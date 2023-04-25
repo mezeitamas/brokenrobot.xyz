@@ -1,0 +1,15 @@
+# Dependency directories
+node_modules/
+
+# Cache folder
+.cache/
+
+# Build output
+public/
+src/gatsby-types.d.ts
+
+# MacOS
+.DS_Store
+
+# Dotenv
+.env

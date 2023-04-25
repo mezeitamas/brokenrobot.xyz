@@ -1,0 +1,128 @@
+{
+    "plugins": ["@typescript-eslint", "react", "react-hooks"],
+    "extends": [
+        "eslint:recommended",
+        "plugin:@typescript-eslint/recommended",
+        "plugin:import/recommended",
+        "plugin:import/typescript",
+        "plugin:tailwindcss/recommended"
+    ],
+    "env": {
+        "browser": true,
+        "es6": true,
+        "node": true
+    },
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+        "project": "./tsconfig.json",
+        "ecmaFeatures": {
+            "jsx": true,
+            "useJSXTextNode": true
+        },
+        "ecmaVersion": "latest",
+        "sourceType": "module"
+    },
+    "settings": {
+        "react": {
+            "version": "detect"
+        },
+        "import/extensions": [".js", ".jsx", ".ts", ".tsx"],
+        "import/parsers": {
+            "@typescript-eslint/parser": [".js", ".jsx", ".ts", ".tsx"]
+        },
+        "import/resolver": {
+            "typescript": {},
+            "node": {
+                "extensions": [".js", ".jsx", ".ts", ".tsx", ".json"],
+                "paths": ["src"]
+            }
+        }
+    },
+    "rules": {
+        "@typescript-eslint/ban-ts-comment": [
+            "error",
+            {
+                "ts-ignore": "allow-with-description",
+                "minimumDescriptionLength": 10
+            }
+        ],
+        "@typescript-eslint/consistent-type-imports": [
+            "error",
+            {
+                "prefer": "type-imports",
+                "disallowTypeAnnotations": true
+            }
+        ],
+        "@typescript-eslint/method-signature-style": ["error", "method"],
+        "@typescript-eslint/no-confusing-non-null-assertion": "error",
+        "@typescript-eslint/no-explicit-any": "error",
+        "@typescript-eslint/no-extra-non-null-assertion": "error",
+        "@typescript-eslint/no-non-null-asserted-nullish-coalescing": "error",
+        "@typescript-eslint/no-unused-vars": "error",
+        "@typescript-eslint/prefer-optional-chain": "error",
+        "@typescript-eslint/strict-boolean-expressions": [
+            "error",
+            {
+                "allowString": false,
+                "allowNumber": false,
+                "allowNullableObject": false,
+                "allowNullableBoolean": false,
+                "allowNullableString": false,
+                "allowNullableNumber": false,
+                "allowAny": false,
+                "allowRuleToRunWithoutStrictNullChecksIKnowWhatIAmDoing": false
+            }
+        ],
+        "import/exports-last": "error",
+        "import/extensions": [
+            "error",
+            "never",
+            {
+                "json": "always"
+            }
+        ],
+        "import/first": "error",
+        "import/group-exports": "error",
+        "import/no-duplicates": "error",
+        "import/no-absolute-path": "error",
+        "import/no-cycle": "error",
+        "import/no-namespace": "error",
+        "import/no-mutable-exports": "error",
+        "import/no-self-import": "error",
+        "import/no-unused-modules": [
+            "error",
+            {
+                "missingExports": true,
+                "unusedExports": false
+            }
+        ],
+        "import/no-useless-path-segments": "error",
+        "import/order": [
+            "error",
+            {
+                "alphabetize": {
+                    "order": "asc",
+                    "caseInsensitive": true
+                },
+                "groups": ["builtin", "external", "internal", "parent", "sibling", "index", "object"],
+                "newlines-between": "always",
+                "pathGroups": [
+                    {
+                        "pattern": "react",
+                        "group": "builtin",
+                        "position": "before"
+                    }
+                ],
+                "pathGroupsExcludedImportTypes": ["builtin"]
+            }
+        ],
+        "react/prop-types": [
+            "off",
+            {
+                "ignore": ["children"]
+            }
+        ],
+        "react-hooks/rules-of-hooks": "error",
+        "react-hooks/exhaustive-deps": "error"
+    }
+}
