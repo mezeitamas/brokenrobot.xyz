@@ -29,7 +29,7 @@ First, we need to create an S3 bucket to store our asset files for our website. 
 
 1. Sign in to the AWS Management Console and navigate to the S3 service.
 2. Click the **Create bucket** button.
-3. Enter a bucket name. This name must be globally unique, across all S3 bucket names, so choose something that is unlikely to be already taken. Let's use `my-website-bucket` as an example for this post.
+3. Enter a bucket name. This name must be globally unique, across all S3 bucket names, so choose something that is unlikely to be already taken. Let's use **my-website-bucket** as an example for this post.
 4. Choose the region you want to create your bucket in.
 5. Leave the default options for the remaining settings for now and click **Create bucket** at the bottom of the page.
 
@@ -97,15 +97,15 @@ Next, we need to upload our asset files, the website itself, to the newly create
 4. Click on the **Add files** button and select the files to upload.
 5. Click on the **Upload** button to upload the selected files.
 
-At this point our website is available through our S3 endpoint URL, for example: `http://my-website-bucket.s3-website.eu-central-1.amazonaws.com`.
+At this point our website is available through our S3 endpoint URL, for example: **http://my-website-bucket.s3-website.eu-central-1.amazonaws.com**.
 
 ## Step 4: Map the domain
 
 Finally, we need to map our domain to our S3 bucket. Here is how to do it:
 
-1. Go to the domain registrar and create a new CNAME record pointing to the Amazon S3 bucket's endpoint URL. For example, if your S3 endpoint URL is `my-website-bucket.s3-website.eu-central-1.amazonaws.com`, create a CNAME record with the domain registrar that points `www.my-website.com` to `my-website-bucket.s3-website.eu-central-1.amazonaws.com`.
+1. Go to the domain registrar and create a new CNAME record pointing to the Amazon S3 bucket's endpoint URL. For example, if your S3 endpoint URL is **my-website-bucket.s3-website.eu-central-1.amazonaws.com**, create a CNAME record with the domain registrar that points **www.my-website.com** to **my-website-bucket.s3-website.eu-central-1.amazonaws.com**.
 2. Wait for the DNS changes to propagate (this can take anywhere from a few minutes to several hours).
-3. Once the DNS changes have propagated, visit the website at `http://www.my-website.com`. The website should now be live! 🚀
+3. Once the DNS changes have propagated, visit the website at **http://www.my-website.com**. The website should now be live! 🚀
 
 ## Pricing
 
