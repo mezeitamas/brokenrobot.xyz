@@ -33,7 +33,7 @@ const config: GatsbyConfig = {
             resolve: 'gatsby-transformer-remark',
             options: {
                 footnotes: true,
-                gfm: true,
+                gfm: false,
                 plugins: [
                     {
                         resolve: 'gatsby-remark-prismjs',
