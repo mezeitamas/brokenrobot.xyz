@@ -3,6 +3,39 @@ import type { GatsbyConfig } from 'gatsby';
 
 dotenv.config();
 
+// An inelegant method for adding types, which will require refactoring later on.
+type DataType = {
+    query: {
+        site: {
+            siteMetadata: {
+                title: string;
+                description: string;
+                siteUrl: string;
+                author: {
+                    name: string;
+                    social: {
+                        github: string;
+                        linkedin: string;
+                    };
+                };
+            };
+        };
+        allMarkdownRemark: {
+            nodes: [
+                {
+                    excerpt: string;
+                    html: string;
+                    frontmatter: {
+                        title: string;
+                        published: string;
+                        slug: string;
+                    };
+                }
+            ];
+        };
+    };
+};
+
 const config: GatsbyConfig = {
     siteMetadata: {
         title: 'Broken Robot',
@@ -102,6 +135,57 @@ const config: GatsbyConfig = {
                 path: './src/content/posts'
             },
             __key: 'posts'
+        },
+        {
+            resolve: `gatsby-plugin-feed`,
+            options: {
+                query: `
+                {
+                  site {
+                    siteMetadata {
+                      title
+                      description
+                      siteUrl
+                      site_url: siteUrl
+                    }
+                  }
+                }
+              `,
+                feeds: [
+                    {
+                        serialize: ({ query: { site, allMarkdownRemark } }: DataType) => {
+                            return allMarkdownRemark.nodes.map((node) => {
+                                return Object.assign({}, node.frontmatter, {
+                                    description: node.excerpt,
+                                    date: node.frontmatter.published,
+                                    url: `${site.siteMetadata.siteUrl}/blog/${node.frontmatter.slug}`,
+                                    guid: `${site.siteMetadata.siteUrl}/blog/${node.frontmatter.slug}`,
+                                    custom_elements: [{ 'content:encoded': node.html }]
+                                });
+                            });
+                        },
+                        query: `
+                    {
+                      allMarkdownRemark(
+                        sort: { order: DESC, fields: [frontmatter___published] },
+                      ) {
+                        nodes {
+                          excerpt
+                          html
+                          frontmatter {
+                            title
+                            published
+                            slug
+                          }
+                        }
+                      }
+                    }
+                  `,
+                        output: '/rss.xml',
+                        title: 'Broken Robot | RSS Feed'
+                    }
+                ]
+            }
         }
     ]
 };

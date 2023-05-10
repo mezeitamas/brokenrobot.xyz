@@ -31,9 +31,15 @@ const Layout: FunctionComponent<PropsWithChildren> = ({ children }): ReactElemen
             <footer className="mb-6 mt-16 flex flex-col gap-4">
                 <hr />
 
-                <div className="flex gap-4 text-gray-700">
-                    <a href={siteMetadata.author.social.github}>GitHub</a>
-                    <a href={siteMetadata.author.social.linkedin}>LinkedIn</a>
+                <div className="flex justify-between text-gray-700">
+                    <div className="flex gap-4">
+                        <a href={siteMetadata.author.social.github}>GitHub</a>
+                        <a href={siteMetadata.author.social.linkedin}>LinkedIn</a>
+                    </div>
+
+                    <div>
+                        <a href="/rss.xml">RSS Feed</a>
+                    </div>
                 </div>
 
                 <div className="text-sm text-gray-400">
