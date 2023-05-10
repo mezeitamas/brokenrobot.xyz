@@ -23,7 +23,7 @@
         "http-server": "http-server --port 8000 --gzip"
     },
     "dependencies": {
-        "gatsby": "5.9.0",
+        "gatsby": "5.9.1",
         "gatsby-plugin-feed": "5.9.0",
         "gatsby-plugin-image": "3.9.0",
         "gatsby-plugin-manifest": "5.9.0",
@@ -43,13 +43,13 @@
     },
     "devDependencies": {
         "@tailwindcss/typography": "0.5.9",
-        "@types/node": "18.16.3",
-        "@types/react": "18.2.3",
-        "@types/react-dom": "18.2.3",
-        "@typescript-eslint/eslint-plugin": "5.59.2",
-        "@typescript-eslint/parser": "5.59.2",
+        "@types/node": "20.1.2",
+        "@types/react": "18.2.6",
+        "@types/react-dom": "18.2.4",
+        "@typescript-eslint/eslint-plugin": "5.59.5",
+        "@typescript-eslint/parser": "5.59.5",
         "autoprefixer": "10.4.14",
-        "eslint": "8.39.0",
+        "eslint": "8.40.0",
         "eslint-import-resolver-typescript": "3.5.5",
         "eslint-plugin-import": "2.27.5",
         "eslint-plugin-react": "7.32.2",
