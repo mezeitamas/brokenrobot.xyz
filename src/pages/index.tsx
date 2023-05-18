@@ -1,10 +1,11 @@
 import React from 'react';
 import type { FunctionComponent, ReactElement } from 'react';
 
-import { Link, graphql, useStaticQuery } from 'gatsby';
+import { graphql, useStaticQuery } from 'gatsby';
 import type { HeadFC, PageProps } from 'gatsby';
 
 import { BlogPostList } from '../components/blog-post-list';
+import { InternalLink } from '../components/internal-link';
 import { Layout } from '../components/layout';
 import { Seo } from '../components/seo';
 
@@ -60,7 +61,7 @@ const IndexPage: FunctionComponent<PageProps> = (): ReactElement => {
                 <p>
                     Welcome to my little corner of the web, where I share my professional experiences, thoughts,
                     adventures, and projects with the world. For further information, please feel free to check out my{' '}
-                    <Link to="/about-me">About me</Link> page.
+                    <InternalLink to="/about-me">About me</InternalLink> page.
                 </p>
             </div>
 
