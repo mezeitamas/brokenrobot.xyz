@@ -71,7 +71,8 @@ const config: GatsbyConfig = {
                     {
                         resolve: 'gatsby-remark-autolink-headers',
                         options: {
-                            className: 'autolink-header'
+                            className: 'autolink-header',
+                            isIconAfterHeader: true
                         }
                     },
                     {
