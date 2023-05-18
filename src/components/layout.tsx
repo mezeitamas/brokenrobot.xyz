@@ -5,6 +5,8 @@ import { Link } from 'gatsby';
 
 import { useSiteMetadata } from '../hooks/use-site-metadata';
 
+import { ExternalLink } from './external-link';
+
 const Layout: FunctionComponent<PropsWithChildren> = ({ children }): ReactElement => {
     const siteMetadata = useSiteMetadata();
 
@@ -33,12 +35,12 @@ const Layout: FunctionComponent<PropsWithChildren> = ({ children }): ReactElemen
 
                 <div className="flex justify-between text-gray-700">
                     <div className="flex gap-4">
-                        <a href={siteMetadata.author.social.github}>GitHub</a>
-                        <a href={siteMetadata.author.social.linkedin}>LinkedIn</a>
+                        <ExternalLink href={siteMetadata.author.social.github}>GitHub</ExternalLink>
+                        <ExternalLink href={siteMetadata.author.social.linkedin}>LinkedIn</ExternalLink>
                     </div>
 
                     <div>
-                        <a href="/rss.xml">RSS Feed</a>
+                        <ExternalLink href="/rss.xml">RSS Feed</ExternalLink>
                     </div>
                 </div>
 
