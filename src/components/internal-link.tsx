@@ -9,9 +9,9 @@ type InternalLinkProps = {
 
 const InternalLink: FunctionComponent<PropsWithChildren<InternalLinkProps>> = ({ to, children }) => {
     return (
-        <div className="hover:underline">
+        <span className="hover:underline">
             <Link to={to}>{children}</Link>
-        </div>
+        </span>
     );
 };
 

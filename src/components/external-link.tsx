@@ -9,7 +9,7 @@ type ExternalLinkProps = {
 
 const ExternalLink: FunctionComponent<PropsWithChildren<ExternalLinkProps>> = ({ href, children }) => {
     return (
-        <div className="flex items-center gap-1 hover:underline">
+        <span className="inline-flex items-center gap-1 hover:underline">
             <a
                 href={href}
                 target="_blank"
@@ -17,7 +17,7 @@ const ExternalLink: FunctionComponent<PropsWithChildren<ExternalLinkProps>> = ({
                 {children}
             </a>
             <FiExternalLink />
-        </div>
+        </span>
     );
 };
 
