@@ -16,7 +16,7 @@ const ExternalLink: FunctionComponent<PropsWithChildren<ExternalLinkProps>> = ({
             >
                 {children}
             </a>
-            <FiExternalLink />
+            <FiExternalLink size="14" />
         </span>
     );
 };
