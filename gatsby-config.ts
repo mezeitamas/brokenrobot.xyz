@@ -69,6 +69,13 @@ const config: GatsbyConfig = {
                 gfm: false,
                 plugins: [
                     {
+                        resolve: 'gatsby-remark-autolink-headers',
+                        options: {
+                            className: 'autolink-header',
+                            isIconAfterHeader: true
+                        }
+                    },
+                    {
                         resolve: 'gatsby-remark-prismjs',
                         options: {
                             classPrefix: 'language-',
