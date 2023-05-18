@@ -1,11 +1,10 @@
 import React from 'react';
 import type { FunctionComponent, ReactElement, PropsWithChildren } from 'react';
 
-import { Link } from 'gatsby';
-
 import { useSiteMetadata } from '../hooks/use-site-metadata';
 
 import { ExternalLink } from './external-link';
+import { InternalLink } from './internal-link';
 
 const Layout: FunctionComponent<PropsWithChildren> = ({ children }): ReactElement => {
     const siteMetadata = useSiteMetadata();
@@ -15,13 +14,13 @@ const Layout: FunctionComponent<PropsWithChildren> = ({ children }): ReactElemen
             <header className="mb-12 mt-6 flex flex-col gap-4 leading-8">
                 <nav className="flex flex-col justify-between gap-4 whitespace-nowrap sm:flex-row">
                     <div className="text-2xl font-bold text-gray-900">
-                        <Link to="/">{siteMetadata.title}</Link>
+                        <InternalLink to="/">{siteMetadata.title}</InternalLink>
                     </div>
 
                     <div className="flex flex-nowrap gap-10 text-gray-600">
-                        <Link to="/">Home</Link>
-                        <Link to="/blog">Blog</Link>
-                        <Link to="/about-me">About me</Link>
+                        <InternalLink to="/">Home</InternalLink>
+                        <InternalLink to="/blog">Blog</InternalLink>
+                        <InternalLink to="/about-me">About me</InternalLink>
                     </div>
                 </nav>
 
