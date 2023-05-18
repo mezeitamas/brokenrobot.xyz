@@ -13,3 +13,6 @@ src/gatsby-types.d.ts
 
 # Dotenv
 .env
+
+# fnm
+.node-version

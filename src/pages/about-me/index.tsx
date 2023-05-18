@@ -1,9 +1,10 @@
 import React from 'react';
 import type { FunctionComponent, ReactElement } from 'react';
 
-import { Link } from 'gatsby';
 import type { HeadFC } from 'gatsby';
 
+import { ExternalLink } from '../../components/external-link';
+import { InternalLink } from '../../components/internal-link';
 import { Layout } from '../../components/layout';
 import { Seo } from '../../components/seo';
 
@@ -29,8 +30,8 @@ const AboutMePage: FunctionComponent = (): ReactElement => {
                 <p>
                     Through this website, I hope to not only showcase my work and expertise but also contribute to the
                     wider software development community. I believe in the power of collaboration, open source, and
-                    continuous learning, and I hope my <Link to="/blog">blog posts</Link> and other content will inspire
-                    others in their own journeys.
+                    continuous learning, and I hope my <InternalLink to="/blog">blog posts</InternalLink> and other
+                    content will inspire others in their own journeys.
                 </p>
 
                 <p>
@@ -67,9 +68,10 @@ const AboutMePage: FunctionComponent = (): ReactElement => {
 
                 <p>
                     The website's source code is available on{' '}
-                    <a href="https://github.com/mezeitamas/brokenrobot.xyz">GitHub</a>. Please don't hesitate to create
-                    an <a href="https://github.com/mezeitamas/brokenrobot.xyz/issues">issue</a> if you encounter a bug
-                    or typo, or if you have any suggestions to offer.
+                    <ExternalLink href="https://github.com/mezeitamas/brokenrobot.xyz">GitHub</ExternalLink>. Please
+                    don't hesitate to create an{' '}
+                    <ExternalLink href="https://github.com/mezeitamas/brokenrobot.xyz/issues">issue</ExternalLink> if
+                    you encounter a bug or typo, or if you have any suggestions to offer.
                 </p>
             </section>
         </Layout>

@@ -1,9 +1,12 @@
 import React from 'react';
 import type { FunctionComponent, ReactElement, PropsWithChildren } from 'react';
 
-import { Link } from 'gatsby';
+import { FiRss, FiGithub, FiLinkedin } from 'react-icons/fi';
 
 import { useSiteMetadata } from '../hooks/use-site-metadata';
+
+import { ExternalLink } from './external-link';
+import { InternalLink } from './internal-link';
 
 const Layout: FunctionComponent<PropsWithChildren> = ({ children }): ReactElement => {
     const siteMetadata = useSiteMetadata();
@@ -13,13 +16,13 @@ const Layout: FunctionComponent<PropsWithChildren> = ({ children }): ReactElemen
             <header className="mb-12 mt-6 flex flex-col gap-4 leading-8">
                 <nav className="flex flex-col justify-between gap-4 whitespace-nowrap sm:flex-row">
                     <div className="text-2xl font-bold text-gray-900">
-                        <Link to="/">{siteMetadata.title}</Link>
+                        <InternalLink to="/">{siteMetadata.title}</InternalLink>
                     </div>
 
-                    <div className="flex flex-nowrap gap-10 text-gray-600">
-                        <Link to="/">Home</Link>
-                        <Link to="/blog">Blog</Link>
-                        <Link to="/about-me">About me</Link>
+                    <div className="flex flex-nowrap gap-6 text-gray-600 sm:gap-10">
+                        <InternalLink to="/">Home</InternalLink>
+                        <InternalLink to="/blog">Blog</InternalLink>
+                        <InternalLink to="/about-me">About me</InternalLink>
                     </div>
                 </nav>
 
@@ -31,14 +34,22 @@ const Layout: FunctionComponent<PropsWithChildren> = ({ children }): ReactElemen
             <footer className="mb-6 mt-16 flex flex-col gap-4">
                 <hr />
 
-                <div className="flex justify-between text-gray-700">
-                    <div className="flex gap-4">
-                        <a href={siteMetadata.author.social.github}>GitHub</a>
-                        <a href={siteMetadata.author.social.linkedin}>LinkedIn</a>
+                <div className="flex flex-col justify-between gap-4 whitespace-nowrap text-gray-700 sm:flex-row">
+                    <div className="flex gap-6 sm:gap-10">
+                        <div className="flex items-center gap-2">
+                            <FiGithub size="18" />
+                            <ExternalLink href={siteMetadata.author.social.github}>GitHub</ExternalLink>
+                        </div>
+
+                        <div className="flex items-center gap-2">
+                            <FiLinkedin size="18" />
+                            <ExternalLink href={siteMetadata.author.social.linkedin}>LinkedIn</ExternalLink>
+                        </div>
                     </div>
 
-                    <div>
-                        <a href="/rss.xml">RSS Feed</a>
+                    <div className="flex items-center gap-2">
+                        <FiRss size="18" />
+                        <ExternalLink href="/rss.xml">RSS Feed</ExternalLink>
                     </div>
                 </div>
 
