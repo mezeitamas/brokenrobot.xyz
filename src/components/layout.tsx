@@ -5,8 +5,8 @@ import { FiRss, FiGithub, FiLinkedin } from 'react-icons/fi';
 
 import { useSiteMetadata } from '../hooks/use-site-metadata';
 
-import { ExternalLink } from './external-link';
-import { InternalLink } from './internal-link';
+import { ExternalLink } from './external-link/external-link';
+import { InternalLink } from './internal-link/internal-link';
 
 const Layout: FunctionComponent<PropsWithChildren> = ({ children }): ReactElement => {
     const siteMetadata = useSiteMetadata();

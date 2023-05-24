@@ -2,26 +2,16 @@
     "include": ["./src/**/*", "./gatsby-config.ts"],
     "exclude": ["node_modules", "*.config.js"],
     "compilerOptions": {
-        /* Language and Environment */
         "target": "esnext",
         "lib": ["dom", "esnext"],
         "jsx": "react",
-
-        /* Modules */
         "module": "esnext",
         "moduleResolution": "node",
-
-        /* Emit */
         "noEmit": true,
-
-        /* Interop Constraints */
         "esModuleInterop": true,
         "forceConsistentCasingInFileNames": true,
-
-        /* Type Checking */
         "strict": true,
-
-        /* Completeness */
-        "skipLibCheck": true
+        "skipLibCheck": true,
+        "types": ["react", "react-dom", "jest", "react-test-renderer"]
     }
 }
