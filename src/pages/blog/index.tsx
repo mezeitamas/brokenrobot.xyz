@@ -5,7 +5,7 @@ import { graphql, useStaticQuery } from 'gatsby';
 import type { HeadFC } from 'gatsby';
 
 import { BlogPostList } from '../../components/blog-post-list';
-import { Layout } from '../../components/layout';
+import { Layout } from '../../components/layout/layout';
 import { Seo } from '../../components/seo';
 
 type DataType = {
