@@ -4,7 +4,7 @@ import type { FunctionComponent } from 'react';
 import { Link } from 'gatsby';
 import type { HeadFC, PageProps } from 'gatsby';
 
-import { Seo } from '../components/seo';
+import { Seo } from '../components/seo/seo';
 
 const NotFoundPage: FunctionComponent<PageProps> = () => {
     return (

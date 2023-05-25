@@ -1,7 +1,7 @@
 import React from 'react';
 import type { FunctionComponent, PropsWithChildren } from 'react';
 
-import { useSiteMetadata } from '../hooks/use-site-metadata';
+import { useSiteMetadata } from '../../hooks/use-site-metadata';
 
 type SeoProps = {
     title?: string;

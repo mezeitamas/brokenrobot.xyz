@@ -4,7 +4,7 @@ import type { FunctionComponent, ReactElement } from 'react';
 import type { HeadFC, PageProps } from 'gatsby';
 
 import { Layout } from '../components/layout/layout';
-import { Seo } from '../components/seo';
+import { Seo } from '../components/seo/seo';
 
 type PageContext = {
     id: string;

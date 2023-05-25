@@ -6,7 +6,7 @@ import type { HeadFC } from 'gatsby';
 
 import { BlogPostList } from '../../components/blog-post-list';
 import { Layout } from '../../components/layout/layout';
-import { Seo } from '../../components/seo';
+import { Seo } from '../../components/seo/seo';
 
 type DataType = {
     allMarkdownRemark: {

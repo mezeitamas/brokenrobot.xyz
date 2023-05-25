@@ -7,7 +7,7 @@ import type { HeadFC, PageProps } from 'gatsby';
 import { BlogPostList } from '../components/blog-post-list';
 import { InternalLink } from '../components/internal-link/internal-link';
 import { Layout } from '../components/layout/layout';
-import { Seo } from '../components/seo';
+import { Seo } from '../components/seo/seo';
 
 type DataType = {
     allMarkdownRemark: {
