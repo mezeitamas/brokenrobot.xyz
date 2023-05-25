@@ -70,3 +70,5 @@ const Seo: FunctionComponent<PropsWithChildren<SeoProps>> = ({ title, descriptio
 };
 
 export { Seo };
+
+export type { SeoProps };
