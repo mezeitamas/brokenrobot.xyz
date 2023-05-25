@@ -8,8 +8,16 @@ node_modules/
 public/
 src/gatsby-types.d.ts
 
+# Coverage directory used by tools like istanbul
+reports
+coverage
+*.lcov
+
 # MacOS
 .DS_Store
 
 # Dotenv
 .env
+
+# fnm
+.node-version

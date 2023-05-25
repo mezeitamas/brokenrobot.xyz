@@ -22,3 +22,5 @@ const ExternalLink: FunctionComponent<PropsWithChildren<ExternalLinkProps>> = ({
 };
 
 export { ExternalLink };
+
+export type { ExternalLinkProps };

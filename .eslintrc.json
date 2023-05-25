@@ -90,10 +90,11 @@
         "import/no-mutable-exports": "error",
         "import/no-self-import": "error",
         "import/no-unused-modules": [
-            "error",
+            "off",
             {
-                "missingExports": true,
-                "unusedExports": false
+                "missingExports": false,
+                "unusedExports": false,
+                "ignoreExports": ["src/**/*.test.*"]
             }
         ],
         "import/no-useless-path-segments": "error",

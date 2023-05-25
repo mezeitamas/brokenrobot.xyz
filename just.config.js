@@ -1,4 +1,13 @@
-const { task, prettierCheckTask, prettierTask, eslintTask, tscTask } = require('just-scripts');
+const { task, cleanTask, prettierCheckTask, prettierTask, eslintTask, tscTask, jestTask } = require('just-scripts');
+
+// Clean
+
+task(
+    'clean',
+    cleanTask({
+        paths: ['public', 'reports', '.cache']
+    })
+);
 
 // Formatting
 
@@ -39,3 +48,23 @@ task(
 // TypeScript
 
 task('type:check', tscTask());
+
+// Testing
+
+task(
+    'test:check',
+    jestTask({
+        runInBand: false,
+        coverage: true,
+        updateSnapshot: false
+    })
+);
+
+task(
+    'test:update',
+    jestTask({
+        runInBand: false,
+        coverage: false,
+        updateSnapshot: true
+    })
+);

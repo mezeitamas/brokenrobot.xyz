@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Content /> should render 1`] = `
+<main
+  className="prose max-w-none"
+>
+  <div>
+    Content
+  </div>
+</main>
+`;

@@ -3,10 +3,10 @@ import type { FunctionComponent, ReactElement } from 'react';
 
 import type { HeadFC } from 'gatsby';
 
-import { ExternalLink } from '../../components/external-link';
-import { InternalLink } from '../../components/internal-link';
-import { Layout } from '../../components/layout';
-import { Seo } from '../../components/seo';
+import { ExternalLink } from '../../components/external-link/external-link';
+import { InternalLink } from '../../components/internal-link/internal-link';
+import { Layout } from '../../components/layout/layout';
+import { Seo } from '../../components/seo/seo';
 
 const AboutMePage: FunctionComponent = (): ReactElement => {
     return (

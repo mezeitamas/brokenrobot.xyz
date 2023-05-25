@@ -16,3 +16,5 @@ const InternalLink: FunctionComponent<PropsWithChildren<InternalLinkProps>> = ({
 };
 
 export { InternalLink };
+
+export type { InternalLinkProps };
