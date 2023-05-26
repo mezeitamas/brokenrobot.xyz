@@ -10,6 +10,7 @@ on:
 
 jobs:
   ci:
+    name: 'Continuous Integration (CI)'
     runs-on: ubuntu-latest
 
     steps:
