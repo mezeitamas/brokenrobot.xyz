@@ -14,7 +14,7 @@ task(
 task(
     'format:check',
     prettierCheckTask({
-        files: ['**/*.{js,ts,tsx,json,md}'],
+        files: ['**/*.{js,ts,tsx,json,md,yml}'],
         fix: false
     })
 );
@@ -22,7 +22,7 @@ task(
 task(
     'format:fix',
     prettierTask({
-        files: ['**/*.{js,ts,tsx,json,md}'],
+        files: ['**/*.{js,ts,tsx,json,md,yml}'],
         fix: true
     })
 );
