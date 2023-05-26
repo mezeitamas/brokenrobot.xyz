@@ -9,8 +9,8 @@ on:
       - main
 
 jobs:
-  ci:
-    name: 'Continuous Integration (CI)'
+  main:
+    name: 'Main'
     runs-on: ubuntu-latest
 
     steps:
