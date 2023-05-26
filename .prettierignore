@@ -18,6 +18,3 @@ coverage
 
 # Dotenv
 .env
-
-# fnm
-.node-version
