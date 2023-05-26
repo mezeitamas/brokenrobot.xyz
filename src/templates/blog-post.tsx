@@ -35,7 +35,15 @@ const BlogPostTemplate: FunctionComponent<PageProps<null, PageContext>> = ({ pag
     );
 };
 
-const Head: HeadFC<null, PageContext> = ({ pageContext: { title } }) => <Seo title={title} />;
+const Head: HeadFC<null, PageContext> = ({ location, pageContext: { title, excerpt, published } }) => (
+    <Seo
+        title={title}
+        description={excerpt}
+        pathname={location.pathname}
+        isArticle={true}
+        published={published}
+    />
+);
 
 export default BlogPostTemplate;
 

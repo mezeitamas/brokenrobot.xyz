@@ -67,4 +67,11 @@ const BlogPage: FunctionComponent = (): ReactElement => {
 
 export default BlogPage;
 
-export const Head: HeadFC = () => <Seo title="Blog" />;
+export const Head: HeadFC = ({ location }) => (
+    <Seo
+        title="Blog"
+        description="Blog posts"
+        pathname={location.pathname}
+        isArticle={false}
+    />
+);

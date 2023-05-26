@@ -56,7 +56,7 @@ const IndexPage: FunctionComponent<PageProps> = (): ReactElement => {
     return (
         <Layout>
             <div>
-                <h2>Hello there, I'm Tamas!</h2>
+                <h2>Hello there, I'm Tamás!</h2>
 
                 <p>
                     Welcome to my little corner of the web, where I share my professional experiences, thoughts,
@@ -76,4 +76,11 @@ const IndexPage: FunctionComponent<PageProps> = (): ReactElement => {
 
 export default IndexPage;
 
-export const Head: HeadFC = () => <Seo />;
+export const Head: HeadFC = ({ location }) => (
+    <Seo
+        title="Broken Robot"
+        description="Personal website and blog of Tamas Mezei. Welcome to my little corner of the web, where I share my professional experiences, thoughts, adventures, and projects with the world."
+        pathname={location.pathname}
+        isArticle={false}
+    />
+);

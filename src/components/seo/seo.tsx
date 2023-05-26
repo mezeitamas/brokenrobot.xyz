@@ -4,25 +4,29 @@ import type { FunctionComponent, PropsWithChildren } from 'react';
 import { useSiteMetadata } from '../../hooks/use-site-metadata';
 
 type SeoProps = {
-    title?: string;
-    description?: string;
-    pathname?: string;
+    title: string;
+    description: string;
+    pathname: string;
+    isArticle: boolean;
+    published?: string;
 };
 
-const Seo: FunctionComponent<PropsWithChildren<SeoProps>> = ({ title, description, pathname, children }) => {
-    const { title: defaultTitle, description: defaultDescription, siteUrl } = useSiteMetadata();
-
-    const seo = {
-        title: title !== undefined ? title : defaultTitle,
-        description: description !== undefined ? description : defaultDescription,
-        url: `${siteUrl}${pathname !== undefined ? pathname : ''}`
-    };
+const Seo: FunctionComponent<PropsWithChildren<SeoProps>> = ({
+    title,
+    description,
+    pathname,
+    isArticle,
+    published,
+    children
+}) => {
+    const { title: siteTitle, siteUrl, author } = useSiteMetadata();
+    const url = `${siteUrl}${pathname !== undefined ? pathname : ''}`;
 
     return (
         <>
             <html lang="en" />
 
-            <title>{seo.title}</title>
+            <title>{title}</title>
 
             <meta
                 httpEquiv="cache-control"
@@ -31,37 +35,71 @@ const Seo: FunctionComponent<PropsWithChildren<SeoProps>> = ({ title, descriptio
 
             <meta
                 name="description"
-                content={seo.description}
+                content={description}
             />
 
             <meta
+                property="og:locale"
+                content="en_GB"
+            />
+            <meta
+                property="og:site_name"
+                content={siteTitle}
+            />
+            <meta
                 property="og:title"
-                content={seo.title}
+                content={title}
             />
             <meta
                 property="og:description"
-                content={seo.description}
+                content={description}
             />
             <meta
-                property="og:type"
-                content="website"
+                property="og:url"
+                content={url}
             />
 
-            <meta
-                name="twitter:title"
-                content={seo.title}
-            />
-            <meta
-                name="twitter:description"
-                content={seo.description}
-            />
+            {isArticle !== true ? (
+                <>
+                    <meta
+                        property="og:type"
+                        content="website"
+                    />
+                </>
+            ) : null}
+
+            {isArticle === true ? (
+                <>
+                    <meta
+                        property="og:type"
+                        content="article"
+                    />
+                    <meta
+                        property="og:article:published_time"
+                        content={published}
+                    />
+                    <meta
+                        property="og:article:author"
+                        content={author.name}
+                    />
+                </>
+            ) : null}
+
             <meta
                 name="twitter:card"
                 content="summary"
             />
             <meta
+                name="twitter:title"
+                content={title}
+            />
+            <meta
+                name="twitter:description"
+                content={description}
+            />
+            <meta
                 name="twitter:url"
-                content={seo.url}
+                content={url}
             />
 
             {children}

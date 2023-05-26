@@ -33,4 +33,11 @@ const NotFoundPage: FunctionComponent<PageProps> = () => {
 
 export default NotFoundPage;
 
-export const Head: HeadFC = () => <Seo title="Not found" />;
+export const Head: HeadFC = ({ location }) => (
+    <Seo
+        title="Not found"
+        description="Not found"
+        pathname={location.pathname}
+        isArticle={false}
+    />
+);
