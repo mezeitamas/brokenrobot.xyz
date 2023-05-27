@@ -58,9 +58,10 @@ const Seo: FunctionComponent<PropsWithChildren<SeoProps>> = ({
                         siteName={siteName}
                         siteUrl={siteUrl}
                         title={title}
+                        description={description}
                         url={url}
                         published={published === undefined ? '' : published}
-                        author={author.name}
+                        author={author}
                     />
                 </>
             ) : null}

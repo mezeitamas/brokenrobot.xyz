@@ -5,15 +5,23 @@ type RichResultsArticleProps = {
     siteName: string;
     siteUrl: string;
     title: string;
+    description: string;
     url: string;
     published: string;
-    author: string;
+    author: {
+        name: string;
+        social: {
+            github: string;
+            linkedin: string;
+        };
+    };
 };
 
 const RichResultsArticle: FunctionComponent<RichResultsArticleProps> = ({
     siteName,
     siteUrl,
     title,
+    description,
     url,
     published,
     author
@@ -27,16 +35,22 @@ const RichResultsArticle: FunctionComponent<RichResultsArticleProps> = ({
                     "@id": "${url}#BlogPosting",
                     "headline": "${title}",
                     "name": "${title}",
+                    "description": "${description}",
                     "datePublished": "${published}",
+                    "dateModified": "${published}",
                     "url": "${url}",
                     "author": [{
                         "@type": "Person",
                         "@id": "${siteUrl}/about-me/#Person",
-                        "name": "${author}",
-                        "url": "${siteUrl}/about-me/"
+                        "name": "${author.name}",
+                        "url": "${siteUrl}/about-me/",
+                        "sameAs": [
+                            "${author.social.github}",
+                            "${author.social.linkedin}"
+                        ]
                     }],
                     "isPartOf": {
-                        "@type" : "Blog",
+                        "@type" : "WebSite",
                         "@id": "${siteUrl}",
                         "name": "${siteName}"
                     },
