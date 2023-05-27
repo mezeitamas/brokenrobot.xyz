@@ -1,0 +1,38 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<MetaOgArticle /> should render 1`] = `
+[
+  <meta
+    content="article"
+    property="og:type"
+  />,
+  <meta
+    content="en_US"
+    property="og:locale"
+  />,
+  <meta
+    content="Broken Robot"
+    property="og:site_name"
+  />,
+  <meta
+    content="Hosting a static website on Amazon S3"
+    property="og:title"
+  />,
+  <meta
+    content="Hosting a simple static website on Amazon Web Services (AWS) can be daunting at first, but luckily it’s quite straightforward. One option..."
+    property="og:description"
+  />,
+  <meta
+    content="https://www.brokenrobot.xyz/blog/hosting-a-static-website-on-amazon-s3/"
+    property="og:url"
+  />,
+  <meta
+    content="2023-05-04"
+    property="og:article:published_time"
+  />,
+  <meta
+    content="Tamas Mezei"
+    property="og:article:author"
+  />,
+]
+`;

@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<Seo /> should render article 1`] = `
+exports[`<Seo /> article should render 1`] = `
 [
   <html
     lang="en"
@@ -17,7 +17,11 @@ exports[`<Seo /> should render article 1`] = `
     name="description"
   />,
   <meta
-    content="en_GB"
+    content="article"
+    property="og:type"
+  />,
+  <meta
+    content="en_US"
     property="og:locale"
   />,
   <meta
@@ -35,10 +39,6 @@ exports[`<Seo /> should render article 1`] = `
   <meta
     content="https://www.brokenrobot.xyz/blog/hosting-a-static-website-on-amazon-s3/"
     property="og:url"
-  />,
-  <meta
-    content="article"
-    property="og:type"
   />,
   <meta
     content="2023-05-04"
@@ -67,7 +67,7 @@ exports[`<Seo /> should render article 1`] = `
 ]
 `;
 
-exports[`<Seo /> should render website 1`] = `
+exports[`<Seo /> website should render normal page 1`] = `
 [
   <html
     lang="en"
@@ -84,7 +84,11 @@ exports[`<Seo /> should render website 1`] = `
     name="description"
   />,
   <meta
-    content="en_GB"
+    content="website"
+    property="og:type"
+  />,
+  <meta
+    content="en_US"
     property="og:locale"
   />,
   <meta
@@ -104,10 +108,6 @@ exports[`<Seo /> should render website 1`] = `
     property="og:url"
   />,
   <meta
-    content="website"
-    property="og:type"
-  />,
-  <meta
     content="summary"
     name="twitter:card"
   />,
@@ -121,6 +121,65 @@ exports[`<Seo /> should render website 1`] = `
   />,
   <meta
     content="https://www.brokenrobot.xyz/blog/"
+    name="twitter:url"
+  />,
+]
+`;
+
+exports[`<Seo /> website should render root page 1`] = `
+[
+  <html
+    lang="en"
+  />,
+  <title>
+    Broken Robot
+  </title>,
+  <meta
+    content="public, max-age=0, must-revalidate"
+    httpEquiv="cache-control"
+  />,
+  <meta
+    content="Personal website and blog of Tamas Mezei. Welcome to my little corner of the web, where I share my professional experiences, thoughts, adventures, and projects with the world."
+    name="description"
+  />,
+  <meta
+    content="website"
+    property="og:type"
+  />,
+  <meta
+    content="en_US"
+    property="og:locale"
+  />,
+  <meta
+    content="Broken Robot"
+    property="og:site_name"
+  />,
+  <meta
+    content="Broken Robot"
+    property="og:title"
+  />,
+  <meta
+    content="Personal website and blog of Tamas Mezei. Welcome to my little corner of the web, where I share my professional experiences, thoughts, adventures, and projects with the world."
+    property="og:description"
+  />,
+  <meta
+    content="https://www.brokenrobot.xyz"
+    property="og:url"
+  />,
+  <meta
+    content="summary"
+    name="twitter:card"
+  />,
+  <meta
+    content="Broken Robot"
+    name="twitter:title"
+  />,
+  <meta
+    content="Personal website and blog of Tamas Mezei. Welcome to my little corner of the web, where I share my professional experiences, thoughts, adventures, and projects with the world."
+    name="twitter:description"
+  />,
+  <meta
+    content="https://www.brokenrobot.xyz"
     name="twitter:url"
   />,
 ]
