@@ -25,6 +25,11 @@ exports[`<RichResultsArticle /> should render 1`] = `
                             "https://www.linkedin.com/in/mezeitamas/"
                         ]
                     }],
+                    "publisher": {
+                        "@type": "Organization",
+                        "name": "Broken Robot",
+                        "url": "https://www.brokenrobot.xyz"
+                    },
                     "isPartOf": {
                         "@type" : "WebSite",
                         "@id": "https://www.brokenrobot.xyz",

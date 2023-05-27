@@ -49,6 +49,11 @@ const RichResultsArticle: FunctionComponent<RichResultsArticleProps> = ({
                             "${author.social.linkedin}"
                         ]
                     }],
+                    "publisher": {
+                        "@type": "Organization",
+                        "name": "${siteName}",
+                        "url": "${siteUrl}"
+                    },
                     "isPartOf": {
                         "@type" : "WebSite",
                         "@id": "${siteUrl}",
