@@ -1,6 +1,6 @@
 ---
 title: Hello, World!
-published: '2023-05-01'
+published: '2023-05-01T10:10:05.000Z'
 slug: hello-world
 ---
 

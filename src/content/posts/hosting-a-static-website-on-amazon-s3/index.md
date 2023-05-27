@@ -1,6 +1,6 @@
 ---
 title: Hosting a static website on Amazon S3
-published: '2023-05-04'
+published: '2023-05-04T17:58:32.000Z'
 slug: hosting-a-static-website-on-amazon-s3
 ---
 

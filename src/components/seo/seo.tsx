@@ -6,6 +6,7 @@ import { useSiteMetadata } from '../../hooks/use-site-metadata';
 import { MetaOgArticle } from './meta-og-article/meta-og-article';
 import { MetaOgWebsite } from './meta-og-website/meta-og-website';
 import { MetaTwitter } from './meta-twitter/meta-twitter';
+import { RichResultsArticle } from './rich-results-article/rich-results-article';
 
 type SeoProps = {
     title: string;
@@ -43,14 +44,25 @@ const Seo: FunctionComponent<PropsWithChildren<SeoProps>> = ({
             />
 
             {isArticle === true ? (
-                <MetaOgArticle
-                    siteName={siteName}
-                    title={title}
-                    description={description}
-                    url={url}
-                    published={published === undefined ? '' : published}
-                    author={author.name}
-                />
+                <>
+                    <MetaOgArticle
+                        siteName={siteName}
+                        title={title}
+                        description={description}
+                        url={url}
+                        published={published === undefined ? '' : published}
+                        author={author.name}
+                    />
+
+                    <RichResultsArticle
+                        siteName={siteName}
+                        siteUrl={siteUrl}
+                        title={title}
+                        url={url}
+                        published={published === undefined ? '' : published}
+                        author={author.name}
+                    />
+                </>
             ) : null}
 
             {isArticle !== true ? (
