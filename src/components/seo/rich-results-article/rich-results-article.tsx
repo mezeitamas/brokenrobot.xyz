@@ -1,6 +1,8 @@
 import React from 'react';
 import type { FunctionComponent } from 'react';
 
+import type { Person, Organization, WebSite, BlogPosting, WithContext } from 'schema-dts';
+
 type RichResultsArticleProps = {
     siteName: string;
     siteUrl: string;
@@ -26,44 +28,46 @@ const RichResultsArticle: FunctionComponent<RichResultsArticleProps> = ({
     published,
     author
 }) => {
-    return (
-        <script type="application/ld+json">
-            {`
-                {
-                    "@context": "https://schema.org",
-                    "@type": "BlogPosting",
-                    "@id": "${url}#BlogPosting",
-                    "headline": "${title}",
-                    "name": "${title}",
-                    "description": "${description}",
-                    "datePublished": "${published}",
-                    "dateModified": "${published}",
-                    "url": "${url}",
-                    "author": [{
-                        "@type": "Person",
-                        "@id": "${siteUrl}/about-me/#Person",
-                        "name": "${author.name}",
-                        "url": "${siteUrl}/about-me/",
-                        "sameAs": [
-                            "${author.social.github}",
-                            "${author.social.linkedin}"
-                        ]
-                    }],
-                    "publisher": {
-                        "@type": "Organization",
-                        "name": "${siteName}",
-                        "url": "${siteUrl}"
-                    },
-                    "isPartOf": {
-                        "@type" : "WebSite",
-                        "@id": "${siteUrl}",
-                        "name": "${siteName}"
-                    },
-                    "keywords": []
-                }
-            `}
-        </script>
-    );
+    const authorPerson: Person = {
+        '@type': 'Person',
+        '@id': `${siteUrl}/about-me/#Person`,
+        name: author.name,
+        url: `${siteUrl}/about-me/`,
+        sameAs: [author.social.github, author.social.linkedin]
+    };
+
+    const publisher: Organization = {
+        '@type': 'Organization',
+        '@id': `${siteUrl}/#Organization`,
+        name: siteName,
+        url: siteUrl
+    };
+
+    const website: WebSite = {
+        '@type': 'WebSite',
+        '@id': `${siteUrl}/#WebSite`,
+        name: siteName,
+        url: siteUrl,
+        inLanguage: 'en-US'
+    };
+
+    const blogPosting: WithContext<BlogPosting> = {
+        '@context': 'https://schema.org',
+        '@type': 'BlogPosting',
+        '@id': `${url}#BlogPosting`,
+        headline: title,
+        name: title,
+        description: description,
+        datePublished: published,
+        dateModified: published,
+        url: url,
+        inLanguage: 'en-US',
+        author: [authorPerson],
+        publisher: publisher,
+        isPartOf: website
+    };
+
+    return <script type="application/ld+json">{JSON.stringify(blogPosting)}</script>;
 };
 
 export { RichResultsArticle };

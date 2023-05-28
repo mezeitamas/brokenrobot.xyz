@@ -44,7 +44,8 @@
         "prismjs": "1.29.0",
         "react": "18.2.0",
         "react-dom": "18.2.0",
-        "react-icons": "4.8.0"
+        "react-icons": "4.8.0",
+        "schema-dts": "1.1.2"
     },
     "devDependencies": {
         "@babel/preset-typescript": "7.21.5",
