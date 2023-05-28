@@ -61,6 +61,13 @@ const config: GatsbyConfig = {
                 icon: 'src/assets/brokenrobot.svg'
             }
         },
+        {
+            resolve: 'gatsby-plugin-canonical-urls',
+            options: {
+                siteUrl: 'https://www.brokenrobot.xyz',
+                stripQueryString: true
+            }
+        },
         'gatsby-plugin-sharp',
         {
             resolve: 'gatsby-transformer-remark',
@@ -139,7 +146,7 @@ const config: GatsbyConfig = {
             resolve: 'gatsby-source-filesystem',
             options: {
                 name: 'posts',
-                path: './src/content/posts'
+                path: './content/posts'
             },
             __key: 'posts'
         },

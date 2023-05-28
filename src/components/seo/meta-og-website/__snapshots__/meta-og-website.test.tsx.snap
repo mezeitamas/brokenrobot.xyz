@@ -1,0 +1,30 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<MetaOgWebsite /> should render 1`] = `
+[
+  <meta
+    content="website"
+    property="og:type"
+  />,
+  <meta
+    content="en_US"
+    property="og:locale"
+  />,
+  <meta
+    content="Broken Robot"
+    property="og:site_name"
+  />,
+  <meta
+    content="Blog"
+    property="og:title"
+  />,
+  <meta
+    content="Blog posts"
+    property="og:description"
+  />,
+  <meta
+    content="https://www.brokenrobot.xyz/blog/"
+    property="og:url"
+  />,
+]
+`;

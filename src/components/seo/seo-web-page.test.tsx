@@ -2,8 +2,8 @@ import React from 'react';
 
 import { create } from 'react-test-renderer';
 
-import { Seo } from './seo';
-import type { SeoProps } from './seo';
+import { SeoWebPage } from './seo-web-page';
+import type { SeoWebPageProps } from './seo-web-page';
 
 jest.mock('../../hooks/use-site-metadata', () => {
     return {
@@ -25,33 +25,18 @@ jest.mock('../../hooks/use-site-metadata', () => {
     };
 });
 
-describe('<Seo />', () => {
-    test('should render without props', () => {
+describe('<SeoWebPage />', () => {
+    test('should render', () => {
         // Given
-        const props: SeoProps = {
-            title: undefined,
-            description: undefined,
-            pathname: undefined
-        };
-
-        // When
-        const component = create(<Seo {...props} />).toJSON();
-
-        // Then
-        expect(component).toMatchSnapshot();
-    });
-
-    test('should render with props', () => {
-        // Given
-        const props: SeoProps = {
-            title: 'Hosting a static website on Amazon S3',
+        const props: SeoWebPageProps = {
+            title: 'Broken Robot',
             description:
-                'Hosting a simple static website on Amazon Web Services (AWS) can be daunting at first, but luckily it’s quite straightforward. One option...',
-            pathname: 'hosting-a-static-website-on-amazon-s3'
+                'Personal website and blog of Tamas Mezei. Welcome to my little corner of the web, where I share my professional experiences, thoughts, adventures, and projects with the world.',
+            pathname: ''
         };
 
         // When
-        const component = create(<Seo {...props} />).toJSON();
+        const component = create(<SeoWebPage {...props} />).toJSON();
 
         // Then
         expect(component).toMatchSnapshot();

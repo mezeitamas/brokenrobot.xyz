@@ -1,7 +1,9 @@
 ---
 title: Hello, World!
-published: '2023-05-01'
+published: '2023-05-01T10:10:05.000Z'
 slug: hello-world
+tags:
+    - helloworld
 ---
 
 As a software engineer, I can't think of a better way to start my blog than with the classic "Hello, World!". For those unfamiliar with the term, "Hello, World!" is often the first program developers write when learning a new programming language or technology. This tradition is simple yet powerful and marks the start of an exciting journey into the world of coding.

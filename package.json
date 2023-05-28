@@ -26,6 +26,7 @@
     },
     "dependencies": {
         "gatsby": "5.10.0",
+        "gatsby-plugin-canonical-urls": "5.10.0",
         "gatsby-plugin-feed": "5.10.0",
         "gatsby-plugin-image": "3.10.0",
         "gatsby-plugin-manifest": "5.10.0",
@@ -43,7 +44,8 @@
         "prismjs": "1.29.0",
         "react": "18.2.0",
         "react-dom": "18.2.0",
-        "react-icons": "4.8.0"
+        "react-icons": "4.8.0",
+        "schema-dts": "1.1.2"
     },
     "devDependencies": {
         "@babel/preset-typescript": "7.21.5",

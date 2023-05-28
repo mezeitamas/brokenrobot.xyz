@@ -6,7 +6,7 @@ import type { HeadFC } from 'gatsby';
 import { ExternalLink } from '../../components/external-link/external-link';
 import { InternalLink } from '../../components/internal-link/internal-link';
 import { Layout } from '../../components/layout/layout';
-import { Seo } from '../../components/seo/seo';
+import { SeoWebPage } from '../../components/seo/seo-web-page';
 
 const AboutMePage: FunctionComponent = (): ReactElement => {
     return (
@@ -15,7 +15,7 @@ const AboutMePage: FunctionComponent = (): ReactElement => {
                 <h2>About me</h2>
 
                 <p>
-                    Hello there, my name is Tamas Mezei! I work as a software engineer / architect in Zürich,
+                    Hello there, my name is Tamas Mezei! I work as a software engineer / architect in Zurich,
                     Switzerland.
                 </p>
 
@@ -80,4 +80,10 @@ const AboutMePage: FunctionComponent = (): ReactElement => {
 
 export default AboutMePage;
 
-export const Head: HeadFC = () => <Seo title="About me" />;
+export const Head: HeadFC = ({ location }) => (
+    <SeoWebPage
+        title="About me"
+        description="About me"
+        pathname={location.pathname}
+    />
+);

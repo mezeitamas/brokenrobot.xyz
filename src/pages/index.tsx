@@ -7,7 +7,7 @@ import type { HeadFC, PageProps } from 'gatsby';
 import { BlogPostList } from '../components/blog-post-list';
 import { InternalLink } from '../components/internal-link/internal-link';
 import { Layout } from '../components/layout/layout';
-import { Seo } from '../components/seo/seo';
+import { SeoWebPage } from '../components/seo/seo-web-page';
 
 type DataType = {
     allMarkdownRemark: {
@@ -49,6 +49,11 @@ const IndexPage: FunctionComponent<PageProps> = (): ReactElement => {
             title: node.frontmatter.title,
             excerpt: node.excerpt,
             published: node.frontmatter.published,
+            publishedFormatted: new Date(node.frontmatter.published).toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            }),
             slug: node.frontmatter.slug
         };
     });
@@ -76,4 +81,10 @@ const IndexPage: FunctionComponent<PageProps> = (): ReactElement => {
 
 export default IndexPage;
 
-export const Head: HeadFC = () => <Seo />;
+export const Head: HeadFC = ({ location }) => (
+    <SeoWebPage
+        title="Broken Robot"
+        description="Personal website and blog of Tamas Mezei. Welcome to my little corner of the web, where I share my professional experiences, thoughts, adventures, and projects with the world."
+        pathname={location.pathname}
+    />
+);
