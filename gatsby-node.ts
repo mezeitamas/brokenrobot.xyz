@@ -12,6 +12,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
                         title
                         published
                         slug
+                        tags
                     }
                 }
             }
@@ -35,6 +36,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
                 title: post.frontmatter.title,
                 published: post.frontmatter.published,
                 slug: post.frontmatter.slug,
+                tags: post.frontmatter.tags,
                 excerpt: post.excerpt,
                 html: post.html
             }

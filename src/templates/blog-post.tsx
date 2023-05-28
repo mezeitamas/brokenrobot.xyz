@@ -11,6 +11,7 @@ type PageContext = {
     title: string;
     published: string;
     slug: string;
+    tags: string[];
     excerpt: string;
     html: string;
 };
@@ -41,12 +42,13 @@ const BlogPostTemplate: FunctionComponent<PageProps<null, PageContext>> = ({ pag
     );
 };
 
-const Head: HeadFC<null, PageContext> = ({ location, pageContext: { title, excerpt, published } }) => (
+const Head: HeadFC<null, PageContext> = ({ location, pageContext: { title, excerpt, published, tags } }) => (
     <SeoBlogPosting
         title={title}
         description={excerpt}
         pathname={location.pathname}
         published={published}
+        tags={tags}
     />
 );
 

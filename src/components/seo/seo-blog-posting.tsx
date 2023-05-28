@@ -12,6 +12,7 @@ type SeoBlogPostingProps = {
     description: string;
     pathname: string;
     published: string;
+    tags: string[];
 };
 
 const SeoBlogPosting: FunctionComponent<PropsWithChildren<SeoBlogPostingProps>> = ({
@@ -19,6 +20,7 @@ const SeoBlogPosting: FunctionComponent<PropsWithChildren<SeoBlogPostingProps>> 
     description,
     pathname,
     published,
+    tags,
     children
 }) => {
     const { title: siteName, siteUrl, author } = useSiteMetadata();
@@ -40,12 +42,18 @@ const SeoBlogPosting: FunctionComponent<PropsWithChildren<SeoBlogPostingProps>> 
                 content={description}
             />
 
+            <meta
+                name="keywords"
+                content={tags.join(', ')}
+            />
+
             <MetaOgArticle
                 siteName={siteName}
                 title={title}
                 description={description}
                 url={url}
                 published={published}
+                tags={tags}
                 author={author.name}
             />
 

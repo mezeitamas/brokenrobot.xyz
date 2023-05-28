@@ -2,6 +2,12 @@
 title: Hosting a static website on Amazon S3
 published: '2023-05-04T17:58:32.000Z'
 slug: hosting-a-static-website-on-amazon-s3
+tags:
+    - aws
+    - s3
+    - route53
+    - staticwebsite
+    - hosting
 ---
 
 Hosting a simple static website on Amazon Web Services (AWS) can be daunting at first, but luckily it's quite straightforward. One option for hosting a static website on AWS is to use Amazon S3.

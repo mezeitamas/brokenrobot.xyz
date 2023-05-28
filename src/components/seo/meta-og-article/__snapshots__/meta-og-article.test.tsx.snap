@@ -27,8 +27,28 @@ exports[`<MetaOgArticle /> should render 1`] = `
     property="og:url"
   />,
   <meta
-    content="2023-05-04"
+    content="2023-05-04T17:58:32.000Z"
     property="og:article:published_time"
+  />,
+  <meta
+    content="aws"
+    property="og:article:tag"
+  />,
+  <meta
+    content="s3"
+    property="og:article:tag"
+  />,
+  <meta
+    content="route53"
+    property="og:article:tag"
+  />,
+  <meta
+    content="staticwebsite"
+    property="og:article:tag"
+  />,
+  <meta
+    content="hosting"
+    property="og:article:tag"
   />,
   <meta
     content="Tamas Mezei"

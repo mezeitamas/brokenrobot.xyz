@@ -33,7 +33,8 @@ describe('<SeoBlogPosting />', () => {
             description:
                 'Hosting a simple static website on Amazon Web Services (AWS) can be daunting at first, but luckily it’s quite straightforward. One option...',
             pathname: '/blog/hosting-a-static-website-on-amazon-s3/',
-            published: '2023-05-04T17:58:32.000Z'
+            published: '2023-05-04T17:58:32.000Z',
+            tags: ['aws', 's3', 'route53', 'staticwebsite', 'hosting']
         };
 
         // When

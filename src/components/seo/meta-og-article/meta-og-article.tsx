@@ -7,6 +7,7 @@ type MetaOgArticleProps = {
     description: string;
     url: string;
     published: string;
+    tags: string[];
     author: string;
 };
 
@@ -16,6 +17,7 @@ const MetaOgArticle: FunctionComponent<MetaOgArticleProps> = ({
     description,
     url,
     published,
+    tags,
     author
 }) => {
     return (
@@ -48,6 +50,14 @@ const MetaOgArticle: FunctionComponent<MetaOgArticleProps> = ({
                 property="og:article:published_time"
                 content={published}
             />
+
+            {tags.map((tag) => (
+                <meta
+                    property="og:article:tag"
+                    content={tag}
+                />
+            ))}
+
             <meta
                 property="og:article:author"
                 content={author}
