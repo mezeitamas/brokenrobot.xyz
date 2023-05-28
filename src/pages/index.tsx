@@ -7,7 +7,7 @@ import type { HeadFC, PageProps } from 'gatsby';
 import { BlogPostList } from '../components/blog-post-list';
 import { InternalLink } from '../components/internal-link/internal-link';
 import { Layout } from '../components/layout/layout';
-import { Seo } from '../components/seo/seo';
+import { SeoWebPage } from '../components/seo/seo-web-page';
 
 type DataType = {
     allMarkdownRemark: {
@@ -77,10 +77,9 @@ const IndexPage: FunctionComponent<PageProps> = (): ReactElement => {
 export default IndexPage;
 
 export const Head: HeadFC = ({ location }) => (
-    <Seo
+    <SeoWebPage
         title="Broken Robot"
         description="Personal website and blog of Tamas Mezei. Welcome to my little corner of the web, where I share my professional experiences, thoughts, adventures, and projects with the world."
         pathname={location.pathname}
-        isArticle={false}
     />
 );

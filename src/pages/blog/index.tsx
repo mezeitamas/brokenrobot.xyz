@@ -6,7 +6,7 @@ import type { HeadFC } from 'gatsby';
 
 import { BlogPostList } from '../../components/blog-post-list';
 import { Layout } from '../../components/layout/layout';
-import { Seo } from '../../components/seo/seo';
+import { SeoWebPage } from '../../components/seo/seo-web-page';
 
 type DataType = {
     allMarkdownRemark: {
@@ -68,10 +68,9 @@ const BlogPage: FunctionComponent = (): ReactElement => {
 export default BlogPage;
 
 export const Head: HeadFC = ({ location }) => (
-    <Seo
+    <SeoWebPage
         title="Blog"
         description="Blog posts"
         pathname={location.pathname}
-        isArticle={false}
     />
 );

@@ -1,0 +1,65 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<SeoWebPage /> should render 1`] = `
+[
+  <html
+    lang="en"
+  />,
+  <title>
+    Broken Robot
+  </title>,
+  <meta
+    content="public, max-age=0, must-revalidate"
+    httpEquiv="cache-control"
+  />,
+  <meta
+    content="Personal website and blog of Tamas Mezei. Welcome to my little corner of the web, where I share my professional experiences, thoughts, adventures, and projects with the world."
+    name="description"
+  />,
+  <meta
+    content="website"
+    property="og:type"
+  />,
+  <meta
+    content="en_US"
+    property="og:locale"
+  />,
+  <meta
+    content="Broken Robot"
+    property="og:site_name"
+  />,
+  <meta
+    content="Broken Robot"
+    property="og:title"
+  />,
+  <meta
+    content="Personal website and blog of Tamas Mezei. Welcome to my little corner of the web, where I share my professional experiences, thoughts, adventures, and projects with the world."
+    property="og:description"
+  />,
+  <meta
+    content="https://www.brokenrobot.xyz"
+    property="og:url"
+  />,
+  <script
+    type="application/ld+json"
+  >
+    {"@context":"https://schema.org","@type":"WebPage","@id":"https://www.brokenrobot.xyz/#WebPage","name":"Broken Robot","url":"https://www.brokenrobot.xyz","inLanguage":"en-US","author":[{"@type":"Person","@id":"https://www.brokenrobot.xyz/about-me/#Person","name":"Tamas Mezei","url":"https://www.brokenrobot.xyz/about-me/","sameAs":["https://github.com/mezeitamas","https://www.linkedin.com/in/mezeitamas/"]}],"publisher":{"@type":"Organization","@id":"https://www.brokenrobot.xyz/#Organization","name":"Broken Robot","url":"https://www.brokenrobot.xyz"}}
+  </script>,
+  <meta
+    content="summary"
+    name="twitter:card"
+  />,
+  <meta
+    content="Broken Robot"
+    name="twitter:title"
+  />,
+  <meta
+    content="Personal website and blog of Tamas Mezei. Welcome to my little corner of the web, where I share my professional experiences, thoughts, adventures, and projects with the world."
+    name="twitter:description"
+  />,
+  <meta
+    content="https://www.brokenrobot.xyz"
+    name="twitter:url"
+  />,
+]
+`;

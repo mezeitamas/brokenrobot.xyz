@@ -4,7 +4,7 @@ import type { FunctionComponent, ReactElement } from 'react';
 import type { HeadFC, PageProps } from 'gatsby';
 
 import { Layout } from '../components/layout/layout';
-import { Seo } from '../components/seo/seo';
+import { SeoBlogPosting } from '../components/seo/seo-blog-posting';
 
 type PageContext = {
     id: string;
@@ -36,11 +36,10 @@ const BlogPostTemplate: FunctionComponent<PageProps<null, PageContext>> = ({ pag
 };
 
 const Head: HeadFC<null, PageContext> = ({ location, pageContext: { title, excerpt, published } }) => (
-    <Seo
+    <SeoBlogPosting
         title={title}
         description={excerpt}
         pathname={location.pathname}
-        isArticle={true}
         published={published}
     />
 );

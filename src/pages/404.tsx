@@ -4,7 +4,7 @@ import type { FunctionComponent } from 'react';
 import { Link } from 'gatsby';
 import type { HeadFC, PageProps } from 'gatsby';
 
-import { Seo } from '../components/seo/seo';
+import { SeoWebPage } from '../components/seo/seo-web-page';
 
 const NotFoundPage: FunctionComponent<PageProps> = () => {
     return (
@@ -34,10 +34,9 @@ const NotFoundPage: FunctionComponent<PageProps> = () => {
 export default NotFoundPage;
 
 export const Head: HeadFC = ({ location }) => (
-    <Seo
+    <SeoWebPage
         title="Not found"
         description="Not found"
         pathname={location.pathname}
-        isArticle={false}
     />
 );

@@ -6,7 +6,7 @@ import type { HeadFC } from 'gatsby';
 import { ExternalLink } from '../../components/external-link/external-link';
 import { InternalLink } from '../../components/internal-link/internal-link';
 import { Layout } from '../../components/layout/layout';
-import { Seo } from '../../components/seo/seo';
+import { SeoWebPage } from '../../components/seo/seo-web-page';
 
 const AboutMePage: FunctionComponent = (): ReactElement => {
     return (
@@ -81,10 +81,9 @@ const AboutMePage: FunctionComponent = (): ReactElement => {
 export default AboutMePage;
 
 export const Head: HeadFC = ({ location }) => (
-    <Seo
+    <SeoWebPage
         title="About me"
         description="About me"
         pathname={location.pathname}
-        isArticle={false}
     />
 );

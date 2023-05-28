@@ -2,13 +2,13 @@ import React from 'react';
 
 import { create } from 'react-test-renderer';
 
-import { RichResultsArticle } from './rich-results-article';
-import type { RichResultsArticleProps } from './rich-results-article';
+import { RichResultsBlogPosting } from './rich-results-blog-posting';
+import type { RichResultsBlogPostingProps } from './rich-results-blog-posting';
 
-describe('<RichResultsArticle />', () => {
+describe('<RichResultsBlogPosting />', () => {
     test('should render', () => {
         // Given
-        const props: RichResultsArticleProps = {
+        const props: RichResultsBlogPostingProps = {
             siteName: 'Broken Robot',
             siteUrl: 'https://www.brokenrobot.xyz',
             title: 'Hosting a static website on Amazon S3',
@@ -26,7 +26,7 @@ describe('<RichResultsArticle />', () => {
         };
 
         // When
-        const component = create(<RichResultsArticle {...props} />).toJSON();
+        const component = create(<RichResultsBlogPosting {...props} />).toJSON();
 
         // Then
         expect(component).toMatchSnapshot();

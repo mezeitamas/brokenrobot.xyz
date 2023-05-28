@@ -3,7 +3,7 @@ import type { FunctionComponent } from 'react';
 
 import type { Person, Organization, WebSite, BlogPosting, WithContext } from 'schema-dts';
 
-type RichResultsArticleProps = {
+type RichResultsBlogPostingProps = {
     siteName: string;
     siteUrl: string;
     title: string;
@@ -19,7 +19,7 @@ type RichResultsArticleProps = {
     };
 };
 
-const RichResultsArticle: FunctionComponent<RichResultsArticleProps> = ({
+const RichResultsBlogPosting: FunctionComponent<RichResultsBlogPostingProps> = ({
     siteName,
     siteUrl,
     title,
@@ -48,7 +48,9 @@ const RichResultsArticle: FunctionComponent<RichResultsArticleProps> = ({
         '@id': `${siteUrl}/#WebSite`,
         name: siteName,
         url: siteUrl,
-        inLanguage: 'en-US'
+        inLanguage: 'en-US',
+        author: [authorPerson],
+        publisher: publisher
     };
 
     const blogPosting: WithContext<BlogPosting> = {
@@ -70,6 +72,6 @@ const RichResultsArticle: FunctionComponent<RichResultsArticleProps> = ({
     return <script type="application/ld+json">{JSON.stringify(blogPosting)}</script>;
 };
 
-export { RichResultsArticle };
+export { RichResultsBlogPosting };
 
-export type { RichResultsArticleProps };
+export type { RichResultsBlogPostingProps };
