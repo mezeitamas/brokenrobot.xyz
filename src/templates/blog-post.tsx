@@ -17,6 +17,12 @@ type PageContext = {
 
 const BlogPostTemplate: FunctionComponent<PageProps<null, PageContext>> = ({ pageContext }): ReactElement => {
     const { title, published, html } = pageContext;
+    const publishedDate = new Date(published);
+    const publishedDateFormatted = publishedDate.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+    });
 
     return (
         <Layout>
@@ -24,7 +30,7 @@ const BlogPostTemplate: FunctionComponent<PageProps<null, PageContext>> = ({ pag
                 <header>
                     <h1>{title}</h1>
 
-                    <time dateTime={published}>{published}</time>
+                    <time dateTime={published}>{publishedDateFormatted}</time>
                 </header>
 
                 <section>

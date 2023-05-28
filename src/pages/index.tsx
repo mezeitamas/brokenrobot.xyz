@@ -49,6 +49,11 @@ const IndexPage: FunctionComponent<PageProps> = (): ReactElement => {
             title: node.frontmatter.title,
             excerpt: node.excerpt,
             published: node.frontmatter.published,
+            publishedFormatted: new Date(node.frontmatter.published).toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            }),
             slug: node.frontmatter.slug
         };
     });
@@ -56,7 +61,7 @@ const IndexPage: FunctionComponent<PageProps> = (): ReactElement => {
     return (
         <Layout>
             <div>
-                <h2>Hello there, I'm Tamás!</h2>
+                <h2>Hello there, I'm Tamas!</h2>
 
                 <p>
                     Welcome to my little corner of the web, where I share my professional experiences, thoughts,

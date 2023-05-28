@@ -7,6 +7,7 @@ type BlogPostListItemProps = {
     title: string;
     excerpt: string;
     published: string;
+    publishedFormatted: string;
     slug: string;
 };
 
@@ -14,6 +15,7 @@ const BlogPostListItem: FunctionComponent<BlogPostListItemProps> = ({
     title,
     excerpt,
     published,
+    publishedFormatted,
     slug
 }): ReactElement => {
     return (
@@ -30,7 +32,7 @@ const BlogPostListItem: FunctionComponent<BlogPostListItemProps> = ({
                     dateTime={published}
                     className="text-sm text-gray-600"
                 >
-                    {published}
+                    {publishedFormatted}
                 </time>
 
                 <p>{excerpt}</p>

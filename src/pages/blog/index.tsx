@@ -48,6 +48,11 @@ const BlogPage: FunctionComponent = (): ReactElement => {
             title: node.frontmatter.title,
             excerpt: node.excerpt,
             published: node.frontmatter.published,
+            publishedFormatted: new Date(node.frontmatter.published).toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            }),
             slug: node.frontmatter.slug
         };
     });

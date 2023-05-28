@@ -15,7 +15,7 @@ const AboutMePage: FunctionComponent = (): ReactElement => {
                 <h2>About me</h2>
 
                 <p>
-                    Hello there, my name is Tamás Mezei! I work as a software engineer / architect in Zürich,
+                    Hello there, my name is Tamas Mezei! I work as a software engineer / architect in Zurich,
                     Switzerland.
                 </p>
 
