@@ -6,7 +6,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
             allMarkdownRemark {
                 nodes {
                     id
-                    excerpt
+                    excerpt(pruneLength: 250)
                     html
                     frontmatter {
                         title

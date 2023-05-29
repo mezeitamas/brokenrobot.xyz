@@ -31,7 +31,7 @@ const BlogPage: FunctionComponent = (): ReactElement => {
             query {
                 allMarkdownRemark(sort: { frontmatter: { published: DESC } }) {
                     nodes {
-                        excerpt
+                        excerpt(pruneLength: 250)
                         frontmatter {
                             title
                             published

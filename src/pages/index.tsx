@@ -32,7 +32,7 @@ const IndexPage: FunctionComponent<PageProps> = (): ReactElement => {
             query {
                 allMarkdownRemark(limit: 3, sort: { frontmatter: { published: DESC } }) {
                     nodes {
-                        excerpt
+                        excerpt(pruneLength: 250)
                         frontmatter {
                             title
                             published
