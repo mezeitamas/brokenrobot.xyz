@@ -6,8 +6,8 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
             allMarkdownRemark {
                 nodes {
                     id
-                    html
                     excerpt
+                    html
                     frontmatter {
                         title
                         published
@@ -20,7 +20,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
     `);
 
     if (result.errors) {
-        reporter.panicOnBuild('Error loading MDX result', result.errors);
+        reporter.panicOnBuild('Error loading MD result', result.errors);
     }
 
     const posts = result.data.allMarkdownRemark.nodes;

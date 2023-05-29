@@ -127,6 +127,12 @@ const config: GatsbyConfig = {
         },
         'gatsby-transformer-sharp',
         {
+            resolve: 'gatsby-plugin-catch-links',
+            options: {
+                excludePattern: /(excluded-link|external)/
+            }
+        },
+        {
             resolve: 'gatsby-source-filesystem',
             options: {
                 name: 'assets',
