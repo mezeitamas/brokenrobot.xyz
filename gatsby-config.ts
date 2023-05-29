@@ -190,7 +190,7 @@ const config: GatsbyConfig = {
                         sort: { order: DESC, fields: [frontmatter___published] },
                       ) {
                         nodes {
-                          excerpt
+                          excerpt(pruneLength: 250)
                           html
                           frontmatter {
                             title
