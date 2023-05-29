@@ -1,12 +1,11 @@
 name: Continuous Integration (CI)
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - main
   pull_request:
-    types:
-      - ready_for_review
     branches:
       - main
 
