@@ -28,7 +28,7 @@ It is quite simple, we have only 2 components: Amazon S3 and Route 53. Where S3 
 
 Now, let's explore how users can access the website from various locations across the globe.
 
-![Alt text](baseline-architecture-s3-geo.png)
+![Baseline architecture - access from locations across the globe](baseline-architecture-s3-geo.png)
 
 ### What can we improve?
 
@@ -120,7 +120,7 @@ Let's identify the main components:
 
 Let's check how users can access the website from different locations around the world.
 
-![Alt text](target-architecture-s3-cdn-geo.png)
+![Target architecture - access from locations across the globe](target-architecture-s3-cdn-geo.png)
 
 When accessing a static website hosted on S3 using CloudFront, users do not connect directly to the S3 bucket itself. Instead, they connect to the nearest CloudFront edge location.
 
