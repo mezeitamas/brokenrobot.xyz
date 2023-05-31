@@ -1,24 +1,15 @@
 import dotenv from 'dotenv';
 import type { GatsbyConfig } from 'gatsby';
 
+import type { SiteMetadata } from './src/components/site-metadata/site-metadata.types';
+
 dotenv.config();
 
 // An inelegant method for adding types, which will require refactoring later on.
 type DataType = {
     query: {
         site: {
-            siteMetadata: {
-                title: string;
-                description: string;
-                siteUrl: string;
-                author: {
-                    name: string;
-                    social: {
-                        github: string;
-                        linkedin: string;
-                    };
-                };
-            };
+            siteMetadata: SiteMetadata;
         };
         allMarkdownRemark: {
             nodes: [

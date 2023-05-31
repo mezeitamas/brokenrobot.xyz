@@ -8,6 +8,7 @@ import { BlogPostList } from '../components/blog-post-list';
 import { InternalLink } from '../components/internal-link/internal-link';
 import { Layout } from '../components/layout/layout';
 import { SeoWebPage } from '../components/seo/seo-web-page';
+import { useSiteMetadata } from '../components/site-metadata/use-site-metadata';
 
 type DataType = {
     allMarkdownRemark: {
@@ -81,10 +82,14 @@ const IndexPage: FunctionComponent<PageProps> = (): ReactElement => {
 
 export default IndexPage;
 
-export const Head: HeadFC = ({ location }) => (
-    <SeoWebPage
-        title="Broken Robot"
-        description="Personal website and blog of Tamas Mezei. Welcome to my little corner of the web, where I share my professional experiences, thoughts, adventures, and projects with the world."
-        pathname={location.pathname}
-    />
-);
+export const Head: HeadFC = ({ location }) => {
+    const { title, description } = useSiteMetadata();
+
+    return (
+        <SeoWebPage
+            title={title}
+            description={description}
+            pathname={location.pathname}
+        />
+    );
+};

@@ -1,19 +1,6 @@
 import { graphql, useStaticQuery } from 'gatsby';
 
-type SiteMetadata = {
-    title: string;
-    description: string;
-    siteUrl: string;
-    author: {
-        name: string;
-        social: {
-            githubUrl: string;
-            linkedinUrl: string;
-            twitterUrl: string;
-            twitterUsername: string;
-        };
-    };
-};
+import type { SiteMetadata } from './site-metadata.types';
 
 type Site = {
     site: {

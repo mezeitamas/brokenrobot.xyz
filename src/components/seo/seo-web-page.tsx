@@ -1,7 +1,7 @@
 import React from 'react';
 import type { FunctionComponent, PropsWithChildren } from 'react';
 
-import { useSiteMetadata } from '../../hooks/use-site-metadata';
+import { useSiteMetadata } from '../site-metadata/use-site-metadata';
 
 import { MetaOgWebsite } from './meta-og-website/meta-og-website';
 import { MetaTwitter } from './meta-twitter/meta-twitter';

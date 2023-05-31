@@ -5,7 +5,7 @@ import { create } from 'react-test-renderer';
 import { SeoWebPage } from './seo-web-page';
 import type { SeoWebPageProps } from './seo-web-page';
 
-jest.mock('../../hooks/use-site-metadata', () => {
+jest.mock('../site-metadata/use-site-metadata', () => {
     return {
         useSiteMetadata: jest.fn().mockImplementation(() => {
             return {
