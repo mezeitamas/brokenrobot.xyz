@@ -1,59 +1,27 @@
 import React from 'react';
 import type { FunctionComponent, ReactElement } from 'react';
 
-import { graphql, useStaticQuery } from 'gatsby';
 import type { HeadFC } from 'gatsby';
 
 import { BlogPostList } from '../../components/blog-post-list';
+import { useBlogPosts } from '../../components/blog-posts/use-blog-posts';
 import { Layout } from '../../components/layout/layout';
 import { SeoWebPage } from '../../components/seo/seo-web-page';
 
-type DataType = {
-    allMarkdownRemark: {
-        nodes: [
-            {
-                excerpt: string;
-                frontmatter: {
-                    title: string;
-                    published: string;
-                    slug: string;
-                };
-            }
-        ];
-    };
-};
-
 const BlogPage: FunctionComponent = (): ReactElement => {
-    const {
-        allMarkdownRemark: { nodes }
-    } = useStaticQuery<DataType>(
-        graphql`
-            query {
-                allMarkdownRemark(sort: { frontmatter: { published: DESC } }) {
-                    nodes {
-                        excerpt(pruneLength: 250)
-                        frontmatter {
-                            title
-                            published
-                            slug
-                        }
-                    }
-                }
-            }
-        `
-    );
+    const blogPosts = useBlogPosts();
 
-    const posts = nodes.map((node) => {
+    const posts = blogPosts.map((blogPost) => {
         return {
-            title: node.frontmatter.title,
-            excerpt: node.excerpt,
-            published: node.frontmatter.published,
-            publishedFormatted: new Date(node.frontmatter.published).toLocaleDateString('en-US', {
+            title: blogPost.frontmatter.title,
+            excerpt: blogPost.excerpt,
+            published: blogPost.frontmatter.published,
+            publishedFormatted: new Date(blogPost.frontmatter.published).toLocaleDateString('en-US', {
                 year: 'numeric',
                 month: 'long',
                 day: 'numeric'
             }),
-            slug: node.frontmatter.slug
+            slug: blogPost.frontmatter.slug
         };
     });
 
