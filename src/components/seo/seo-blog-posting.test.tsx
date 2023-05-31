@@ -16,8 +16,10 @@ jest.mock('../../hooks/use-site-metadata', () => {
                 author: {
                     name: 'Tamas Mezei',
                     social: {
-                        github: 'https://github.com/mezeitamas',
-                        linkedin: 'https://www.linkedin.com/in/mezeitamas/'
+                        githubUrl: 'https://github.com/mezeitamas',
+                        linkedinUrl: 'https://www.linkedin.com/in/mezeitamas/',
+                        twitterUrl: 'https://twitter.com/brokenrobot_xyz',
+                        twitterUsername: '@brokenrobot_xyz'
                     }
                 }
             };

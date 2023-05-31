@@ -7,8 +7,10 @@ type SiteMetadata = {
     author: {
         name: string;
         social: {
-            github: string;
-            linkedin: string;
+            githubUrl: string;
+            linkedinUrl: string;
+            twitterUrl: string;
+            twitterUsername: string;
         };
     };
 };
@@ -32,8 +34,10 @@ const useSiteMetadata = (): SiteMetadata => {
                     author {
                         name
                         social {
-                            github
-                            linkedin
+                            githubUrl
+                            linkedinUrl
+                            twitterUrl
+                            twitterUsername
                         }
                     }
                 }

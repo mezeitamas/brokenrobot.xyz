@@ -13,8 +13,10 @@ type RichResultsBlogPostingProps = {
     author: {
         name: string;
         social: {
-            github: string;
-            linkedin: string;
+            githubUrl: string;
+            linkedinUrl: string;
+            twitterUrl: string;
+            twitterUsername: string;
         };
     };
 };
@@ -33,7 +35,7 @@ const RichResultsBlogPosting: FunctionComponent<RichResultsBlogPostingProps> = (
         '@id': `${siteUrl}/about-me/#Person`,
         name: author.name,
         url: `${siteUrl}/about-me/`,
-        sameAs: [author.social.github, author.social.linkedin]
+        sameAs: [author.social.githubUrl, author.social.linkedinUrl, author.social.twitterUrl]
     };
 
     const publisher: Organization = {

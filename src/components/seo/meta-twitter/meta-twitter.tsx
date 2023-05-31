@@ -5,9 +5,18 @@ type MetaTwitterProps = {
     title: string;
     description: string;
     url: string;
+    author: {
+        name: string;
+        social: {
+            githubUrl: string;
+            linkedinUrl: string;
+            twitterUrl: string;
+            twitterUsername: string;
+        };
+    };
 };
 
-const MetaTwitter: FunctionComponent<MetaTwitterProps> = ({ title, description, url }) => {
+const MetaTwitter: FunctionComponent<MetaTwitterProps> = ({ title, description, url, author }) => {
     return (
         <>
             <meta
@@ -25,6 +34,10 @@ const MetaTwitter: FunctionComponent<MetaTwitterProps> = ({ title, description, 
             <meta
                 name="twitter:url"
                 content={url}
+            />
+            <meta
+                name="twitter:creator"
+                content={author.social.twitterUsername}
             />
         </>
     );

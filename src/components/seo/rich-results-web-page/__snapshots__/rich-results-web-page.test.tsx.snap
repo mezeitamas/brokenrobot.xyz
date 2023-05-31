@@ -4,6 +4,6 @@ exports[`<RichResultsWebPage /> should render 1`] = `
 <script
   type="application/ld+json"
 >
-  {"@context":"https://schema.org","@type":"WebPage","@id":"https://www.brokenrobot.xyz/#WebPage","name":"Broken Robot","url":"https://www.brokenrobot.xyz","inLanguage":"en-US","author":[{"@type":"Person","@id":"https://www.brokenrobot.xyz/about-me/#Person","name":"Tamas Mezei","url":"https://www.brokenrobot.xyz/about-me/","sameAs":["https://github.com/mezeitamas","https://www.linkedin.com/in/mezeitamas/"]}],"publisher":{"@type":"Organization","@id":"https://www.brokenrobot.xyz/#Organization","name":"Broken Robot","url":"https://www.brokenrobot.xyz"}}
+  {"@context":"https://schema.org","@type":"WebPage","@id":"https://www.brokenrobot.xyz/#WebPage","name":"Broken Robot","url":"https://www.brokenrobot.xyz","inLanguage":"en-US","author":[{"@type":"Person","@id":"https://www.brokenrobot.xyz/about-me/#Person","name":"Tamas Mezei","url":"https://www.brokenrobot.xyz/about-me/","sameAs":["https://github.com/mezeitamas","https://www.linkedin.com/in/mezeitamas/","https://twitter.com/brokenrobot_xyz"]}],"publisher":{"@type":"Organization","@id":"https://www.brokenrobot.xyz/#Organization","name":"Broken Robot","url":"https://www.brokenrobot.xyz"}}
 </script>
 `;

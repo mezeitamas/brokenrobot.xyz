@@ -1,17 +1,23 @@
 import React from 'react';
 import type { FunctionComponent, ReactElement } from 'react';
 
-import { FiRss, FiGithub, FiLinkedin } from 'react-icons/fi';
+import { FiRss, FiGithub, FiLinkedin, FiTwitter } from 'react-icons/fi';
 
 import { ExternalLink } from '../../external-link/external-link';
 
 type FooterProps = {
     githubLink: string;
     linkedinLink: string;
+    twitterLink: string;
     authorName: string;
 };
 
-const Footer: FunctionComponent<FooterProps> = ({ githubLink, linkedinLink, authorName }): ReactElement => {
+const Footer: FunctionComponent<FooterProps> = ({
+    githubLink,
+    linkedinLink,
+    twitterLink,
+    authorName
+}): ReactElement => {
     return (
         <footer className="mb-6 mt-16 flex flex-col gap-4">
             <hr />
@@ -26,6 +32,11 @@ const Footer: FunctionComponent<FooterProps> = ({ githubLink, linkedinLink, auth
                     <div className="flex items-center gap-2">
                         <FiLinkedin size="18" />
                         <ExternalLink href={linkedinLink}>LinkedIn</ExternalLink>
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                        <FiTwitter size="18" />
+                        <ExternalLink href={twitterLink}>Twitter</ExternalLink>
                     </div>
                 </div>
 

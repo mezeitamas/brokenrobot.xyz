@@ -71,6 +71,7 @@ const SeoBlogPosting: FunctionComponent<PropsWithChildren<SeoBlogPostingProps>> 
                 title={title}
                 description={description}
                 url={url}
+                author={author}
             />
 
             {children}

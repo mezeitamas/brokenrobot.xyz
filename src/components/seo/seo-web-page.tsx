@@ -55,6 +55,7 @@ const SeoWebPage: FunctionComponent<PropsWithChildren<SeoWebPageProps>> = ({
                 title={title}
                 description={description}
                 url={url}
+                author={author}
             />
 
             {children}
