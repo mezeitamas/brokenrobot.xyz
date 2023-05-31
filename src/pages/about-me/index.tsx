@@ -2,6 +2,7 @@ import React from 'react';
 import type { FunctionComponent, ReactElement } from 'react';
 
 import type { HeadFC } from 'gatsby';
+import { StaticImage } from 'gatsby-plugin-image';
 
 import { ExternalLink } from '../../components/external-link/external-link';
 import { InternalLink } from '../../components/internal-link/internal-link';
@@ -14,41 +15,59 @@ const AboutMePage: FunctionComponent = (): ReactElement => {
             <section>
                 <h2>About me</h2>
 
-                <p>
-                    Hello there, my name is Tamas Mezei! I work as a software engineer / architect in Zurich,
-                    Switzerland.
-                </p>
+                <div className="flex flex-col justify-between gap-4 lg:flex-row lg:gap-10">
+                    <div>
+                        <p>
+                            Hello there, my name is Tamas Mezei! I work as a software engineer / architect in Zurich,
+                            Switzerland.
+                        </p>
 
-                <p>
-                    From my early days tinkering with computers and programming languages to my years of professional
-                    experience in the field, I have come to appreciate the power of software to transform lives and
-                    businesses. As the web and cloud have become increasingly important and ubiquitous, I have focused
-                    my attention on mastering these technologies and exploring their potential to create scalable,
-                    secure, and user-friendly solutions.
-                </p>
+                        <p>
+                            From my early days tinkering with computers and programming languages to my years of
+                            professional experience in the field, I have come to appreciate the power of software to
+                            transform lives and businesses. As the web and cloud have become increasingly important and
+                            ubiquitous, I have focused my attention on mastering these technologies and exploring their
+                            potential to create scalable, secure, and user-friendly solutions.
+                        </p>
 
-                <p>
-                    Through this website, I hope to not only showcase my work and expertise but also contribute to the
-                    wider software development community. I believe in the power of collaboration, open source, and
-                    continuous learning, and I hope my <InternalLink to="/blog">blog posts</InternalLink> and other
-                    content will inspire others in their own journeys.
-                </p>
+                        <p>
+                            Through this website, I hope to not only showcase my work and expertise but also contribute
+                            to the wider software development community. I believe in the power of collaboration, open
+                            source, and continuous learning, and I hope my{' '}
+                            <InternalLink to="/blog">blog posts</InternalLink> and other content will inspire others in
+                            their own journeys.
+                        </p>
 
-                <p>
-                    I'm also a firm believer in making the internet a better place, that's why I've created a website
-                    that's simple, clean, and free from all the annoying distractions that plague the internet these
-                    days.
-                </p>
+                        <p>
+                            I'm also a firm believer in making the internet a better place, that's why I've created a
+                            website that's simple, clean, and free from all the annoying distractions that plague the
+                            internet these days.
+                        </p>
 
-                <p>
-                    Being said that you won't find any ads, affiliate links, or spyware here, just pure unadulterated
-                    content.
-                </p>
+                        <p>
+                            Being said that you won't find any ads, affiliate links, or spyware here, just pure
+                            unadulterated content.
+                        </p>
 
-                <p>
-                    I hope you enjoy exploring my website, and if you have any questions or comments, feel free to reach
-                    out to me. And let's make the internet a more awesome place, one byte at a time!
-                </p>
+                        <p>
+                            I hope you enjoy exploring my website, and if you have any questions or comments, feel free
+                            to reach out to me. And let's make the internet a more awesome place, one byte at a time!
+                        </p>
+                    </div>
+
+                    <div className="flex items-center justify-center">
+                        <StaticImage
+                            src="tamas-mezei-avatar.png"
+                            alt="Tamas Mezei avatar"
+                            loading="eager"
+                            placeholder="blurred"
+                            layout="fixed"
+                            width={300}
+                            height={300}
+                            className="rounded-full"
+                        />
+                    </div>
+                </div>
             </section>
 
             <section>
