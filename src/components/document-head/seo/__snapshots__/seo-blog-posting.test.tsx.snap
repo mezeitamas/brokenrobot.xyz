@@ -2,16 +2,9 @@
 
 exports[`<SeoBlogPosting /> should render 1`] = `
 [
-  <html
-    lang="en"
-  />,
   <title>
     Hosting a static website on Amazon S3
   </title>,
-  <meta
-    content="public, max-age=0, must-revalidate"
-    httpEquiv="cache-control"
-  />,
   <meta
     content="Hosting a simple static website on Amazon Web Services (AWS) can be daunting at first, but luckily it’s quite straightforward. One option..."
     name="description"

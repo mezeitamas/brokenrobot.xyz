@@ -3,7 +3,7 @@ import type { FunctionComponent } from 'react';
 
 import type { Person, Organization, WithContext, WebPage } from 'schema-dts';
 
-import type { Author } from '../../site-metadata/site-metadata.types';
+import type { Author } from '../../../site-metadata/site-metadata.types';
 
 type RichResultsWebPageProps = {
     siteName: string;

@@ -1,7 +1,7 @@
 import React from 'react';
 import type { FunctionComponent } from 'react';
 
-import type { Author } from '../../site-metadata/site-metadata.types';
+import type { Author } from '../../../site-metadata/site-metadata.types';
 
 type MetaTwitterProps = {
     title: string;

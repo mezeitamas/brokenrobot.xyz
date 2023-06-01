@@ -5,8 +5,9 @@ import type { HeadFC } from 'gatsby';
 
 import { BlogPostList } from '../../components/blog-post-list';
 import { useBlogPosts } from '../../components/blog-posts/use-blog-posts';
+import { DocumentHead } from '../../components/document-head/document-head';
+import { SeoWebPage } from '../../components/document-head/seo/seo-web-page';
 import { Layout } from '../../components/layout/layout';
-import { SeoWebPage } from '../../components/seo/seo-web-page';
 
 const BlogPage: FunctionComponent = (): ReactElement => {
     const blogPosts = useBlogPosts();
@@ -40,10 +41,14 @@ const BlogPage: FunctionComponent = (): ReactElement => {
 
 export default BlogPage;
 
-export const Head: HeadFC = ({ location }) => (
-    <SeoWebPage
-        title="Blog"
-        description="Blog posts"
-        pathname={location.pathname}
-    />
-);
+export const Head: HeadFC = ({ location }) => {
+    return (
+        <DocumentHead>
+            <SeoWebPage
+                title="Blog"
+                description="Blog posts"
+                pathname={location.pathname}
+            />
+        </DocumentHead>
+    );
+};

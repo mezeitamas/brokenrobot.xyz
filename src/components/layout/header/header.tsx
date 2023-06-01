@@ -1,6 +1,7 @@
 import React from 'react';
 import type { FunctionComponent, ReactElement } from 'react';
 
+import { DarkModeSwitch } from '../../dark-mode-switch/dark-mode-switch';
 import { InternalLink } from '../../internal-link/internal-link';
 
 type HeaderProps = {
@@ -19,6 +20,8 @@ const Header: FunctionComponent<HeaderProps> = ({ title }): ReactElement => {
                     <InternalLink to="/">Home</InternalLink>
                     <InternalLink to="/blog">Blog</InternalLink>
                     <InternalLink to="/about-me">About me</InternalLink>
+
+                    <DarkModeSwitch />
                 </div>
             </nav>
 

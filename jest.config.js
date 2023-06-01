@@ -6,7 +6,7 @@ module.exports = {
 
     // Coverage
     collectCoverage: true,
-    collectCoverageFrom: ['src/**/*.{ts,tsx}', '!src/**/*.test.{ts,tsx}', '!src/gatsby-types.d.ts'],
+    collectCoverageFrom: ['src/**/*.{ts,tsx}', '!src/**/*.types.{ts,tsx}', '!src/**/*.test.{ts,tsx}', '!src/gatsby-types.d.ts'],
     coverageDirectory: 'reports/coverage',
     coveragePathIgnorePatterns: ['/node_modules/'],
     coverageProvider: 'babel',

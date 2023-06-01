@@ -2,16 +2,9 @@
 
 exports[`<SeoWebPage /> should render 1`] = `
 [
-  <html
-    lang="en"
-  />,
   <title>
     Broken Robot
   </title>,
-  <meta
-    content="public, max-age=0, must-revalidate"
-    httpEquiv="cache-control"
-  />,
   <meta
     content="Personal website and blog of Tamas Mezei. Welcome to my little corner of the web, where I share my professional experiences, thoughts, adventures, and projects with the world."
     name="description"

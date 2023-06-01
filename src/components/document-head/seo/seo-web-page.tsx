@@ -1,7 +1,7 @@
 import React from 'react';
-import type { FunctionComponent, PropsWithChildren } from 'react';
+import type { FunctionComponent } from 'react';
 
-import { useSiteMetadata } from '../site-metadata/use-site-metadata';
+import { useSiteMetadata } from '../../site-metadata/use-site-metadata';
 
 import { MetaOgWebsite } from './meta-og-website/meta-og-website';
 import { MetaTwitter } from './meta-twitter/meta-twitter';
@@ -13,25 +13,13 @@ type SeoWebPageProps = {
     pathname: string;
 };
 
-const SeoWebPage: FunctionComponent<PropsWithChildren<SeoWebPageProps>> = ({
-    title,
-    description,
-    pathname,
-    children
-}) => {
+const SeoWebPage: FunctionComponent<SeoWebPageProps> = ({ title, description, pathname }) => {
     const { title: siteName, siteUrl, author } = useSiteMetadata();
     const url = `${siteUrl}${pathname}`;
 
     return (
         <>
-            <html lang="en" />
-
             <title>{title}</title>
-
-            <meta
-                httpEquiv="cache-control"
-                content="public, max-age=0, must-revalidate"
-            />
 
             <meta
                 name="description"
@@ -57,8 +45,6 @@ const SeoWebPage: FunctionComponent<PropsWithChildren<SeoWebPageProps>> = ({
                 url={url}
                 author={author}
             />
-
-            {children}
         </>
     );
 };

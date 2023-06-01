@@ -5,9 +5,10 @@ import type { HeadFC, PageProps } from 'gatsby';
 
 import { BlogPostList } from '../components/blog-post-list';
 import { useRecentBlogPosts } from '../components/blog-posts/use-recent-blog-posts';
+import { DocumentHead } from '../components/document-head/document-head';
+import { SeoWebPage } from '../components/document-head/seo/seo-web-page';
 import { InternalLink } from '../components/internal-link/internal-link';
 import { Layout } from '../components/layout/layout';
-import { SeoWebPage } from '../components/seo/seo-web-page';
 import { useSiteMetadata } from '../components/site-metadata/use-site-metadata';
 
 const IndexPage: FunctionComponent<PageProps> = (): ReactElement => {
@@ -54,10 +55,12 @@ export const Head: HeadFC = ({ location }) => {
     const { title, description } = useSiteMetadata();
 
     return (
-        <SeoWebPage
-            title={title}
-            description={description}
-            pathname={location.pathname}
-        />
+        <DocumentHead>
+            <SeoWebPage
+                title={title}
+                description={description}
+                pathname={location.pathname}
+            />
+        </DocumentHead>
     );
 };

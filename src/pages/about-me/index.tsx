@@ -4,10 +4,11 @@ import type { FunctionComponent, ReactElement } from 'react';
 import type { HeadFC } from 'gatsby';
 import { StaticImage } from 'gatsby-plugin-image';
 
+import { DocumentHead } from '../../components/document-head/document-head';
+import { SeoWebPage } from '../../components/document-head/seo/seo-web-page';
 import { ExternalLink } from '../../components/external-link/external-link';
 import { InternalLink } from '../../components/internal-link/internal-link';
 import { Layout } from '../../components/layout/layout';
-import { SeoWebPage } from '../../components/seo/seo-web-page';
 
 const AboutMePage: FunctionComponent = (): ReactElement => {
     return (
@@ -99,10 +100,14 @@ const AboutMePage: FunctionComponent = (): ReactElement => {
 
 export default AboutMePage;
 
-export const Head: HeadFC = ({ location }) => (
-    <SeoWebPage
-        title="About me"
-        description="About me"
-        pathname={location.pathname}
-    />
-);
+export const Head: HeadFC = ({ location }) => {
+    return (
+        <DocumentHead>
+            <SeoWebPage
+                title="About me"
+                description="About me"
+                pathname={location.pathname}
+            />
+        </DocumentHead>
+    );
+};

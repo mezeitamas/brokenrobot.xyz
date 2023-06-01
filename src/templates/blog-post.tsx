@@ -3,8 +3,9 @@ import type { FunctionComponent, ReactElement } from 'react';
 
 import type { HeadFC, PageProps } from 'gatsby';
 
+import { DocumentHead } from '../components/document-head/document-head';
+import { SeoBlogPosting } from '../components/document-head/seo/seo-blog-posting';
 import { Layout } from '../components/layout/layout';
-import { SeoBlogPosting } from '../components/seo/seo-blog-posting';
 
 type PageContext = {
     id: string;
@@ -42,15 +43,19 @@ const BlogPostTemplate: FunctionComponent<PageProps<null, PageContext>> = ({ pag
     );
 };
 
-const Head: HeadFC<null, PageContext> = ({ location, pageContext: { title, excerpt, published, tags } }) => (
-    <SeoBlogPosting
-        title={title}
-        description={excerpt}
-        pathname={location.pathname}
-        published={published}
-        tags={tags}
-    />
-);
+const Head: HeadFC<null, PageContext> = ({ location, pageContext: { title, excerpt, published, tags } }) => {
+    return (
+        <DocumentHead>
+            <SeoBlogPosting
+                title={title}
+                description={excerpt}
+                pathname={location.pathname}
+                published={published}
+                tags={tags}
+            />
+        </DocumentHead>
+    );
+};
 
 export default BlogPostTemplate;
 

@@ -1,7 +1,7 @@
 import React from 'react';
-import type { FunctionComponent, PropsWithChildren } from 'react';
+import type { FunctionComponent } from 'react';
 
-import { useSiteMetadata } from '../site-metadata/use-site-metadata';
+import { useSiteMetadata } from '../../site-metadata/use-site-metadata';
 
 import { MetaOgArticle } from './meta-og-article/meta-og-article';
 import { MetaTwitter } from './meta-twitter/meta-twitter';
@@ -15,27 +15,13 @@ type SeoBlogPostingProps = {
     tags: string[];
 };
 
-const SeoBlogPosting: FunctionComponent<PropsWithChildren<SeoBlogPostingProps>> = ({
-    title,
-    description,
-    pathname,
-    published,
-    tags,
-    children
-}) => {
+const SeoBlogPosting: FunctionComponent<SeoBlogPostingProps> = ({ title, description, pathname, published, tags }) => {
     const { title: siteName, siteUrl, author } = useSiteMetadata();
     const url = `${siteUrl}${pathname}`;
 
     return (
         <>
-            <html lang="en" />
-
             <title>{title}</title>
-
-            <meta
-                httpEquiv="cache-control"
-                content="public, max-age=0, must-revalidate"
-            />
 
             <meta
                 name="description"
@@ -73,8 +59,6 @@ const SeoBlogPosting: FunctionComponent<PropsWithChildren<SeoBlogPostingProps>> 
                 url={url}
                 author={author}
             />
-
-            {children}
         </>
     );
 };
