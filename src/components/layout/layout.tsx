@@ -11,7 +11,7 @@ const Layout: FunctionComponent<PropsWithChildren> = ({ children }): ReactElemen
     const { title, author } = useSiteMetadata();
 
     return (
-        <div className="container mx-auto bg-white px-4">
+        <div className="container mx-auto bg-white px-4 dark:bg-black">
             <Header title={title} />
 
             <Content>{children}</Content>
