@@ -18,5 +18,9 @@ exports[`<MetaTwitter /> should render 1`] = `
     content="https://www.brokenrobot.xyz/blog/hosting-a-static-website-on-amazon-s3/"
     name="twitter:url"
   />,
+  <meta
+    content="@brokenrobot_xyz"
+    name="twitter:creator"
+  />,
 ]
 `;

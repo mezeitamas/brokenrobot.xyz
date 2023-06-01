@@ -1,13 +1,16 @@
 import React from 'react';
 import type { FunctionComponent } from 'react';
 
+import type { Author } from '../../site-metadata/site-metadata.types';
+
 type MetaTwitterProps = {
     title: string;
     description: string;
     url: string;
+    author: Author;
 };
 
-const MetaTwitter: FunctionComponent<MetaTwitterProps> = ({ title, description, url }) => {
+const MetaTwitter: FunctionComponent<MetaTwitterProps> = ({ title, description, url, author }) => {
     return (
         <>
             <meta
@@ -25,6 +28,10 @@ const MetaTwitter: FunctionComponent<MetaTwitterProps> = ({ title, description, 
             <meta
                 name="twitter:url"
                 content={url}
+            />
+            <meta
+                name="twitter:creator"
+                content={author.social.twitterUsername}
             />
         </>
     );

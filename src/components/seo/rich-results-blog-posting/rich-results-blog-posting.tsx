@@ -3,6 +3,8 @@ import type { FunctionComponent } from 'react';
 
 import type { Person, Organization, WebSite, BlogPosting, WithContext } from 'schema-dts';
 
+import type { Author } from '../../site-metadata/site-metadata.types';
+
 type RichResultsBlogPostingProps = {
     siteName: string;
     siteUrl: string;
@@ -10,13 +12,7 @@ type RichResultsBlogPostingProps = {
     description: string;
     url: string;
     published: string;
-    author: {
-        name: string;
-        social: {
-            github: string;
-            linkedin: string;
-        };
-    };
+    author: Author;
 };
 
 const RichResultsBlogPosting: FunctionComponent<RichResultsBlogPostingProps> = ({
@@ -33,7 +29,7 @@ const RichResultsBlogPosting: FunctionComponent<RichResultsBlogPostingProps> = (
         '@id': `${siteUrl}/about-me/#Person`,
         name: author.name,
         url: `${siteUrl}/about-me/`,
-        sameAs: [author.social.github, author.social.linkedin]
+        sameAs: [author.social.githubUrl, author.social.linkedinUrl, author.social.twitterUrl]
     };
 
     const publisher: Organization = {

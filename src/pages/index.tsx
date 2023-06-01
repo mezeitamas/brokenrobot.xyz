@@ -1,60 +1,29 @@
 import React from 'react';
 import type { FunctionComponent, ReactElement } from 'react';
 
-import { graphql, useStaticQuery } from 'gatsby';
 import type { HeadFC, PageProps } from 'gatsby';
 
 import { BlogPostList } from '../components/blog-post-list';
+import { useRecentBlogPosts } from '../components/blog-posts/use-recent-blog-posts';
 import { InternalLink } from '../components/internal-link/internal-link';
 import { Layout } from '../components/layout/layout';
 import { SeoWebPage } from '../components/seo/seo-web-page';
-
-type DataType = {
-    allMarkdownRemark: {
-        nodes: [
-            {
-                excerpt: string;
-                frontmatter: {
-                    title: string;
-                    published: string;
-                    slug: string;
-                };
-            }
-        ];
-    };
-};
+import { useSiteMetadata } from '../components/site-metadata/use-site-metadata';
 
 const IndexPage: FunctionComponent<PageProps> = (): ReactElement => {
-    const {
-        allMarkdownRemark: { nodes }
-    } = useStaticQuery<DataType>(
-        graphql`
-            query {
-                allMarkdownRemark(limit: 3, sort: { frontmatter: { published: DESC } }) {
-                    nodes {
-                        excerpt(pruneLength: 250)
-                        frontmatter {
-                            title
-                            published
-                            slug
-                        }
-                    }
-                }
-            }
-        `
-    );
+    const recentBlogPosts = useRecentBlogPosts();
 
-    const posts = nodes.map((node) => {
+    const posts = recentBlogPosts.map((blogPost) => {
         return {
-            title: node.frontmatter.title,
-            excerpt: node.excerpt,
-            published: node.frontmatter.published,
-            publishedFormatted: new Date(node.frontmatter.published).toLocaleDateString('en-US', {
+            title: blogPost.frontmatter.title,
+            excerpt: blogPost.excerpt,
+            published: blogPost.frontmatter.published,
+            publishedFormatted: new Date(blogPost.frontmatter.published).toLocaleDateString('en-US', {
                 year: 'numeric',
                 month: 'long',
                 day: 'numeric'
             }),
-            slug: node.frontmatter.slug
+            slug: blogPost.frontmatter.slug
         };
     });
 
@@ -81,10 +50,14 @@ const IndexPage: FunctionComponent<PageProps> = (): ReactElement => {
 
 export default IndexPage;
 
-export const Head: HeadFC = ({ location }) => (
-    <SeoWebPage
-        title="Broken Robot"
-        description="Personal website and blog of Tamas Mezei. Welcome to my little corner of the web, where I share my professional experiences, thoughts, adventures, and projects with the world."
-        pathname={location.pathname}
-    />
-);
+export const Head: HeadFC = ({ location }) => {
+    const { title, description } = useSiteMetadata();
+
+    return (
+        <SeoWebPage
+            title={title}
+            description={description}
+            pathname={location.pathname}
+        />
+    );
+};

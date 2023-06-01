@@ -3,16 +3,12 @@ import type { FunctionComponent } from 'react';
 
 import type { Person, Organization, WithContext, WebPage } from 'schema-dts';
 
+import type { Author } from '../../site-metadata/site-metadata.types';
+
 type RichResultsWebPageProps = {
     siteName: string;
     siteUrl: string;
-    author: {
-        name: string;
-        social: {
-            github: string;
-            linkedin: string;
-        };
-    };
+    author: Author;
 };
 
 const RichResultsWebPage: FunctionComponent<RichResultsWebPageProps> = ({ siteName, siteUrl, author }) => {
@@ -21,7 +17,7 @@ const RichResultsWebPage: FunctionComponent<RichResultsWebPageProps> = ({ siteNa
         '@id': `${siteUrl}/about-me/#Person`,
         name: author.name,
         url: `${siteUrl}/about-me/`,
-        sameAs: [author.social.github, author.social.linkedin]
+        sameAs: [author.social.githubUrl, author.social.linkedinUrl, author.social.twitterUrl]
     };
 
     const publisher: Organization = {
