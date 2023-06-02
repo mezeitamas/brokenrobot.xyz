@@ -2,12 +2,14 @@ import React from 'react';
 
 import { create } from 'react-test-renderer';
 
+import type { SiteMetadata } from '../site-metadata/site-metadata.types';
+
 import { SeoWebPage } from './seo-web-page';
 import type { SeoWebPageProps } from './seo-web-page';
 
 jest.mock('../site-metadata/use-site-metadata', () => {
     return {
-        useSiteMetadata: jest.fn().mockImplementation(() => {
+        useSiteMetadata: jest.fn().mockImplementation((): SiteMetadata => {
             return {
                 title: 'Broken Robot',
                 description:
@@ -18,6 +20,8 @@ jest.mock('../site-metadata/use-site-metadata', () => {
                     social: {
                         githubUrl: 'https://github.com/mezeitamas',
                         linkedinUrl: 'https://www.linkedin.com/in/mezeitamas/',
+                        mastodonUrl: 'https://mastodon.social/@brokenrobot_xyz',
+                        mastodonUsername: '@brokenrobot_xyz@mastodon.social',
                         twitterUrl: 'https://twitter.com/brokenrobot_xyz',
                         twitterUsername: '@brokenrobot_xyz'
                     }

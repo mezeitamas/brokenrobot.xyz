@@ -3,11 +3,13 @@ import type { PropsWithChildren } from 'react';
 
 import { create } from 'react-test-renderer';
 
+import type { SiteMetadata } from '../site-metadata/site-metadata.types';
+
 import { Layout } from './layout';
 
 jest.mock('../site-metadata/use-site-metadata', () => {
     return {
-        useSiteMetadata: jest.fn().mockImplementation(() => {
+        useSiteMetadata: jest.fn().mockImplementation((): SiteMetadata => {
             return {
                 title: 'Broken Robot',
                 description:
@@ -16,8 +18,12 @@ jest.mock('../site-metadata/use-site-metadata', () => {
                 author: {
                     name: 'Tamas Mezei',
                     social: {
-                        github: 'https://github.com/mezeitamas',
-                        linkedin: 'https://www.linkedin.com/in/mezeitamas/'
+                        githubUrl: 'https://github.com/mezeitamas',
+                        linkedinUrl: 'https://www.linkedin.com/in/mezeitamas/',
+                        mastodonUrl: 'https://mastodon.social/@brokenrobot_xyz',
+                        mastodonUsername: '@brokenrobot_xyz@mastodon.social',
+                        twitterUrl: 'https://twitter.com/brokenrobot_xyz',
+                        twitterUsername: '@brokenrobot_xyz'
                     }
                 }
             };

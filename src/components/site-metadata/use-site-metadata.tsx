@@ -23,6 +23,8 @@ const useSiteMetadata = (): SiteMetadata => {
                         social {
                             githubUrl
                             linkedinUrl
+                            mastodonUrl
+                            mastodonUsername
                             twitterUrl
                             twitterUsername
                         }

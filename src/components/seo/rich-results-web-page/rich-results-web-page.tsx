@@ -17,7 +17,12 @@ const RichResultsWebPage: FunctionComponent<RichResultsWebPageProps> = ({ siteNa
         '@id': `${siteUrl}/about-me/#Person`,
         name: author.name,
         url: `${siteUrl}/about-me/`,
-        sameAs: [author.social.githubUrl, author.social.linkedinUrl, author.social.twitterUrl]
+        sameAs: [
+            author.social.githubUrl,
+            author.social.linkedinUrl,
+            author.social.mastodonUrl,
+            author.social.twitterUrl
+        ]
     };
 
     const publisher: Organization = {
