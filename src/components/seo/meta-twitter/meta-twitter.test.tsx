@@ -18,6 +18,8 @@ describe('<MetaTwitter />', () => {
                 social: {
                     githubUrl: 'https://github.com/mezeitamas',
                     linkedinUrl: 'https://www.linkedin.com/in/mezeitamas/',
+                    mastodonUrl: 'https://mastodon.social/@brokenrobot_xyz',
+                    mastodonUsername: '@brokenrobot_xyz@mastodon.social',
                     twitterUrl: 'https://twitter.com/brokenrobot_xyz',
                     twitterUsername: '@brokenrobot_xyz'
                 }

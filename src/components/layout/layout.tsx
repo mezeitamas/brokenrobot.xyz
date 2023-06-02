@@ -19,6 +19,7 @@ const Layout: FunctionComponent<PropsWithChildren> = ({ children }): ReactElemen
             <Footer
                 githubLink={author.social.githubUrl}
                 linkedinLink={author.social.linkedinUrl}
+                mastodonLink={author.social.mastodonUrl}
                 twitterLink={author.social.twitterUrl}
                 authorName={author.name}
             />

@@ -19,4 +19,19 @@ describe('<ExternalLink />', () => {
         // Then
         expect(component).toMatchSnapshot();
     });
+
+    test('should render with rel', () => {
+        // Given
+        const props: ExternalLinkProps = {
+            href: 'https://mastodon.social/@brokenrobot_xyz',
+            rel: 'me'
+        };
+        const children = 'Mastodon';
+
+        // When
+        const component = create(<ExternalLink {...props}>{children}</ExternalLink>).toJSON();
+
+        // Then
+        expect(component).toMatchSnapshot();
+    });
 });

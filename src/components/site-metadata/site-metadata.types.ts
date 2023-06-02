@@ -3,6 +3,8 @@ type Author = {
     social: {
         githubUrl: string;
         linkedinUrl: string;
+        mastodonUrl: string;
+        mastodonUsername: string;
         twitterUrl: string;
         twitterUsername: string;
     };

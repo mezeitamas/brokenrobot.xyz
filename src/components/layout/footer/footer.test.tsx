@@ -11,6 +11,7 @@ describe('<Footer />', () => {
         const props: FooterProps = {
             githubLink: 'https://github.com/mezeitamas',
             linkedinLink: 'https://www.linkedin.com/in/mezeitamas/',
+            mastodonLink: 'https://mastodon.social/@brokenrobot_xyz',
             twitterLink: 'https://twitter.com/brokenrobot_xyz',
             authorName: 'Tamas Mezei'
         };
