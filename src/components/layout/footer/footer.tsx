@@ -5,6 +5,7 @@ import { FiRss, FiGithub, FiLinkedin, FiTwitter } from 'react-icons/fi';
 import { TbBrandMastodon } from 'react-icons/tb';
 
 import { ExternalLink } from '../../external-link/external-link';
+import { InternalLink } from '../../internal-link/internal-link';
 
 type FooterProps = {
     githubLink: string;
@@ -59,7 +60,7 @@ const Footer: FunctionComponent<FooterProps> = ({
 
                 <div className="flex items-center gap-2">
                     <FiRss size="18" />
-                    <ExternalLink href="/rss.xml">RSS Feed</ExternalLink>
+                    <InternalLink to="/rss.xml">RSS Feed</InternalLink>
                 </div>
             </div>
 
