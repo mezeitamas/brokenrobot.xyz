@@ -1,6 +1,6 @@
 #!/usr/bin/env make
 
-.PHONY: build_website build_container run_container
+.PHONY: build_website build_container run_container stop_container
 
 build_website:
 	npm run clean && npm run build
