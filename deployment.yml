@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: brokenrobot-xyz-deployment
+  namespace: brokenrobot-xyz
+  labels:
+    app: brokenrobot-xyz
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: brokenrobot-xyz
+  template:
+    metadata:
+      labels:
+        app: brokenrobot-xyz
+    spec:
+      containers:
+        - name: brokenrobot-xyz-container
+          image: localhost:5000/brokenrobot.xyz:latest
+          resources:
+            requests:
+              memory: '64Mi'
+              cpu: '250m'
+            limits:
+              memory: '128Mi'
+              cpu: '500m'
