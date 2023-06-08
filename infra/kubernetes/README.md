@@ -20,8 +20,8 @@ minikube tunnel
 
 # Docker
 
-docker tag brokenrobot.xyz localhost:5000/brokenrobot.xyz
-docker push localhost:5000/brokenrobot.xyz
+docker tag brokenrobot.xyz localhost:5000/brokenrobot.xyz:1.0.0
+docker push localhost:5000/brokenrobot.xyz:1.0.0
 
 # kubectl
 

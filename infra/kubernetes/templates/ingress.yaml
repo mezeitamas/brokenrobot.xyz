@@ -1,0 +1,24 @@
+{{- $svcPort := .Values.service.port -}}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: brokenrobot-xyz-ingress
+  labels:
+    app: brokenrobot-xyz
+spec:
+  ingressClassName: {{ .Values.ingress.className }}
+  rules:
+  {{- range .Values.ingress.hosts }}
+    - host: {{ .host | quote }}
+      http:
+        paths:
+          {{- range .paths }}
+          - path: {{ .path }}
+            pathType: {{ .pathType }}
+            backend:
+              service:
+                name: brokenrobot-xyz-service
+                port:
+                  number: {{ $svcPort }}
+          {{- end }}
+  {{- end }}
