@@ -93,7 +93,7 @@ kubectl run -i --tty busybox --image=busybox --restart=Never -- sh
 ## Helm
 
 ```shell
-helm upgrade brokenrobot-xyz ./chart --values values-local-minikube.yaml --namespace development --create-namespace --install --atomic --cleanup-on-fail
+helm upgrade brokenrobot-xyz ./chart --values values-local-minikube.yaml --namespace development --create-namespace --install --atomic --cleanup-on-fail --timeout 1m
 ```
 
 ```shell
