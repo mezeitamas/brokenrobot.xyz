@@ -1,39 +1,101 @@
+# Local development
+
+## Minikube
+
+[Minikube](https://minikube.sigs.k8s.io/)
+
+### Start
+
+```shell
 minikube start
+```
 
-# Enable local registry
+### Configure
 
-minikube addons enable registry
-docker run --rm -it --network=host alpine ash -c "apk add socat && socat TCP-LISTEN:5000,reuseaddr,fork TCP:$(minikube ip):5000"
+```shell
+minikube addons list
+```
 
-# Enable dashboard
+#### ingress
 
-minikube addons enable metrics-server
-minikube dashboard
-
-# Enable ingress
-
+```shell
 minikube addons enable ingress
+```
 
-# Tunnel
+#### registry
 
+```shell
+minikube addons enable registry
+```
+
+```shell
+docker run --rm -it --network=host alpine ash -c "apk add socat && socat TCP-LISTEN:5000,reuseaddr,fork TCP:$(minikube ip):5000"
+```
+
+#### dashboard
+
+```shell
+minikube addons enable dashboard
+```
+
+```shell
+minikube addons enable metrics-server
+```
+
+```shell
+minikube dashboard --url
+```
+
+#### Tunnel
+
+```shell
 minikube tunnel
+```
 
-# Docker
+### Status
 
-docker tag brokenrobot.xyz localhost:5000/brokenrobot.xyz:1.0.0
-docker push localhost:5000/brokenrobot.xyz:1.0.0
+```shell
+minikube status
+```
 
-# kubectl
+### Stop
 
-kubectl create -f namespace.yml
-kubectl create -f deployment.yml
-kubectl create -f service.yml
-kubectl create -f ingress.yml
+```shell
+minikube stop
+```
 
-# BusyBox
+```shell
+minikube delete -all
+```
 
-kubectl exec -it busybox-6b95744666-kxs2k -n brokenrobot-xyz -- /bin/sh
+### Docker
 
-# Links
+```shell
+docker tag brokenrobot.xyz localhost:5000/brokenrobot.xyz
+```
 
-https://kubernetes.github.io/ingress-nginx/user-guide/basic-usage/
+```shell
+docker push localhost:5000/brokenrobot.xyz
+```
+
+## Microk8s
+
+[Microk8s](https://microk8s.io/)
+
+`// TODO`
+
+## BusyBox
+
+```shell
+kubectl run -i --tty busybox --image=busybox --restart=Never -- sh
+```
+
+## Helm
+
+```shell
+helm upgrade brokenrobot-xyz ./chart --values values-local-minikube.yaml --namespace development --create-namespace --install --atomic --cleanup-on-fail
+```
+
+```shell
+helm uninstall brokenrobot-xyz --namespace development
+```

@@ -9,7 +9,7 @@ build_container: build_website
 	docker build -t brokenrobot.xyz .
 
 run_container: build_container
-	docker run -p 8080:80 -d --name brokenrobot.xyz --rm brokenrobot.xyz
+	docker run -p 8080:8080 -d --name brokenrobot.xyz --rm brokenrobot.xyz
 
 stop_container:
 	docker stop brokenrobot.xyz

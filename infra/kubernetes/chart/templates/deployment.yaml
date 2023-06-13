@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: brokenrobot-xyz-deployment
+  name: {{ .Chart.Name }}-deployment
   labels:
-    app: brokenrobot-xyz
+    app: {{ .Chart.Name }}
 spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
   {{- end }}
   selector:
     matchLabels:
-      app: brokenrobot-xyz
+      app: {{ .Chart.Name }}
   template:
     metadata:
       labels:
-        app: brokenrobot-xyz
+        app: {{ .Chart.Name }}
     spec:
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}

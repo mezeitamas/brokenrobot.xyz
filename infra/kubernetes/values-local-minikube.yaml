@@ -4,8 +4,8 @@ autoscaling:
   enabled: false
   minReplicas: 1
   maxReplicas: 3
-  targetCPUUtilizationPercentage: 80
-  # targetMemoryUtilizationPercentage: 80
+  targetCPUUtilizationPercentage: 75
+  # targetMemoryUtilizationPercentage: 75
 
 image:
   repository: localhost:5000/brokenrobot.xyz
@@ -20,7 +20,7 @@ securityContext: {}
 
 service:
   type: ClusterIP
-  port: 80
+  port: 8080
 
 ingress:
   className: nginx

@@ -1,0 +1,33 @@
+replicaCount: 1
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 3
+  targetCPUUtilizationPercentage: 75
+  # targetMemoryUtilizationPercentage: 75
+
+image:
+  repository: k8s0.local:32000/brokenrobot.xyz
+  pullPolicy: IfNotPresent
+  tag: "latest"
+
+podAnnotations: {}
+
+podSecurityContext: {}
+
+securityContext: {}
+
+service:
+  type: ClusterIP
+  port: 8080
+
+ingress:
+  className: nginx
+  hosts:
+    - host: localhost
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+
+resources: {}
