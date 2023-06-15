@@ -78,12 +78,6 @@ docker tag brokenrobot.xyz localhost:5000/brokenrobot.xyz
 docker push localhost:5000/brokenrobot.xyz
 ```
 
-## Microk8s
-
-[Microk8s](https://microk8s.io/)
-
-`// TODO`
-
 ## BusyBox
 
 ```shell

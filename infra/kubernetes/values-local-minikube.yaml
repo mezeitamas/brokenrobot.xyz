@@ -9,14 +9,20 @@ autoscaling:
 
 image:
   repository: localhost:5000/brokenrobot.xyz
-  pullPolicy: IfNotPresent
+  pullPolicy: Always
   tag: "latest"
 
 podAnnotations: {}
 
 podSecurityContext: {}
 
-securityContext: {}
+securityContext:
+  allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: true
+  runAsNonRoot: true
+  capabilities:
+    drop:
+    - ALL
 
 service:
   type: ClusterIP
