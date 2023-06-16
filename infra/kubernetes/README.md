@@ -65,7 +65,7 @@ minikube stop -p brokenrobot-xyz
 ```
 
 ```shell
-minikube delete -all
+minikube delete --all
 ```
 
 ### Docker
