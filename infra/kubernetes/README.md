@@ -7,61 +7,61 @@
 ### Start
 
 ```shell
-minikube start
+minikube start --nodes 3 -p brokenrobot-xyz
 ```
 
 ### Configure
 
 ```shell
-minikube addons list
+minikube addons list -p brokenrobot-xyz
 ```
 
 #### ingress
 
 ```shell
-minikube addons enable ingress
+minikube addons enable ingress -p brokenrobot-xyz
 ```
 
 #### registry
 
 ```shell
-minikube addons enable registry
+minikube addons enable registry -p brokenrobot-xyz
 ```
 
 ```shell
-docker run --rm -it --network=host alpine ash -c "apk add socat && socat TCP-LISTEN:5000,reuseaddr,fork TCP:$(minikube ip):5000"
+docker run --rm -it --network=host alpine ash -c "apk add socat && socat TCP-LISTEN:5000,reuseaddr,fork TCP:$(minikube ip -p brokenrobot-xyz):5000"
 ```
 
 #### dashboard
 
 ```shell
-minikube addons enable dashboard
+minikube addons enable dashboard -p brokenrobot-xyz
 ```
 
 ```shell
-minikube addons enable metrics-server
+minikube addons enable metrics-server -p brokenrobot-xyz
 ```
 
 ```shell
-minikube dashboard --url
+minikube dashboard --url -p brokenrobot-xyz
 ```
 
 #### Tunnel
 
 ```shell
-minikube tunnel
+minikube tunnel -p brokenrobot-xyz
 ```
 
 ### Status
 
 ```shell
-minikube status
+minikube status -p brokenrobot-xyz
 ```
 
 ### Stop
 
 ```shell
-minikube stop
+minikube stop -p brokenrobot-xyz
 ```
 
 ```shell

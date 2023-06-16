@@ -5,7 +5,7 @@ autoscaling:
   minReplicas: 1
   maxReplicas: 3
   targetCPUUtilizationPercentage: 75
-  # targetMemoryUtilizationPercentage: 75
+  targetMemoryUtilizationPercentage: 75
 
 image:
   repository: localhost:5000/brokenrobot.xyz

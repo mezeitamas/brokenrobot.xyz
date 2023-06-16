@@ -1,6 +1,6 @@
 #!/usr/bin/env make
 
-.PHONY: build_website build_container run_container stop_container tag_container push_container install_app uninstall_app
+.PHONY: build_website build_container run_container stop_container tag_container push_container
 
 build_website:
 	npm run clean && npm run build
@@ -19,9 +19,3 @@ tag_container: build_container
 
 push_container: tag_container
 	docker push localhost:5000/brokenrobot.xyz
-
-install_app:
-	helm upgrade brokenrobot-xyz ./chart --values values-local-minikube.yaml --namespace development --create-namespace --install --atomic --cleanup-on-fail --timeout 1m
-
-uninstall_app:
-	helm uninstall brokenrobot-xyz --namespace development
