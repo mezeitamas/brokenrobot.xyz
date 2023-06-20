@@ -7,7 +7,7 @@
 ### Start
 
 ```shell
-minikube start --nodes 3 -p brokenrobot-xyz
+minikube start --cni calico --nodes 3 -p brokenrobot-xyz
 ```
 
 ### Configure
@@ -81,7 +81,17 @@ docker push localhost:5000/brokenrobot.xyz
 ## BusyBox
 
 ```shell
-kubectl run -i --tty busybox --image=busybox --restart=Never -- sh
+kubectl run busybox --rm -ti --image=busybox -- /bin/sh
+```
+
+```shell
+wget --spider --timeout=1 <IP>
+```
+
+## Network policy
+
+```shell
+kubectl describe networkpolicy brokenrobot-xyz-networkpolicy -n development
 ```
 
 ## Helm
