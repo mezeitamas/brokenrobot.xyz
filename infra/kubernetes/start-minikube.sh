@@ -28,3 +28,7 @@ echo "\n"
 
 echo "Current status of the cluster"
 minikube status -p brokenrobot-xyz
+echo "\n"
+
+echo "Starting registry container..."
+docker run --rm -it --detach --network=host alpine ash -c "apk add socat && socat TCP-LISTEN:5000,reuseaddr,fork TCP:$(minikube ip -p brokenrobot-xyz):5000"
