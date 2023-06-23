@@ -1,7 +1,6 @@
-FROM nginx
-LABEL maintainer="Tamas Mezei <tamas.mezei@brokenrobot.xyz>"
+FROM nginxinc/nginx-unprivileged:1.25.1-alpine
 
-COPY ./public /website
+COPY ./public /brokenrobot.xyz
 COPY nginx.conf /etc/nginx/nginx.conf
 
-EXPOSE 80
+EXPOSE 8080
