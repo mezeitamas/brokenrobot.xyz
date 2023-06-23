@@ -10,7 +10,7 @@ autoscaling:
 image:
   repository: localhost:5000/brokenrobot.xyz
   pullPolicy: Always
-  tag: "latest"
+  tag: "1.0.0"
 
 serviceAccount:
   create: true

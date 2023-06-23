@@ -71,11 +71,11 @@ minikube delete --all
 ### Docker
 
 ```shell
-docker tag brokenrobot.xyz localhost:5000/brokenrobot.xyz
+docker tag brokenrobot.xyz localhost:5000/brokenrobot.xyz:1.0.0
 ```
 
 ```shell
-docker push localhost:5000/brokenrobot.xyz
+docker push localhost:5000/brokenrobot.xyz:1.0.0
 ```
 
 ## BusyBox
@@ -91,7 +91,7 @@ wget --spider --timeout=1 <IP>
 ## Network policy
 
 ```shell
-kubectl describe networkpolicy brokenrobot-xyz-networkpolicy -n development
+kubectl describe networkpolicy brokenrobot-xyz -n development
 ```
 
 ## Helm
