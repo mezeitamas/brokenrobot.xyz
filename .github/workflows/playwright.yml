@@ -9,6 +9,9 @@ on:
     branches:
       - main
 
+env:
+  BROKENROBOT_PORT: 8080
+
 jobs:
   test:
     name: Playwright Tests
