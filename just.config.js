@@ -32,7 +32,7 @@ task(
 task(
     'lint:check',
     eslintTask({
-        files: ['src/**/*.{ts,tsx}', 'tests/**/*.{ts,tsx}', 'gatsby-config.ts'],
+        files: ['src/**/*.{ts,tsx}', 'tests/**/*.{ts,tsx}', 'gatsby-config.ts', 'playwright.config.ts'],
         fix: false
     })
 );
@@ -40,7 +40,7 @@ task(
 task(
     'lint:fix',
     eslintTask({
-        files: ['src/**/*.{ts,tsx}', 'tests/**/*.{ts,tsx}', 'gatsby-config.ts'],
+        files: ['src/**/*.{ts,tsx}', 'tests/**/*.{ts,tsx}', 'gatsby-config.ts', 'playwright.config.ts'],
         fix: true
     })
 );
