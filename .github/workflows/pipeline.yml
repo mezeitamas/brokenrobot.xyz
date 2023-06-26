@@ -87,16 +87,24 @@ jobs:
           node-version-file: '.node-version'
           cache: 'npm'
 
-      - name: Download public
+      - name: Download build output
         uses: actions/download-artifact@v3
         with:
           name: public
+
+      - shell: bash
+        run: |
+          ls -al
 
       - name: Install dependencies
         run: npm ci
 
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
+
+      - shell: bash
+        run: |
+          ls -al
 
       - name: E2E test check
         run: npm run test:e2e:check
