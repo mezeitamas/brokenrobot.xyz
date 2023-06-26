@@ -23,10 +23,10 @@ const Footer: FunctionComponent<FooterProps> = ({
     authorName
 }): ReactElement => {
     return (
-        <footer className="mb-6 mt-16 flex flex-col gap-4">
+        <footer className="mb-6 mt-16 flex flex-col gap-4 text-gray-700">
             <hr />
 
-            <div className="flex flex-col justify-between gap-6 whitespace-nowrap text-gray-700 sm:flex-row sm:gap-10">
+            <div className="flex flex-col justify-between gap-6 whitespace-nowrap sm:flex-row sm:gap-10">
                 <div className="flex flex-col gap-4 sm:flex-row">
                     <div className="flex flex-row gap-4">
                         <div className="flex items-center gap-2">
@@ -64,7 +64,7 @@ const Footer: FunctionComponent<FooterProps> = ({
                 </div>
             </div>
 
-            <div className="text-sm text-gray-400">&copy; 2023 {authorName}. All rights reserved.</div>
+            <div className="text-sm">&copy; 2023 {authorName}. All rights reserved.</div>
         </footer>
     );
 };

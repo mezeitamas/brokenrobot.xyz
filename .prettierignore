@@ -18,3 +18,8 @@ coverage
 
 # Dotenv
 .env
+
+# Playwright
+/test-results/
+/playwright-report/
+/playwright/.cache/

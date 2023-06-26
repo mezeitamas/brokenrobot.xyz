@@ -29,7 +29,7 @@ const BlogPage: FunctionComponent = (): ReactElement => {
         <Layout>
             <div>
                 <header>
-                    <h2 className="text-gray-900">Blog posts</h2>
+                    <h1 className="text-gray-900">Blog posts</h1>
                 </header>
 
                 <BlogPostList posts={posts} />

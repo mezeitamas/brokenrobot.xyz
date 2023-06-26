@@ -15,13 +15,13 @@
         "lint:check": "just lint:check",
         "lint:fix": "just lint:fix",
         "type:check": "just type:check",
-        "test:check": "just test:check",
-        "test:update": "just test:update",
+        "test:unit:check": "just test:unit:check",
+        "test:unit:update": "just test:unit:update",
+        "test:e2e:check": "playwright test",
         "audit:check": "npm audit --package-lock-only --omit=dev",
-        "develop": "gatsby develop",
-        "start": "gatsby develop",
+        "start": "gatsby develop --port 8080",
         "build": "gatsby build",
-        "serve": "gatsby serve"
+        "serve": "gatsby serve --port 8080"
     },
     "dependencies": {
         "gatsby": "5.10.0",
@@ -48,7 +48,9 @@
         "schema-dts": "1.1.2"
     },
     "devDependencies": {
+        "@axe-core/playwright": "4.7.3",
         "@babel/preset-typescript": "7.21.5",
+        "@playwright/test": "1.35.1",
         "@tailwindcss/typography": "0.5.9",
         "@testing-library/jest-dom": "5.16.5",
         "@testing-library/react": "14.0.0",
@@ -62,6 +64,7 @@
         "autoprefixer": "10.4.14",
         "babel-jest": "29.5.0",
         "babel-preset-gatsby": "3.10.0",
+        "dotenv": "16.3.1",
         "eslint": "8.41.0",
         "eslint-import-resolver-typescript": "3.5.5",
         "eslint-plugin-import": "2.27.5",

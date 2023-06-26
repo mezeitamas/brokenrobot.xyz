@@ -12,6 +12,7 @@ on:
 jobs:
   main:
     name: 'Main'
+    timeout-minutes: 10
     runs-on: ubuntu-latest
 
     steps:
@@ -37,7 +38,17 @@ jobs:
         run: npm run type:check
 
       - name: Unit test check
-        run: npm run test:check
+        run: npm run test:unit:check
+
+      - name: E2E test check
+        run: npm run test:e2e:check
 
       - name: Build
         run: npm run build
+
+      - uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 30

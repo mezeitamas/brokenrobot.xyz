@@ -30,7 +30,7 @@ const IndexPage: FunctionComponent<PageProps> = (): ReactElement => {
     return (
         <Layout>
             <div>
-                <h2>Hello there, I'm Tamas!</h2>
+                <h1>Hello there, I'm Tamas!</h1>
 
                 <p>
                     Welcome to my little corner of the web, where I share my professional experiences, thoughts,

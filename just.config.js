@@ -5,7 +5,7 @@ const { task, cleanTask, prettierCheckTask, prettierTask, eslintTask, tscTask, j
 task(
     'clean',
     cleanTask({
-        paths: ['public', 'reports', '.cache']
+        paths: ['public', 'reports', '.cache', 'test-results', 'playwright-report']
     })
 );
 
@@ -32,7 +32,7 @@ task(
 task(
     'lint:check',
     eslintTask({
-        files: ['src/**/*.{ts,tsx}', 'gatsby-config.ts'],
+        files: ['src/**/*.{ts,tsx}', 'tests/**/*.{ts,tsx}', 'gatsby-config.ts'],
         fix: false
     })
 );
@@ -40,7 +40,7 @@ task(
 task(
     'lint:fix',
     eslintTask({
-        files: ['src/**/*.{ts,tsx}', 'gatsby-config.ts'],
+        files: ['src/**/*.{ts,tsx}', 'tests/**/*.{ts,tsx}', 'gatsby-config.ts'],
         fix: true
     })
 );
@@ -52,7 +52,7 @@ task('type:check', tscTask());
 // Testing
 
 task(
-    'test:check',
+    'test:unit:check',
     jestTask({
         runInBand: false,
         coverage: true,
@@ -61,7 +61,7 @@ task(
 );
 
 task(
-    'test:update',
+    'test:unit:update',
     jestTask({
         runInBand: false,
         coverage: false,
