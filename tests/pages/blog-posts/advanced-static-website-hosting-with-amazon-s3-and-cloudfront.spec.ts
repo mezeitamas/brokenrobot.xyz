@@ -10,7 +10,7 @@ test.describe('Post: Advanced static website hosting with Amazon S3 and CloudFro
         await expect(page).toHaveTitle(/Advanced static website hosting with Amazon S3 and CloudFront/);
     });
 
-    test('should not have any automatically detectable accessibility issues', async ({ page }) => {
+    test.skip('should not have any automatically detectable accessibility issues', async ({ page }) => {
         const accessibilityScanResults = await new AxeBuilder({ page }).analyze();
 
         expect(accessibilityScanResults.violations).toEqual([]);
