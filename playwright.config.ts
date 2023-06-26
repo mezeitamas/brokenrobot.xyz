@@ -41,7 +41,7 @@ export default defineConfig({
         */
     ],
     webServer: {
-        command: 'npm run serve',
+        command: 'npm run build && npm run serve',
         url: `http://localhost:${process.env.BROKENROBOT_PORT}`,
         reuseExistingServer: process.env.CI === undefined
     }
