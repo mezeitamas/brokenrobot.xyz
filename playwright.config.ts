@@ -5,7 +5,6 @@ config();
 
 export default defineConfig({
     testDir: './tests',
-    timeout: 120_000,
     fullyParallel: true,
     forbidOnly: process.env.CI !== undefined,
     retries: process.env.CI !== undefined ? 2 : 0,
@@ -42,6 +41,7 @@ export default defineConfig({
     ],
     webServer: {
         command: 'npm run build && npm run serve',
+        timeout: 120_000,
         url: `http://localhost:${process.env.BROKENROBOT_PORT}`,
         reuseExistingServer: process.env.CI === undefined
     }
