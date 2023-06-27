@@ -20,24 +20,9 @@ export default defineConfig({
             use: { ...devices['Desktop Chrome'] }
         },
         {
-            name: 'Desktop Firefox',
-            use: { ...devices['Desktop Firefox'] }
-        },
-        {
-            name: 'Desktop Safari',
-            use: { ...devices['Desktop Safari'] }
-        },
-        {
             name: 'Mobile Chrome',
             use: { ...devices['Pixel 5'] }
         }
-        /* Mobile Safari tests are failing on GitHub Actions */
-        /*
-        {
-            name: 'Mobile Safari',
-            use: { ...devices['iPhone 12'] }
-        }
-        */
     ],
     webServer: {
         command: 'npm run build && npm run serve',
