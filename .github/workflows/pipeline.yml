@@ -69,6 +69,7 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: mcr.microsoft.com/playwright:v1.35.1-jammy
+      options: '--ipc=host --user pwuser --security-opt seccomp=seccomp_profile.json'
     timeout-minutes: 10
 
     steps:
