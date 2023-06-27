@@ -67,6 +67,8 @@ jobs:
   test:
     name: 'Test'
     runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v1.35.1-jammy
     timeout-minutes: 10
 
     steps:
@@ -81,9 +83,6 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
-
-      - name: Install Playwright Browsers
-        run: npx playwright install --with-deps
 
       - name: E2E test check
         run: npm run test:e2e:check
