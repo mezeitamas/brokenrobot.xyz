@@ -9,7 +9,14 @@ export default defineConfig({
     forbidOnly: process.env.CI !== undefined,
     retries: process.env.CI !== undefined ? 2 : 0,
     workers: process.env.CI !== undefined ? 1 : undefined,
-    reporter: [['list'], ['json'], ['html', { open: 'never' }], ['junit'], ['github']],
+    outputDir: 'reports/tests/e2e/test-results',
+    reporter: [
+        ['list'],
+        ['html', { outputFolder: 'reports/tests/e2e/html', open: 'never' }],
+        ['json', { outputFile: 'reports/tests/e2e/json/test-results.json' }],
+        ['junit', { outputFile: 'reports/tests/e2e/junit/test-results.xml' }],
+        ['github']
+    ],
     use: {
         baseURL: `http://localhost:${process.env.BROKENROBOT_PORT}`,
         trace: 'on-first-retry'
