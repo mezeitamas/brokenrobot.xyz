@@ -43,6 +43,14 @@ jobs:
       - name: Unit test check
         run: npm run test:unit:check
 
+      - name: Upload unit test reports
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: unit-reports
+          path: reports/tests/unit/
+          retention-days: 1
+
   build:
     name: 'Build'
     runs-on: ubuntu-latest
@@ -88,10 +96,10 @@ jobs:
       - name: E2E test check
         run: npm run test:e2e:check
 
-      - name: Upload test reports
+      - name: Upload e2e test reports
         uses: actions/upload-artifact@v3
         if: always()
         with:
-          name: playwright-report
-          path: playwright-report/
+          name: e2e-reports
+          path: reports/tests/e2e/
           retention-days: 1
