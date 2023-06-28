@@ -5,7 +5,7 @@ test.beforeEach(async ({ page }) => {
     await page.goto('./');
 });
 
-test.describe('home page', () => {
+test.describe('Home page', () => {
     test('should have a title', async ({ page }) => {
         await expect(page).toHaveTitle(/Broken Robot/);
     });
