@@ -10,7 +10,7 @@ test.describe('Post: Hello, World!', () => {
         await expect(page).toHaveTitle(/Hello, World!/);
     });
 
-    test.fixme('should not have any automatically detectable accessibility issues', async ({ page }) => {
+    test('should not have any automatically detectable accessibility issues', async ({ page }) => {
         const accessibilityScanResults = await new AxeBuilder({ page }).analyze();
 
         expect(accessibilityScanResults.violations).toEqual([]);
