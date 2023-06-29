@@ -17,7 +17,8 @@ test.describe('Post: Hosting a static website on Amazon S3', () => {
             // It is not clear for now how to solve it, until then the checks for this element
             // are disabled.
             // More info here: https://github.com/PrismJS/prism/issues/2695
-            .exclude(['.language-javascript'])
+            .exclude('.language-javascript')
+            .exclude('.language-json')
             .analyze();
 
         expect(accessibilityScanResults.violations).toEqual([]);
