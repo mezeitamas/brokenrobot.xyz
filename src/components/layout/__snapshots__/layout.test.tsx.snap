@@ -65,11 +65,11 @@ exports[`<Layout /> should render 1`] = `
     </div>
   </main>
   <footer
-    className="mb-6 mt-16 flex flex-col gap-4"
+    className="mb-6 mt-16 flex flex-col gap-4 text-gray-700"
   >
     <hr />
     <div
-      className="flex flex-col justify-between gap-6 whitespace-nowrap text-gray-700 sm:flex-row sm:gap-10"
+      className="flex flex-col justify-between gap-6 whitespace-nowrap sm:flex-row sm:gap-10"
     >
       <div
         className="flex flex-col gap-4 sm:flex-row"
@@ -398,7 +398,7 @@ exports[`<Layout /> should render 1`] = `
       </div>
     </div>
     <div
-      className="text-sm text-gray-400"
+      className="text-sm"
     >
       © 2023 
       Tamas Mezei

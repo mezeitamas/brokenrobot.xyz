@@ -1,0 +1,115 @@
+import { test, expect } from '@playwright/test';
+
+test.describe('Home page', () => {
+    test('should be accessible via the header mavigation', async ({ page }) => {
+        await page.goto('./');
+        await expect(page).toHaveTitle(/Broken Robot/);
+
+        await page.getByRole('navigation').getByRole('link', { name: 'Home' }).click();
+        await expect(page).toHaveTitle(/Broken Robot/);
+    });
+
+    test('should be accessible via the page title', async ({ page }) => {
+        await page.goto('./');
+        await expect(page).toHaveTitle(/Broken Robot/);
+
+        await page.getByRole('navigation').getByRole('link', { name: 'Broken Robot' }).click();
+        await expect(page).toHaveTitle(/Broken Robot/);
+    });
+});
+
+test.describe('About me page', () => {
+    test('should be accessible from the home page via the header navigation', async ({ page }) => {
+        await page.goto('./');
+        await expect(page).toHaveTitle(/Broken Robot/);
+
+        await page.getByRole('navigation').getByRole('link', { name: 'About me' }).click();
+        await expect(page).toHaveTitle(/About me/);
+    });
+
+    test('should be accessible from the home page via the intro paragraph', async ({ page }) => {
+        await page.goto('./');
+        await expect(page).toHaveTitle(/Broken Robot/);
+
+        await page.getByRole('main').getByRole('link', { name: 'About me' }).click();
+        await expect(page).toHaveTitle(/About me/);
+    });
+});
+
+test.describe('Blog page', () => {
+    test('should be accessible from the home page via the header navigation', async ({ page }) => {
+        await page.goto('./');
+        await expect(page).toHaveTitle(/Broken Robot/);
+
+        await page.getByRole('navigation').getByRole('link', { name: 'Blog' }).click();
+        await expect(page).toHaveTitle(/Blog/);
+    });
+
+    test('should be accessible from the about me page via the intro paragraph', async ({ page }) => {
+        await page.goto('./about-me');
+        await expect(page).toHaveTitle(/About me/);
+
+        await page.getByRole('link', { name: 'blog posts' }).click();
+        await expect(page).toHaveTitle(/Blog/);
+    });
+});
+
+test.describe('Post: Hello, World!', () => {
+    test('should be accessible from the home page', async ({ page }) => {
+        await page.goto('./');
+        await expect(page).toHaveTitle(/Broken Robot/);
+
+        await page.getByRole('heading').getByRole('link', { name: 'Hello, World!' }).click();
+        await expect(page).toHaveTitle(/Hello, World!/);
+    });
+
+    test('should be accessible from the blog page', async ({ page }) => {
+        await page.goto('./blog');
+        await expect(page).toHaveTitle(/Blog/);
+
+        await page.getByRole('heading').getByRole('link', { name: 'Hello, World!' }).click();
+        await expect(page).toHaveTitle(/Hello, World!/);
+    });
+});
+
+test.describe('Post: Hosting a static website on Amazon S3', () => {
+    test('should be accessible from the home page', async ({ page }) => {
+        await page.goto('./');
+        await expect(page).toHaveTitle(/Broken Robot/);
+
+        await page.getByRole('heading').getByRole('link', { name: 'Hosting a static website on Amazon S3' }).click();
+        await expect(page).toHaveTitle(/Hosting a static website on Amazon S3/);
+    });
+
+    test('should be accessible from the blog page', async ({ page }) => {
+        await page.goto('./blog');
+        await expect(page).toHaveTitle(/Blog/);
+
+        await page.getByRole('heading').getByRole('link', { name: 'Hosting a static website on Amazon S3' }).click();
+        await expect(page).toHaveTitle(/Hosting a static website on Amazon S3/);
+    });
+});
+
+test.describe('Post: Advanced static website hosting with Amazon S3 and CloudFront', () => {
+    test('should be accessible from the home page', async ({ page }) => {
+        await page.goto('./');
+        await expect(page).toHaveTitle(/Broken Robot/);
+
+        await page
+            .getByRole('heading')
+            .getByRole('link', { name: 'Advanced static website hosting with Amazon S3 and CloudFront' })
+            .click();
+        await expect(page).toHaveTitle(/Advanced static website hosting with Amazon S3 and CloudFront/);
+    });
+
+    test('should be accessible from the blog page', async ({ page }) => {
+        await page.goto('./blog');
+        await expect(page).toHaveTitle(/Blog/);
+
+        await page
+            .getByRole('heading')
+            .getByRole('link', { name: 'Advanced static website hosting with Amazon S3 and CloudFront' })
+            .click();
+        await expect(page).toHaveTitle(/Advanced static website hosting with Amazon S3 and CloudFront/);
+    });
+});

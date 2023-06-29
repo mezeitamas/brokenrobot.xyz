@@ -13,7 +13,7 @@ const AboutMePage: FunctionComponent = (): ReactElement => {
     return (
         <Layout>
             <section>
-                <h2>About me</h2>
+                <h1>About me</h1>
 
                 <div className="flex flex-col justify-between gap-4 lg:flex-row lg:gap-10">
                     <div>

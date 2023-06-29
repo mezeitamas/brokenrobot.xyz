@@ -24,9 +24,9 @@ const BlogPostListItem: FunctionComponent<BlogPostListItemProps> = ({
             key={slug}
         >
             <header>
-                <h3>
+                <h2>
                     <Link to={`/blog/${slug}/`}>{title}</Link>
-                </h3>
+                </h2>
 
                 <time
                     dateTime={published}
