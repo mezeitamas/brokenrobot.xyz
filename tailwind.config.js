@@ -5,7 +5,11 @@ module.exports = {
         './src/templates/**/*.{js,jsx,ts,tsx}'
     ],
     theme: {
-        extend: {}
+        extend: {
+            fontFamily: {
+                sans: ['Roboto']
+            }
+        }
     },
     plugins: [require('@tailwindcss/typography')]
 };
