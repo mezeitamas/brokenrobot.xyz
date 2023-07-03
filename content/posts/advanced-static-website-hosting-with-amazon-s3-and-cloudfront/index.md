@@ -132,7 +132,7 @@ Let's explore the utilization of CloudFront functions.
 
 There is an objective that cannot be accomplished solely through CloudFront configuration:
 
--   **Rewriting the URL**: default object (in our case `index.html`) for the root and all other URLs
+-   **Rewriting the URL**: default object (in our case "index.html") for the root and all other URLs
 
 To make our website more secure, we need to add certain **HTTP headers** to every response. This can be achieved in 2 ways:
 
@@ -147,11 +147,11 @@ The diagram below illustrates the role of the CloudFront functions.
 
 #### Rewriting the URL
 
-We can configure CloudFront to have a [default root object](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/DefaultRootObject.html), so when we try to access the website, for example by visiting `https://www.my-website.com/` we will be navigated to `https://www.my-website.com/index.html`
+We can configure CloudFront to have a [default root object](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/DefaultRootObject.html), so when we try to access the website, for example by visiting **https://www.my-website.com/** we will be navigated to **https://www.my-website.com/index.html**
 
-This is really helpful, however insufficient, because if we visit `https://www.my-website.com/blog/hello-world/` we are **not** navigated to `https://www.my-website.com/blog/hello-world/index.html` instead we get an ugly 403 (Forbidden) error.
+This is really helpful, however insufficient, because if we visit **https://www.my-website.com/blog/hello-world/** we are **not** navigated to **https://www.my-website.com/blog/hello-world/index.html** instead we get an ugly 403 (Forbidden) error.
 
-Luckily there is a solution. We need a simple CloudFront function to rewrite the URL by appending `index.html` to it on every request:
+Luckily there is a solution. We need a simple CloudFront function to rewrite the URL by appending "index.html" to it on every request:
 
 ```javascript
 function handler(event) {
@@ -278,7 +278,7 @@ For now, we will only add a single custom error response. These are the steps:
 4. Click on the **Create custom error response**
 5. Set the **HTTP error code** to _403: Forbidden_
 6. Set **Customize error response** to _Yes_
-7. Set the **Response page path** to _`/404.html`_ (this is not a typo)
+7. Set the **Response page path** to _/404.html_ (this is not a typo)
 8. Set the **HTTP Response code** to _403: Forbidden_
 
 In cases where a user attempts to access a non-existent resource, both S3 and CloudFront will respond with a 403 HTTP status code. However we will handle this as we would handle a 404 HTTP status code, so we will tell to the user that the requested resource is not found.
@@ -425,7 +425,7 @@ Here's a step-by-step guide on creating a DNS record in Route 53 for the CloudFr
 
 Once the DNS record is created, it may take some time for the changes to propagate.
 
-After the propagation period, the website should be accessible through the domain, for example: `https://www.my-website.com`
+After the propagation period, the website should be accessible through the domain, for example: **https://www.my-website.com**
 
 ## Pricing
 
