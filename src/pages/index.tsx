@@ -29,7 +29,7 @@ const IndexPage: FunctionComponent<PageProps> = (): ReactElement => {
 
     return (
         <Layout>
-            <section className="mb-16">
+            <section className="mb-24">
                 <h1>Hello there, I'm Tamas!</h1>
 
                 <p>
