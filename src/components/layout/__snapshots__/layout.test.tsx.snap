@@ -58,14 +58,14 @@ exports[`<Layout /> should render 1`] = `
     <hr />
   </header>
   <main
-    className="prose max-w-none"
+    className="prose max-w-none md:prose-lg lg:prose-xl"
   >
     <div>
       Content
     </div>
   </main>
   <footer
-    className="mb-6 mt-16 flex flex-col gap-4 text-gray-700"
+    className="mb-6 mt-12 flex flex-col gap-4 text-gray-600"
   >
     <hr />
     <div

@@ -29,7 +29,7 @@ const IndexPage: FunctionComponent<PageProps> = (): ReactElement => {
 
     return (
         <Layout>
-            <div>
+            <section className="mb-16">
                 <h1>Hello there, I'm Tamas!</h1>
 
                 <p>
@@ -37,13 +37,13 @@ const IndexPage: FunctionComponent<PageProps> = (): ReactElement => {
                     adventures, and projects with the world. For further information, please feel free to check out my{' '}
                     <InternalLink to="/about-me">About me</InternalLink> page.
                 </p>
-            </div>
+            </section>
 
-            <div>
-                <h2>Recent blog posts</h2>
+            <section>
+                <h1>Recent blog posts</h1>
 
                 <BlogPostList posts={posts} />
-            </div>
+            </section>
         </Layout>
     );
 };

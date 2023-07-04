@@ -27,13 +27,11 @@ const BlogPage: FunctionComponent = (): ReactElement => {
 
     return (
         <Layout>
-            <div>
-                <header>
-                    <h1 className="text-gray-900">Blog posts</h1>
-                </header>
+            <section>
+                <h1>Blog posts</h1>
 
                 <BlogPostList posts={posts} />
-            </div>
+            </section>
         </Layout>
     );
 };

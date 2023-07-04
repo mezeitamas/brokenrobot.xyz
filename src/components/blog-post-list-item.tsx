@@ -28,12 +28,7 @@ const BlogPostListItem: FunctionComponent<BlogPostListItemProps> = ({
                     <Link to={`/blog/${slug}/`}>{title}</Link>
                 </h2>
 
-                <time
-                    dateTime={published}
-                    className="text-sm text-gray-600"
-                >
-                    {publishedFormatted}
-                </time>
+                <time dateTime={published}>{publishedFormatted}</time>
 
                 <p>{excerpt}</p>
             </header>
