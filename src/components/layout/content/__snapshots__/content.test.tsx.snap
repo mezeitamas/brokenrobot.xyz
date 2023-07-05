@@ -2,7 +2,7 @@
 
 exports[`<Content /> should render 1`] = `
 <main
-  className="prose max-w-none"
+  className="prose max-w-none md:prose-lg lg:prose-xl"
 >
   <div>
     Content

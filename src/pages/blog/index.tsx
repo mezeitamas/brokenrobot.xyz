@@ -3,7 +3,7 @@ import type { FunctionComponent, ReactElement } from 'react';
 
 import type { HeadFC } from 'gatsby';
 
-import { BlogPostList } from '../../components/blog-post-list';
+import { BlogPostList } from '../../components/blog-posts/blog-post-list';
 import { useBlogPosts } from '../../components/blog-posts/use-blog-posts';
 import { Layout } from '../../components/layout/layout';
 import { SeoWebPage } from '../../components/seo/seo-web-page';
@@ -27,13 +27,14 @@ const BlogPage: FunctionComponent = (): ReactElement => {
 
     return (
         <Layout>
-            <div>
-                <header>
-                    <h1 className="text-gray-900">Blog posts</h1>
-                </header>
+            <section>
+                <h1>Blog posts</h1>
 
-                <BlogPostList posts={posts} />
-            </div>
+                <BlogPostList
+                    posts={posts}
+                    HeadingType="h2"
+                />
+            </section>
         </Layout>
     );
 };

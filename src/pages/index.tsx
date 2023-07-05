@@ -3,7 +3,7 @@ import type { FunctionComponent, ReactElement } from 'react';
 
 import type { HeadFC, PageProps } from 'gatsby';
 
-import { BlogPostList } from '../components/blog-post-list';
+import { BlogPostList } from '../components/blog-posts/blog-post-list';
 import { useRecentBlogPosts } from '../components/blog-posts/use-recent-blog-posts';
 import { InternalLink } from '../components/internal-link/internal-link';
 import { Layout } from '../components/layout/layout';
@@ -29,7 +29,7 @@ const IndexPage: FunctionComponent<PageProps> = (): ReactElement => {
 
     return (
         <Layout>
-            <div>
+            <section className="mb-24">
                 <h1>Hello there, I'm Tamas!</h1>
 
                 <p>
@@ -37,13 +37,16 @@ const IndexPage: FunctionComponent<PageProps> = (): ReactElement => {
                     adventures, and projects with the world. For further information, please feel free to check out my{' '}
                     <InternalLink to="/about-me">About me</InternalLink> page.
                 </p>
-            </div>
+            </section>
 
-            <div>
+            <section>
                 <h2>Recent blog posts</h2>
 
-                <BlogPostList posts={posts} />
-            </div>
+                <BlogPostList
+                    posts={posts}
+                    HeadingType="h3"
+                />
+            </section>
         </Layout>
     );
 };

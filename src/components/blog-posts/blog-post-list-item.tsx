@@ -9,6 +9,7 @@ type BlogPostListItemProps = {
     published: string;
     publishedFormatted: string;
     slug: string;
+    HeadingType: keyof JSX.IntrinsicElements;
 };
 
 const BlogPostListItem: FunctionComponent<BlogPostListItemProps> = ({
@@ -16,7 +17,8 @@ const BlogPostListItem: FunctionComponent<BlogPostListItemProps> = ({
     excerpt,
     published,
     publishedFormatted,
-    slug
+    slug,
+    HeadingType
 }): ReactElement => {
     return (
         <article
@@ -24,16 +26,11 @@ const BlogPostListItem: FunctionComponent<BlogPostListItemProps> = ({
             key={slug}
         >
             <header>
-                <h2>
+                <HeadingType>
                     <Link to={`/blog/${slug}/`}>{title}</Link>
-                </h2>
+                </HeadingType>
 
-                <time
-                    dateTime={published}
-                    className="text-sm text-gray-600"
-                >
-                    {publishedFormatted}
-                </time>
+                <time dateTime={published}>{publishedFormatted}</time>
 
                 <p>{excerpt}</p>
             </header>
@@ -42,3 +39,5 @@ const BlogPostListItem: FunctionComponent<BlogPostListItemProps> = ({
 };
 
 export { BlogPostListItem };
+
+export type { BlogPostListItemProps };

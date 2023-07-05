@@ -107,7 +107,8 @@ const config: GatsbyConfig = {
                     {
                         resolve: 'gatsby-remark-images',
                         options: {
-                            maxWidth: 590,
+                            maxWidth: 1280,
+                            srcSetBreakpoints: [384, 640, 768, 1024, 1280, 1536],
                             backgroundColor: 'transparent'
                         }
                     },

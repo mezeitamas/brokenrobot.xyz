@@ -2,7 +2,7 @@
 
 exports[`<Footer /> should render 1`] = `
 <footer
-  className="mb-6 mt-16 flex flex-col gap-4 text-gray-700"
+  className="mb-6 mt-12 flex flex-col gap-4 text-gray-600"
 >
   <hr />
   <div

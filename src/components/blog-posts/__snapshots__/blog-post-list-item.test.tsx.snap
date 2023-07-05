@@ -1,0 +1,49 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<BlogPostListItem /> should render with h2 heading 1`] = `
+<article
+  className="flex flex-col items-start justify-between"
+>
+  <header>
+    <h2>
+      <a
+        href="/blog/advanced-static-website-hosting-with-amazon-s3-and-cloudfront/"
+      >
+        Advanced static website hosting with Amazon S3 and CloudFront
+      </a>
+    </h2>
+    <time
+      dateTime="2023-05-29T18:00:00.000Z"
+    >
+      May 29, 2023
+    </time>
+    <p>
+      Today we will dive deep into the world of hosting a static website on Amazon S3 using CloudFront. If you’re looking for a secure, reliable, scalable, cost effective and performant solution, you’ve come to the right place. In this blog post, we’ll...
+    </p>
+  </header>
+</article>
+`;
+
+exports[`<BlogPostListItem /> should render with h3 heading 1`] = `
+<article
+  className="flex flex-col items-start justify-between"
+>
+  <header>
+    <h3>
+      <a
+        href="/blog/advanced-static-website-hosting-with-amazon-s3-and-cloudfront/"
+      >
+        Advanced static website hosting with Amazon S3 and CloudFront
+      </a>
+    </h3>
+    <time
+      dateTime="2023-05-29T18:00:00.000Z"
+    >
+      May 29, 2023
+    </time>
+    <p>
+      Today we will dive deep into the world of hosting a static website on Amazon S3 using CloudFront. If you’re looking for a secure, reliable, scalable, cost effective and performant solution, you’ve come to the right place. In this blog post, we’ll...
+    </p>
+  </header>
+</article>
+`;

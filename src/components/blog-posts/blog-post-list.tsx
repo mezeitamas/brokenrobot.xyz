@@ -5,9 +5,10 @@ import { BlogPostListItem } from './blog-post-list-item';
 
 type BlogPostListProps = {
     posts: { title: string; excerpt: string; published: string; publishedFormatted: string; slug: string }[];
+    HeadingType: keyof JSX.IntrinsicElements;
 };
 
-const BlogPostList: FunctionComponent<BlogPostListProps> = ({ posts }): ReactElement => {
+const BlogPostList: FunctionComponent<BlogPostListProps> = ({ posts, HeadingType }): ReactElement => {
     return (
         <div>
             {posts.map(({ title, excerpt, published, publishedFormatted, slug }) => (
@@ -18,6 +19,7 @@ const BlogPostList: FunctionComponent<BlogPostListProps> = ({ posts }): ReactEle
                     published={published}
                     publishedFormatted={publishedFormatted}
                     slug={slug}
+                    HeadingType={HeadingType}
                 />
             ))}
         </div>
@@ -25,3 +27,5 @@ const BlogPostList: FunctionComponent<BlogPostListProps> = ({ posts }): ReactEle
 };
 
 export { BlogPostList };
+
+export type { BlogPostListProps };
