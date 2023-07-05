@@ -39,3 +39,5 @@ const BlogPostListItem: FunctionComponent<BlogPostListItemProps> = ({
 };
 
 export { BlogPostListItem };
+
+export type { BlogPostListItemProps };

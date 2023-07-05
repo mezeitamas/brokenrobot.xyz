@@ -3,7 +3,7 @@ import type { FunctionComponent, ReactElement } from 'react';
 
 import type { HeadFC, PageProps } from 'gatsby';
 
-import { BlogPostList } from '../components/blog-post-list';
+import { BlogPostList } from '../components/blog-posts/blog-post-list';
 import { useRecentBlogPosts } from '../components/blog-posts/use-recent-blog-posts';
 import { InternalLink } from '../components/internal-link/internal-link';
 import { Layout } from '../components/layout/layout';

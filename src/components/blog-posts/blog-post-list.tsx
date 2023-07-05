@@ -27,3 +27,5 @@ const BlogPostList: FunctionComponent<BlogPostListProps> = ({ posts, HeadingType
 };
 
 export { BlogPostList };
+
+export type { BlogPostListProps };
