@@ -40,9 +40,12 @@ const IndexPage: FunctionComponent<PageProps> = (): ReactElement => {
             </section>
 
             <section>
-                <h1>Recent blog posts</h1>
+                <h2>Recent blog posts</h2>
 
-                <BlogPostList posts={posts} />
+                <BlogPostList
+                    posts={posts}
+                    HeadingType="h3"
+                />
             </section>
         </Layout>
     );

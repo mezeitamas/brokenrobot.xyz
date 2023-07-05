@@ -30,7 +30,10 @@ const BlogPage: FunctionComponent = (): ReactElement => {
             <section>
                 <h1>Blog posts</h1>
 
-                <BlogPostList posts={posts} />
+                <BlogPostList
+                    posts={posts}
+                    HeadingType="h2"
+                />
             </section>
         </Layout>
     );
