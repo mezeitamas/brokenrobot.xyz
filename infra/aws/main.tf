@@ -143,11 +143,11 @@ resource "aws_cloudfront_origin_access_control" "website" {
   signing_protocol                  = "sigv4"
 }
 
-resource "aws_cloudfront_function" "url_rewrite" {
+resource "aws_cloudfront_function" "viewer_request" {
   name    = "url-rewrite"
   runtime = "cloudfront-js-1.0"
   publish = true
-  code    = file("${path.module}/cloudfront-functions/url-rewrite/url-rewrite.js")
+  code    = file("${path.module}/cloudfront-functions/viewer-request/viewer-request.js")
 }
 
 resource "aws_cloudfront_response_headers_policy" "security_headers_policy" {
@@ -283,7 +283,7 @@ resource "aws_cloudfront_distribution" "website" {
 
     function_association {
       event_type   = "viewer-request"
-      function_arn = aws_cloudfront_function.url_rewrite.arn
+      function_arn = aws_cloudfront_function.viewer_request.arn
     }
   }
 
@@ -309,11 +309,50 @@ data "aws_route53_zone" "website" {
   private_zone = false
 }
 
-resource "aws_route53_record" "website" {
+resource "aws_route53_record" "website_a_apex" {
+  zone_id = data.aws_route53_zone.website.zone_id
+
+  name = data.aws_route53_zone.website.name
+  type = "A"
+
+  alias {
+    name                   = aws_cloudfront_distribution.website.domain_name
+    zone_id                = aws_cloudfront_distribution.website.hosted_zone_id
+    evaluate_target_health = false
+  }
+}
+
+resource "aws_route53_record" "website_aaaa_apex" {
+  zone_id = data.aws_route53_zone.website.zone_id
+
+  name = data.aws_route53_zone.website.name
+  type = "AAAA"
+
+  alias {
+    name                   = aws_cloudfront_distribution.website.domain_name
+    zone_id                = aws_cloudfront_distribution.website.hosted_zone_id
+    evaluate_target_health = false
+  }
+}
+
+resource "aws_route53_record" "website_a_www" {
   zone_id = data.aws_route53_zone.website.zone_id
 
   name = "www.${data.aws_route53_zone.website.name}"
   type = "A"
+
+  alias {
+    name                   = aws_cloudfront_distribution.website.domain_name
+    zone_id                = aws_cloudfront_distribution.website.hosted_zone_id
+    evaluate_target_health = false
+  }
+}
+
+resource "aws_route53_record" "website_aaaa_www" {
+  zone_id = data.aws_route53_zone.website.zone_id
+
+  name = "www.${data.aws_route53_zone.website.name}"
+  type = "AAAA"
 
   alias {
     name                   = aws_cloudfront_distribution.website.domain_name
