@@ -88,7 +88,8 @@ resource "aws_s3_bucket_ownership_controls" "website" {
 # ########################################
 
 resource "aws_s3_bucket" "logs" {
-  bucket = "brokenrobot.xyz-logs"
+  bucket        = "brokenrobot.xyz-logs"
+  force_destroy = true
 
   tags = {
     Application = "brokenrobot.xyz"
