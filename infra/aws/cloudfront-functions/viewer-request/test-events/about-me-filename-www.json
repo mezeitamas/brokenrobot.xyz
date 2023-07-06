@@ -8,8 +8,12 @@
     },
     "request": {
         "method": "GET",
-        "uri": "/",
-        "headers": {},
+        "uri": "/about-me/index.html",
+        "headers": {
+            "host": {
+                "value": "www.brokenrobot.xyz"
+            }
+        },
         "cookies": {},
         "querystring": {}
     }
