@@ -244,7 +244,7 @@ resource "aws_cloudfront_distribution" "website" {
     }
   }
 
-  aliases = ["www.brokenrobot.xyz"]
+  aliases = ["brokenrobot.xyz", "www.brokenrobot.xyz"]
 
   restrictions {
     geo_restriction {
