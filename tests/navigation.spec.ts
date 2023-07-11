@@ -55,14 +55,6 @@ test.describe('Blog page', () => {
 });
 
 test.describe('Post: Hello, World!', () => {
-    test('should be accessible from the home page', async ({ page }) => {
-        await page.goto('./');
-        await expect(page).toHaveTitle(/Broken Robot/);
-
-        await page.getByRole('heading').getByRole('link', { name: 'Hello, World!' }).click();
-        await expect(page).toHaveTitle(/Hello, World!/);
-    });
-
     test('should be accessible from the blog page', async ({ page }) => {
         await page.goto('./blog');
         await expect(page).toHaveTitle(/Blog/);
@@ -111,5 +103,29 @@ test.describe('Post: Advanced static website hosting with Amazon S3 and CloudFro
             .getByRole('link', { name: 'Advanced static website hosting with Amazon S3 and CloudFront' })
             .click();
         await expect(page).toHaveTitle(/Advanced static website hosting with Amazon S3 and CloudFront/);
+    });
+});
+
+test.describe('Post: URL redirect with Amazon CloudFront and Amazon Route 53', () => {
+    test('should be accessible from the home page', async ({ page }) => {
+        await page.goto('./');
+        await expect(page).toHaveTitle(/Broken Robot/);
+
+        await page
+            .getByRole('heading')
+            .getByRole('link', { name: 'URL redirect with Amazon CloudFront and Amazon Route 53' })
+            .click();
+        await expect(page).toHaveTitle(/URL redirect with Amazon CloudFront and Amazon Route 53/);
+    });
+
+    test('should be accessible from the blog page', async ({ page }) => {
+        await page.goto('./blog');
+        await expect(page).toHaveTitle(/Blog/);
+
+        await page
+            .getByRole('heading')
+            .getByRole('link', { name: 'URL redirect with Amazon CloudFront and Amazon Route 53' })
+            .click();
+        await expect(page).toHaveTitle(/URL redirect with Amazon CloudFront and Amazon Route 53/);
     });
 });
