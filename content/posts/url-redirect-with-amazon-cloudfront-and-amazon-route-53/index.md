@@ -13,7 +13,7 @@ tags:
     - hosting
 ---
 
-In this blog post we will discover how to implement a consitent, SEO friendly URL structure for a personal website, using URL redirection with Amazon CloudFront and Route 53.
+In this blog post we will discover how to implement a consitent, SEO friendly URL structure, focusing on using the **www** subdomain over the apex domain, for a personal website, using URL redirection with Amazon CloudFront and Route 53.
 
 Before we dive deep into this topic, let's check a little bit of context:
 
@@ -51,13 +51,13 @@ If you need more details, please check my previous post: [Advanced static websit
 
 Unfortunately these diagrams do not tell anything about how can we access the website. For example, via **https://my-website.com** or through **https://www.my-website.com**?
 
-In the previous article, in [Step 9: Create DNS record](/blog/advanced-static-website-hosting-with-amazon-s3-and-cloudfront#step-9-create-dns-record) we created only a single **A** record which points to **https://www.my-website.com**. So the website is only reachable via the mentioned URL!
+This detail is hidden in the previous post, in [Step 9: Create DNS record](/blog/advanced-static-website-hosting-with-amazon-s3-and-cloudfront#step-9-create-dns-record). We created only a single **A** record which points to **https://www.my-website.com**. So the website is only reachable via the mentioned URL! Attempting to access the website via the apex domain (**https://my-website.com**) results in an error.
 
 ### What can we improve?
 
 We made a decision and the website is only reachable through **https://www.my-website.com** and NOT via **https://my-website.com**. In this way everything is simple and easy, no SEO issues, like search engine indexing and duplicate content.
 
-However the UX is negatively affected. Not every visitor likes to type in **www** or sometomes they simple forget to type it in. This can lead to an ugly "website is not reachable" error message which is not professional and can give the impression that the website does not exist.
+However the UX is affected negatively. Not every visitor likes to type in **www** or sometomes they simple forget to do it. This can lead to an ugly "website is not reachable" error message which is not professional and can give the impression that the website does not exist.
 
 How can we prevent this without compromising SEO?
 
@@ -190,7 +190,7 @@ After the propagation period, the website should be accessible through the apex 
 
 This step is heavily depends on the used framework.
 
-At the time of writing this article, [**Gatsby**](https://www.gatsbyjs.com/) is used to generate the website's content. There is an official plugin for **Gatsby** to tackle the canonical URL problem: [gatsby-plugin-canonical-urls](https://www.gatsbyjs.com/plugins/gatsby-plugin-canonical-urls/)
+At the time of writing this post, [**Gatsby**](https://www.gatsbyjs.com/) is used to generate the website's content. There is an official plugin for **Gatsby** to tackle the canonical URL problem: [gatsby-plugin-canonical-urls](https://www.gatsbyjs.com/plugins/gatsby-plugin-canonical-urls/)
 
 This plugin adds a link tag to the head of every page to describe the canonical URL of that page.
 
