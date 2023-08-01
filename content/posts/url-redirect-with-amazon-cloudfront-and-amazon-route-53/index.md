@@ -11,6 +11,7 @@ tags:
     - certificatemanager
     - staticwebsite
     - hosting
+    - brokenrobot
 ---
 
 In this blog post we will discover how to implement a consitent, SEO friendly URL structure, focusing on using the **www** subdomain over the apex domain, for a personal website, using URL redirection with Amazon CloudFront and Route 53.

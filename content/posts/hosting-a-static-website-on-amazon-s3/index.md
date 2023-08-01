@@ -8,6 +8,7 @@ tags:
     - route53
     - staticwebsite
     - hosting
+    - brokenrobot
 ---
 
 Hosting a simple static website on Amazon Web Services (AWS) can be daunting at first, but luckily it's quite straightforward. One option for hosting a static website on AWS is to use Amazon S3.
