@@ -80,6 +80,14 @@ test.describe('Post: Hosting a static website on Amazon S3', () => {
         await page.getByRole('heading').getByRole('link', { name: 'Hosting a static website on Amazon S3' }).click();
         await expect(page).toHaveTitle(/Hosting a static website on Amazon S3/);
     });
+
+    test('should be accessible from the about page', async ({ page }) => {
+        await page.goto('./about-me');
+        await expect(page).toHaveTitle(/About me/);
+
+        await page.getByRole('link', { name: 'Hosting a static website on Amazon S3' }).click();
+        await expect(page).toHaveTitle(/Hosting a static website on Amazon S3/);
+    });
 });
 
 test.describe('Post: Advanced static website hosting with Amazon S3 and CloudFront', () => {
@@ -104,6 +112,14 @@ test.describe('Post: Advanced static website hosting with Amazon S3 and CloudFro
             .click();
         await expect(page).toHaveTitle(/Advanced static website hosting with Amazon S3 and CloudFront/);
     });
+
+    test('should be accessible from the about page', async ({ page }) => {
+        await page.goto('./about-me');
+        await expect(page).toHaveTitle(/About me/);
+
+        await page.getByRole('link', { name: 'Advanced static website hosting with Amazon S3 and CloudFront' }).click();
+        await expect(page).toHaveTitle(/Advanced static website hosting with Amazon S3 and CloudFront/);
+    });
 });
 
 test.describe('Post: URL redirect with Amazon CloudFront and Amazon Route 53', () => {
@@ -126,6 +142,14 @@ test.describe('Post: URL redirect with Amazon CloudFront and Amazon Route 53', (
             .getByRole('heading')
             .getByRole('link', { name: 'URL redirect with Amazon CloudFront and Amazon Route 53' })
             .click();
+        await expect(page).toHaveTitle(/URL redirect with Amazon CloudFront and Amazon Route 53/);
+    });
+
+    test('should be accessible from the about page', async ({ page }) => {
+        await page.goto('./about-me');
+        await expect(page).toHaveTitle(/About me/);
+
+        await page.getByRole('link', { name: 'URL redirect with Amazon CloudFront and Amazon Route 53' }).click();
         await expect(page).toHaveTitle(/URL redirect with Amazon CloudFront and Amazon Route 53/);
     });
 });

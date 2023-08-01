@@ -1,7 +1,7 @@
 import React from 'react';
 import type { FunctionComponent, ReactElement } from 'react';
 
-import { Link } from 'gatsby';
+import { InternalLink } from '../internal-link/internal-link';
 
 type BlogPostListItemProps = {
     title: string;
@@ -27,7 +27,7 @@ const BlogPostListItem: FunctionComponent<BlogPostListItemProps> = ({
         >
             <header>
                 <HeadingType>
-                    <Link to={`/blog/${slug}/`}>{title}</Link>
+                    <InternalLink to={`/blog/${slug}/`}>{title}</InternalLink>
                 </HeadingType>
 
                 <time dateTime={published}>{publishedFormatted}</time>

@@ -6,11 +6,15 @@ exports[`<BlogPostListItem /> should render with h2 heading 1`] = `
 >
   <header>
     <h2>
-      <a
-        href="/blog/advanced-static-website-hosting-with-amazon-s3-and-cloudfront/"
+      <span
+        className="hover:underline"
       >
-        Advanced static website hosting with Amazon S3 and CloudFront
-      </a>
+        <a
+          href="/blog/advanced-static-website-hosting-with-amazon-s3-and-cloudfront/"
+        >
+          Advanced static website hosting with Amazon S3 and CloudFront
+        </a>
+      </span>
     </h2>
     <time
       dateTime="2023-05-29T18:00:00.000Z"
@@ -30,11 +34,15 @@ exports[`<BlogPostListItem /> should render with h3 heading 1`] = `
 >
   <header>
     <h3>
-      <a
-        href="/blog/advanced-static-website-hosting-with-amazon-s3-and-cloudfront/"
+      <span
+        className="hover:underline"
       >
-        Advanced static website hosting with Amazon S3 and CloudFront
-      </a>
+        <a
+          href="/blog/advanced-static-website-hosting-with-amazon-s3-and-cloudfront/"
+        >
+          Advanced static website hosting with Amazon S3 and CloudFront
+        </a>
+      </span>
     </h3>
     <time
       dateTime="2023-05-29T18:00:00.000Z"

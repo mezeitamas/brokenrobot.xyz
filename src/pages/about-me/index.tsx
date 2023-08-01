@@ -4,12 +4,15 @@ import type { FunctionComponent, ReactElement } from 'react';
 import type { HeadFC } from 'gatsby';
 import { StaticImage } from 'gatsby-plugin-image';
 
+import { useBrokenRobotRelatedBlogPosts } from '../../components/blog-posts/use-brokenrobot-related-blog-posts';
 import { ExternalLink } from '../../components/external-link/external-link';
 import { InternalLink } from '../../components/internal-link/internal-link';
 import { Layout } from '../../components/layout/layout';
 import { SeoWebPage } from '../../components/seo/seo-web-page';
 
 const AboutMePage: FunctionComponent = (): ReactElement => {
+    const blogPosts = useBrokenRobotRelatedBlogPosts();
+
     return (
         <Layout>
             <section>
@@ -81,17 +84,25 @@ const AboutMePage: FunctionComponent = (): ReactElement => {
                 </p>
 
                 <p>
-                    I'll be documenting any improvements or modifications to the website through blog posts that will be
-                    published on this site.
-                </p>
-
-                <p>
                     The website's source code is available on{' '}
                     <ExternalLink href="https://github.com/mezeitamas/brokenrobot.xyz">GitHub</ExternalLink>. Please
                     don't hesitate to create an{' '}
                     <ExternalLink href="https://github.com/mezeitamas/brokenrobot.xyz/issues">issue</ExternalLink> if
                     you encounter a bug or typo, or if you have any suggestions to offer.
                 </p>
+
+                <p>
+                    I'll be documenting any improvements or modifications to the website through blog posts that will be
+                    published on this site:
+                </p>
+
+                <ul>
+                    {blogPosts.map(({ frontmatter: { title, slug } }) => (
+                        <li key={slug}>
+                            <InternalLink to={`/blog/${slug}/`}>{title}</InternalLink>
+                        </li>
+                    ))}
+                </ul>
             </section>
         </Layout>
     );
