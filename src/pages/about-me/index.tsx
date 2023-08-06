@@ -7,14 +7,13 @@ import { StaticImage } from 'gatsby-plugin-image';
 import { useBrokenRobotRelatedBlogPosts } from '../../components/blog-posts/use-brokenrobot-related-blog-posts';
 import { ExternalLink } from '../../components/external-link/external-link';
 import { InternalLink } from '../../components/internal-link/internal-link';
-import { Layout } from '../../components/layout/layout';
 import { SeoWebPage } from '../../components/seo/seo-web-page';
 
 const AboutMePage: FunctionComponent = (): ReactElement => {
     const blogPosts = useBrokenRobotRelatedBlogPosts();
 
     return (
-        <Layout>
+        <>
             <section>
                 <h1>About me</h1>
 
@@ -104,7 +103,7 @@ const AboutMePage: FunctionComponent = (): ReactElement => {
                     ))}
                 </ul>
             </section>
-        </Layout>
+        </>
     );
 };
 

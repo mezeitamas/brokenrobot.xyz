@@ -5,7 +5,6 @@ import type { HeadFC } from 'gatsby';
 
 import { BlogPostList } from '../../components/blog-posts/blog-post-list';
 import { useBlogPosts } from '../../components/blog-posts/use-blog-posts';
-import { Layout } from '../../components/layout/layout';
 import { SeoWebPage } from '../../components/seo/seo-web-page';
 
 const BlogPage: FunctionComponent = (): ReactElement => {
@@ -26,7 +25,7 @@ const BlogPage: FunctionComponent = (): ReactElement => {
     });
 
     return (
-        <Layout>
+        <>
             <section>
                 <h1>Blog posts</h1>
 
@@ -35,7 +34,7 @@ const BlogPage: FunctionComponent = (): ReactElement => {
                     HeadingType="h2"
                 />
             </section>
-        </Layout>
+        </>
     );
 };
 

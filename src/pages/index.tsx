@@ -6,7 +6,6 @@ import type { HeadFC, PageProps } from 'gatsby';
 import { BlogPostList } from '../components/blog-posts/blog-post-list';
 import { useRecentBlogPosts } from '../components/blog-posts/use-recent-blog-posts';
 import { InternalLink } from '../components/internal-link/internal-link';
-import { Layout } from '../components/layout/layout';
 import { SeoWebPage } from '../components/seo/seo-web-page';
 import { useSiteMetadata } from '../components/site-metadata/use-site-metadata';
 
@@ -28,7 +27,7 @@ const IndexPage: FunctionComponent<PageProps> = (): ReactElement => {
     });
 
     return (
-        <Layout>
+        <>
             <section className="mb-24">
                 <h1>Hello there, I'm Tamas!</h1>
 
@@ -47,7 +46,7 @@ const IndexPage: FunctionComponent<PageProps> = (): ReactElement => {
                     HeadingType="h3"
                 />
             </section>
-        </Layout>
+        </>
     );
 };
 
