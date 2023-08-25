@@ -1,7 +1,28 @@
-const path = require('path');
+import { resolve } from 'path';
 
-exports.createPages = async ({ graphql, actions, reporter }) => {
-    const result = await graphql(`
+import type { GatsbyNode } from 'gatsby';
+
+const createPages: GatsbyNode['createPages'] = async ({ graphql, actions, reporter }) => {
+    const { createPage } = actions;
+    const result: {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        errors?: any;
+        data?: {
+            allMarkdownRemark: {
+                nodes: {
+                    id: string;
+                    excerpt: string;
+                    html: string;
+                    frontmatter: {
+                        title: string;
+                        published: string;
+                        slug: string;
+                        tags: string;
+                    };
+                }[];
+            };
+        };
+    } = await graphql(`
         {
             allMarkdownRemark {
                 nodes {
@@ -19,18 +40,16 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
         }
     `);
 
-    if (result.errors) {
+    if (result.errors !== undefined) {
         reporter.panicOnBuild('Error loading MD result', result.errors);
     }
 
-    const posts = result.data.allMarkdownRemark.nodes;
-    const { createPage } = actions;
-    const BlogPostTemplate = path.resolve(`./src/templates/blog-post.tsx`);
+    const posts = result.data?.allMarkdownRemark.nodes;
 
-    posts.forEach((post) => {
+    posts?.forEach((post) => {
         createPage({
             path: `/blog/${post.frontmatter.slug}/`,
-            component: BlogPostTemplate,
+            component: resolve(`./src/templates/blog-post.tsx`),
             context: {
                 id: post.id,
                 title: post.frontmatter.title,
@@ -43,3 +62,5 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
         });
     });
 };
+
+export { createPages };

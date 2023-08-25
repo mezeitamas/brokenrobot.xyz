@@ -3,7 +3,6 @@ import type { FunctionComponent, ReactElement } from 'react';
 
 import type { HeadFC, PageProps } from 'gatsby';
 
-import { Layout } from '../components/layout/layout';
 import { SeoBlogPosting } from '../components/seo/seo-blog-posting';
 
 type PageContext = {
@@ -26,7 +25,7 @@ const BlogPostTemplate: FunctionComponent<PageProps<null, PageContext>> = ({ pag
     });
 
     return (
-        <Layout>
+        <>
             <article>
                 <header>
                     <h1>{title}</h1>
@@ -38,7 +37,7 @@ const BlogPostTemplate: FunctionComponent<PageProps<null, PageContext>> = ({ pag
                     <div dangerouslySetInnerHTML={{ __html: html }}></div>
                 </section>
             </article>
-        </Layout>
+        </>
     );
 };
 
