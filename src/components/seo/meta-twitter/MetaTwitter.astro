@@ -1,0 +1,38 @@
+---
+import { SITE_METADATA } from '../../../consts';
+
+type Props = {
+    title: string;
+    description: string;
+    image: string;
+};
+
+const { title, description, image } = Astro.props;
+---
+
+<>
+    <meta
+        name="twitter:card"
+        content="summary_large_image"
+    />
+    <meta
+        name="twitter:title"
+        content={title}
+    />
+    <meta
+        name="twitter:description"
+        content={description}
+    />
+    <meta
+        name="twitter:image"
+        content={new URL(image, Astro.url)}
+    />
+    <meta
+        name="twitter:creator"
+        content={SITE_METADATA.AUTHOR.SOCIAL.TWITTER_USERNAME}
+    />
+    <meta
+        name="twitter:site"
+        content={SITE_METADATA.AUTHOR.SOCIAL.TWITTER_USERNAME}
+    />
+</>

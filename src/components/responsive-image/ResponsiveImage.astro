@@ -1,0 +1,59 @@
+---
+/*
+For now the component is not used, because even on max quality,
+the optimized images are not sharp enough.
+
+Useful links:
+- https://docs.astro.build/en/guides/images/
+- https://sharp.pixelplumbing.com/
+- https://developer.mozilla.org/en-US/docs/Web/HTML/Element/picture
+- https://developer.mozilla.org/en-US/docs/Learn/HTML/Multimedia_and_embedding/Responsive_images
+
+*/
+
+import type { ImageOutputFormat, ImageQuality } from 'astro';
+import { getImage } from 'astro:assets';
+
+type Props = {
+    src: ImageMetadata;
+    alt: string;
+    sizes: number[];
+    format?: ImageOutputFormat | undefined;
+    quality?: ImageQuality | undefined;
+};
+
+const { src, alt, sizes, format = 'png', quality = 'max' } = Astro.props;
+
+const generateResponsiveImage = async (
+    src: ImageMetadata,
+    format: ImageOutputFormat,
+    quality: ImageQuality,
+    sizes: number[]
+) => {
+    const imgSrcSet = sizes.map(async (size) => {
+        const image = await getImage({ src, width: size, format, quality });
+
+        return `${image.src} ${size}w`;
+    });
+
+    const imgSrc = await getImage({ src, width: Math.max(...sizes), format, quality });
+
+    return {
+        srcSet: await Promise.all(imgSrcSet),
+        imgSrc: imgSrc.src
+    };
+};
+
+const maxSize = Math.max(...sizes);
+const { srcSet, imgSrc } = await generateResponsiveImage(src, format, quality, sizes);
+---
+
+<img
+    srcset={srcSet.join(', ')}
+    alt={alt}
+    src={imgSrc}
+    sizes=`(max-width: ${maxSize}px) 100vw, ${maxSize}px`
+    loading="lazy"
+    decoding="async"
+    style="max-inline-size: 100%; block-size: auto;"
+/>

@@ -156,7 +156,7 @@ resource "aws_cloudfront_response_headers_policy" "security_headers_policy" {
 
   security_headers_config {
     content_security_policy {
-      content_security_policy = "default-src 'none'; connect-src 'self'; manifest-src 'self'; img-src 'self' 'unsafe-inline' data:; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; object-src 'none'; frame-ancestors 'none'"
+      content_security_policy = "default-src 'none'; connect-src 'self'; manifest-src 'self'; img-src 'self' 'unsafe-inline'; script-src 'none'; style-src 'self' 'unsafe-inline'; object-src 'none'; frame-ancestors 'none'; form-action 'none'; base-uri 'none'; require-trusted-types-for 'script';"
 
       override = true
     }
@@ -181,13 +181,6 @@ resource "aws_cloudfront_response_headers_policy" "security_headers_policy" {
       access_control_max_age_sec = 63072000
       include_subdomains         = true
       preload                    = true
-
-      override = true
-    }
-
-    xss_protection {
-      mode_block = true
-      protection = true
 
       override = true
     }

@@ -4,8 +4,8 @@ node_modules/
 # Cache folder
 .cache/
 
-# Build output
-src/gatsby-types.d.ts
+# Generated types
+.astro/
 
 # Coverage directory used by tools like istanbul
 reports
@@ -15,13 +15,23 @@ coverage
 # MacOS
 .DS_Store
 
+# VSC
+.vscode/
+
 # Dotenv
 .env
+.env.production
 
 # Playwright
 /test-results/
 /playwright-report/
 /playwright/.cache/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
 
 # Local .terraform directories
 **/.terraform/*

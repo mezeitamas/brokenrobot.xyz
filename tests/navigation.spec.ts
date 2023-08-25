@@ -18,21 +18,21 @@ test.describe('Home page', () => {
     });
 });
 
-test.describe('About me page', () => {
+test.describe('About page', () => {
     test('should be accessible from the home page via the header navigation', async ({ page }) => {
         await page.goto('./');
         await expect(page).toHaveTitle(/Broken Robot/);
 
-        await page.getByRole('navigation').getByRole('link', { name: 'About me' }).click();
-        await expect(page).toHaveTitle(/About me/);
+        await page.getByRole('navigation').getByRole('link', { name: 'About' }).click();
+        await expect(page).toHaveTitle(/About/);
     });
 
     test('should be accessible from the home page via the intro paragraph', async ({ page }) => {
         await page.goto('./');
         await expect(page).toHaveTitle(/Broken Robot/);
 
-        await page.getByRole('main').getByRole('link', { name: 'About me' }).click();
-        await expect(page).toHaveTitle(/About me/);
+        await page.getByRole('main').getByRole('link', { name: 'About' }).click();
+        await expect(page).toHaveTitle(/About/);
     });
 });
 
@@ -45,9 +45,9 @@ test.describe('Blog page', () => {
         await expect(page).toHaveTitle(/Blog/);
     });
 
-    test('should be accessible from the about me page via the intro paragraph', async ({ page }) => {
-        await page.goto('./about-me');
-        await expect(page).toHaveTitle(/About me/);
+    test('should be accessible from the about page via the intro paragraph', async ({ page }) => {
+        await page.goto('./about');
+        await expect(page).toHaveTitle(/About/);
 
         await page.getByRole('link', { name: 'blog posts' }).click();
         await expect(page).toHaveTitle(/Blog/);
@@ -82,8 +82,8 @@ test.describe('Post: Hosting a static website on Amazon S3', () => {
     });
 
     test('should be accessible from the about page', async ({ page }) => {
-        await page.goto('./about-me');
-        await expect(page).toHaveTitle(/About me/);
+        await page.goto('./about');
+        await expect(page).toHaveTitle(/About/);
 
         await page.getByRole('link', { name: 'Hosting a static website on Amazon S3' }).click();
         await expect(page).toHaveTitle(/Hosting a static website on Amazon S3/);
@@ -114,8 +114,8 @@ test.describe('Post: Advanced static website hosting with Amazon S3 and CloudFro
     });
 
     test('should be accessible from the about page', async ({ page }) => {
-        await page.goto('./about-me');
-        await expect(page).toHaveTitle(/About me/);
+        await page.goto('./about');
+        await expect(page).toHaveTitle(/About/);
 
         await page.getByRole('link', { name: 'Advanced static website hosting with Amazon S3 and CloudFront' }).click();
         await expect(page).toHaveTitle(/Advanced static website hosting with Amazon S3 and CloudFront/);
@@ -146,8 +146,8 @@ test.describe('Post: URL redirect with Amazon CloudFront and Amazon Route 53', (
     });
 
     test('should be accessible from the about page', async ({ page }) => {
-        await page.goto('./about-me');
-        await expect(page).toHaveTitle(/About me/);
+        await page.goto('./about');
+        await expect(page).toHaveTitle(/About/);
 
         await page.getByRole('link', { name: 'URL redirect with Amazon CloudFront and Amazon Route 53' }).click();
         await expect(page).toHaveTitle(/URL redirect with Amazon CloudFront and Amazon Route 53/);

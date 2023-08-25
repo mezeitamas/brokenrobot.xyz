@@ -1,0 +1,40 @@
+---
+import { type CollectionEntry, getCollection } from 'astro:content';
+
+import ArticleLayout from '@layouts/ArticleLayout.astro';
+
+import FormattedDate from '@components/FormattedDate.astro';
+
+export async function getStaticPaths() {
+    const posts = await getCollection('blog');
+    return posts.map((post) => ({
+        params: { slug: post.slug },
+        props: post
+    }));
+}
+type Props = CollectionEntry<'blog'>;
+
+const post = Astro.props;
+const { Content } = await post.render();
+---
+
+<ArticleLayout
+    pageTitle={post.data.title}
+    pageDescription={post.data.excerpt}
+    publishDate={post.data.publishDate}
+    tags={post.data.tags}
+>
+    <Fragment slot="content">
+        <article>
+            <header>
+                <h1>{post.data.title}</h1>
+
+                <FormattedDate date={post.data.publishDate} />
+            </header>
+
+            <section>
+                <Content />
+            </section>
+        </article>
+    </Fragment>
+</ArticleLayout>

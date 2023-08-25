@@ -1,0 +1,44 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+
+import MetaOgWebsite from '@components/seo/meta-og/MetaOgWebsite.astro';
+import MetaTwitter from '@components/seo/meta-twitter/MetaTwitter.astro';
+import RichResultsWebsite from '@components/seo/rich-results/RichResultsWebsite.astro';
+
+type Props = {
+    pageTitle: string;
+    pageDescription: string;
+    image?: string | undefined;
+};
+
+const { pageTitle, pageDescription, image = '/favicon.svg' } = Astro.props;
+---
+
+<BaseLayout
+    pageTitle={pageTitle}
+    pageDescription={pageDescription}
+>
+    <Fragment slot="seo">
+        <MetaOgWebsite
+            title={pageTitle}
+            description={pageDescription}
+            image={image}
+        />
+
+        <MetaTwitter
+            title={pageTitle}
+            description={pageDescription}
+            image={image}
+        />
+
+        <RichResultsWebsite
+            title={pageTitle}
+            description={pageDescription}
+        />
+    </Fragment>
+
+    <slot
+        name="content"
+        slot="content"
+    />
+</BaseLayout>
