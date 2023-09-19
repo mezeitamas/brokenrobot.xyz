@@ -7,8 +7,8 @@ export default defineConfig({
     testDir: './tests',
     fullyParallel: true,
     forbidOnly: process.env.CI !== undefined,
-    retries: process.env.CI !== undefined ? 2 : 0,
-    workers: process.env.CI !== undefined ? 1 : undefined,
+    retries: 0,
+    workers: 1,
     outputDir: 'reports/tests/e2e/test-results',
     reporter: [
         ['list'],

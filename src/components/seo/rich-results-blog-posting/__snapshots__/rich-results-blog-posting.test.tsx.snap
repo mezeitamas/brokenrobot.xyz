@@ -1,9 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`<RichResultsBlogPosting /> should render 1`] = `
-<script
-  type="application/ld+json"
->
-  {"@context":"https://schema.org","@type":"BlogPosting","@id":"https://www.brokenrobot.xyz/blog/hosting-a-static-website-on-amazon-s3/#BlogPosting","headline":"Hosting a static website on Amazon S3","name":"Hosting a static website on Amazon S3","description":"Hosting a simple static website on Amazon Web Services (AWS) can be daunting at first, but luckily it’s quite straightforward. One option...","datePublished":"2023-05-01T10:10:05.000Z","dateModified":"2023-05-01T10:10:05.000Z","url":"https://www.brokenrobot.xyz/blog/hosting-a-static-website-on-amazon-s3/","inLanguage":"en-US","author":[{"@type":"Person","@id":"https://www.brokenrobot.xyz/about-me/#Person","name":"Tamas Mezei","url":"https://www.brokenrobot.xyz/about-me/","sameAs":["https://github.com/mezeitamas","https://www.linkedin.com/in/mezeitamas/","https://mastodon.social/@brokenrobot_xyz","https://twitter.com/brokenrobot_xyz"]}],"publisher":{"@type":"Organization","@id":"https://www.brokenrobot.xyz/#Organization","name":"Broken Robot","url":"https://www.brokenrobot.xyz"},"isPartOf":{"@type":"WebSite","@id":"https://www.brokenrobot.xyz/#WebSite","name":"Broken Robot","url":"https://www.brokenrobot.xyz","inLanguage":"en-US","author":[{"@type":"Person","@id":"https://www.brokenrobot.xyz/about-me/#Person","name":"Tamas Mezei","url":"https://www.brokenrobot.xyz/about-me/","sameAs":["https://github.com/mezeitamas","https://www.linkedin.com/in/mezeitamas/","https://mastodon.social/@brokenrobot_xyz","https://twitter.com/brokenrobot_xyz"]}],"publisher":{"@type":"Organization","@id":"https://www.brokenrobot.xyz/#Organization","name":"Broken Robot","url":"https://www.brokenrobot.xyz"}}}
-</script>
-`;

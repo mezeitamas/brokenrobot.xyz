@@ -1,0 +1,32 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import type { HTMLTag } from 'astro/types';
+
+import InternalLink from '@components/links/InternalLink.astro';
+import FormattedDate from '@components/FormattedDate.astro';
+
+type Props = {
+    posts: CollectionEntry<'blog'>[];
+    HeadingType: HTMLTag;
+};
+
+const { posts, HeadingType } = Astro.props;
+---
+
+<Fragment>
+    {
+        posts.map((post) => (
+            <article class="flex flex-col items-start justify-between">
+                <header>
+                    <HeadingType>
+                        <InternalLink href={`/blog/${post.slug}/`}>{post.data.title}</InternalLink>
+                    </HeadingType>
+
+                    <FormattedDate date={post.data.publishDate} />
+
+                    <p>{post.data.excerpt}</p>
+                </header>
+            </article>
+        ))
+    }
+</Fragment>

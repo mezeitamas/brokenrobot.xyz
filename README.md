@@ -1,6 +1,6 @@
 # brokenrobot.xyz
 
-This is the code repository for my personal website. The website is built with Gatsby using TypeScript and TailwindCSS.
+This is the code repository for my personal website. The website is built with Astro using TypeScript and TailwindCSS.
 
 ## 🚀 Installation and usage
 
@@ -14,10 +14,8 @@ To install and run the project, please follow these steps:
 
 The website was built using the following technologies:
 
--   [Gatsby](https://www.gatsbyjs.com/)
+-   [Astro](https://astro.build/)
 -   [TypeScript](https://www.typescriptlang.org/)
--   [React](https://react.dev/)
--   [GraphQL](https://graphql.org/)
 -   [TailwindCSS](https://tailwindcss.com/)
 
 ## 📄 License

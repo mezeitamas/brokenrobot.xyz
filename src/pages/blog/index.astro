@@ -1,0 +1,25 @@
+---
+import { getCollection } from 'astro:content';
+
+import PageLayout from '@layouts/PageLayout.astro';
+
+import BlogPosts from '@components/blog-posts/BlogPosts.astro';
+
+const posts = (await getCollection('blog')).sort((a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf());
+---
+
+<PageLayout
+    pageTitle="Blog"
+    pageDescription="Blog posts"
+>
+    <Fragment slot="content">
+        <section>
+            <h1>Blog posts</h1>
+
+            <BlogPosts
+                posts={posts}
+                HeadingType="h2"
+            />
+        </section>
+    </Fragment>
+</PageLayout>

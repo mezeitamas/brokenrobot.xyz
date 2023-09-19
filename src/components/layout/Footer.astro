@@ -1,0 +1,61 @@
+---
+import { GithubIcon, LinkedinIcon, GlobeIcon, TwitterIcon, RssIcon } from 'astro-feather';
+
+import ExternalLink from '@components/links/ExternalLink.astro';
+import InternalLink from '@components/links/InternalLink.astro';
+
+type Props = {
+    githubLink: string;
+    linkedinLink: string;
+    mastodonLink: string;
+    twitterLink: string;
+    authorName: string;
+};
+
+const { githubLink, linkedinLink, mastodonLink, twitterLink, authorName } = Astro.props;
+const today = new Date();
+---
+
+<footer class="mb-6 mt-12 flex flex-col gap-4 text-gray-600">
+    <hr />
+
+    <div class="flex flex-col justify-between gap-6 whitespace-nowrap sm:flex-row sm:gap-10">
+        <div class="flex flex-col gap-4 sm:flex-row">
+            <div class="flex flex-row gap-4">
+                <div class="flex items-center gap-2">
+                    <GithubIcon />
+                    <ExternalLink href={githubLink}>GitHub</ExternalLink>
+                </div>
+
+                <div class="flex items-center gap-2">
+                    <LinkedinIcon />
+                    <ExternalLink href={linkedinLink}>LinkedIn</ExternalLink>
+                </div>
+            </div>
+
+            <div class="flex flex-row gap-4">
+                <div class="flex items-center gap-2">
+                    <GlobeIcon />
+                    <ExternalLink
+                        href={mastodonLink}
+                        rel="me"
+                    >
+                        Mastodon
+                    </ExternalLink>
+                </div>
+
+                <div class="flex items-center gap-2">
+                    <TwitterIcon />
+                    <ExternalLink href={twitterLink}>Twitter</ExternalLink>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex items-center gap-2">
+            <RssIcon />
+            <InternalLink href="/rss.xml">RSS Feed</InternalLink>
+        </div>
+    </div>
+
+    <div class="text-sm">&copy; {today.getFullYear()} {` `} {authorName}. All rights reserved.</div>
+</footer>

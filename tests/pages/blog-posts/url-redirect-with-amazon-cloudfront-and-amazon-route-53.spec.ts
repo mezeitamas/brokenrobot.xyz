@@ -2,12 +2,12 @@ import AxeBuilder from '@axe-core/playwright';
 import { test, expect } from '@playwright/test';
 
 test.beforeEach(async ({ page }) => {
-    await page.goto('./blog/hosting-a-static-website-on-amazon-s3');
+    await page.goto('./blog/url-redirect-with-amazon-cloudfront-and-amazon-route-53');
 });
 
-test.describe('Post: Hosting a static website on Amazon S3', () => {
+test.describe('Post: URL redirect with Amazon CloudFront and Amazon Route 53', () => {
     test('should have a title', async ({ page }) => {
-        await expect(page).toHaveTitle(/Hosting a static website on Amazon S3/);
+        await expect(page).toHaveTitle(/URL redirect with Amazon CloudFront and Amazon Route 53/);
     });
 
     test('should not have any automatically detectable accessibility issues', async ({ page }) => {

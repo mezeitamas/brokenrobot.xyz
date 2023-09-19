@@ -1,0 +1,55 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+
+import MetaOgArticle from '@components/seo/meta-og/MetaOgArticle.astro';
+import MetaTwitter from '@components/seo/meta-twitter/MetaTwitter.astro';
+import RichResultsArticle from '@components/seo/rich-results/RichResultsArticle.astro';
+
+type Props = {
+    pageTitle: string;
+    pageDescription: string;
+    image?: string | undefined;
+    publishDate: Date;
+    tags: string[];
+};
+
+const { pageTitle, pageDescription, image = '/favicon.svg', publishDate, tags } = Astro.props;
+---
+
+<BaseLayout
+    pageTitle={pageTitle}
+    pageDescription={pageDescription}
+>
+    <Fragment slot="seo">
+        <meta
+            name="keywords"
+            content={tags?.join(', ')}
+        />
+
+        <MetaOgArticle
+            title={pageTitle}
+            description={pageDescription}
+            image={image}
+            publishDate={publishDate}
+            tags={tags}
+        />
+
+        <MetaTwitter
+            title={pageTitle}
+            description={pageDescription}
+            image={image}
+        />
+
+        <RichResultsArticle
+            title={pageTitle}
+            excerpt={pageDescription}
+            publishDate={publishDate}
+            tags={tags}
+        />
+    </Fragment>
+
+    <slot
+        name="content"
+        slot="content"
+    />
+</BaseLayout>

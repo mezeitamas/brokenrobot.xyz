@@ -40,17 +40,6 @@ jobs:
       - name: Type check
         run: npm run type:check
 
-      - name: Unit test check
-        run: npm run test:unit:check
-
-      - name: Upload unit test reports
-        uses: actions/upload-artifact@v3
-        if: always()
-        with:
-          name: unit-test-reports
-          path: reports/tests/unit/
-          retention-days: 1
-
   build:
     name: 'Build'
     runs-on: ubuntu-latest

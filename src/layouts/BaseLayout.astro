@@ -1,0 +1,93 @@
+---
+import '../styles/base.css';
+
+import Header from '@components/layout/Header.astro';
+import Footer from '@components/layout/Footer.astro';
+
+import { SITE_METADATA } from '../consts';
+
+type Props = {
+    pageTitle: string;
+    pageDescription: string;
+};
+
+const { pageTitle, pageDescription } = Astro.props;
+---
+
+<!doctype html>
+<html
+    lang={SITE_METADATA.LANGUAGE}
+    dir={SITE_METADATA.DIR}
+>
+    <head>
+        <meta charset="utf-8" />
+        <meta
+            name="viewport"
+            content="width=device-width,initial-scale=1"
+        />
+        <meta
+            http-equiv="cache-control"
+            content="public, max-age=0, must-revalidate"
+        />
+        <meta
+            name="generator"
+            content={Astro.generator}
+        />
+        <meta
+            name="theme-color"
+            media="(prefers-color-scheme: light)"
+            content="white"
+        />
+        <link
+            rel="sitemap"
+            href="/sitemap-index.xml"
+        />
+        <link
+            rel="alternate"
+            type="application/rss+xml"
+            title={SITE_METADATA.TITLE}
+            href="/rss.xml"
+        />
+        <link
+            rel="canonical"
+            href={Astro.url}
+        />
+        <link
+            rel="icon"
+            type="image/svg+xml"
+            href="/favicon.svg"
+        />
+
+        <title>{pageTitle}</title>
+        <meta
+            name="title"
+            content={pageTitle}
+        />
+        <meta
+            name="author"
+            content={SITE_METADATA.AUTHOR.NAME}
+        />
+        <meta
+            name="description"
+            content={pageDescription}
+        />
+
+        <slot name="seo" />
+    </head>
+
+    <body class="mx-auto max-w-screen-xl px-4 md:px-6 lg:px-8">
+        <Header title={SITE_METADATA.TITLE} />
+
+        <main class="prose max-w-none md:prose-lg lg:prose-xl">
+            <slot name="content" />
+        </main>
+
+        <Footer
+            githubLink={SITE_METADATA.AUTHOR.SOCIAL.GITHUB_URL}
+            linkedinLink={SITE_METADATA.AUTHOR.SOCIAL.LINKEDIN_URL}
+            mastodonLink={SITE_METADATA.AUTHOR.SOCIAL.MASTODON_URL}
+            twitterLink={SITE_METADATA.AUTHOR.SOCIAL.TWITTER_URL}
+            authorName={SITE_METADATA.AUTHOR.NAME}
+        />
+    </body>
+</html>

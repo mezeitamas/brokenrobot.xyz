@@ -1,0 +1,23 @@
+---
+import { ExternalLinkIcon } from 'astro-feather';
+
+type Props = {
+    href: string;
+    rel?: string;
+};
+
+const { href, rel } = Astro.props;
+---
+
+<span class="inline-flex items-center gap-1">
+    <a
+        href={href}
+        target="_blank"
+        rel={rel}
+        class="hover:underline"
+    >
+        <slot />
+    </a>
+
+    <ExternalLinkIcon size={14} />
+</span>

@@ -1,0 +1,49 @@
+---
+import type { Organization, Person, WebSite, WithContext } from 'schema-dts';
+
+import { SITE_METADATA } from '../../../consts';
+
+type Props = {
+    title: string;
+    description: string;
+};
+
+const { title, description } = Astro.props;
+
+const authorPerson: Person = {
+    '@type': 'Person',
+    '@id': `${Astro.site}about/#Person`,
+    name: SITE_METADATA.AUTHOR.NAME,
+    url: `${Astro.site}about/`,
+    sameAs: [
+        SITE_METADATA.AUTHOR.SOCIAL.GITHUB_URL,
+        SITE_METADATA.AUTHOR.SOCIAL.LINKEDIN_URL,
+        SITE_METADATA.AUTHOR.SOCIAL.MASTODON_URL,
+        SITE_METADATA.AUTHOR.SOCIAL.TWITTER_URL
+    ]
+};
+
+const publisher: Organization = {
+    '@type': 'Organization',
+    '@id': `${Astro.site}#Organization`,
+    name: SITE_METADATA.TITLE,
+    url: `${Astro.site}`
+};
+
+const webSite: WithContext<WebSite> = {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    '@id': `${Astro.site}#WebSite`,
+    name: title,
+    description: description,
+    url: `${Astro.site}`,
+    inLanguage: SITE_METADATA.LANGUAGE,
+    author: [authorPerson],
+    publisher: publisher
+};
+---
+
+<script
+    type="application/ld+json"
+    set:html={JSON.stringify(webSite)}
+/>

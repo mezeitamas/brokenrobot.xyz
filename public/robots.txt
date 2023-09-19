@@ -1,0 +1,4 @@
+User-agent: *
+Disallow:
+
+Sitemap: https://www.brokenrobot.xyz/sitemap-index.xml
