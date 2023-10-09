@@ -2,6 +2,7 @@
 title: 'Advanced static website hosting with Amazon S3 and CloudFront'
 excerpt: 'Today we will dive deep into the world of hosting a static website on Amazon S3 using CloudFront. If you’re looking for a secure, reliable, scalable, cost effective and performant solution, you’ve come to the right place.'
 publishDate: '2023-05-29T18:00:00.000Z'
+heroImage: './heroImage.jpg'
 tags: ['aws', 's3', 'route53', 'cloudfront', 'certificatemanager', 'staticwebsite', 'hosting', 'brokenrobot']
 ---
 

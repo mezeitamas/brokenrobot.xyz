@@ -2,6 +2,7 @@
 title: 'URL redirect with Amazon CloudFront and Amazon Route 53'
 excerpt: 'In this blog post we will discover how to implement a consitent, SEO friendly URL structure, focusing on using the www subdomain over the apex domain, for a personal website, using URL redirection with Amazon CloudFront and Route 53.'
 publishDate: '2023-07-14T18:00:00.000Z'
+heroImage: './heroImage.jpg'
 tags:
     [
         '301redirect',

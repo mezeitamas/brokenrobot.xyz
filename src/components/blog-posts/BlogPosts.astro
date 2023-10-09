@@ -1,4 +1,5 @@
 ---
+import { Image } from 'astro:assets';
 import type { CollectionEntry } from 'astro:content';
 import type { HTMLTag } from 'astro/types';
 
@@ -18,13 +19,27 @@ const { posts, HeadingType } = Astro.props;
         posts.map((post) => (
             <article class="flex flex-col items-start justify-between">
                 <header>
-                    <HeadingType>
+                    <HeadingType transition:name={`post-title-${post.slug}`}>
                         <InternalLink href={`/blog/${post.slug}/`}>{post.data.title}</InternalLink>
                     </HeadingType>
 
-                    <FormattedDate date={post.data.publishDate} />
+                    <FormattedDate
+                        date={post.data.publishDate}
+                        transition:name={`post-publish-date-${post.slug}`}
+                    />
 
-                    <p>{post.data.excerpt}</p>
+                    <div class="flex flex-col justify-between gap-4 sm:flex-row sm:gap-8">
+                        <Image
+                            src={post.data.heroImage}
+                            alt=""
+                            loading="eager"
+                            decoding="sync"
+                            class="not-prose w-fit rounded-lg sm:w-80"
+                            transition:name={`post-hero-image-${post.slug}`}
+                        />
+
+                        <div>{post.data.excerpt}</div>
+                    </div>
                 </header>
             </article>
         ))

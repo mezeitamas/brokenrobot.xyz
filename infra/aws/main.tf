@@ -156,7 +156,7 @@ resource "aws_cloudfront_response_headers_policy" "security_headers_policy" {
 
   security_headers_config {
     content_security_policy {
-      content_security_policy = "default-src 'none'; connect-src 'self'; manifest-src 'self'; img-src 'self' 'unsafe-inline'; script-src 'none'; style-src 'self' 'unsafe-inline'; object-src 'none'; frame-ancestors 'none'; form-action 'none'; base-uri 'none'; require-trusted-types-for 'script';"
+      content_security_policy = "default-src 'none'; connect-src 'self'; manifest-src 'self'; img-src 'self' 'unsafe-inline'; script-src 'self'; style-src 'self' 'unsafe-inline'; object-src 'none'; frame-ancestors 'none'; form-action 'none'; base-uri 'none';"
 
       override = true
     }

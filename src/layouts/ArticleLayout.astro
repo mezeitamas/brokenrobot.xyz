@@ -1,24 +1,20 @@
 ---
+import type { CollectionEntry } from 'astro:content';
+
 import BaseLayout from '@layouts/BaseLayout.astro';
 
 import MetaOgArticle from '@components/seo/meta-og/MetaOgArticle.astro';
 import MetaTwitter from '@components/seo/meta-twitter/MetaTwitter.astro';
 import RichResultsArticle from '@components/seo/rich-results/RichResultsArticle.astro';
 
-type Props = {
-    pageTitle: string;
-    pageDescription: string;
-    image?: string | undefined;
-    publishDate: Date;
-    tags: string[];
-};
+type Props = CollectionEntry<'blog'>['data'];
 
-const { pageTitle, pageDescription, image = '/favicon.svg', publishDate, tags } = Astro.props;
+const { title, excerpt, publishDate, heroImage, tags } = Astro.props;
 ---
 
 <BaseLayout
-    pageTitle={pageTitle}
-    pageDescription={pageDescription}
+    pageTitle={title}
+    pageDescription={excerpt}
 >
     <Fragment slot="seo">
         <meta
@@ -27,22 +23,23 @@ const { pageTitle, pageDescription, image = '/favicon.svg', publishDate, tags } 
         />
 
         <MetaOgArticle
-            title={pageTitle}
-            description={pageDescription}
-            image={image}
+            title={title}
+            description={excerpt}
+            image={heroImage.src}
             publishDate={publishDate}
             tags={tags}
         />
 
         <MetaTwitter
-            title={pageTitle}
-            description={pageDescription}
-            image={image}
+            title={title}
+            description={excerpt}
+            image={heroImage.src}
         />
 
         <RichResultsArticle
-            title={pageTitle}
-            excerpt={pageDescription}
+            title={title}
+            description={excerpt}
+            image={heroImage.src}
             publishDate={publishDate}
             tags={tags}
         />
