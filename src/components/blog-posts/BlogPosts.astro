@@ -34,7 +34,7 @@ const { posts, HeadingType } = Astro.props;
                         <div class="basis-1/3">
                             <Picture
                                 src={post.data.heroImage}
-                                alt=""
+                                alt={post.data.title}
                                 formats={['avif', 'webp']}
                                 widths={SITE_METADATA.SRC_SET_BREAKPOINTS}
                                 loading="lazy"
