@@ -27,8 +27,16 @@ export default defineConfig({
             use: { ...devices['Desktop Chrome'] }
         },
         {
-            name: 'Mobile Chrome',
+            name: 'Desktop Safari',
+            use: { ...devices['Desktop Safari'] }
+        },
+        {
+            name: 'Mobile Chrome - Pixel 5',
             use: { ...devices['Pixel 5'] }
+        },
+        {
+            name: 'Mobile Safari - iPhone 14',
+            use: { ...devices['iPhone 14'] }
         }
     ],
     webServer: {
