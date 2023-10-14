@@ -1,10 +1,12 @@
 ---
-import { Image } from 'astro:assets';
+import { Picture } from 'astro:assets';
 import { type CollectionEntry, getCollection } from 'astro:content';
 
 import ArticleLayout from '@layouts/ArticleLayout.astro';
 
 import FormattedDate from '@components/FormattedDate.astro';
+
+import { SITE_METADATA } from '../../consts';
 
 export async function getStaticPaths() {
     const posts = await getCollection('blog');
@@ -43,14 +45,17 @@ const {
             </header>
 
             <section>
-                <Image
+                <Picture
                     src={heroImage}
                     alt=""
-                    width={1280}
-                    height={731}
-                    loading="eager"
-                    decoding="sync"
-                    class="rounded-lg"
+                    formats={['avif', 'webp']}
+                    widths={SITE_METADATA.SRC_SET_BREAKPOINTS}
+                    loading="lazy"
+                    decoding="async"
+                    pictureAttributes={{
+                        class: 'not-prose rounded-lg'
+                    }}
+                    class="not-prose rounded-lg"
                     transition:name={`post-hero-image-${post.slug}`}
                 />
 

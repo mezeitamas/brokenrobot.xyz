@@ -17,6 +17,12 @@ tags:
     ]
 ---
 
+import BlogPostPicture from '@components/picture/BlogPostPicture.astro';
+
+import baselineArchitecture from '../advanced-static-website-hosting-with-amazon-s3-and-cloudfront/target-architecture-s3-cdn.png';
+import baselineArchitectureCloudFrontFunction from '../advanced-static-website-hosting-with-amazon-s3-and-cloudfront/target-architecture-s3-cdn-cloudfront-function.png';
+import targetArchitectureS3CdnCloudfrontFunction from './target-architecture-s3-cdn-cloudfront-function.png';
+
 In this blog post we will discover how to implement a consitent, SEO friendly URL structure, focusing on using the **www** subdomain over the apex domain, for a personal website, using URL redirection with Amazon CloudFront and Route 53.
 
 Before we dive deep into this topic, let's check a little bit of context:
@@ -40,11 +46,17 @@ These are the main components:
 -   **CloudFront**: Our Content Delivery Network (CDN).
 -   **S3**: This where we store the website's content.
 
-![Baseline architecture](../advanced-static-website-hosting-with-amazon-s3-and-cloudfront/target-architecture-s3-cdn.png)
+<BlogPostPicture
+    src={baselineArchitecture}
+    alt="Baseline architecture"
+/>
 
 **CloudFront functions** play (and will play) an important role, so it worth to have a look at this diagram as well:
 
-![Baseline architecture - CloudFront Function](../advanced-static-website-hosting-with-amazon-s3-and-cloudfront/target-architecture-s3-cdn-cloudfront-function.png)
+<BlogPostPicture
+    src={baselineArchitectureCloudFrontFunction}
+    alt="Baseline architecture - CloudFront Function"
+/>
 
 We utilize two functions:
 
@@ -92,7 +104,10 @@ By using HTTP redirects we can easily achieve this. However we should not compro
 
 We will not make any fundamental changes to the architecture itself. However we need to add extra responsibility to the CloudFront distribution, in particular to the function which handles visitor requests, to handle the redirect.
 
-![Target architecture - CloudFront Function](./target-architecture-s3-cdn-cloudfront-function.png)
+<BlogPostPicture
+    src={targetArchitectureS3CdnCloudfrontFunction}
+    alt="Target architecture - CloudFront Function"
+/>
 
 Now let's dive deep into the implementation details.
 

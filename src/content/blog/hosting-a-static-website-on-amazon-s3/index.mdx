@@ -6,6 +6,10 @@ heroImage: './heroImage.jpg'
 tags: ['aws', 's3', 'route53', 'staticwebsite', 'hosting', 'brokenrobot']
 ---
 
+import BlogPostPicture from '@components/picture/BlogPostPicture.astro';
+
+import targetArchitecture from './target-architecture.png';
+
 Hosting a simple static website on Amazon Web Services (AWS) can be daunting at first, but luckily it's quite straightforward. One option for hosting a static website on AWS is to use Amazon S3.
 
 In this post, we will walk through the steps to host a static website using only S3 and only the AWS Management Console. So I can show how I started to host my website initially.
@@ -23,7 +27,10 @@ While registering a domain name is not mandatory, it is possible to host a stati
 
 The target architecture is relatively simple, we have 2 major components: Amazon S3 and Route 53. Where S3 is doing the heavy lifting, the website hosting and Route 53 is responsible for handling DNS related things.
 
-![Target architecture](./target-architecture.png)
+<BlogPostPicture
+    src={targetArchitecture}
+    alt="Target architecture"
+/>
 
 ## Step 1: Create an S3 bucket
 

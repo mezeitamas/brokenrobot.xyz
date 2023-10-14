@@ -1,10 +1,12 @@
 ---
-import { Image } from 'astro:assets';
+import { Picture } from 'astro:assets';
 import type { CollectionEntry } from 'astro:content';
 import type { HTMLTag } from 'astro/types';
 
 import InternalLink from '@components/links/InternalLink.astro';
 import FormattedDate from '@components/FormattedDate.astro';
+
+import { SITE_METADATA } from '../../consts';
 
 type Props = {
     posts: CollectionEntry<'blog'>[];
@@ -29,11 +31,16 @@ const { posts, HeadingType } = Astro.props;
                     />
 
                     <div class="flex flex-col justify-between gap-4 sm:flex-row sm:gap-8">
-                        <Image
+                        <Picture
                             src={post.data.heroImage}
                             alt=""
-                            loading="eager"
-                            decoding="sync"
+                            formats={['avif', 'webp']}
+                            widths={SITE_METADATA.SRC_SET_BREAKPOINTS}
+                            loading="lazy"
+                            decoding="async"
+                            pictureAttributes={{
+                                class: 'not-prose w-fit rounded-lg sm:w-80'
+                            }}
                             class="not-prose w-fit rounded-lg sm:w-80"
                             transition:name={`post-hero-image-${post.slug}`}
                         />

@@ -1,5 +1,5 @@
 ---
-import { Image } from 'astro:assets';
+import { Picture } from 'astro:assets';
 import { getCollection } from 'astro:content';
 
 import PageLayout from '@layouts/PageLayout.astro';
@@ -7,7 +7,9 @@ import PageLayout from '@layouts/PageLayout.astro';
 import ExternalLink from '@components/links/ExternalLink.astro';
 import InternalLink from '@components/links/InternalLink.astro';
 
-import avatarImage from './tamas-mezei-avatar.png';
+import { SITE_METADATA } from '../../consts';
+
+import avatarImage from './avatar.png';
 
 const posts = (await getCollection('blog'))
     .filter((post) => post.data.tags.includes('brokenrobot'))
@@ -64,13 +66,18 @@ const posts = (await getCollection('blog'))
                 </div>
 
                 <div class="flex items-center justify-center">
-                    <Image
+                    <Picture
                         src={avatarImage}
                         alt="Tamas Mezei avatar"
                         width={300}
                         height={300}
-                        loading="eager"
-                        decoding="sync"
+                        formats={['avif', 'webp']}
+                        widths={SITE_METADATA.SRC_SET_BREAKPOINTS}
+                        loading="lazy"
+                        decoding="async"
+                        pictureAttributes={{
+                            class: 'max-w-none rounded-full'
+                        }}
                         class="max-w-none rounded-full"
                     />
                 </div>
