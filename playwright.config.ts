@@ -27,13 +27,21 @@ export default defineConfig({
             use: { ...devices['Desktop Chrome'] }
         },
         {
-            name: 'Mobile Chrome',
+            name: 'Desktop Safari',
+            use: { ...devices['Desktop Safari'] }
+        },
+        {
+            name: 'Mobile Chrome - Pixel 5',
             use: { ...devices['Pixel 5'] }
+        },
+        {
+            name: 'Mobile Safari - iPhone 14',
+            use: { ...devices['iPhone 14'] }
         }
     ],
     webServer: {
         command: 'npm run build && npm run serve',
-        timeout: 120_000,
+        timeout: 420_000,
         url: `http://localhost:${process.env.BROKENROBOT_PORT}`,
         reuseExistingServer: process.env.CI === undefined
     }

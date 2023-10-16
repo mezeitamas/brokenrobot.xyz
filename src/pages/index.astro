@@ -3,7 +3,7 @@ import { getCollection } from 'astro:content';
 
 import PageLayout from '@layouts/PageLayout.astro';
 
-import BlogPosts from '@components/blog-posts/BlogPosts.astro';
+import CompactBlogPosts from '@components/blog-posts/CompactBlogPosts.astro';
 import InternalLink from '@components/links/InternalLink.astro';
 
 import { SITE_METADATA } from '../consts';
@@ -34,7 +34,7 @@ const posts = (await getCollection('blog'))
         <section>
             <h2>Recent blog posts</h2>
 
-            <BlogPosts
+            <CompactBlogPosts
                 posts={posts}
                 HeadingType="h3"
             />

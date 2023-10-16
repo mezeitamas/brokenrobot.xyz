@@ -1,11 +1,13 @@
 ---
-import { Image } from 'astro:assets';
+import { Picture } from 'astro:assets';
 
 import PageLayout from '@layouts/PageLayout.astro';
 
 import InternalLink from '@components/links/InternalLink.astro';
 
-import brokenRobotImage from './broken-robot.png';
+import { SITE_METADATA } from '../../consts';
+
+import n404Image from './404.jpg';
 ---
 
 <PageLayout
@@ -13,26 +15,25 @@ import brokenRobotImage from './broken-robot.png';
     pageDescription="Not found"
 >
     <Fragment slot="content">
-        <div class="lg:gap-18 flex flex-col justify-center gap-4 lg:flex-row">
+        <div>
+            <div class="text-center">Oops... page NOT found</div>
+
+            <Picture
+                src={n404Image}
+                alt="404"
+                formats={['avif', 'webp']}
+                widths={SITE_METADATA.SRC_SET_BREAKPOINTS}
+                loading="lazy"
+                decoding="async"
+                pictureAttributes={{
+                    class: 'rounded-lg'
+                }}
+                class="rounded-lg"
+            />
+
             <div class="text-center">
-                <p>Oops...</p>
-                <p class="text-4xl font-bold">404</p>
-                <p>Page NOT found</p>
+                I want to go <InternalLink href="/">Home</InternalLink>!
             </div>
-
-            <div class="self-center">
-                <Image
-                    src={brokenRobotImage}
-                    alt="Broken Robot"
-                    width={300}
-                    height={300}
-                    loading="eager"
-                />
-            </div>
-        </div>
-
-        <div class="text-center">
-            I want to go <InternalLink href="/">Home</InternalLink>!
         </div>
     </Fragment>
 </PageLayout>

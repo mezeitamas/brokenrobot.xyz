@@ -1,5 +1,5 @@
 ---
-import { Image } from 'astro:assets';
+import { Picture } from 'astro:assets';
 import { getCollection } from 'astro:content';
 
 import PageLayout from '@layouts/PageLayout.astro';
@@ -7,7 +7,9 @@ import PageLayout from '@layouts/PageLayout.astro';
 import ExternalLink from '@components/links/ExternalLink.astro';
 import InternalLink from '@components/links/InternalLink.astro';
 
-import avatarImage from './tamas-mezei-avatar.png';
+import { SITE_METADATA } from '../../consts';
+
+import avatarImage from './avatar.png';
 
 const posts = (await getCollection('blog'))
     .filter((post) => post.data.tags.includes('brokenrobot'))
@@ -64,13 +66,18 @@ const posts = (await getCollection('blog'))
                 </div>
 
                 <div class="flex items-center justify-center">
-                    <Image
+                    <Picture
                         src={avatarImage}
                         alt="Tamas Mezei avatar"
                         width={300}
                         height={300}
-                        loading="eager"
-                        decoding="sync"
+                        formats={['avif', 'webp']}
+                        widths={SITE_METADATA.SRC_SET_BREAKPOINTS}
+                        loading="lazy"
+                        decoding="async"
+                        pictureAttributes={{
+                            class: 'max-w-none rounded-full'
+                        }}
                         class="max-w-none rounded-full"
                     />
                 </div>
@@ -113,6 +120,109 @@ const posts = (await getCollection('blog'))
                         </li>
                     ))
                 }
+            </ul>
+        </section>
+
+        <section>
+            <h2>Attribution</h2>
+
+            <h3>Implementing this website</h3>
+            <ul>
+                <li>
+                    <ExternalLink href="https://astro.build">Astro</ExternalLink>
+                </li>
+                <li>
+                    <ExternalLink href="https://tailwindcss.com">TailwindCSS</ExternalLink>
+                </li>
+                <li>
+                    <ExternalLink href="https://prettier.io">Prettier</ExternalLink>
+                </li>
+                <li>
+                    <ExternalLink href="https://eslint.org">ESlint</ExternalLink>
+                </li>
+                <li>
+                    <ExternalLink href="https://www.typescriptlang.org">TypeScript</ExternalLink>
+                </li>
+                <li>
+                    <ExternalLink href="https://playwright.dev">Playwright</ExternalLink>
+                </li>
+                <li>
+                    <ExternalLink href="https://www.dotenv.org">Dotenv</ExternalLink>
+                </li>
+                <li>
+                    <ExternalLink href="https://editorconfig.org">EditorConfig</ExternalLink>
+                </li>
+                <li>
+                    <ExternalLink href="https://nodejs.org">Node.js</ExternalLink>
+                </li>
+                <li>
+                    <ExternalLink href="https://github.com/Schniz/fnm">Fast Node Manager (fnm)</ExternalLink>
+                </li>
+                <li>
+                    <ExternalLink href="https://code.visualstudio.com">Visual Studio Code</ExternalLink>
+                </li>
+            </ul>
+
+            <h3>Creating content</h3>
+            <ul>
+                <li>
+                    <ExternalLink href="https://firefly.adobe.com">Adobe Firefly</ExternalLink>
+                </li>
+                <li>
+                    <ExternalLink href="https://excalidraw.com">Excalidraw</ExternalLink>
+                </li>
+                <li>
+                    <ExternalLink href="https://www.drawio.com">Draw.io</ExternalLink>
+                </li>
+                <li>
+                    <ExternalLink href="https://feathericons.com">Feather Icons</ExternalLink>
+                </li>
+            </ul>
+
+            <h3>Hosting</h3>
+            <ul>
+                <li>
+                    <ExternalLink href="https://aws.amazon.com">AWS</ExternalLink>
+
+                    <ul>
+                        <li>
+                            <ExternalLink href="https://aws.amazon.com/s3/">S3</ExternalLink>
+                        </li>
+                        <li>
+                            <ExternalLink href="https://aws.amazon.com/cloudfront/">CloudFront</ExternalLink>
+                        </li>
+                        <li>
+                            <ExternalLink href="https://aws.amazon.com/route53/">Route 53</ExternalLink>
+                        </li>
+                        <li>
+                            <ExternalLink href="https://aws.amazon.com/certificate-manager/">
+                                Certificate Manager
+                            </ExternalLink>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <ExternalLink href="https://www.terraform.io">Terraform</ExternalLink>
+                </li>
+            </ul>
+
+            <h3>Other tools</h3>
+            <ul>
+                <li>
+                    <ExternalLink href="https://www.docker.com">Docker</ExternalLink>
+                </li>
+                <li>
+                    <ExternalLink href="https://kubernetes.io">Kubernetes</ExternalLink>
+                </li>
+                <li>
+                    <ExternalLink href="https://helm.sh">Helm</ExternalLink>
+                </li>
+                <li>
+                    <ExternalLink href="https://minikube.sigs.k8s.io/">Minikube</ExternalLink>
+                </li>
+                <li>
+                    <ExternalLink href="https://www.nginx.com">nginx</ExternalLink>
+                </li>
             </ul>
         </section>
     </Fragment>

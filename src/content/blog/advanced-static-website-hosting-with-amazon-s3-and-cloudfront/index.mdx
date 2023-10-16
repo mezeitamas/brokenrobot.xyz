@@ -2,8 +2,17 @@
 title: 'Advanced static website hosting with Amazon S3 and CloudFront'
 excerpt: 'Today we will dive deep into the world of hosting a static website on Amazon S3 using CloudFront. If you’re looking for a secure, reliable, scalable, cost effective and performant solution, you’ve come to the right place.'
 publishDate: '2023-05-29T18:00:00.000Z'
+heroImage: './heroImage.jpg'
 tags: ['aws', 's3', 'route53', 'cloudfront', 'certificatemanager', 'staticwebsite', 'hosting', 'brokenrobot']
 ---
+
+import BlogPostPicture from '@components/picture/BlogPostPicture.astro';
+
+import baselineArchitectureS3 from './baseline-architecture-s3.png';
+import baselineArchitectureS3Geo from './baseline-architecture-s3-geo.png';
+import targetArchitectureS3Cdn from './target-architecture-s3-cdn.png';
+import targetArchitectureS3CdnGeo from './target-architecture-s3-cdn-geo.png';
+import targetArchitectureS3CdnCloudfrontFunction from './target-architecture-s3-cdn-cloudfront-function.png';
 
 Today we will dive deep into the world of hosting a static website on Amazon S3 using CloudFront. If you're looking for a secure, reliable, scalable, cost effective and performant solution, you've come to the right place.
 
@@ -17,11 +26,17 @@ Let's quickly recap how the baseline architecture looks like.
 
 It is quite simple, we have only 2 components: Amazon S3 and Route 53. Where S3 is doing the heavy lifting, the website hosting and Route 53 is responsible for handling DNS related things.
 
-![Baseline architecture](./baseline-architecture-s3.png)
+<BlogPostPicture
+    src={baselineArchitectureS3}
+    alt="Baseline architecture"
+/>
 
 Now, let's explore how users can access the website from various locations across the globe.
 
-![Baseline architecture - access from locations across the globe](./baseline-architecture-s3-geo.png)
+<BlogPostPicture
+    src={baselineArchitectureS3Geo}
+    alt="Baseline architecture - access from locations across the globe"
+/>
 
 ### What can we improve?
 
@@ -100,7 +115,10 @@ Having reviewed the baseline architecture and identified areas for improvement i
 
 ### Main components
 
-![Target architecture](./target-architecture-s3-cdn.png)
+<BlogPostPicture
+    src={targetArchitectureS3Cdn}
+    alt="Target architecture"
+/>
 
 Let's identify the main components:
 
@@ -113,7 +131,10 @@ Let's identify the main components:
 
 Let's check how users can access the website from different locations around the world.
 
-![Target architecture - access from locations across the globe](./target-architecture-s3-cdn-geo.png)
+<BlogPostPicture
+    src={targetArchitectureS3CdnGeo}
+    alt="Target architecture - access from locations across the globe"
+/>
 
 When accessing a static website hosted on S3 using CloudFront, users do not connect directly to the S3 bucket itself. Instead, they connect to the nearest CloudFront edge location.
 
@@ -136,7 +157,10 @@ In this post we will go with the first one and solving it via a CloudFront funct
 
 The diagram below illustrates the role of the CloudFront functions.
 
-![Target architecture - CloudFront Function](./target-architecture-s3-cdn-cloudfront-function.png)
+<BlogPostPicture
+    src={targetArchitectureS3CdnCloudfrontFunction}
+    alt="Target architecture - CloudFront Function"
+/>
 
 #### Rewriting the URL
 
