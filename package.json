@@ -10,7 +10,7 @@
     },
     "type": "module",
     "scripts": {
-        "postinstall": "playwright install --with-deps",
+        "install:playwright": "playwright install --with-deps",
         "clean": "rimraf dist/ reports/ .astro/ .cache/ test-results/ playwright-report/",
         "format:check": "prettier '**/*.{astro,js,jsx,ts,tsx,cjs,mjs,json,md,mdx,yml}' --check",
         "format:fix": "prettier '**/*.{astro,js,jsx,ts,tsx,cjs,mjs,json,md,mdx,yml}' --write",
