@@ -40,8 +40,8 @@ export default defineConfig({
         }
     ],
     webServer: {
-        command: 'npm run build && npm run serve',
-        timeout: 420_000,
+        command: 'npm run serve',
+        timeout: 240_000,
         url: `http://localhost:${process.env.BROKENROBOT_PORT}`,
         reuseExistingServer: process.env.CI === undefined
     }
