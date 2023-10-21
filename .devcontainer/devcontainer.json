@@ -8,7 +8,7 @@
         },
         "ghcr.io/devcontainers/features/terraform:1": {}
     },
-    "postCreateCommand": "npm install",
+    "postCreateCommand": "npm install && npm run install:playwright",
     "customizations": {
         "vscode": {
             "settings": {},
