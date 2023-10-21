@@ -84,17 +84,11 @@ jobs:
           node-version-file: '.node-version'
           cache: 'npm'
 
-      - name: ls
-        run: ls -al
-
       - name: Download dist
         uses: actions/download-artifact@v3
         with:
           name: dist
           path: dist/
-
-      - name: ls
-        run: ls -al
 
       - name: Install dependencies
         run: npm ci
