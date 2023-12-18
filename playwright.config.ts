@@ -27,6 +27,10 @@ export default defineConfig({
             use: { ...devices['Desktop Chrome'] }
         },
         {
+            name: 'Desktop Firefox',
+            use: { ...devices['Desktop Firefox'] }
+        },
+        {
             name: 'Desktop Safari',
             use: { ...devices['Desktop Safari'] }
         },
@@ -41,7 +45,7 @@ export default defineConfig({
     ],
     webServer: {
         command: 'npm run serve',
-        timeout: 240_000,
+        timeout: 60_000,
         url: `http://localhost:${process.env.BROKENROBOT_PORT}`,
         reuseExistingServer: process.env.CI === undefined
     }
