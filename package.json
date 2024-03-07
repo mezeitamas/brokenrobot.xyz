@@ -12,8 +12,8 @@
     "scripts": {
         "install:playwright": "playwright install --with-deps",
         "clean": "rimraf dist/ reports/ .astro/ .cache/ test-results/ playwright-report/",
-        "format:check": "prettier '**/*.{astro,js,jsx,ts,tsx,cjs,mjs,json,md,mdx,yml}' --check",
-        "format:fix": "prettier '**/*.{astro,js,jsx,ts,tsx,cjs,mjs,json,md,mdx,yml}' --write",
+        "format:check": "prettier '**/*.{astro,js,jsx,ts,tsx,cjs,mjs,css,json,md,mdx,yml}' --check",
+        "format:fix": "prettier '**/*.{astro,js,jsx,ts,tsx,cjs,mjs,css,json,md,mdx,yml}' --write",
         "lint:check": "astro sync && eslint 'src/**/*.{astro,ts}'",
         "type:check": "astro check && tsc --noEmit",
         "test:e2e:check": "playwright test",
@@ -30,6 +30,7 @@
         "@astrojs/sitemap": "3.1.1",
         "@astrojs/tailwind": "5.1.0",
         "@astrojs/ts-plugin": "1.5.3",
+        "@fontsource/poppins": "5.0.12",
         "@tailwindcss/typography": "0.5.10",
         "astro": "4.4.6",
         "astro-feather": "1.0.0",

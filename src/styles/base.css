@@ -1,3 +1,6 @@
+@import '@fontsource/poppins/latin.css';
+@import '@fontsource/poppins/latin-italic.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -5,5 +8,6 @@
 @layer base {
     :root {
         color-scheme: light;
+        font-family: 'Poppins';
     }
 }
