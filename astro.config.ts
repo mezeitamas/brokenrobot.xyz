@@ -9,6 +9,7 @@ config();
 export default defineConfig({
     site: 'https://www.brokenrobot.xyz',
     integrations: [mdx(), sitemap(), tailwind({ applyBaseStyles: false })],
+    compressHTML: true,
     build: {
         inlineStylesheets: 'always'
     },
