@@ -1,8 +1,9 @@
 ---
-import '../styles/base.css';
+import '@styles/base.css';
 
 import { ViewTransitions } from 'astro:transitions';
 
+import PreloadFonts from '@components/fonts/PreloadFonts.astro';
 import Header from '@components/layout/Header.astro';
 import Footer from '@components/layout/Footer.astro';
 
@@ -27,10 +28,6 @@ const { pageTitle, pageDescription } = Astro.props;
         <meta
             name="viewport"
             content="width=device-width,initial-scale=1"
-        />
-        <meta
-            http-equiv="cache-control"
-            content="public, max-age=0, must-revalidate"
         />
         <meta
             name="generator"
@@ -60,6 +57,8 @@ const { pageTitle, pageDescription } = Astro.props;
             type="image/svg+xml"
             href="/favicon.svg"
         />
+
+        <PreloadFonts />
 
         <title>{pageTitle}</title>
         <meta
