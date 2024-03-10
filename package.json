@@ -17,6 +17,7 @@
         "lint:check": "astro sync && eslint 'src/**/*.{astro,ts}'",
         "type:check": "astro check && tsc --noEmit",
         "test:e2e:check": "playwright test",
+        "test:e2e:update": "playwright test --update-snapshots",
         "audit:check": "npm audit --package-lock-only --omit=dev",
         "build": "astro build",
         "serve": "astro preview",
