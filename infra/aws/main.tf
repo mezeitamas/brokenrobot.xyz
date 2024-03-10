@@ -188,6 +188,13 @@ resource "aws_cloudfront_response_headers_policy" "security_headers_policy" {
 
   custom_headers_config {
     items {
+      header = "Cache-Control"
+      value  = "public, max-age=0, must-revalidate"
+
+      override = true
+    }
+
+    items {
       header = "permissions-policy"
       value  = "accelerometer=(), ambient-light-sensor=(), autoplay=(), battery=(), camera=(), display-capture=(), document-domain=(), encrypted-media=(), gamepad=(), geolocation=(), gyroscope=(), fullscreen=(self), magnetometer=(), microphone=(), midi=(), payment=(), publickey-credentials-get=(), screen-wake-lock=(), serial=(), speaker-selection=(), usb=(), web-share=(), xr-spatial-tracking=()"
 
