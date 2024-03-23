@@ -302,6 +302,146 @@ resource "aws_cloudfront_distribution" "website" {
 }
 
 # ########################################
+# SNS - alarms
+# ########################################
+
+resource "aws_sns_topic" "website_alarms_topic" {
+  name         = "brokenrobot-xyz-alarms-topic"
+  display_name = "Alarm Notifications for brokenrobot.xyz"
+
+  tags = {
+    Application = "brokenrobot.xyz"
+    Environment = "production"
+  }
+}
+
+resource "aws_sns_topic_subscription" "website_alarms_subscription" {
+  for_each  = toset(var.website_alarms_endpoints)
+  topic_arn = aws_sns_topic.website_alarms_topic.arn
+  protocol  = "email"
+  endpoint  = each.value
+}
+
+data "aws_iam_policy_document" "sns_topic_policy" {
+  statement {
+    actions = [
+      "SNS:GetTopicAttributes",
+      "SNS:SetTopicAttributes",
+      "SNS:AddPermission",
+      "SNS:RemovePermission",
+      "SNS:DeleteTopic",
+      "SNS:Subscribe",
+      "SNS:ListSubscriptionsByTopic",
+      "SNS:Publish"
+    ]
+
+    effect = "Allow"
+
+    principals {
+      type        = "AWS"
+      identifiers = ["*"]
+    }
+
+    resources = [
+      aws_sns_topic.website_alarms_topic.arn
+    ]
+
+    sid = "__default_statement_ID"
+  }
+}
+
+# ########################################
+# CloudWatch - metrics
+# ########################################
+
+resource "aws_cloudwatch_metric_alarm" "website_1k_requests_alarm" {
+  alarm_name        = "brokenrobot.xyz - 1k request alarm"
+  alarm_description = "Checks for if the number of requests to CloudFront crossed the 1k threshold"
+
+  metric_name         = "Requests"
+  comparison_operator = "GreaterThanThreshold"
+  period              = "300"
+  statistic           = "Average"
+  threshold           = "1000"
+  evaluation_periods  = "1"
+  namespace           = "AWS/CloudFront"
+  treat_missing_data  = "missing"
+
+  actions_enabled = true
+  alarm_actions = [
+    aws_sns_topic.website_alarms_topic.arn
+  ]
+
+  dimensions = {
+    DistributionId = aws_cloudfront_distribution.website.arn
+    Region         = "Global"
+  }
+
+  tags = {
+    Application = "brokenrobot.xyz"
+    Environment = "production"
+  }
+}
+
+resource "aws_cloudwatch_metric_alarm" "website_5k_requests_alarm" {
+  alarm_name        = "brokenrobot.xyz - 5k request alarm"
+  alarm_description = "Checks for if the number of requests to CloudFront crossed the 5k threshold"
+
+  metric_name         = "Requests"
+  comparison_operator = "GreaterThanThreshold"
+  period              = "300"
+  statistic           = "Average"
+  threshold           = "5000"
+  evaluation_periods  = "1"
+  namespace           = "AWS/CloudFront"
+  treat_missing_data  = "missing"
+
+  actions_enabled = true
+  alarm_actions = [
+    aws_sns_topic.website_alarms_topic.arn
+  ]
+
+  dimensions = {
+    DistributionId = aws_cloudfront_distribution.website.arn
+    Region         = "Global"
+  }
+
+  tags = {
+    Application = "brokenrobot.xyz"
+    Environment = "production"
+  }
+}
+
+resource "aws_cloudwatch_metric_alarm" "website_10k_requests_alarm" {
+  alarm_name        = "brokenrobot.xyz - 10k request alarm"
+  alarm_description = "Checks for if the number of requests to CloudFront crossed the 10k threshold"
+
+  metric_name         = "Requests"
+  comparison_operator = "GreaterThanThreshold"
+  period              = "300"
+  statistic           = "Average"
+  threshold           = "10000"
+  evaluation_periods  = "1"
+  namespace           = "AWS/CloudFront"
+  treat_missing_data  = "missing"
+
+  actions_enabled = true
+  alarm_actions = [
+    aws_sns_topic.website_alarms_topic.arn
+  ]
+
+  dimensions = {
+    DistributionId = aws_cloudfront_distribution.website.arn
+    Region         = "Global"
+  }
+
+  tags = {
+    Application = "brokenrobot.xyz"
+    Environment = "production"
+  }
+}
+
+# ########################################
 # Route 53 - website
 # ########################################
 
