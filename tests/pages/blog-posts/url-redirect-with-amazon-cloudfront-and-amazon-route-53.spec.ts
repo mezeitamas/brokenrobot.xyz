@@ -17,6 +17,6 @@ test.describe('Post: URL redirect with Amazon CloudFront and Amazon Route 53', (
     });
 
     test('should match the screenshot', async ({ page }) => {
-        await expect(page).toHaveScreenshot();
+        await expect(page).toHaveScreenshot({ fullPage: true });
     });
 });

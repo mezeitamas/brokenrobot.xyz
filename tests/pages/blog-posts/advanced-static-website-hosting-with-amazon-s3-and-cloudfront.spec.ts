@@ -17,6 +17,6 @@ test.describe('Post: Advanced static website hosting with Amazon S3 and CloudFro
     });
 
     test('should match the screenshot', async ({ page }) => {
-        await expect(page).toHaveScreenshot();
+        await expect(page).toHaveScreenshot({ fullPage: true });
     });
 });
