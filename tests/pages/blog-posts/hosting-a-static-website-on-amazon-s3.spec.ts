@@ -17,6 +17,6 @@ test.describe('Post: Hosting a static website on Amazon S3', () => {
     });
 
     test('should match the screenshot', async ({ page }) => {
-        await expect(page).toHaveScreenshot();
+        await expect(page).toHaveScreenshot({ fullPage: true });
     });
 });

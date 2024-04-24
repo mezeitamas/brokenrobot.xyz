@@ -17,6 +17,6 @@ test.describe('About page', () => {
     });
 
     test('should match the screenshot', async ({ page }) => {
-        await expect(page).toHaveScreenshot();
+        await expect(page).toHaveScreenshot({ fullPage: true });
     });
 });

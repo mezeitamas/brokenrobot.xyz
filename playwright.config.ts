@@ -5,6 +5,12 @@ config();
 
 export default defineConfig({
     testDir: './tests',
+    expect: {
+        toHaveScreenshot: {
+            maxDiffPixelRatio: 0.01,
+            stylePath: './tests/screenshot.css'
+        }
+    },
     fullyParallel: true,
     forbidOnly: process.env.CI !== undefined,
     retries: 0,
