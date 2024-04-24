@@ -146,7 +146,7 @@ resource "aws_cloudfront_origin_access_control" "website" {
 
 resource "aws_cloudfront_function" "viewer_request" {
   name    = "viewer-request"
-  runtime = "cloudfront-js-1.0"
+  runtime = "cloudfront-js-2.0"
   publish = true
   code    = file("${path.module}/cloudfront-functions/viewer-request/viewer-request.js")
 }

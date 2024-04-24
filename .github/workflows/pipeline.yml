@@ -40,6 +40,21 @@ jobs:
       - name: Type check
         run: npm run type:check
 
+      - name: Set up TerraForm
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Go to infra/aws
+        run: cd infra/aws
+
+      - name: TerraForm format check
+        run: terraform fmt -check
+
+      - name: TerraForm init
+        run: terraform init
+
+      - name: TerraForm validate
+        run: terraform validate -no-color
+
   build:
     name: 'Build'
     runs-on: ubuntu-latest

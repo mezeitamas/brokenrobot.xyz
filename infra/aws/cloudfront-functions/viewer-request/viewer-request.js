@@ -1,14 +1,16 @@
 function handler(event) {
+    var apexDomain = 'brokenrobot.xyz';
     var request = event.request;
+    var headers = request.headers;
 
     // Redirect apex to www
-    if (request.headers.host.value === 'brokenrobot.xyz') {
+    if (headers.host.value === apexDomain) {
         var response = {
             statusCode: 301,
             statusDescription: 'Moved Permanently',
             headers: {
                 location: {
-                    value: `https://www.brokenrobot.xyz${request.uri}`
+                    value: 'https://www.' + headers.host.value + '/' + request.uri
                 }
             }
         };
