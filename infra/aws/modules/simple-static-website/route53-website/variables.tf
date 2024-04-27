@@ -14,5 +14,5 @@ variable "cloudfront_website" {
 variable "tags" {
   type        = map(string)
   default     = {}
-  nullable    = true
+  nullable    = false
 }

@@ -11,5 +11,5 @@ variable "s3_cloudfront_access_policy" {
 variable "tags" {
   type        = map(string)
   default     = {}
-  nullable    = true
+  nullable    = false
 }

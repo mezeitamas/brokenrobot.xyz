@@ -6,5 +6,5 @@ variable "name" {
 variable "tags" {
   type        = map(string)
   default     = {}
-  nullable    = true
+  nullable    = false
 }

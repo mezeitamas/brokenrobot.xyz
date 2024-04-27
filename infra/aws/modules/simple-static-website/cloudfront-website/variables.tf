@@ -39,5 +39,5 @@ variable "aliases" {
 variable "tags" {
   type        = map(string)
   default     = {}
-  nullable    = true
+  nullable    = false
 }
