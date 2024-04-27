@@ -10,7 +10,8 @@ resource "aws_cloudfront_distribution" "website" {
     origin_access_control_id = aws_cloudfront_origin_access_control.website.id
 
     origin_shield {
-      enabled = false
+      enabled              = false
+      origin_shield_region = "eu-central-1"
     }
   }
 
