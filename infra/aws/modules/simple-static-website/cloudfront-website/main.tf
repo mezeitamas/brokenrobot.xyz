@@ -54,7 +54,7 @@ resource "aws_cloudfront_distribution" "website" {
 
     function_association {
       event_type   = "viewer-request"
-      function_arn = aws_cloudfront_function.viewer_request.arn
+      function_arn = var.aws_cloudfront_function_viewer_request_arn
     }
   }
 
@@ -75,19 +75,12 @@ resource "aws_cloudfront_origin_access_control" "website" {
   signing_protocol                  = "sigv4"
 }
 
-resource "aws_cloudfront_function" "viewer_request" {
-  name    = "viewer-request"
-  runtime = "cloudfront-js-2.0"
-  publish = true
-  code    = file("${path.module}/cloudfront-functions/viewer-request/viewer-request.js")
-}
-
 resource "aws_cloudfront_response_headers_policy" "security_headers_policy" {
   name = "security-headers-policy"
 
   security_headers_config {
     content_security_policy {
-      content_security_policy = "default-src 'none'; child-src 'none'; connect-src 'self'; font-src 'self'; frame-src 'none'; img-src 'self' 'unsafe-inline'; manifest-src 'none'; media-src 'none'; object-src 'none'; script-src 'self' 'unsafe-inline'; script-src-attr 'self'; script-src-elem 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; style-src-attr 'self' 'unsafe-inline'; style-src-elem 'self' 'unsafe-inline'; worker-src 'none'; base-uri 'none'; form-action 'none'; frame-ancestors 'none';"
+      content_security_policy = var.content_security_policy
 
       override = true
     }

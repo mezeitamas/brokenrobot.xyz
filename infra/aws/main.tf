@@ -21,7 +21,10 @@ module "simple_static_website" {
   }
 
   cloudfront_website = {
-    acm_certificate_arn = data.aws_acm_certificate.website.arn
+    acm_certificate_arn                        = data.aws_acm_certificate.website.arn
+    aws_cloudfront_function_viewer_request_arn = aws_cloudfront_function.viewer_request.arn
+    content_security_policy                    = "default-src 'none'; child-src 'none'; connect-src 'self'; font-src 'self'; frame-src 'none'; img-src 'self' 'unsafe-inline'; manifest-src 'none'; media-src 'none'; object-src 'none'; script-src 'self' 'unsafe-inline'; script-src-attr 'self'; script-src-elem 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; style-src-attr 'self' 'unsafe-inline'; style-src-elem 'self' 'unsafe-inline'; worker-src 'none'; base-uri 'none'; form-action 'none'; frame-ancestors 'none';"
+
     aliases = [
       "brokenrobot.xyz",
       "www.brokenrobot.xyz"
@@ -33,6 +36,13 @@ module "simple_static_website" {
   }
 
   tags = local.tags
+}
+
+resource "aws_cloudfront_function" "viewer_request" {
+  name    = "viewer-request"
+  runtime = "cloudfront-js-2.0"
+  publish = true
+  code    = file("${path.module}/cloudfront-functions/viewer-request/viewer-request.js")
 }
 
 # ########################################
