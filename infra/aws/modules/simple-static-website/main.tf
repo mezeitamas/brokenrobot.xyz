@@ -5,7 +5,7 @@
 module "s3_bucket_website" {
   source = "./s3-bucket-website"
 
-  name                        = var.s3_bucket_website.name
+  name                        = "${var.apex_domain_name}-website"
   s3_cloudfront_access_policy = data.aws_iam_policy_document.s3_cloudfront_access_policy.json
 
   tags = var.tags
@@ -49,7 +49,7 @@ data "aws_iam_policy_document" "s3_cloudfront_access_policy" {
 module "s3_bucket_logs" {
   source = "./s3-bucket-logs"
 
-  name = var.s3_bucket_logs.name
+  name = "${var.apex_domain_name}-logs"
 
   tags = var.tags
 }
@@ -74,7 +74,10 @@ module "cloudfront_website" {
   aws_acm_certificate_arn = var.cloudfront_website.acm_certificate_arn
   aws_cloudfront_function_viewer_request_arn = var.cloudfront_website.aws_cloudfront_function_viewer_request_arn
   content_security_policy = var.cloudfront_website.content_security_policy
-  aliases = var.cloudfront_website.aliases
+  aliases = [
+    var.apex_domain_name,
+    "www.${var.apex_domain_name}"
+  ]
 
   tags = var.tags
 }
@@ -86,7 +89,7 @@ module "cloudfront_website" {
 module "route53_website" {
   source = "./route53-website"
 
-  name = var.route53_website.name
+  name = var.apex_domain_name
 
   cloudfront_website = {
     domain_name    = module.cloudfront_website.domain_name
