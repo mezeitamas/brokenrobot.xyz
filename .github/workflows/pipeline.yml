@@ -15,7 +15,7 @@ env:
 jobs:
   verify:
     name: 'Verify'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 10
 
     steps:
@@ -57,7 +57,7 @@ jobs:
 
   build:
     name: 'Build'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 10
 
     steps:
@@ -85,7 +85,7 @@ jobs:
 
   test:
     name: 'Test'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: build
     timeout-minutes: 10
 
@@ -124,7 +124,7 @@ jobs:
 
   deploy:
     name: 'Deploy'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: [verify, build, test]
     if: github.ref == 'refs/heads/main'
     timeout-minutes: 10
