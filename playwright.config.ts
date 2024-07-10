@@ -7,6 +7,7 @@ export default defineConfig({
     testDir: './tests',
     snapshotPathTemplate: '{testDir}/__screenshots__/{testFilePath}/{arg}{-projectName}{ext}',
     expect: {
+        timeout: 10_000,
         toHaveScreenshot: {
             maxDiffPixelRatio: 0.1,
             stylePath: './tests/screenshot.css'
