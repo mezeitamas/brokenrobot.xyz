@@ -10,8 +10,8 @@
     },
     "type": "module",
     "engines": {
-        "node": ">=22.4.1",
-        "npm": ">=10.8.1"
+        "node": ">=22.5.1",
+        "npm": ">=10.8.2"
     },
     "scripts": {
         "install:playwright": "playwright install --with-deps",
