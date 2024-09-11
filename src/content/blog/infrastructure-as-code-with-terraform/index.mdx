@@ -187,21 +187,51 @@ Key features:
 
 ### Why it was chosen?
 
-**// TODO**
+Terraform was chosen, because it is one of the most popular and versatile _IaC_ tools available today. It offers a range of features that make it well-suited for managing infrastructure across multiple cloud providers.
 
-    - What is TF?
-    - Declarative
-    - Describing the desired state
-    - Best practices
-    	- Not to store secrets in the code!
-    	- Where to store secrets, like AWS credentials
-    	- Limit AWS user access rights
-     - Where to store the infra state?
-    	- Local vs remote state
+At the moment we are using only AWS to host our static website. However it is good to have the flexibility to switch to another cloud provider in the future,
+or to manage on-premises infrastructure, without having to learn a new tool.
+
+Terraform has a large community and extensive documentation, making it easy to find resources, examples, and solutions to common problems.
 
 ## Terraform Cloud
 
-**// TODO**
+In order to effectively manage the infrastructure for our static website on AWS using Terraform, we need to manage and store the state file in a secure and centralized location. This is where Terraform Cloud comes into play. However there are other ways to manage the state file, like using an S3 bucket, but Terraform Cloud offers additional features that can be beneficial for teams and organizations.
+
+### Why Terraform Cloud?
+
+Using Terraform Cloud offers several benefits, particularly for teams and organizations looking to manage infrastructure in a scalable, collaborative, and automated manner. Here's why:
+
+#### Remote state management
+
+-   **Centralized state management**: Terraform Cloud securely stores state files, which track the current state of our infrastructure, in a centralized, but remote location. This prevents state file conflicts and ensures that all team members are working with the most up-to-date infrastructure state.
+-   **Versioned state files**: Previous state files are versioned, so we can roll back to earlier configurations if needed, reducing the risk of outages due to errors when updating infrastructure.
+
+#### Automation of infrastructure changes
+
+Terraform Cloud can automatically plan and apply infrastructure changes by integrating with CI/CD pipelines. It ensures that the infrastructure is provisioned or updated automatically when new code is commited or pushed.
+
+#### Collaboration and teamwork
+
+Terraform Cloud provides a collaborative platform for teams to work on infrastructure changes together:
+
+-   **Workspaces**: Multiple team members can work on infrastructure changes in dedicated workspaces, preventing conflicts and ensuring that each change is properly reviewed and managed.
+-   **Version control system (VCS) integration**: Integrates seamlessly with GitHub, GitLab, Bitbucket, and other VCS platforms, automatically triggering Terraform runs when infrastructure code is committed or pushed.
+-   **Permissions**: We can define fine-grained access controls for different team members, ensuring that only the authorized individuals can make changes to production infrastructure, for example.
+-   **Secret management**: Terraform Cloud can securely manage sensitive data such as API keys, credentials, and other secrets, making it safer than hard-coding sensitive information in configuration files.
+
+#### Policy as Code with Sentinel
+
+Terraform Cloud includes HashiCorp's Sentinel, a policy-as-code framework that lets organizations enforce rules for their infrastructure. These policies can ensure that the infrastructure adheres to security, cost, or performance requirements before any changes are applied. So in this way we can prevent costly mistakes or security breaches.
+
+#### Cost efficiency and monitoring
+
+-   **Cost estimation**: Before applying changes, Terraform Cloud can provide an estimate of how much the infrastructure changes will cost. This can be useful to stay within budget and avoid unexpected expenses.
+-   **Audit trails and logging**: Terraform Cloud logs every action taken in the platform, making it easy to track changes, monitor activity, and maintain an audit trail for compliance purposes.
+
+#### Free and paid plans
+
+Terraform Cloud offers both free and paid plans, making it accessible to small teams while also providing enterprise-level features like governance, collaboration, and security for larger organizations.
 
 ## Development workflow
 
@@ -214,12 +244,25 @@ Key features:
 
 ## Conclusion
 
-    - Possible improvements
-    	- Reusable modules / IaC
-    	- Policy as code ([Sentinel](https://www.hashicorp.com/sentinel))
-
 **// TODO**
 
 ## Additional resources
 
 **// TODO**
+
+---
+
+**// TODO**
+
+    - What is TF?
+    - Declarative
+    - Describing the desired state
+    - Best practices
+    	- Not to store secrets in the code!
+    	- Where to store secrets, like AWS credentials
+    	- Limit AWS user access rights
+     - Where to store the infra state?
+    	- Local vs remote state
+    - Possible improvements
+    	- Reusable modules / IaC
+    	- Policy as code ([Sentinel](https://www.hashicorp.com/sentinel))
