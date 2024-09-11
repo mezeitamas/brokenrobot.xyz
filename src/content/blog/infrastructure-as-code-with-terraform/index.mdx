@@ -9,17 +9,19 @@ tags: ['infrastructureascode', 'iac', 'terraform', 'aws', 'staticwebsite', 'host
 import BlogPostPicture from '@components/picture/BlogPostPicture.astro';
 
 import manualInfraChanges from './manual-infra-changes.png';
+import autoInfraChanges from './auto-infra-changes.png';
 
-In this blog post we will discover the concept of Infrastructure as Code (IaC), discussing its general principles and the various tools available for it. Additionally, I'll explore what it means to apply IaC specifically in the context of managing the infrastructure for my static website in AWS with Terraform, highlighting the benefits and practical implications.
+In this blog post we will discover the concept of Infrastructure as Code (IaC), discussing its general principles and the various tools available for it. Additionally, we'll explore what it means to apply IaC specifically in the context of managing the infrastructure for a static website on AWS with Terraform, highlighting the benefits and practical implications.
 
 ## What do we have?
 
 We have a production-ready, secure, scalable, highly available, performant, and cost-effective static website hosted on AWS.
 
-As demonstrated in the previous post, building the infrastructure for this website is a straightforward process when following the step-by-step guide:
+As demonstrated in the previous posts, building the infrastructure for a static website is a straightforward process when following the step-by-step guide:
 
 -   [Hosting a static website on Amazon S3](/blog/hosting-a-static-website-on-amazon-s3)
 -   [Advanced static website hosting with Amazon S3 and CloudFront](/blog/advanced-static-website-hosting-with-amazon-s3-and-cloudfront)
+-   [URL redirect with Amazon CloudFront and Amazon Route 53](/blog/url-redirect-with-amazon-cloudfront-and-amazon-route-53)
 
 ### Development workflow
 
@@ -43,17 +45,15 @@ Fortunately, Infrastructure as Code (IaC) offers a powerful solution.
 
 ## Infrastructure as Code
 
-In this section, we explore what Infrastructure as Code (IaC) is and the advantages of using it.
-
-**// TODO**
+In this section, we explore what Infrastructure as Code (IaC) is, the advantages of using it and the available tools for it.
 
 ### What is it?
 
-Infrastructure as Code (IaC) is a way to manage and provision infrastructure through code and configuration files, rather than via traditional manual processes or graphical interfaces.
+Infrastructure as Code (IaC) is a way to manage and provision infrastructure through code and configuration files, rather than via traditional manual processes or graphical interfaces.
 
-In other words, IaC treats infrastructure (such as servers, networks, databases, etc) as a set of code that can be version-controlled, tested, and deployed in repeatable manner. This approach allows us to define and manage infrastructure typically in a declarative way, stating what we want and how the infrastructure should look like, rather than how to create it.
+In other words, IaC treats infrastructure (such as servers, networks, databases, etc) as a set of code that can be version-controlled, tested, and deployed in repeatable manner. This approach allows us to define and manage infrastructure typically in a declarative way, stating what we want and how the infrastructure should look like, rather than how to create it.
 
-IaC solutions provide a high-level abstraction over the underlying infrastructure, allowing us to focus on the desired state of the environment, rather than the technical details of provisioning and managing individual resources.
+IaC solutions provide a high-level abstraction over the underlying infrastructure, allowing us to focus on the desired state of the environment, rather than the technical details of provisioning and managing individual resources.
 
 #### Imperative vs declarative approach
 
@@ -77,15 +77,15 @@ The immutable approach states that once the infrastructure is provisioned, it ca
 
 Infrastructure as Code (IaC) offers several benefits for provisioning and managing infrastructure resources via code:
 
--   **Consistency**: With IaC, we can ensure consistency across multiple environments (e.g., dev, test, prod) by using the same configurations. This reduces the risk of human error and drift between environments.
--   **Automation**: By using IaC solutions, the provisioning process can be automated, reducing the need for manual intervention and minimizing the risk of human error. This also means we can deploy our infrastructure in a repeatable and consistent way.
-    -   **Repeatability**: IaC enables us to reproduce our infrastructure quickly and accurately whenever needed. This is particularly useful when setting up new environments or deploying changes to existing ones.
-    -   **Reduced downtime**: IaC solutions can be designed to automatically roll back changes in case of failure, reducing the risk of downtime and ensuring minimal disruption to users.
-    -   **Simplified disaster recovery**: Infrastructure as Code makes it easier to set up disaster recovery plans by reproducing entire environments quickly and accurately.
--   **Version control**: IaC solutions allow us to treat the infrastructure as code, which means we can version it just like we would with any source code.
-    -   **Collaboration**: By treating it as source code and versioning it, makes it easier for multiple teams or individuals to collaborate on infrastructure changes without stepping on each other's toes. This improves communication and reduces conflicts.
-    -   **Auditability**: All changes are tracked and version-controlled, making it easy to identify who made what change and when. This provides a clear audit trail and helps with compliance.
--   **Cost optimization**: IaC solutions can help to optimize the infrastructure related costs (especially when it comes to the cloud) by enabling an easier automatic scaling down or shutting down resources that are not in use.
+-   **Consistency**: With IaC, we can ensure consistency across multiple environments (e.g., dev, test, prod) by using the same configurations. This reduces the risk of human error and drift between environments.
+-   **Automation**: By using IaC solutions, the provisioning process can be automated, reducing the need for manual intervention and minimizing the risk of human error. This also means we can deploy our infrastructure in a repeatable and consistent way.
+    -   **Repeatability**: IaC enables us to reproduce our infrastructure quickly and accurately whenever needed. This is particularly useful when setting up new environments or deploying changes to existing ones.
+    -   **Reduced downtime**: IaC solutions can be designed to automatically roll back changes in case of failure, reducing the risk of downtime and ensuring minimal disruption to users.
+    -   **Simplified disaster recovery**: Infrastructure as Code makes it easier to set up disaster recovery plans by reproducing entire environments quickly and accurately.
+-   **Version control**: IaC solutions allow us to treat the infrastructure as code, which means we can version it just like we would with any source code.
+    -   **Collaboration**: By treating it as source code and versioning it, makes it easier for multiple teams or individuals to collaborate on infrastructure changes without stepping on each other's toes. This improves communication and reduces conflicts.
+    -   **Auditability**: All changes are tracked and version-controlled, making it easy to identify who made what change and when. This provides a clear audit trail and helps with compliance.
+-   **Cost optimization**: IaC solutions can help to optimize the infrastructure related costs (especially when it comes to the cloud) by enabling an easier automatic scaling down or shutting down resources that are not in use.
 
 ### Choosing the right IaC tool
 
@@ -189,6 +189,11 @@ Key features:
 ## Development workflow
 
 **// TODO**
+
+<BlogPostPicture
+    src={autoInfraChanges}
+    alt="Automated infrastructure changes"
+/>
 
 ## Conclusion
 
