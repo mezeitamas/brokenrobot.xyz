@@ -25,19 +25,36 @@ As demonstrated in the previous posts, building the infrastructure for a static 
 
 ### Development workflow
 
-**// TODO**
+The current development workflow is designed to be straightforward and efficient, with the emphasis on automation where possible.
 
 <BlogPostPicture
     src={manualInfraChanges}
     alt="Manual infrastructure changes"
 />
 
+#### Making changes to the website's source code
+
+-   **Modify the website's source code**: We make changes to the website's source code locally, such as adding new features, updating content, or fixing bugs.
+-   **Push changes to the repository**: Once the changes are made, they are pushed to the source code repository, which in our case is hosted on GitHub.
+-   **Automated CI/CD pipeline**: After the code is pushed, the CI/CD pipeline is automatically triggered. The pipeline handles the following steps:
+    -   **Building the website**: The source code is compiled or processed, depending on the framework or static site generator used.
+    -   **Running tests**: Automated tests are executed to ensure that the website functions correctly and that new changes haven't introduced any bugs.
+    -   **Deploying to AWS**: If the tests pass, the website is deployed to AWS.
+
+This workflow simplifies the development process, as it is automated, from testing to deployment. However, the main focus in this blog post is on infrastructure, so we won't delve too deep into the CI/CD pipeline or the intricacies of the development process for the website itself.
+
+#### Making changes to the infrastructure
+
+While the website deployment is largely automated, managing the infrastructure is still a manual process. Changes to the infrastructure, such as adjusting configurations, modifying network settings, or scaling resources, are handled via the AWS Management Console.
+
+This means that when adjustments are needed - whether to improve performance, enhance security, or adapt to traffic fluctuations - someone must log in to the console and manually make the required updates. This can be time-consuming and prone to human error, especially when dealing with large-scale or complex infrastructures.
+
+While the current setup allows for effective management, the manual process for infrastructure changes could benefit from automation to ensure consistency, reduce errors, and save time.
+
 ## What can we improve?
 
 Manually managing the infrastructure is not only time-consuming but can also be quite frustrating. Even for an experienced system administrator, making the necessary adjustments to the infrastructure can be a slow and tedious process.
 If the site goes down, it can take a significant amount of time to get it back online. Given that the provisioning process is entirely manual, the risk of making mistakes - especially in high-pressure situations - is quite high.
-
-We certainly can't afford to have a swarm of frustrated visitors unable to access our vital content.
 
 So, how can we avoid these challenges, streamline our processes, and ultimately enjoy a more stress-free experience?
 
