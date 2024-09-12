@@ -1,9 +1,9 @@
 ---
-title: 'Infrastructure as Code with Terraform'
+title: 'Infrastructure as Code with Terraform on AWS'
 excerpt: 'In this blog post we will discover the concept of Infrastructure as Code (IaC), discussing its general principles and the various tools available for it.'
 publishDate: '2024-10-01T18:00:00.000Z'
 heroImage: './heroImage.jpg'
-tags: ['infrastructureascode', 'iac', 'terraform', 'aws', 'staticwebsite', 'hosting', 'brokenrobot']
+tags: ['infrastructureascode', 'iac', 'terraform', 'terraformcloud', 'aws', 'staticwebsite', 'hosting', 'brokenrobot']
 ---
 
 import BlogPostPicture from '@components/picture/BlogPostPicture.astro';
@@ -238,7 +238,7 @@ Terraform Cloud includes [HashiCorp's Sentinel](https://www.hashicorp.com/sentin
 
 Terraform Cloud offers both free and paid plans, making it accessible to small teams while also providing enterprise-level features like governance, collaboration, and security for larger organizations.
 
-## Development workflow
+## Improved development workflow
 
 Let's see how the development workflow looks like after introducing Terraform, using Terraform Cloud and adding automation to applying the infrastructure changes.
 
@@ -249,11 +249,11 @@ Let's see how the development workflow looks like after introducing Terraform, u
 
 Let's dive a bit deeper into the improved and automated workflow.
 
-#### Making changes to the website's source code
+### Making changes to the website's source code
 
 This workflow remains the same as before. It's automated and streamlined already.
 
-#### Making changes to the infrastructure
+### Making changes to the infrastructure
 
 By adopting _IaC_ with Terraform and Terraform Cloud, we can now automate our infrastructure management.
 
