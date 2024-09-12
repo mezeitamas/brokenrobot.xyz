@@ -232,7 +232,7 @@ Terraform Cloud provides a collaborative platform for teams to work on infrastru
 
 #### Policy as Code
 
-Terraform Cloud includes HashiCorp's Sentinel, a policy-as-code framework that lets organizations enforce rules for their infrastructure. These policies can ensure that the infrastructure adheres, for example, to security or cost requirements before any changes are applied. So in this way we can prevent costly mistakes or security breaches.
+Terraform Cloud includes [HashiCorp's Sentinel](https://www.hashicorp.com/sentinel), a policy-as-code framework that lets organizations enforce rules for their infrastructure. These policies can ensure that the infrastructure adheres, for example, to security or cost requirements before any changes are applied. So in this way we can prevent costly mistakes or security breaches.
 
 #### Free and paid plans
 
@@ -240,12 +240,26 @@ Terraform Cloud offers both free and paid plans, making it accessible to small t
 
 ## Development workflow
 
-**// TODO**
+Let's see how the development workflow looks like after introducing Terraform, using Terraform Cloud and adding automation to applying the infrastructure changes.
 
 <BlogPostPicture
     src={autoInfraChanges}
     alt="Automated infrastructure changes"
 />
+
+Let's dive a bit deeper into the improved and automated workflow.
+
+#### Making changes to the website's source code
+
+This workflow remains the same as before. It's automated and streamlined already.
+
+#### Making changes to the infrastructure
+
+By adopting _IaC_ with Terraform and Terraform Cloud, we can now automate our infrastructure management.
+
+Rather than manually adjusting the infrastructure through the AWS Management Console, we define its desired state using Terraform configuration files. These files specify the resources to be provisioned, their attributes, and how they interact with each other. Just like with source code, we modify the Terraform files when changes are needed and then commit those changes to our version control system.
+
+In our setup, whenever changes are pushed to the repository, Terraform Cloud automatically detects them. It then pulls the latest code, generates a plan for the proposed changes, and applies them to the infrastructure. This streamlined process is automated, consistent, fast, and repeatable, significantly reducing the likelihood of human errors and ensuring the infrastructure remains up-to-date.
 
 ## Conclusion
 
