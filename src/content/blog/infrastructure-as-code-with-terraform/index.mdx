@@ -25,19 +25,21 @@ As demonstrated in the previous posts, building the infrastructure for a static 
 
 ### Development workflow
 
-The current development workflow is designed to be straightforward and efficient, with the emphasis on automation where possible.
+The current development workflow is designed to be straightforward and efficient, with the emphasis on automation.
 
 <BlogPostPicture
     src={manualInfraChanges}
     alt="Manual infrastructure changes"
 />
 
+However as you see on the diagram one part of the development workflow is still manual, and that is the infrastructure changes. Let's dive a bit deeper into the current workflow.
+
 #### Making changes to the website's source code
 
 -   **Modify the website's source code**: We make changes to the website's source code locally, such as adding new features, updating content, or fixing bugs.
 -   **Push changes to the repository**: Once the changes are made, they are pushed to the source code repository, which in our case is hosted on GitHub.
 -   **Automated CI/CD pipeline**: After the code is pushed, the CI/CD pipeline is automatically triggered. The pipeline handles the following steps:
-    -   **Building the website**: The source code is compiled or processed, depending on the framework or static site generator used.
+    -   **Building the website**: The source code is compiled or processed, using a static site generator.
     -   **Running tests**: Automated tests are executed to ensure that the website functions correctly and that new changes haven't introduced any bugs.
     -   **Deploying to AWS**: If the tests pass, the website is deployed to AWS.
 
@@ -47,7 +49,7 @@ This workflow simplifies the development process, as it is automated, from testi
 
 While the website deployment is largely automated, managing the infrastructure is still a manual process. Changes to the infrastructure, such as adjusting configurations, modifying network settings, or scaling resources, are handled via the AWS Management Console.
 
-This means that when adjustments are needed - whether to improve performance, enhance security, or adapt to traffic fluctuations - someone must log in to the console and manually make the required updates. This can be time-consuming and prone to human error, especially when dealing with large-scale or complex infrastructures.
+This means that when adjustments are needed - whether to improve performance, enhance security, or adapt to traffic fluctuations - someone must log in to the management console and manually make the required updates. This can be time-consuming and prone to human error, especially when dealing with large-scale or complex infrastructures.
 
 While the current setup allows for effective management, the manual process for infrastructure changes could benefit from automation to ensure consistency, reduce errors, and save time.
 
@@ -58,7 +60,7 @@ If the site goes down, it can take a significant amount of time to get it back o
 
 So, how can we avoid these challenges, streamline our processes, and ultimately enjoy a more stress-free experience?
 
-Fortunately, _infrastructure as code_ offers a powerful solution.
+Fortunately, _infrastructure as code_ offers a solution.
 
 ## Infrastructure as Code
 
@@ -72,23 +74,25 @@ In other words, _IaC_ treats infrastructure (such as servers, networks, database
 
 _IaC_ solutions provide a high-level abstraction over the underlying infrastructure, allowing us to focus on the desired state of the environment, rather than the technical details of provisioning and managing individual resources.
 
+Let's explore the different approaches to _IaC_.
+
 #### Imperative vs declarative approach
 
 There are two different approaches to _IaC_: _declarative_ and _imperative_.
 
-The declarative approach describes the desired state of the infrastructure (what we want), including the required resources and their properties. A tool is used to configure the infrastructure to match the desired state. Additionally, the declarative approach maintains a record of the current state of infrastructure resources, making it easier to manage changes and teardowns.
+The _declarative_ approach describes the desired state of the infrastructure (what we want), including the required resources and their properties. A tool is used to configure the infrastructure to match the desired state. Additionally, the declarative approach maintains a record of the current state of infrastructure resources, making it easier to manage changes and teardowns.
 
-In contrast, the imperative approach specifies the precise commands necessary to achieve the desired state (how we want it). These commands must be executed in the correct order.
+In contrast, the _imperative_ approach specifies the precise commands necessary to achieve the desired state (how we want it). These commands must be executed in the correct order.
 
-The most popular approach nowdays is the declarative. It is much easier to describe what we want rather than how we want to achieve it. An _IaC_ tool will do the heavy lifting and knows how to achieve the desired state.
+The most popular approach nowdays is the _declarative_. It is much easier to describe what we want rather than how we want to achieve it. An _IaC_ tool does the heavy lifting for us and knows how to achieve the desired state.
 
 #### Mutable vs immutable infrastructure
 
-When adopting _IaC_ a crucial choice to consider is whether to implement _mutable_ or _immutable infrastructure_. This decision determines how changes to the infrastructure are executed and reflects different philosophies in infrastructure management.
+When adopting _IaC_ a crucial choice to consider is whether to implement _mutable_ or _immutable_ infrastructure. This decision determines how changes to the infrastructure are executed and reflects different philosophies in infrastructure management.
 
-Mutable infrastructure refers to an infrastructure that can be altered even after its initial provisioning. This offers development teams the flexibility to make on-the-fly adjustments to the infrastructure as needed.
+_Mutable_ infrastructure refers to an infrastructure that can be altered even after its initial provisioning. This offers development teams the flexibility to make on-the-fly adjustments to the infrastructure as needed.
 
-The immutable approach states that once the infrastructure is provisioned, it cannot be directly modified. Instead, if any changes are required, a new infrastructure is created to replace the existing one. This may seem challenging, but with containerization and the cloud, this becomes feasible and practical.
+The _immutable_ approach states that once the infrastructure is provisioned, it cannot be directly modified. Instead, if any changes are required, a new infrastructure is created to replace the existing one. This may seem challenging, but with containerization and the cloud, this becomes feasible and practical.
 
 ### Benefits
 
@@ -99,52 +103,34 @@ _IaC_ offers several benefits for provisioning and managing infrastructure resou
     -   **Repeatability**: _IaC_ enables us to reproduce our infrastructure quickly and accurately whenever needed. This is particularly useful when setting up new environments or deploying changes to existing ones.
     -   **Reduced downtime**: _IaC_ solutions can be designed to automatically roll back changes in case of failure, reducing the risk of downtime and ensuring minimal disruption to users.
     -   **Simplified disaster recovery**: _IaC_ makes it easier to set up disaster recovery plans by reproducing entire environments quickly and accurately.
--   **Version control**: _IaC_ solutions allow us to treat the _infrastructure as code_, which means we can version it just like we would with any source code.
+-   **Version control**: _IaC_ solutions allow us to treat the infrastructure as code, which means we can version it just like we would with any source code.
     -   **Collaboration**: By treating it as source code and versioning it, makes it easier for multiple teams or individuals to collaborate on infrastructure changes without stepping on each other's toes. This improves communication and reduces conflicts.
     -   **Auditability**: All changes are tracked and version-controlled, making it easy to identify who made what change and when. This provides a clear audit trail and helps with compliance.
 -   **Cost optimization**: _IaC_ solutions can help to optimize the infrastructure related costs (especially when it comes to the cloud) by enabling an easier automatic scaling down or shutting down resources that are not in use.
 
-### Choosing the right IaC tool
-
-As the complexity of managing modern infrastructure grows, so does the need for effective tools to streamline the process. _Infrastructure as code_ has become a cornerstone of efficient, scalable, and reliable infrastructure management. However, with a variety of tools available, choosing the right one for your specific needs can be challenging.
-
-#### Making a choice
-
-Consider these factors when deciding:
-
--   **Cloud provider**: Are we using AWS, Azure, Google Cloud, or a multi-cloud approach?
--   **Existing skills**: What programming languages are we comfortable with?
--   **Scope**: Do we need to manage just cloud resources, or on-premises infrastructure as well?
--   **Complexity**: How complex is our infrastructure? Do we need advanced features like modules or state management?
--   **Ecosystem compatibility**: Choose a tool that integrates well with the existing tech stack, ecosystem.
--   **Learning curve**: Balance the tool's power with the time needed to become proficient.
--   **Community and support**: A larger community often means better resources and third-party integrations.
--   **Scalability**: Ensure the tool can grow with the needs and requirements.
--   **Cost**: Some tools are free, others require licenses. We need to factor this into the decision.
-
-### Overview of the available tools
+### Overview of the available IaC tools
 
 A wide variety of tools are available, choosing the right one for our specific needs can be challenging. To help navigating this landscape, let's have an overview by categorizing some of the most popular tools and explore their primary use cases.
 
-_Infrastructure provisioning_ and _configuration management tools_ are both essential components of _IaC_ and automation in IT environments, but they serve different purposes and address different stages of the infrastructure lifecycle.
+_Infrastructure provisioning_ and _configuration management_ tools are both essential components of _IaC_ and automation in IT environments, but they serve different purposes and address different stages of the infrastructure lifecycle.
 
 #### Infrastructure provisioning tools
 
-_Infrastructure provisioning tools_ are used to create and manage the foundational infrastructure - whether in the cloud or on-premises - by automating the provisioning of resources like virtual machines, networks, and storage. They focus on the initial setup, management and decommissioning of infrastructure resources.
+_Infrastructure provisioning_ tools are used to create and manage the foundational infrastructure - whether in the cloud or on-premises - by automating the provisioning of resources like virtual machines, networks, and storage. They focus on the initial setup, management and decommissioning of infrastructure resources.
 
 They can typically be categorized based on several key criteria:
 
--   **Cloud compatibility**: Determine whether the tool is cloud-agnostic, meaning it can work across multiple cloud providers, or cloud-specific, tailored to a particular cloud platform like AWS or Azure.
--   **Configuration style**: Whether the tool follows a declarative approach, where you define the desired end state and the tool figures out the steps to achieve it, or an imperative approach, where you explicitly outline the steps needed to reach the desired configuration.
+-   **Cloud compatibility**: Determine whether the tool is _cloud-agnostic_, meaning it can work across multiple cloud providers, or _cloud-specific_, tailored to a particular cloud platform like AWS or Azure.
+-   **Configuration style**: Whether the tool follows a _declarative_ approach, where we define the desired end state and the tool figures out the steps to achieve it, or an _imperative_ approach, where we explicitly outline the steps needed to reach the desired configuration.
 -   **Language and syntax**: Whether the tool utilizes a general-purpose programming language (such as Python, Go, or TypeScript), allowing for more flexible and familiar coding practices, or if it relies on its own domain-specific language (DSL), designed specifically for defining infrastructure configurations.
 
 ##### Cloud-agnostic tools
 
--   [**Terraform**](https://www.terraform.io/): A cloud-agnostic tool that supports a wide range of providers, it uses its own declarative syntax (HCL) to define _infrastructure as code_, making it a top choice for multi-cloud environments.
+-   [**Terraform**](https://www.terraform.io/): A _cloud-agnostic_ tool that supports a wide range of providers, it uses its own declarative syntax (HCL) to define infrastructure as code, making it a top choice for multi-cloud environments.
     Related tools:
-    -   [**CDK for Terraform**](https://developer.hashicorp.com/terraform/cdktf): CDK allows us to use a general-purpose programming language to define and provision the infrastructure.
+    -   [**CDK for Terraform**](https://developer.hashicorp.com/terraform/cdktf): The CDK allows us to use a general-purpose programming language to define and provision the infrastructure.
     -   [**OpenTofu**](https://opentofu.org/): It is a fork of Terraform that is open-source, community-driven, and managed by the Linux Foundation.
--   [**Pulumi**](https://www.pulumi.com/): A cloud-agnostic tool that bridges the gap between development and operations by allowing us to define infrastructure using general-purpose programming languages. A good choice for multi-cloud environments.
+-   [**Pulumi**](https://www.pulumi.com/): A _cloud-agnostic_ tool that allows us to define infrastructure using general-purpose programming languages. A good choice for multi-cloud environments.
 
 ##### Cloud-specific tools
 
@@ -157,7 +143,7 @@ They can typically be categorized based on several key criteria:
 
 #### Configuration management tools
 
-_Configuration management tools_ take over after the infrastructure is provisioned, ensuring that the systems are properly configured, software is installed, and services are running as expected. They focus on maintaining and enforcing the desired state of the infrastructure over time.
+_Configuration management_ tools take over after the infrastructure is provisioned, ensuring that the systems are properly configured, software is installed, and services are running as expected. They focus on maintaining and enforcing the desired state of the infrastructure over time.
 
 Popular configuration management tools:
 
@@ -165,11 +151,31 @@ Popular configuration management tools:
 -   [Puppet](https://www.puppet.com/)
 -   [Chef](https://www.chef.io/)
 
+In this blog post we don't discuss in details the _configuration management_ tools, as the focus is on the _infrastructure provisioning_.
+
+### Choosing the right IaC tool
+
+As the complexity of managing modern infrastructure grows, so does the need for effective tools to streamline the process. _Infrastructure as code_ has become a cornerstone of efficient, scalable, and reliable infrastructure management. However, with a wide variety of tools available, choosing the right one for our specific needs can be challenging.
+
+#### Making a choice
+
+We need to consider these factors when deciding:
+
+-   **Cloud provider**: Are we using AWS, Azure, Google Cloud, or a multi-cloud approach?
+-   **Existing skills**: What programming languages are we comfortable with?
+-   **Scope**: Do we need to manage just cloud resources, or on-premises infrastructure as well?
+-   **Complexity**: How complex is our infrastructure? Do we need advanced features like modules or state management?
+-   **Ecosystem compatibility**: Choose a tool that integrates well with the existing tech stack, ecosystem.
+-   **Learning curve**: Balance the tool's power with the time needed to become proficient.
+-   **Community and support**: A larger community often means better resources and third-party integrations.
+-   **Scalability**: Ensure the tool can grow with the needs and requirements.
+-   **Cost**: Some tools are free, others require licenses. We need to factor this into the decision.
+
 ## Terraform
 
-Now that the mandatory part if out of the way, we can focus on why Terraform was chosen to provision the infrastructure for my static website on AWS.
+Now that the mandatory part is out of the way, we can focus on why Terraform was chosen to provision the infrastructure for my static website on AWS.
 
-Terraform was briefly introduced, but it worth to check it in more details.
+Terraform was briefly introduced above, but it worth to check it in more details.
 
 ### What is Terraform?
 
@@ -177,17 +183,16 @@ Terraform is an open-source _IaC_ tool, focusing on infrastructure provisioning,
 
 Key features:
 
--   **Cloud-agnostic**: Terraform is designed to be cloud-agnostic, meaning it can manage infrastructure across multiple cloud providers (such as AWS, Azure) as well as on-premises environments (like VMware or OpenStack) using a single, unified configuration language.
--   **Declarative**: Terraform uses a declarative approach to infrastructure management. Instead of specifying the step-by-step process to achieve a desired state, users define the desired state of their infrastructure, and Terraform determines how to achieve that state by creating, updating, or deleting resources as needed.
+-   **Cloud-agnostic**: Terraform is designed to be _cloud-agnostic_, meaning it can manage infrastructure across multiple cloud providers (such as AWS, Azure) as well as on-premises environments (like VMware or OpenStack).
+-   **Declarative**: Terraform uses a _declarative_ approach to infrastructure management. Instead of specifying the step-by-step process to achieve a desired state, users define the desired state of their infrastructure, and Terraform determines how to achieve that state by creating, updating, or deleting resources as needed.
 -   **State management**: Terraform maintains a state file that keeps track of the current state of the infrastructure. This file allows Terraform to understand the differences between the desired state (as defined in the configuration files) and the actual state of the infrastructure. This enables Terraform to make incremental changes rather than recreating resources from scratch.
--   **Execution plan**: Terraform provides an execution plan feature (`terraform plan`) that shows what changes will be made to the infrastructure before they are actually applied. This allows users to review and approve the changes, reducing the risk of unintended modifications.
--   **Modularity and reusability**: Terraform supports the creation of reusable modules, which are packages of Terraform configurations that can be shared and reused across different projects. This modularity promotes best practices, reduces duplication, and makes it easier to manage complex infrastructures.
+-   **Execution plan**: Terraform provides an execution plan feature that shows what changes will be made to the infrastructure before they are actually applied. This allows users to review and approve the changes, reducing the risk of unintended modifications.
+-   **Modularity and reusability**: Terraform supports the creation of reusable modules, which are packages of Terraform configurations that can be shared and reused across different projects.
 -   **Provisioning and orchestration**: Terraform can provision a wide range of infrastructure resources, including virtual machines, networking components, storage, and more. Additionally, it can orchestrate the deployment of services and manage dependencies between resources, ensuring that they are created or updated in the correct order.
--   **Extensive ecosystem of providers**: Terraform has a vast ecosystem of providers, which are plugins that enable Terraform to interact with various APIs and services. These providers allow Terraform to manage resources on cloud platforms, SaaS applications, and other infrastructure components.
 
 ### Why it was chosen?
 
-Terraform was chosen, because it is one of the most popular and versatile _IaC_ tools available today. It offers a range of features that make it well-suited for managing infrastructure across multiple cloud providers.
+Terraform was chosen, because it is one of the most popular and versatile _IaC_ tool available today. It offers a range of features that make it well-suited for managing infrastructure across multiple cloud providers.
 
 At the moment we are using only AWS to host our static website. However it is good to have the flexibility to switch to another cloud provider in the future,
 or to manage on-premises infrastructure, without having to learn a new tool.
@@ -202,10 +207,10 @@ In order to effectively manage the infrastructure for our static website on AWS 
 
 Using Terraform Cloud offers several benefits, particularly for teams and organizations looking to manage infrastructure in a scalable, collaborative, and automated manner. Here's why:
 
-#### Remote state management
+#### State management
 
 -   **Centralized state management**: Terraform Cloud securely stores state files, which track the current state of our infrastructure, in a centralized, but remote location. This prevents state file conflicts and ensures that all team members are working with the most up-to-date infrastructure state.
--   **Versioned state files**: Previous state files are versioned, so we can roll back to earlier configurations if needed, reducing the risk of outages due to errors when updating infrastructure.
+-   **Versioned state files**: Previous state files are versioned, so we can roll back to earlier configurations if needed, reducing the risk of outages due to errors when updating the infrastructure.
 
 #### Automation of infrastructure changes
 
@@ -220,14 +225,14 @@ Terraform Cloud provides a collaborative platform for teams to work on infrastru
 -   **Permissions**: We can define fine-grained access controls for different team members, ensuring that only the authorized individuals can make changes to production infrastructure, for example.
 -   **Secret management**: Terraform Cloud can securely manage sensitive data such as API keys, credentials, and other secrets, making it safer than hard-coding sensitive information in configuration files.
 
-#### Policy as Code with Sentinel
-
-Terraform Cloud includes HashiCorp's Sentinel, a policy-as-code framework that lets organizations enforce rules for their infrastructure. These policies can ensure that the infrastructure adheres to security, cost, or performance requirements before any changes are applied. So in this way we can prevent costly mistakes or security breaches.
-
 #### Cost efficiency and monitoring
 
 -   **Cost estimation**: Before applying changes, Terraform Cloud can provide an estimate of how much the infrastructure changes will cost. This can be useful to stay within budget and avoid unexpected expenses.
 -   **Audit trails and logging**: Terraform Cloud logs every action taken in the platform, making it easy to track changes, monitor activity, and maintain an audit trail for compliance purposes.
+
+#### Policy as Code
+
+Terraform Cloud includes HashiCorp's Sentinel, a policy-as-code framework that lets organizations enforce rules for their infrastructure. These policies can ensure that the infrastructure adheres, for example, to security or cost requirements before any changes are applied. So in this way we can prevent costly mistakes or security breaches.
 
 #### Free and paid plans
 
