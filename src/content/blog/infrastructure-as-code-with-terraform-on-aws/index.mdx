@@ -8,10 +8,9 @@ tags: ['infrastructureascode', 'iac', 'terraform', 'terraformcloud', 'aws', 'sta
 
 import BlogPostPicture from '@components/picture/BlogPostPicture.astro';
 
-import manualInfraChanges from './manual-infra-changes.png';
-import autoInfraChanges from './auto-infra-changes.png';
-
 In this blog post we will discover the concept of _Infrastructure as Code (IaC)_, discussing its general principles and the various tools available for it. Additionally, we'll explore what it means to apply _IaC_ specifically in the context of managing the infrastructure for a static website on AWS with Terraform, highlighting the benefits and practical implications.
+
+**// TODO: add note for the long general iac introduction**
 
 ## What do we have?
 
@@ -27,19 +26,18 @@ As demonstrated in the previous posts, building the infrastructure for a static 
 
 The current development workflow is designed to be straightforward and efficient, with the emphasis on automation.
 
-<BlogPostPicture
-    src={manualInfraChanges}
-    alt="Manual infrastructure changes"
-/>
+![Manual infrastructure changes](./manual-infra-changes-generic.svg)
 
-However as you see on the diagram one part of the development workflow is still manual, and that is the infrastructure changes. Let's dive a bit deeper into the current workflow.
+However as you see on the diagram one part of the development workflow is still manual, and that is the infrastructure changes.
+
+Let's dive a bit deeper into the current workflow.
 
 #### Making changes to the website's source code
 
 -   **Modify the website's source code**: We make changes to the website's source code locally, such as adding new features, updating content, or fixing bugs.
--   **Push changes to the repository**: Once the changes are made, they are pushed to the source code repository, which in our case is hosted on GitHub.
+-   **Push changes to the repository**: Once the changes are made, they are pushed to the source code repository.
 -   **Automated CI/CD pipeline**: After the code is pushed, the CI/CD pipeline is automatically triggered. The pipeline handles the following steps:
-    -   **Building the website**: The source code is compiled or processed, using a static site generator.
+    -   **Building the website**: The source code is compiled / processed, using a static site generator.
     -   **Running tests**: Automated tests are executed to ensure that the website functions correctly and that new changes haven't introduced any bugs.
     -   **Deploying to AWS**: If the tests pass, the website is deployed to AWS.
 
@@ -47,11 +45,11 @@ This workflow simplifies the development process, as it is automated, from testi
 
 #### Making changes to the infrastructure
 
-While the website deployment is largely automated, managing the infrastructure is still a manual process. Changes to the infrastructure, such as adjusting configurations, modifying network settings, or scaling resources, are handled via the AWS Management Console.
+While the website deployment is automated, managing the infrastructure is still a manual process. Changes to the infrastructure, such as adjusting configurations, modifying network settings, or scaling resources, are handled via the AWS Management Console.
 
-This means that when adjustments are needed - whether to improve performance, enhance security, or adapt to traffic fluctuations - someone must log in to the management console and manually make the required updates. This can be time-consuming and prone to human error, especially when dealing with large-scale or complex infrastructures.
+This means that when adjustments are needed - whether to improve performance, enhance security, or adapt to traffic fluctuations - someone must log in to the management console and manually make the required updates. This can be time-consuming and error prone, especially when dealing with large-scale or complex infrastructures.
 
-While the current setup allows for effective management, the manual process for infrastructure changes could benefit from automation to ensure consistency, reduce errors, and save time.
+While the current setup allows for effective management, the manual process for infrastructure changes could benefit from automation.
 
 ## What can we improve?
 
@@ -86,13 +84,23 @@ In contrast, the _imperative_ approach specifies the precise commands necessary 
 
 The most popular approach nowdays is the _declarative_. It is much easier to describe what we want rather than how we want to achieve it. An _IaC_ tool does the heavy lifting for us and knows how to achieve the desired state.
 
+**// TODO: mention that imperative languages are used for example Pulumi, but they describe the desired state not the steps to achieve it**
+
 #### Mutable vs immutable infrastructure
 
 When adopting _IaC_ a crucial choice to consider is whether to implement _mutable_ or _immutable_ infrastructure. This decision determines how changes to the infrastructure are executed and reflects different philosophies in infrastructure management.
 
-_Mutable_ infrastructure refers to an infrastructure that can be altered even after its initial provisioning. This offers development teams the flexibility to make on-the-fly adjustments to the infrastructure as needed.
+_Mutable_ infrastructure refers to an infrastructure that can be altered even after its initial provisioning. This offers development teams the flexibility to make on-the-fly adjustments to the infrastructure as needed. However, this approach can lead to _configuration drift_ and inconsistencies between environments.
 
 The _immutable_ approach states that once the infrastructure is provisioned, it cannot be directly modified. Instead, if any changes are required, a new infrastructure is created to replace the existing one. This may seem challenging, but with containerization and the cloud, this becomes feasible and practical.
+
+**// TODO: add**
+Some key benefits of immutable infrastructure are as follows:
+The configuration remains consistent and predictable.
+Enhances security by reducing the risk of unintended changes.
+Ensures that each new instance is identical and consistent.
+If issues arise with the new infrastructure, rolling back to the previous version is straightforward.
+**// TODO:**
 
 ### Benefits
 
@@ -107,6 +115,28 @@ _IaC_ offers several benefits for provisioning and managing infrastructure resou
     -   **Collaboration**: By treating it as source code and versioning it, makes it easier for multiple teams or individuals to collaborate on infrastructure changes without stepping on each other's toes. This improves communication and reduces conflicts.
     -   **Auditability**: All changes are tracked and version-controlled, making it easy to identify who made what change and when. This provides a clear audit trail and helps with compliance.
 -   **Cost optimization**: _IaC_ solutions can help to optimize the infrastructure related costs (especially when it comes to the cloud) by enabling an easier automatic scaling down or shutting down resources that are not in use.
+
+### Target development workflow
+
+Let's see how the target development workflow looks like after introducing _Infrastructure as Code_, adding automation to applying infrastructure changes.
+
+![Automated infrastructure changes](./auto-infra-changes-generic.svg)
+
+Let's dive a bit deeper into the improved and automated workflow.
+
+#### Making changes to the website's source code
+
+This workflow remains the same as before. It's automated and streamlined already.
+
+#### Making changes to the infrastructure
+
+By adopting _Infrastructure as Code_, we can now automate our infrastructure management.
+
+Rather than manually adjusting the infrastructure through the AWS Management Console, we define its desired state using an _IaC_ tool's configuration files. These files specify the resources to be provisioned, their attributes, and how they interact with each other. Just like with source code, we modify these configuration files when changes are needed and then commit those changes to our version control system.
+
+In this setup, whenever changes are pushed to the repository, the CI/CD pipeline is automatically triggered and applies the changes to the infrastructure.
+
+This streamlined process is automated, consistent, fast, and repeatable, significantly reducing the likelihood of human errors and ensuring the infrastructure remains up-to-date.
 
 ### Overview of the available IaC tools
 
@@ -123,6 +153,12 @@ They can typically be categorized based on several key criteria:
 -   **Cloud compatibility**: Determine whether the tool is _cloud-agnostic_, meaning it can work across multiple cloud providers, or _cloud-specific_, tailored to a particular cloud platform like AWS or Azure.
 -   **Configuration style**: Whether the tool follows a _declarative_ approach, where we define the desired end state and the tool figures out the steps to achieve it, or an _imperative_ approach, where we explicitly outline the steps needed to reach the desired configuration.
 -   **Language and syntax**: Whether the tool utilizes a general-purpose programming language (such as Python, Go, or TypeScript), allowing for more flexible and familiar coding practices, or if it relies on its own domain-specific language (DSL), designed specifically for defining infrastructure configurations.
+
+**// TODO: agent-based vs agent-less (agent vs agentless)**
+
+**// TODO: push vs pull**
+
+**// TODO: drift detection and remediation**
 
 ##### Cloud-agnostic tools
 
@@ -143,13 +179,14 @@ They can typically be categorized based on several key criteria:
 
 #### Configuration management tools
 
-_Configuration management_ tools take over after the infrastructure is provisioned, ensuring that the systems are properly configured, software is installed, and services are running as expected. They focus on maintaining and enforcing the desired state of the infrastructure over time.
+_Configuration management_ tools take over after the infrastructure is provisioned, ensuring that the systems are properly configured, softwares are installed, and services are running as expected.
 
 Popular configuration management tools:
 
 -   [Ansible](https://www.ansible.com/)
 -   [Puppet](https://www.puppet.com/)
 -   [Chef](https://www.chef.io/)
+-   [SaltStack](https://saltproject.io/)
 
 In this blog post we don't discuss in details the _configuration management_ tools, as the focus is on the _infrastructure provisioning_.
 
@@ -242,10 +279,7 @@ Terraform Cloud offers both free and paid plans, making it accessible to small t
 
 Let's see how the development workflow looks like after introducing Terraform, using Terraform Cloud and adding automation to applying the infrastructure changes.
 
-<BlogPostPicture
-    src={autoInfraChanges}
-    alt="Automated infrastructure changes"
-/>
+![Automated infrastructure changes](./auto-infra-changes.svg)
 
 Let's dive a bit deeper into the improved and automated workflow.
 
@@ -260,6 +294,10 @@ By adopting _IaC_ with Terraform and Terraform Cloud, we can now automate our in
 Rather than manually adjusting the infrastructure through the AWS Management Console, we define its desired state using Terraform configuration files. These files specify the resources to be provisioned, their attributes, and how they interact with each other. Just like with source code, we modify the Terraform files when changes are needed and then commit those changes to our version control system.
 
 In our setup, whenever changes are pushed to the repository, Terraform Cloud automatically detects them. It then pulls the latest code, generates a plan for the proposed changes, and applies them to the infrastructure. This streamlined process is automated, consistent, fast, and repeatable, significantly reducing the likelihood of human errors and ensuring the infrastructure remains up-to-date.
+
+## // TODO: Practical example
+
+**// TODO: show some terraform code**
 
 ## Conclusion
 
@@ -284,3 +322,7 @@ As we continue to evolve our infrastructure practices, we can look into further 
 -   [Enforcing AWS S3 Security Best Practices Using Terraform & Sentinel](https://medium.com/hashicorp-engineering/enforcing-aws-s3-security-best-practice-using-terraform-sentinel-ddcd181ff4b7)
 -   [The Core Terraform Workflow](https://developer.hashicorp.com/terraform/intro/core-workflow)
 -   [Phases of Terraform Adoption](https://developer.hashicorp.com/terraform/intro/phases)
+
+**// TODO: https://circleci.com/topics/infrastructure-as-code-iac/**
+
+**// TODO: categorize articles**
