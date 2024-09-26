@@ -10,13 +10,11 @@ import BlogPostPicture from '@components/picture/BlogPostPicture.astro';
 
 In this blog post we will discover the concept of _Infrastructure as Code (IaC)_, discussing its general principles and the various tools available for it. Additionally, we'll explore what it means to apply _IaC_ specifically in the context of managing the infrastructure for a static website on AWS with Terraform, highlighting the benefits and practical implications.
 
-**// TODO: add note for the long general iac introduction**
-
 ## What do we have?
 
 We have a production-ready, secure, scalable, highly available, performant, and cost-effective static website hosted on AWS.
 
-As demonstrated in the previous posts, building the infrastructure for a static website is a straightforward process when following the step-by-step guide:
+As showed in the previous posts, building the infrastructure for a static website is a straightforward process when following the step-by-step guide:
 
 -   [Hosting a static website on Amazon S3](/blog/hosting-a-static-website-on-amazon-s3)
 -   [Advanced static website hosting with Amazon S3 and CloudFront](/blog/advanced-static-website-hosting-with-amazon-s3-and-cloudfront)
@@ -28,14 +26,14 @@ The current development workflow is designed to be straightforward and efficient
 
 ![Manual infrastructure changes](./manual-infra-changes-generic.svg)
 
-However as you see on the diagram one part of the development workflow is still manual, and that is the infrastructure changes.
+However as you see on the diagram one part of the development workflow is still manual, and that is where we modify the infrastructure.
 
 Let's dive a bit deeper into the current workflow.
 
 #### Making changes to the website's source code
 
 -   **Modify the website's source code**: We make changes to the website's source code locally, such as adding new features, updating content, or fixing bugs.
--   **Push changes to the repository**: Once the changes are made, they are pushed to the source code repository.
+-   **Push changes to the repository**: Once the changes are done, they are pushed to the source code repository.
 -   **Automated CI/CD pipeline**: After the code is pushed, the CI/CD pipeline is automatically triggered. The pipeline handles the following steps:
     -   **Building the website**: The source code is compiled / processed, using a static site generator.
     -   **Running tests**: Automated tests are executed to ensure that the website functions correctly and that new changes haven't introduced any bugs.
@@ -47,9 +45,7 @@ This workflow simplifies the development process, as it is automated, from testi
 
 While the website deployment is automated, managing the infrastructure is still a manual process. Changes to the infrastructure, such as adjusting configurations, modifying network settings, or scaling resources, are handled via the AWS Management Console.
 
-This means that when adjustments are needed - whether to improve performance, enhance security, or adapt to traffic fluctuations - someone must log in to the management console and manually make the required updates. This can be time-consuming and error prone, especially when dealing with large-scale or complex infrastructures.
-
-While the current setup allows for effective management, the manual process for infrastructure changes could benefit from automation.
+This means that when adjustments are needed someone must log in to the management console and manually make the required updates. This can be time-consuming and error prone, especially when dealing with large-scale or complex infrastructures.
 
 ## What can we improve?
 
@@ -66,9 +62,11 @@ In this section, we explore what _Infrastructure as Code (IaC)_ is, the advantag
 
 ### What is it?
 
-_Infrastructure as code_ is a way to manage and provision infrastructure through code and configuration files, rather than via traditional manual processes or graphical interfaces.
+_Infrastructure as Code_ is a way to manage and provision infrastructure through code and configuration files, rather than via traditional manual processes or user interfaces.
 
 In other words, _IaC_ treats infrastructure (such as servers, networks, databases, etc) as a set of code that can be version-controlled, tested, and deployed in repeatable manner. This approach allows us to define and manage infrastructure typically in a declarative way, stating what we want and how the infrastructure should look like, rather than how to create it.
+
+![Infrastructure as Code](./iac.svg)
 
 _IaC_ solutions provide a high-level abstraction over the underlying infrastructure, allowing us to focus on the desired state of the environment, rather than the technical details of provisioning and managing individual resources.
 
@@ -84,7 +82,7 @@ In contrast, the _imperative_ approach specifies the precise commands necessary 
 
 The most popular approach nowdays is the _declarative_. It is much easier to describe what we want rather than how we want to achieve it. An _IaC_ tool does the heavy lifting for us and knows how to achieve the desired state.
 
-**// TODO: mention that imperative languages are used for example Pulumi, but they describe the desired state not the steps to achieve it**
+It worth noting that some _IaC_ tools use an imperative language to describe the desired state, but they still follow the declarative approach. For example Pulumi.
 
 #### Mutable vs immutable infrastructure
 
@@ -93,14 +91,6 @@ When adopting _IaC_ a crucial choice to consider is whether to implement _mutabl
 _Mutable_ infrastructure refers to an infrastructure that can be altered even after its initial provisioning. This offers development teams the flexibility to make on-the-fly adjustments to the infrastructure as needed. However, this approach can lead to _configuration drift_ and inconsistencies between environments.
 
 The _immutable_ approach states that once the infrastructure is provisioned, it cannot be directly modified. Instead, if any changes are required, a new infrastructure is created to replace the existing one. This may seem challenging, but with containerization and the cloud, this becomes feasible and practical.
-
-**// TODO: add**
-Some key benefits of immutable infrastructure are as follows:
-The configuration remains consistent and predictable.
-Enhances security by reducing the risk of unintended changes.
-Ensures that each new instance is identical and consistent.
-If issues arise with the new infrastructure, rolling back to the previous version is straightforward.
-**// TODO:**
 
 ### Benefits
 
@@ -122,8 +112,6 @@ Let's see how the target development workflow looks like after introducing _Infr
 
 ![Automated infrastructure changes](./auto-infra-changes-generic.svg)
 
-Let's dive a bit deeper into the improved and automated workflow.
-
 #### Making changes to the website's source code
 
 This workflow remains the same as before. It's automated and streamlined already.
@@ -136,29 +124,29 @@ Rather than manually adjusting the infrastructure through the AWS Management Con
 
 In this setup, whenever changes are pushed to the repository, the CI/CD pipeline is automatically triggered and applies the changes to the infrastructure.
 
-This streamlined process is automated, consistent, fast, and repeatable, significantly reducing the likelihood of human errors and ensuring the infrastructure remains up-to-date.
+This streamlined process is automated, consistent, fast, and repeatable, significantly reducing the likelihood of human errors and ensuring that the infrastructure remains up-to-date.
 
 ### Overview of the available IaC tools
 
-A wide variety of tools are available, choosing the right one for our specific needs can be challenging. To help navigating this landscape, let's have an overview by categorizing some of the most popular tools and explore their primary use cases.
+Now that we have a target development workflow which intends to automate the infrastructure changes, let's explore the available tools for _IaC_ and see how they can help us achieve this goal.
 
-_Infrastructure provisioning_ and _configuration management_ tools are both essential components of _IaC_ and automation in IT environments, but they serve different purposes and address different stages of the infrastructure lifecycle.
+Luckily a wide variety of tools are available, choosing the right one for our specific needs can be challenging. To help navigating this landscape, let's have an overview by categorizing some of the most popular tools and check their primary use cases.
+
+They can typically be categorized based on several key criteria:
+
+-   **Infrastructure provisioning or configuration management**: _Infrastructure provisioning_ and _configuration management_ tools are both essential components of _IaC_ and automation in IT environments, but they serve different purposes and address different stages of the infrastructure lifecycle.
+-   **Cloud compatibility**: Determine whether the tool is _cloud-agnostic_, meaning it can work across multiple cloud providers, or _cloud-specific_, tailored to a particular cloud platform like AWS or Azure.
+-   **Configuration style**: Whether the tool follows a _declarative_ approach, where we define the desired end state and the tool figures out the steps to achieve it, or an _imperative_ approach, where we explicitly outline the steps needed to reach the desired state.
+-   **Language and syntax**: Whether the tool utilizes a general-purpose programming language (such as Python, Go, or TypeScript), allowing for more flexible and familiar coding practices, or if it relies on its own domain-specific language (DSL), designed specifically for defining infrastructure configurations.
+-   **Agent-based or agent-less**: Whether the tool requires an agent to be installed on the target systems to manage them, or if it can interact with the systems remotely without an agent.
+-   **Push or pull**: Whether the tool pushes the configuration to the target systems or the target systems pull the configuration from a central server.
+-   **Drift detection and remediation**: Whether the tool can detect and correct configuration drifts, ensuring that the actual state of the infrastructure matches the desired state.
+
+In this blog post we only discuss in details the _infrastructure provisioning_ tools, however it worth to mention the _configuration management_ tools briefly.
 
 #### Infrastructure provisioning tools
 
 _Infrastructure provisioning_ tools are used to create and manage the foundational infrastructure - whether in the cloud or on-premises - by automating the provisioning of resources like virtual machines, networks, and storage. They focus on the initial setup, management and decommissioning of infrastructure resources.
-
-They can typically be categorized based on several key criteria:
-
--   **Cloud compatibility**: Determine whether the tool is _cloud-agnostic_, meaning it can work across multiple cloud providers, or _cloud-specific_, tailored to a particular cloud platform like AWS or Azure.
--   **Configuration style**: Whether the tool follows a _declarative_ approach, where we define the desired end state and the tool figures out the steps to achieve it, or an _imperative_ approach, where we explicitly outline the steps needed to reach the desired configuration.
--   **Language and syntax**: Whether the tool utilizes a general-purpose programming language (such as Python, Go, or TypeScript), allowing for more flexible and familiar coding practices, or if it relies on its own domain-specific language (DSL), designed specifically for defining infrastructure configurations.
-
-**// TODO: agent-based vs agent-less (agent vs agentless)**
-
-**// TODO: push vs pull**
-
-**// TODO: drift detection and remediation**
 
 ##### Cloud-agnostic tools
 
@@ -188,25 +176,29 @@ Popular configuration management tools:
 -   [Chef](https://www.chef.io/)
 -   [SaltStack](https://saltproject.io/)
 
-In this blog post we don't discuss in details the _configuration management_ tools, as the focus is on the _infrastructure provisioning_.
+### Choosing the right tool
 
-### Choosing the right IaC tool
-
-As the complexity of managing modern infrastructure grows, so does the need for effective tools to streamline the process. _Infrastructure as code_ has become a cornerstone of efficient, scalable, and reliable infrastructure management. However, with a wide variety of tools available, choosing the right one for our specific needs can be challenging.
-
-#### Making a choice
+As the complexity of managing modern infrastructure grows, so does the need for effective tools to streamline the process. _Infrastructure as Code_ has become a cornerstone of efficient, scalable, and reliable infrastructure management. However, with a wide variety of tools available, choosing the right one for our specific needs can be challenging.
 
 We need to consider these factors when deciding:
 
 -   **Cloud provider**: Are we using AWS, Azure, Google Cloud, or a multi-cloud approach?
--   **Existing skills**: What programming languages are we comfortable with?
 -   **Scope**: Do we need to manage just cloud resources, or on-premises infrastructure as well?
 -   **Complexity**: How complex is our infrastructure? Do we need advanced features like modules or state management?
--   **Ecosystem compatibility**: Choose a tool that integrates well with the existing tech stack, ecosystem.
+-   **Ecosystem compatibility**: Choose a tool that integrates well with the existing tech stack or ecosystem.
+-   **Existing skills**: What programming languages are we comfortable with?
 -   **Learning curve**: Balance the tool's power with the time needed to become proficient.
 -   **Community and support**: A larger community often means better resources and third-party integrations.
 -   **Scalability**: Ensure the tool can grow with the needs and requirements.
 -   **Cost**: Some tools are free, others require licenses. We need to factor this into the decision.
+
+## GitOps
+
+_GitOps_ is a modern approach to _continuous delivery_ and _infrastructure management_ that leverages Git as the single source of truth. So we can safely say that without _GitOps_ there is no effective _Infrastructure as Code_.
+
+![GitOps](./gitops.svg)
+
+**// TODO:** finish this section
 
 ## Terraform
 
@@ -277,11 +269,11 @@ Terraform Cloud offers both free and paid plans, making it accessible to small t
 
 ## Improved development workflow
 
-Let's see how the development workflow looks like after introducing Terraform, using Terraform Cloud and adding automation to applying the infrastructure changes.
+Let's check how the improved development workflow looks like for this website after introducing Terraform, using Terraform Cloud and adding automation to applying the infrastructure changes.
 
 ![Automated infrastructure changes](./auto-infra-changes.svg)
 
-Let's dive a bit deeper into the improved and automated workflow.
+**// TODO:**
 
 ### Making changes to the website's source code
 
