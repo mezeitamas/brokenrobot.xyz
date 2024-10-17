@@ -10,8 +10,8 @@
     },
     "type": "module",
     "engines": {
-        "node": ">=22.8.0",
-        "npm": ">=10.8.2"
+        "node": ">=22.10.0",
+        "npm": ">=10.9.0"
     },
     "scripts": {
         "install:playwright": "playwright install --with-deps",
@@ -34,10 +34,10 @@
         "@astrojs/rss": "4.0.9",
         "@astrojs/sitemap": "3.2.1",
         "@astrojs/tailwind": "5.1.2",
-        "@astrojs/ts-plugin": "1.10.2",
+        "@astrojs/ts-plugin": "1.10.3",
         "@fontsource/poppins": "5.1.0",
         "@tailwindcss/typography": "0.5.15",
-        "astro": "4.16.5",
+        "astro": "4.16.6",
         "astro-feather": "1.0.0",
         "schema-dts": "1.1.2",
         "tailwindcss": "3.4.14"
@@ -47,8 +47,8 @@
         "@playwright/test": "1.48.1",
         "@types/markdown-it": "14.1.2",
         "@types/sanitize-html": "2.13.0",
-        "@typescript-eslint/eslint-plugin": "8.9.0",
-        "@typescript-eslint/parser": "8.9.0",
+        "@typescript-eslint/eslint-plugin": "8.10.0",
+        "@typescript-eslint/parser": "8.10.0",
         "autoprefixer": "10.4.20",
         "dotenv": "16.4.5",
         "eslint": "8.57.0",
