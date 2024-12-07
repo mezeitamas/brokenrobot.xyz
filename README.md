@@ -6,17 +6,17 @@ This is the code repository for my personal website. The website is built with A
 
 To install and run the project, please follow these steps:
 
--   Clone the repository to your local machine using `git clone git@github.com:mezeitamas/brokenrobot.xyz.git`
--   Install dependencies by executing `npm install`
--   Start the development server by running `npm start`
+- Clone the repository to your local machine using `git clone git@github.com:mezeitamas/brokenrobot.xyz.git`
+- Install dependencies by executing `npm install`
+- Start the development server by running `npm start`
 
 ## 💻 Technologies used
 
 The website was built using the following technologies:
 
--   [Astro](https://astro.build/)
--   [TypeScript](https://www.typescriptlang.org/)
--   [TailwindCSS](https://tailwindcss.com/)
+- [Astro](https://astro.build/)
+- [TypeScript](https://www.typescriptlang.org/)
+- [TailwindCSS](https://tailwindcss.com/)
 
 ## 📄 License
 
