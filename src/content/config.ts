@@ -9,9 +9,7 @@ const blog = defineCollection({
                 .string()
                 .or(z.date())
                 .transform((val) => new Date(val)),
-            heroImage: image().refine((img) => img.width >= 1280, {
-                message: 'Cover image must be at least 1280 pixels wide!'
-            }),
+            heroImage: image(),
             tags: z.array(z.string())
         })
 });
