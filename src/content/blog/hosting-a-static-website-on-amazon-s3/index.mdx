@@ -18,8 +18,8 @@ In this post, we will walk through the steps to host a static website using only
 
 Before we start, make sure to have the followings:
 
--   An AWS account
--   A registered domain name
+- An AWS account
+- A registered domain name
 
 While registering a domain name is not mandatory, it is possible to host a static website on Amazon S3 without it. If you are looking to save money on a domain, you can simply skip **Step 4**.
 
@@ -46,8 +46,8 @@ First, we need to create an S3 bucket to store our asset files for our website. 
 
 Now that we have created our bucket, we need to configure its properties to allow it to host our website. For this we need to do following things:
 
--   Enable static website hosting
--   Allow public read-only access
+- Enable static website hosting
+- Allow public read-only access
 
 ### Enable static website hosting
 
@@ -140,11 +140,11 @@ In addition to the annual fee, some registrars may also charge extra fees for se
 
 Hosting a static website on Amazon S3 is a quick and easy way to get the website up and running. Although this is a good initial step, however this is **not** what we really want as our production setup. We need a few additional elements to establish a hosting solution that is highly available, performs well and can be considered production ready. For example:
 
--   Make it more scalable and performant by using a content delivery network (CDN).
--   Make the communication secure by using HTTPS (encrypt data in transit).
--   Make the S3 bucket private and the website should be only accessible through the CDN.
--   Get usage related data by enable logging.
--   Add error handling and feedback.
+- Make it more scalable and performant by using a content delivery network (CDN).
+- Make the communication secure by using HTTPS (encrypt data in transit).
+- Make the S3 bucket private and the website should be only accessible through the CDN.
+- Get usage related data by enable logging.
+- Add error handling and feedback.
 
 I will write about these additions in another post, so stay tuned.
 
@@ -152,6 +152,6 @@ But for now let's celebrate 🎉, because our website is up and running, so we c
 
 ## Additional resources
 
--   [Configuring a static website using a custom domain registered with Route 53](https://docs.aws.amazon.com/AmazonS3/latest/userguide/website-hosting-custom-domain-walkthrough.html)
--   [Amazon S3](https://aws.amazon.com/s3/)
--   [Amazon Route 53](https://aws.amazon.com/route53/)
+- [Configuring a static website using a custom domain registered with Route 53](https://docs.aws.amazon.com/AmazonS3/latest/userguide/website-hosting-custom-domain-walkthrough.html)
+- [Amazon S3](https://aws.amazon.com/s3/)
+- [Amazon Route 53](https://aws.amazon.com/route53/)

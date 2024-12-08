@@ -1,7 +1,7 @@
 ---
 import '@styles/base.css';
 
-import { ViewTransitions } from 'astro:transitions';
+import { ClientRouter } from 'astro:transitions';
 
 import PreloadFonts from '@components/fonts/PreloadFonts.astro';
 import Header from '@components/layout/Header.astro';
@@ -76,7 +76,7 @@ const { pageTitle, pageDescription } = Astro.props;
 
         <slot name="seo" />
 
-        <ViewTransitions fallback="none" />
+        <ClientRouter fallback="none" />
     </head>
 
     <body class="mx-auto max-w-screen-xl px-4 md:px-6 lg:px-8">

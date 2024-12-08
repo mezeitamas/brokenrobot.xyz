@@ -41,10 +41,10 @@ Before we start the implementation, let's recap what we have.
 
 These are the main components:
 
--   **Route 53**: Managing the website's domain name and pointing to our CloudFront distribution.
--   **Certificate Manager**: It is the certificate authority and issuing the SSL certificate.
--   **CloudFront**: Our Content Delivery Network (CDN).
--   **S3**: This where we store the website's content.
+- **Route 53**: Managing the website's domain name and pointing to our CloudFront distribution.
+- **Certificate Manager**: It is the certificate authority and issuing the SSL certificate.
+- **CloudFront**: Our Content Delivery Network (CDN).
+- **S3**: This where we store the website's content.
 
 <BlogPostPicture
     src={baselineArchitecture}
@@ -60,8 +60,8 @@ These are the main components:
 
 We utilize two functions:
 
--   **URL rewrite**: Modifies the viewer's request and it appends the _index.html_ to the end URL if it is not there.
--   **HTTP headers**: Changes the server's response and adds security related HTTP headers.
+- **URL rewrite**: Modifies the viewer's request and it appends the _index.html_ to the end URL if it is not there.
+- **HTTP headers**: Changes the server's response and adds security related HTTP headers.
 
 If you need more details, please check my previous post: [Advanced static website hosting with Amazon S3 and CloudFront](/blog/advanced-static-website-hosting-with-amazon-s3-and-cloudfront)
 
@@ -134,8 +134,8 @@ Please find below a step-by-step guide on how to request a wildcard SSL certific
 
 We need to modify 2 things in our CloudFront distribution:
 
--   Associate the new wildcard SSL certificate
--   Enhance the viewer request handler
+- Associate the new wildcard SSL certificate
+- Enhance the viewer request handler
 
 #### Associate the wildcard SSL certificate with the CloudFront distribution
 
@@ -221,9 +221,9 @@ Before we apply any changes, it is wise to revisit the pricing.
 
 What has changed in the infrastructure compared to the previous version:
 
--   **Certificate Manager**: New public wildcard SSL certificate
--   **CloudFront**: Modified viewer request handler function
--   **Route 53**: New **A** record
+- **Certificate Manager**: New public wildcard SSL certificate
+- **CloudFront**: Modified viewer request handler function
+- **Route 53**: New **A** record
 
 The changes are minimal, no new elements, therefor no changes in the pricing. 🤑🎉
 
@@ -239,11 +239,11 @@ By adopting this approach, we have not only tackled the "**www** or no **www**" 
 
 ## Additional resources
 
--   HTTP redirections
-    -   [Redirections in HTTP](https://developer.mozilla.org/en-US/docs/Web/HTTP/Redirections)
--   HTTP response status codes
-    -   [HTTP response status codes](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status)
-    -   [301 Moved Permanently](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/301)
--   Canonical URL
-    -   [What is canonicalization](https://developers.google.com/search/docs/crawling-indexing/canonicalization)
--   [Choosing between www and non-www URLs](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/Choosing_between_www_and_non-www_URLs)
+- HTTP redirections
+    - [Redirections in HTTP](https://developer.mozilla.org/en-US/docs/Web/HTTP/Redirections)
+- HTTP response status codes
+    - [HTTP response status codes](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status)
+    - [301 Moved Permanently](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/301)
+- Canonical URL
+    - [What is canonicalization](https://developers.google.com/search/docs/crawling-indexing/canonicalization)
+- [Choosing between www and non-www URLs](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/Choosing_between_www_and_non-www_URLs)

@@ -42,11 +42,11 @@ Now, let's explore how users can access the website from various locations acros
 
 In my previous post I mentioned the following possible improvements:
 
--   Make it more scalable and performant by using a content delivery network (CDN).
--   Make the S3 bucket private and the website should be only accessible through the CDN.
--   Get usage related data by enable logging.
--   Add error handling and feedback.
--   Make the communication secure by using HTTPS (encrypt data in transit).
+- Make it more scalable and performant by using a content delivery network (CDN).
+- Make the S3 bucket private and the website should be only accessible through the CDN.
+- Get usage related data by enable logging.
+- Add error handling and feedback.
+- Make the communication secure by using HTTPS (encrypt data in transit).
 
 Let's check them in details.
 
@@ -56,15 +56,15 @@ Amazon S3 has a built-in scalability feature that allows it to handle increasing
 
 Using S3 exclusively for website hosting has a few drawbacks to consider:
 
--   The user experience may be slower for visitors located far from the S3 bucket's region.
--   S3 imposes charges not only for data storage but also for outbound traffic from the bucket.
+- The user experience may be slower for visitors located far from the S3 bucket's region.
+- S3 imposes charges not only for data storage but also for outbound traffic from the bucket.
 
 Using CloudFront in combination with S3 offers several benefits over using S3 exclusively for hosting the website:
 
--   **Improved performance**: CloudFront is a global Content Delivery Network (CDN) service that caches the website's content in edge locations worldwide. When a user requests content from the website, CloudFront serves it from the edge location nearest to them, reducing latency and improving response times. This ensures a faster and more responsive user experience.
--   **Scalability**: CloudFront automatically scales to handle high volumes of traffic. It distributes the load across its global network of edge locations, reducing the burden on the origin server. This allows the website to handle sudden traffic spikes without performance degradation or downtime.
--   **Cost efficiency**: CloudFront's pay-as-you-go pricing model makes it cost-effective for websites of all sizes. With it, we only pay for the data transfer and requests made by the users. By caching content at the edge locations, CloudFront reduces the amount of data transferred from the origin server, helping to lower the bandwidth costs.
--   **Analytics**: CloudFront provides detailed logs and metrics, allowing us to monitor the performance of the website and gain insights into user behavior. This data can help optimizing the website's content and make informed decisions to improve the user experience.
+- **Improved performance**: CloudFront is a global Content Delivery Network (CDN) service that caches the website's content in edge locations worldwide. When a user requests content from the website, CloudFront serves it from the edge location nearest to them, reducing latency and improving response times. This ensures a faster and more responsive user experience.
+- **Scalability**: CloudFront automatically scales to handle high volumes of traffic. It distributes the load across its global network of edge locations, reducing the burden on the origin server. This allows the website to handle sudden traffic spikes without performance degradation or downtime.
+- **Cost efficiency**: CloudFront's pay-as-you-go pricing model makes it cost-effective for websites of all sizes. With it, we only pay for the data transfer and requests made by the users. By caching content at the edge locations, CloudFront reduces the amount of data transferred from the origin server, helping to lower the bandwidth costs.
+- **Analytics**: CloudFront provides detailed logs and metrics, allowing us to monitor the performance of the website and gain insights into user behavior. This data can help optimizing the website's content and make informed decisions to improve the user experience.
 
 By using CloudFront for the website, we can significantly enhance performance, improve scalability and lower costs. These advantages make CloudFront an essential component for delivering a fast, reliable, and scalable web experience to visitors.
 
@@ -72,10 +72,10 @@ By using CloudFront for the website, we can significantly enhance performance, i
 
 Limiting access to the S3 bucket (where we store the website's data / content) only to the associated CloudFront distribution offers several benefits:
 
--   **Content protection**: Limiting access to the S3 bucket, prevents users from bypassing CloudFront and accessing the content directly. This helps to protect the content from unauthorized downloads.
--   **Improved security**: By restricting access, we minimize the attack surface and reduce the risk of unauthorized access.
--   **Enhanced performance**: CloudFront caches and serves the content from the edge locations closest to the users, reducing latency and improving the overall performance of the website.
--   **Cost optimization**: By enforcing access restrictions, we can optimize costs associated with data transfer and storage. When users access the content through CloudFront, it utilizes a caching mechanisms to serve the content from edge locations, reducing the load on the S3 bucket and minimizing data transfer costs.
+- **Content protection**: Limiting access to the S3 bucket, prevents users from bypassing CloudFront and accessing the content directly. This helps to protect the content from unauthorized downloads.
+- **Improved security**: By restricting access, we minimize the attack surface and reduce the risk of unauthorized access.
+- **Enhanced performance**: CloudFront caches and serves the content from the edge locations closest to the users, reducing latency and improving the overall performance of the website.
+- **Cost optimization**: By enforcing access restrictions, we can optimize costs associated with data transfer and storage. When users access the content through CloudFront, it utilizes a caching mechanisms to serve the content from edge locations, reducing the load on the S3 bucket and minimizing data transfer costs.
 
 By restricting access to the S3 bucket only to the associated CloudFront distribution, we enhance security, protect the content, optimize costs and improve performance.
 
@@ -89,9 +89,9 @@ To enhance the user experience, it's important to provide more user-friendly err
 
 CloudFront provides different kinds of logging (standard and real-time), enabling them offers several benefits:
 
--   **Access and monitoring**: CloudFront logging provides detailed access logs that capture information about every request made to the website. These logs include valuable data such as the time of the request, the requested resource, the client's IP address, response status codes, and more. Analyzing these logs helps to gain valuable insights.
--   **Debugging and troubleshooting**: With CloudFront logs stored in S3, we have a centralized location to track and investigate any issues or errors occurring on the website.
--   **Performance optimization**: CloudFront logs provide valuable data for optimizing the performance of the website. By analyzing the logs, we can identify frequently accessed resources, popular content, and patterns in user behavior.
+- **Access and monitoring**: CloudFront logging provides detailed access logs that capture information about every request made to the website. These logs include valuable data such as the time of the request, the requested resource, the client's IP address, response status codes, and more. Analyzing these logs helps to gain valuable insights.
+- **Debugging and troubleshooting**: With CloudFront logs stored in S3, we have a centralized location to track and investigate any issues or errors occurring on the website.
+- **Performance optimization**: CloudFront logs provide valuable data for optimizing the performance of the website. By analyzing the logs, we can identify frequently accessed resources, popular content, and patterns in user behavior.
 
 Enabling CloudFront logging to S3 ensures that we have a comprehensive and centralized record of website access, enhances debugging and troubleshooting capabilities.
 
@@ -101,9 +101,9 @@ CloudFront's logging offers much more than the above mentioned, please checkout 
 
 Using HTTPS (Hypertext Transfer Protocol Secure) offers several benefits:
 
--   **Security**: HTTPS encrypts the data transmitted between the website and the user's browser. It prevents unauthorized access, eavesdropping, or tampering with the data during transit.
--   **User trust**: HTTPS provides a visual indicator, such as a padlock icon, in the browser's address bar, indicating that the connection is secure. This instills trust and confidence in the visitors, assuring them that their information is protected and reducing the risk of potential security concerns.
--   **SEO advantage**: Search engines prioritize websites with HTTPS in their search results. Having HTTPS can positively impact the website's search engine ranking and visibility, potentially leading to increased organic traffic.
+- **Security**: HTTPS encrypts the data transmitted between the website and the user's browser. It prevents unauthorized access, eavesdropping, or tampering with the data during transit.
+- **User trust**: HTTPS provides a visual indicator, such as a padlock icon, in the browser's address bar, indicating that the connection is secure. This instills trust and confidence in the visitors, assuring them that their information is protected and reducing the risk of potential security concerns.
+- **SEO advantage**: Search engines prioritize websites with HTTPS in their search results. Having HTTPS can positively impact the website's search engine ranking and visibility, potentially leading to increased organic traffic.
 
 Overall, using HTTPS is a must now days because of security, user trust, SEO advantages, protection against cyber threats, and maintaining a professional online presence.
 
@@ -122,10 +122,10 @@ Having reviewed the baseline architecture and identified areas for improvement i
 
 Let's identify the main components:
 
--   **Route 53**: It is responsible for managing the website's domain name and pointing to the CloudFront distribution.
--   **Certificate Manager**: It is the certificate authority and issuing the SSL certificate for HTTPS.
--   **CloudFront**: It is the CDN and serves as the cache for the website's content.
--   **S3**: It is storing the website's content and serves as the origin for the CloudFront distribution.
+- **Route 53**: It is responsible for managing the website's domain name and pointing to the CloudFront distribution.
+- **Certificate Manager**: It is the certificate authority and issuing the SSL certificate for HTTPS.
+- **CloudFront**: It is the CDN and serves as the cache for the website's content.
+- **S3**: It is storing the website's content and serves as the origin for the CloudFront distribution.
 
 ### CloudFront edge location caching
 
@@ -146,12 +146,12 @@ Let's explore the utilization of CloudFront functions.
 
 There is an objective that cannot be accomplished solely through CloudFront configuration:
 
--   **Rewriting the URL**: default object (in our case "index.html") for the root and all other URLs
+- **Rewriting the URL**: default object (in our case "index.html") for the root and all other URLs
 
 To make our website more secure, we need to add certain **HTTP headers** to every response. This can be achieved in 2 ways:
 
--   By adding a _CloudFront function_
--   By adding a _CloudFront policy_
+- By adding a _CloudFront function_
+- By adding a _CloudFront policy_
 
 In this post we will go with the first one and solving it via a CloudFront function. Please check the following article for more details on the CloudFront policy based solution: [Adding or removing HTTP headers in CloudFront responses](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/modifying-response-headers.html)
 
@@ -228,8 +228,8 @@ We will build the infrastructure from the ground up.
 
 Before we start, make sure to have the followings:
 
--   An AWS account
--   A registered domain name
+- An AWS account
+- A registered domain name
 
 ### Step 1: Create an S3 bucket
 
@@ -243,10 +243,10 @@ First, we need to create an S3 bucket to store our asset files for the website. 
 
 The following configuration options are crucial:
 
--   **Static website hosting**: This should be disabled.
--   **Block public access (bucket settings)**: All public access must be blocked.
--   **Object Ownership**: It should be _Bucket owner enforced_.
--   **Bucket policy**: This needs to be empty for now, but we will add a policy later.
+- **Static website hosting**: This should be disabled.
+- **Block public access (bucket settings)**: All public access must be blocked.
+- **Object Ownership**: It should be _Bucket owner enforced_.
+- **Bucket policy**: This needs to be empty for now, but we will add a policy later.
 
 ### Step 2: Upload the asset files
 
@@ -450,10 +450,10 @@ Let's talk about the ugly part, and check how much do we need to pay on a monthl
 
 The services utilized and associated costs are as follows:
 
--   **S3**: _$0_
--   **CloudFront**: _$0_
--   **Certificate Manager**: _$0_
--   **Route 53**: _$1.5_
+- **S3**: _$0_
+- **CloudFront**: _$0_
+- **Certificate Manager**: _$0_
+- **Route 53**: _$1.5_
 
 All together we need to pay **$1.5 / month**. This is a great news, we do not need to be a millionaire to start hosting a static website. 🤑
 
@@ -479,11 +479,11 @@ CloudFront has a very generous free tier:
 
 > Included in Always Free Tier
 >
-> -   1 TB of data transfer out per month
-> -   10,000,000 HTTP or HTTPS Requests per month
-> -   2,000,000 CloudFront Function invocations per month
-> -   Free SSL certificates
-> -   No limitations, all features available
+> - 1 TB of data transfer out per month
+> - 10,000,000 HTTP or HTTPS Requests per month
+> - 2,000,000 CloudFront Function invocations per month
+> - Free SSL certificates
+> - No limitations, all features available
 
 We have just started with our static website, so we do not have an enormous amount of content nor a large number of visitors, so we will likely stay in the tier for a while.
 
@@ -503,12 +503,12 @@ Please visit the [AWS Certificate Manager Pricing](https://aws.amazon.com/certif
 
 The pricing of the Route 53 service is based on:
 
--   the number of managed hosted zones
-    -   We have a single hosted zone which costs us $0.50 / month.
--   the number of DNS queries
-    -   We have DNS queries for **A** alias records which are free of charge.
--   the number of managed domain names
-    -   We registered a single domain name, which costs us $1 / month.
+- the number of managed hosted zones
+    - We have a single hosted zone which costs us $0.50 / month.
+- the number of DNS queries
+    - We have DNS queries for **A** alias records which are free of charge.
+- the number of managed domain names
+    - We registered a single domain name, which costs us $1 / month.
 
 All together we will pay $1.5 / month.
 
@@ -528,48 +528,48 @@ However there is always room for improvement. 👀
 
 Let's briefly check a few improvement ideas:
 
--   **Infrastructure as Code**: To setup manually the above mentioned infrastructure can be time consuming, but ultimately annoying 😒. Automation can be our saviour. For example, we can use [AWS CDK](https://aws.amazon.com/cdk/), [AWS CloudFormation](https://aws.amazon.com/cloudformation/) or [Terraform](https://www.terraform.io/) to manage our infrastructure.
--   **Monitoring and alerting**: It is always a good idea to monitor our website, because in this way, for example, we can:
-    -   detect and respond to issues faster
-    -   optimize costs and resource utilization
--   **Detailed analytics**: The collected data by CloudFront can help optimizing the website's content and make informed decisions to improve the user experience.
+- **Infrastructure as Code**: To setup manually the above mentioned infrastructure can be time consuming, but ultimately annoying 😒. Automation can be our saviour. For example, we can use [AWS CDK](https://aws.amazon.com/cdk/), [AWS CloudFormation](https://aws.amazon.com/cloudformation/) or [Terraform](https://www.terraform.io/) to manage our infrastructure.
+- **Monitoring and alerting**: It is always a good idea to monitor our website, because in this way, for example, we can:
+    - detect and respond to issues faster
+    - optimize costs and resource utilization
+- **Detailed analytics**: The collected data by CloudFront can help optimizing the website's content and make informed decisions to improve the user experience.
 
 ## Additional resources
 
 ### CloudFront
 
--   [Amazon CloudFront](https://aws.amazon.com/cloudfront/)
--   [Reports, metrics, and logs](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/reports-and-monitoring.html)
--   [CloudFront and edge function logging](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/logging.html)
--   [How do I turn on logging for my CloudFront distribution?](https://www.youtube.com/watch?v=CmCe5h8qjhg)
--   [Introducing CloudFront Functions – Run Your Code at the Edge with Low Latency at Any Scale](https://aws.amazon.com/blogs/aws/introducing-cloudfront-functions-run-your-code-at-the-edge-with-low-latency-at-any-scale/)
--   [Getting started with a secure static website](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/getting-started-secure-static-website-cloudformation-template.html)
--   [Adding HTTP Security Headers Using Lambda@Edge and Amazon CloudFront](https://aws.amazon.com/blogs/networking-and-content-delivery/adding-http-security-headers-using-lambdaedge-and-amazon-cloudfront/)
--   [Working with policies](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/working-with-policies.html)
--   [Adding or removing HTTP headers in CloudFront responses](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/modifying-response-headers.html)
--   [Invalidating files](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Invalidation.html)
--   [Specifying a default root object](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/DefaultRootObject.html)
--   [Add index.html to request URLs that don’t include a file name](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/example-function-add-index.html)
+- [Amazon CloudFront](https://aws.amazon.com/cloudfront/)
+- [Reports, metrics, and logs](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/reports-and-monitoring.html)
+- [CloudFront and edge function logging](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/logging.html)
+- [How do I turn on logging for my CloudFront distribution?](https://www.youtube.com/watch?v=CmCe5h8qjhg)
+- [Introducing CloudFront Functions – Run Your Code at the Edge with Low Latency at Any Scale](https://aws.amazon.com/blogs/aws/introducing-cloudfront-functions-run-your-code-at-the-edge-with-low-latency-at-any-scale/)
+- [Getting started with a secure static website](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/getting-started-secure-static-website-cloudformation-template.html)
+- [Adding HTTP Security Headers Using Lambda@Edge and Amazon CloudFront](https://aws.amazon.com/blogs/networking-and-content-delivery/adding-http-security-headers-using-lambdaedge-and-amazon-cloudfront/)
+- [Working with policies](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/working-with-policies.html)
+- [Adding or removing HTTP headers in CloudFront responses](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/modifying-response-headers.html)
+- [Invalidating files](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Invalidation.html)
+- [Specifying a default root object](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/DefaultRootObject.html)
+- [Add index.html to request URLs that don’t include a file name](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/example-function-add-index.html)
 
 ### Certificate Manager
 
--   [AWS Certificate Manager](https://aws.amazon.com/certificate-manager/)
--   [Requesting a public certificate](https://docs.aws.amazon.com/acm/latest/userguide/gs-acm-request-public.html)
+- [AWS Certificate Manager](https://aws.amazon.com/certificate-manager/)
+- [Requesting a public certificate](https://docs.aws.amazon.com/acm/latest/userguide/gs-acm-request-public.html)
 
 ### S3
 
--   [Amazon S3](https://aws.amazon.com/s3/)
+- [Amazon S3](https://aws.amazon.com/s3/)
 
 ### Route 53
 
--   [Amazon Route 53](https://aws.amazon.com/route53/)
+- [Amazon Route 53](https://aws.amazon.com/route53/)
 
 ### HTTPS
 
--   [Enabling HTTPS on your servers](https://web.dev/enable-https/)
--   [What is HTTPS?](https://www.cloudflare.com/learning/ssl/what-is-https/)
+- [Enabling HTTPS on your servers](https://web.dev/enable-https/)
+- [What is HTTPS?](https://www.cloudflare.com/learning/ssl/what-is-https/)
 
 ### Security headers
 
--   [OWASP Secure Headers Project](https://owasp.org/www-project-secure-headers/)
--   [An Overview of Best Practices for Security Headers](https://developer.okta.com/blog/2021/10/18/security-headers-best-practices)
+- [OWASP Secure Headers Project](https://owasp.org/www-project-secure-headers/)
+- [An Overview of Best Practices for Security Headers](https://developer.okta.com/blog/2021/10/18/security-headers-best-practices)
