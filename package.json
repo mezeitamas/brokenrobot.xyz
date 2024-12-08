@@ -1,7 +1,7 @@
 {
     "name": "brokenrobot.xyz",
     "description": "Tamas Mezei's personal website.",
-    "version": "2.0.0",
+    "version": "3.0.0",
     "private": true,
     "author": "Tamas Mezei",
     "repository": {
