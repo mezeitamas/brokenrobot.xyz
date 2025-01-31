@@ -10,7 +10,7 @@
     },
     "type": "module",
     "engines": {
-        "node": ">=23.6.0",
+        "node": ">=23.6.1",
         "npm": ">=10.9.2"
     },
     "scripts": {
