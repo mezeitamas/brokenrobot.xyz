@@ -65,14 +65,6 @@ test.describe('Post: Hello, World!', () => {
 });
 
 test.describe('Post: Hosting a static website on Amazon S3', () => {
-    test('should be accessible from the home page', async ({ page }) => {
-        await page.goto('./');
-        await expect(page).toHaveTitle(/Broken Robot/);
-
-        await page.getByRole('heading').getByRole('link', { name: 'Hosting a static website on Amazon S3' }).click();
-        await expect(page).toHaveTitle(/Hosting a static website on Amazon S3/);
-    });
-
     test('should be accessible from the blog page', async ({ page }) => {
         await page.goto('./blog');
         await expect(page).toHaveTitle(/Blog/);
@@ -151,5 +143,31 @@ test.describe('Post: URL redirect with Amazon CloudFront and Amazon Route 53', (
 
         await page.getByRole('link', { name: 'URL redirect with Amazon CloudFront and Amazon Route 53' }).click();
         await expect(page).toHaveTitle(/URL redirect with Amazon CloudFront and Amazon Route 53/);
+    });
+});
+
+test.describe('Post: Infrastructure as Code with Terraform', () => {
+    test('should be accessible from the home page', async ({ page }) => {
+        await page.goto('./');
+        await expect(page).toHaveTitle(/Broken Robot/);
+
+        await page.getByRole('heading').getByRole('link', { name: 'Infrastructure as Code with Terraform' }).click();
+        await expect(page).toHaveTitle(/Infrastructure as Code with Terraform/);
+    });
+
+    test('should be accessible from the blog page', async ({ page }) => {
+        await page.goto('./blog');
+        await expect(page).toHaveTitle(/Blog/);
+
+        await page.getByRole('heading').getByRole('link', { name: 'Infrastructure as Code with Terraform' }).click();
+        await expect(page).toHaveTitle(/Infrastructure as Code with Terraform/);
+    });
+
+    test('should be accessible from the about page', async ({ page }) => {
+        await page.goto('./about');
+        await expect(page).toHaveTitle(/About/);
+
+        await page.getByRole('link', { name: 'Infrastructure as Code with Terraform' }).click();
+        await expect(page).toHaveTitle(/Infrastructure as Code with Terraform/);
     });
 });
