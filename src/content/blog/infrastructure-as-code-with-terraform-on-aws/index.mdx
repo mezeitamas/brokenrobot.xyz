@@ -194,11 +194,36 @@ We need to consider these factors when deciding:
 
 ## GitOps
 
-_GitOps_ is a modern approach to _continuous delivery_ and _infrastructure management_ that leverages Git as the single source of truth. So we can safely say that without _GitOps_ there is no effective _Infrastructure as Code_.
+_GitOps_ extends the principles of _Infrastructure as Code_ by integrating them into a Git-based workflow. It uses Git as the single source of truth for infrastructure and application configurations, enabling teams to manage infrastructure configurations, application code, and deployment processes in a unified way.
+
+So we can safely say that without _GitOps_ there is no effective _Infrastructure as Code_. Therefore, it worth to mention it briefly.
+
+### What is GitOps?
+
+_GitOps_ is a methodology that applies Git-based workflows to infrastructure automation and application deployment. It ensures that the desired system state configuration is stored in a Git repository, and any changes to the system are made through pull requests (PRs). These changes are automatically applied to the system using CI/CD pipelines.
+
+### Key principles
+
+- **Declarative configuration**: The entire system configuration, including infrastructure and applications, is defined typically in a declarative way.
+- **Versioned**: All configurations are stored in Git, providing a complete audit trail and version history.
+- **Automation**: Changes merged into Git are automatically applied to the system using CI/CD pipelines.
+
+### Benefits
+
+- **Enhanced security**: All changes go through Git-based reviews, improving transparency and compliance.
+- **Faster deployments**: Automated workflows reduce the time to deploy and roll back changes.
+- **Improved collaboration**: Teams follow Git workflows, enabling better collaboration across development and operations.
+
+### GitOps workflow
+
+A typical _GitOps_ workflow follows these steps:
+
+- A developer makes changes to the infrastructure or application configuration in Git.
+- A pull request (PR) is created for review.
+- Once approved, the changes are merged into the _main_ branch.
+- A CI/CD pipeline detects the change and applies it, using a _IaC_ tool.
 
 ![GitOps](./gitops.svg)
-
-**// TODO:** finish this section
 
 ## Terraform
 
@@ -269,11 +294,9 @@ Terraform Cloud offers both free and paid plans, making it accessible to small t
 
 ## Improved development workflow
 
-Let's check how the improved development workflow looks like for this website after introducing Terraform, using Terraform Cloud and adding automation to applying the infrastructure changes.
+Let's check how the target development workflow implementation looks like for this website after introducing _IaC_, Terraform, using Terraform Cloud and adding automation to applying the infrastructure changes.
 
 ![Automated infrastructure changes](./auto-infra-changes.svg)
-
-**// TODO:**
 
 ### Making changes to the website's source code
 
@@ -287,13 +310,9 @@ Rather than manually adjusting the infrastructure through the AWS Management Con
 
 In our setup, whenever changes are pushed to the repository, Terraform Cloud automatically detects them. It then pulls the latest code, generates a plan for the proposed changes, and applies them to the infrastructure. This streamlined process is automated, consistent, fast, and repeatable, significantly reducing the likelihood of human errors and ensuring the infrastructure remains up-to-date.
 
-## // TODO: Practical example
-
-**// TODO: show some terraform code**
-
 ## Conclusion
 
-In this blog post, we went through the concept of _Infrastructure as Code (IaC)_ and discussed its benefits and the available tools for managing infrastructure via code. We also explored the advantages of using _IaC_ to automate the provisioning and management of infrastructure resources.
+In this blog post, we went through the concept of _Infrastructure as Code (IaC)_ and discussed its benefits and the available tools for managing infrastructure via code.
 
 Moreover, we've explored how integrating Terraform and Terraform Cloud into our development workflow can significantly enhance our infrastructure management.
 
@@ -303,18 +322,19 @@ As we continue to evolve our infrastructure practices, we can look into further 
 
 ## Additional resources
 
-- [HashiCorp Terraform Adoption Stages](https://www.youtube.com/watch?v=FWpCQar9dYg)
-- [InfrastructureAsCode](https://martinfowler.com/bliki/InfrastructureAsCode.html)
-- [What is Infrastructure as Code with Terraform?](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/infrastructure-as-code)
-- [What is Mutable vs. Immutable Infrastructure?](https://www.hashicorp.com/resources/what-is-mutable-vs-immutable-infrastructure)
-- [Infrastructure as code](https://docs.aws.amazon.com/whitepapers/latest/introduction-devops-aws/infrastructure-as-code.html)
-- [What is Infrastructure as Code (IaC)?](https://www.redhat.com/en/topics/automation/what-is-infrastructure-as-code-iac)
-- [Infrastructure as code](https://www.atlassian.com/microservices/cloud-computing/infrastructure-as-code)
-- [Keeping Terraform Cloud/Enterprise Provider Credentials Secure](https://medium.com/hashicorp-engineering/keeping-terraform-cloud-enterprise-provider-credentials-secure-2edfbd1dfb98)
-- [Enforcing AWS S3 Security Best Practices Using Terraform & Sentinel](https://medium.com/hashicorp-engineering/enforcing-aws-s3-security-best-practice-using-terraform-sentinel-ddcd181ff4b7)
-- [The Core Terraform Workflow](https://developer.hashicorp.com/terraform/intro/core-workflow)
-- [Phases of Terraform Adoption](https://developer.hashicorp.com/terraform/intro/phases)
-
-**// TODO: https://circleci.com/topics/infrastructure-as-code-iac/**
-
-**// TODO: categorize articles**
+- Infrastructure as Code
+    - [InfrastructureAsCode](https://martinfowler.com/bliki/InfrastructureAsCode.html)
+    - [What is Infrastructure as Code with Terraform?](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/infrastructure-as-code)
+    - [What is Mutable vs. Immutable Infrastructure?](https://www.hashicorp.com/resources/what-is-mutable-vs-immutable-infrastructure)
+    - [Infrastructure as code](https://docs.aws.amazon.com/whitepapers/latest/introduction-devops-aws/infrastructure-as-code.html)
+    - [What is Infrastructure as Code (IaC)?](https://www.redhat.com/en/topics/automation/what-is-infrastructure-as-code-iac)
+    - [Infrastructure as code](https://www.atlassian.com/microservices/cloud-computing/infrastructure-as-code)
+- GitOps
+    - [What is GitOps?](https://www.redhat.com/en/topics/devops/what-is-gitops)
+    - [Is GitOps the next big thing in DevOps?](https://www.atlassian.com/git/tutorials/gitops)
+- Terraform
+    - [HashiCorp Terraform Adoption Stages](https://www.youtube.com/watch?v=FWpCQar9dYg)
+    - [Keeping Terraform Cloud/Enterprise Provider Credentials Secure](https://medium.com/hashicorp-engineering/keeping-terraform-cloud-enterprise-provider-credentials-secure-2edfbd1dfb98)
+    - [Enforcing AWS S3 Security Best Practices Using Terraform & Sentinel](https://medium.com/hashicorp-engineering/enforcing-aws-s3-security-best-practice-using-terraform-sentinel-ddcd181ff4b7)
+    - [The Core Terraform Workflow](https://developer.hashicorp.com/terraform/intro/core-workflow)
+    - [Phases of Terraform Adoption](https://developer.hashicorp.com/terraform/intro/phases)
