@@ -1,0 +1,61 @@
+---
+title: 'The human side of code reviews in large teams'
+excerpt: 'Software development is not just about writing code - it is a collaboration. In large teams working on complex projects, code reviews are meant to be a process of knowledge sharing, quality assurance, and professional growth. At the heart of every code review is a conversation between individuals with different backgrounds, experiences, and perspectives.'
+publishDate: '2025-03-10T18:00:00.000Z'
+heroImage: './heroImage.jpg'
+tags: ['code reviews', 'pull request reviews', 'software development', 'teamwork', 'collaboration']
+---
+
+Software development is not just about writing code - it is a collaboration. In large teams working on complex projects, code reviews are meant to be a process of knowledge sharing, quality assurance, and professional growth. At the heart of every code review is a conversation between individuals with different backgrounds, experiences, and perspectives. Ideally, this conversation should be constructive and goal-oriented. In reality, however, it can become a process filled with miscommunication, assumptions, and even personal friction. Despite the best intentions, they often become a source of frustration, tension, and inefficiency.
+
+In this blog post I would like to showcase a few typical challenges that arise in the code review process, especially in large teams. These challenges are not necessarily technical in nature; they are deeply rooted in the human dynamics of collaboration. By understanding these challenges, we can begin to address them more effectively, creating a more positive and productive code review experience for everyone involved.
+
+Please do not expect a list of solutions in this post. Instead, I only aim to raise awareness of the human side of code reviews. Possible solutions may occasionally be suggested, but they should always be adapted to fit the specific context of your team.
+
+## The impact of vague or low-quality requirements
+
+The foundation of a successful code review starts long before the code is written. When requirements lack clarity, developers are forced to make assumptions. These assumptions then manifest in the code, making it difficult for reviewers to determine whether the change actually fulfills its intended purpose. Poorly defined requirements create a ripple effect, leading to prolonged review cycles, endless back-and-forth discussions, and occasional frustration from both sides.
+
+## The missing context
+
+Code does not exist in isolation - it is a reflection of business requirements, technical constraints, and personal interpretations of best practices. Yet, in many cases, reviewers are asked to assess changes without sufficient context. They may not have attended the meetings where the feature was discussed, and they might not be familiar with the reasoning behind certain decisions. In addition, authors typically do not document their changes thoroughly, further depriving reviewers of crucial background information. This creates an immediate disconnect: the author assumes the reviewer understands, while the reviewer struggles to make sense of the changes.
+
+## The subjective nature of "common sense"
+
+A phrase often heard in development discussions is: "It's just common sense." However, what is considered "common sense" is shaped by a multitude of factors, including an individual's cultural background, professional environment, and unique work experiences. One developer may see a particular approach as self-evidently correct, while another may view it as flawed - each relying on their own set of assumptions and experiences. This subjective nature of "common sense" not only leads to disagreements that can feel more like personal battles than technical discussions, but also highlights how easily misaligned perspectives can disrupt collaboration when a shared framework or explicit standards are absent.
+
+## The emotional weight of code reviews
+
+Software developers take pride in their work. Writing code is not just a mechanical process - it is a creative act that involves problem-solving, design choices, and personal craftsmanship. When their code changes receive heavy criticism, it can feel like an attack on one's skills rather than a critique of the code itself. On the other hand, reviewers also carry the burden of ensuring quality while maintaining a respectful and professional tone. Miscommunication or a poorly worded comment can easily escalate into defensiveness or resentment, making the review process more about emotions than the actual code.
+
+## The absence of standardized guidelines
+
+A related challenge arises when teams do not adopt standardized coding guidelines. In an ideal world, every team follows a clearly defined set of coding standards and architectural principles. In reality, teams often lack comprehensive guidelines, leading to implementations and also reviews based on personal preferences rather than objective criteria. This subjectivity creates inconsistencies - one reviewer might flag an issue that another would overlook. When feedback is unpredictable, developers may feel frustrated or uncertain about what is expected from them.
+
+## The divide between different teams
+
+Large organizations often structure large projects into different smaller teams, each focusing on specific aspects of the system. While this division helps with scalability, it introduces a challenge in code reviews. Reviewers are often from different teams, meaning they were not involved in discussions that shaped the implementation. Without shared context, feedback can sometimes seem arbitrary or uninformed, leading to friction between teams. The disconnect between authors and reviewers can make the process feel bureaucratic rather than collaborative.
+
+## The struggle to balance speed and quality
+
+Every development team operates under deadlines. The pressure to deliver features quickly can sometimes clash with the need for thorough reviews. Developers submitting code changes often want them merged as soon as possible, while reviewers want to ensure quality is maintained. This push-and-pull dynamic creates tension: authors may see reviewers as blockers, while reviewers may feel rushed into approving changes they are not fully comfortable with.
+
+## The social dynamics of critique
+
+Giving and receiving feedback is inherently a social interaction. The way a comment is phrased can determine whether it is taken as helpful advice or as an unnecessary nitpicking. Some developers may struggle with wording feedback in a neutral way, while others may take even constructive criticism personally. In distributed teams, where communication happens primarily through written comments, the lack of verbal cues and facial expressions makes misunderstandings even more likely.
+
+## The underappreciated effort of reviewers
+
+While much attention is given to developers who submit code changes, reviewing them is a time-consuming and often underappreciated task. A good review requires a thoughtful analysis considering edge cases. Both technical and business aspects need to be considered, making high-quality requirements essential. However, in many teams, review is seen as an obligation rather than a valued contribution. Reviewers may rush through the process to keep up with their own development tasks, leading to lower-quality feedbacks and increased frustration for authors.
+
+## Conclusion
+
+In a large, complex software project, authoring code changes and reviewing them are not purely technical exercises. They are deeply human interactions, shaped by context, communication style, and organizational culture. From poorly detailed requirements and incomplete descriptions to the myth of "common sense", each challenge reflects underlying interpersonal dynamics that can hamper collaboration if left unaddressed. It is worth highlighting that without a common set of standards and expectations, it is unrealistic to assume that all team members will naturally reach the same conclusions.
+
+Recognizing these issues is the first step in transforming the code review process into something more constructive and less stressful. In practice, many solutions exist - such as clear documentation, style guides, and better cross-team communication - but the starting point is acknowledging that code reviews are ultimately about people working together. When we understand the human aspect of this workflow, we can begin moving toward more empathetic, supportive, and effective collaboration.
+
+## Additional resources
+
+- [Helping others review your changes](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/getting-started/helping-others-review-your-changes)
+- [How to write the perfect pull request](https://github.blog/developer-skills/github/how-to-write-the-perfect-pull-request/)
+- [How to Pull Request.](https://medium.com/google-developer-experts/how-to-pull-request-d75ac81449a5)
