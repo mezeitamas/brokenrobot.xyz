@@ -83,17 +83,6 @@ test.describe('Post: Hosting a static website on Amazon S3', () => {
 });
 
 test.describe('Post: Advanced static website hosting with Amazon S3 and CloudFront', () => {
-    test('should be accessible from the home page', async ({ page }) => {
-        await page.goto('./');
-        await expect(page).toHaveTitle(/Broken Robot/);
-
-        await page
-            .getByRole('heading')
-            .getByRole('link', { name: 'Advanced static website hosting with Amazon S3 and CloudFront' })
-            .click();
-        await expect(page).toHaveTitle(/Advanced static website hosting with Amazon S3 and CloudFront/);
-    });
-
     test('should be accessible from the blog page', async ({ page }) => {
         await page.goto('./blog');
         await expect(page).toHaveTitle(/Blog/);
@@ -167,5 +156,29 @@ test.describe('Post: The human side of code reviews in large teams', () => {
             .getByRole('link', { name: 'The human side of code reviews in large teams' })
             .click();
         await expect(page).toHaveTitle(/The human side of code reviews in large teams/);
+    });
+});
+
+test.describe('Post: The power of coding conventions in large, distributed teams', () => {
+    test('should be accessible from the home page', async ({ page }) => {
+        await page.goto('./');
+        await expect(page).toHaveTitle(/Broken Robot/);
+
+        await page
+            .getByRole('heading')
+            .getByRole('link', { name: 'The power of coding conventions in large, distributed teams' })
+            .click();
+        await expect(page).toHaveTitle(/The power of coding conventions in large, distributed teams/);
+    });
+
+    test('should be accessible from the blog page', async ({ page }) => {
+        await page.goto('./blog');
+        await expect(page).toHaveTitle(/Blog/);
+
+        await page
+            .getByRole('heading')
+            .getByRole('link', { name: 'The power of coding conventions in large, distributed teams' })
+            .click();
+        await expect(page).toHaveTitle(/The power of coding conventions in large, distributed teams/);
     });
 });
