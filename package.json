@@ -52,7 +52,7 @@
         "autoprefixer": "10.4.21",
         "dotenv": "16.4.7",
         "eslint": "8.57.0",
-        "eslint-import-resolver-typescript": "3.8.4",
+        "eslint-import-resolver-typescript": "3.8.5",
         "eslint-plugin-astro": "1.3.1",
         "eslint-plugin-import": "2.31.0",
         "eslint-plugin-jsx-a11y": "6.10.2",
