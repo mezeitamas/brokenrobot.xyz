@@ -10,6 +10,8 @@ const SITE_METADATA = {
         SOCIAL: {
             GITHUB_URL: 'https://github.com/mezeitamas',
             LINKEDIN_URL: 'https://www.linkedin.com/in/mezeitamas/',
+            BLUESKY_URL: 'https://bsky.app/profile/brokenrobot.xyz',
+            BLUESKY_USERNAME: '@brokenrobot.xyz',
             MASTODON_URL: 'https://mastodon.social/@brokenrobot_xyz',
             MASTODON_USERNAME: '@brokenrobot_xyz@mastodon.social',
             TWITTER_URL: 'https://twitter.com/brokenrobot_xyz',

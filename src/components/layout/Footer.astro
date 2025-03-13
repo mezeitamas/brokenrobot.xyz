@@ -1,5 +1,5 @@
 ---
-import { GithubIcon, LinkedinIcon, GlobeIcon, TwitterIcon, RssIcon } from 'astro-feather';
+import { GithubIcon, LinkedinIcon, GlobeIcon, RssIcon } from 'astro-feather';
 
 import ExternalLink from '@components/links/ExternalLink.astro';
 import InternalLink from '@components/links/InternalLink.astro';
@@ -7,12 +7,12 @@ import InternalLink from '@components/links/InternalLink.astro';
 type Props = {
     githubLink: string;
     linkedinLink: string;
+    blueskyLink: string;
     mastodonLink: string;
-    twitterLink: string;
     authorName: string;
 };
 
-const { githubLink, linkedinLink, mastodonLink, twitterLink, authorName } = Astro.props;
+const { githubLink, linkedinLink, blueskyLink, mastodonLink, authorName } = Astro.props;
 const today = new Date();
 ---
 
@@ -35,16 +35,21 @@ const today = new Date();
                 <div class="flex items-center gap-2">
                     <GlobeIcon />
                     <ExternalLink
+                        href={blueskyLink}
+                        rel="me"
+                    >
+                        Bluesky
+                    </ExternalLink>
+                </div>
+
+                <div class="flex items-center gap-2">
+                    <GlobeIcon />
+                    <ExternalLink
                         href={mastodonLink}
                         rel="me"
                     >
                         Mastodon
                     </ExternalLink>
-                </div>
-
-                <div class="flex items-center gap-2">
-                    <TwitterIcon />
-                    <ExternalLink href={twitterLink}>Twitter</ExternalLink>
                 </div>
             </div>
         </div>
