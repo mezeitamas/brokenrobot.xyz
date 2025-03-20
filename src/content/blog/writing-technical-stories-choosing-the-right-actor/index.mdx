@@ -1,0 +1,237 @@
+---
+title: 'Writing technical stories: choosing the right actor'
+excerpt: 'TODO'
+publishDate: '2025-05-29T15:00:00.000Z'
+heroImage: './heroImage.jpg'
+tags: ['TODO', 'teamwork', 'collaboration']
+---
+
+In agile software development, user stories play a critical role in defining requirements and guiding the implementation. They're written in a concise format—traditionally:
+
+- **As a** [actor],
+- **I want to** [capability],
+- **So that** [benefit].
+
+This structure forces us to answer who needs something (actor), what they need (capability), and why it's valuable (benefit). Often, user stories focus on end-users to keep the conversation customer-centric and business-focused.
+
+However, not all work directly involves end-users. In modern software development - especially with microservices, infrastructure as code, DevOps pipelines, and complex integrations - it's common to write technical stories that outline tasks for services or developers. Technical stories ensure clarity around system requirements and internal improvements (like setting up Kafka consumers or configuring CI/CD).
+
+Yet there are a few challenges:
+
+- **Who is the actor** when there isn't a direct human end-user?
+- **How do we preserve the clarity of business value** when the story is highly technical?
+
+In these scenarios, teams often choose one of two approaches for the actor:
+
+- **As a service** (or **As a system**), framing the story from the perspective of a software component.
+- **As a developer**, focusing on the developer's responsibility and tasks.
+
+Both approaches are valid, but each has its own pros and cons. In this post, we'll explore each style, give examples of how you might write such stories, and provide Behavior-Driven Development (BDD) acceptance criteria we can use to keep our requirements testable and clear.
+
+## "As a service" (or "As a system") actors
+
+### What are they?
+
+In these stories, the _actor_ is not a human but rather a **system component** - a microservice, a background job, or some other automated process. We're effectively giving that service a "voice", stating what capabilities it needs and why, often mapping directly to the architectural role it plays.
+
+Example:
+
+- **As a** service responsible for handling financial messages,
+- **I want to** connect to the Kafka topic where the raw financial messages are published,
+- **So that** I can process them in near real time for downstream transactions.
+
+### Why use them?
+
+#### Microservices and modern architectures
+
+In a microservices architecture, each service has its own scope and responsibilities. Writing user stories from the service's perspective makes it clear which component needs the functionality and how it integrates with the rest of the system.
+
+This approach aligns well with domain-driven design (DDD), where each bounded context (or service) owns a specific part of the domain and has explicit responsibilities.
+
+#### Clarity on ownership
+
+By stating "As a service", we highlight that this requirement belongs to a specific system component. This helps cross-functional teams identify ownership boundaries.
+
+#### Direct mapping to system diagrams
+
+Architectural or deployment diagrams often label components by service name. Using that same name in the user stories provides a straightforward mapping from backlog items to the actual system topology.
+
+#### Reduced risk of oversight
+
+When every service or subsystem "speaks for itself" in the story, it's less likely we'll overlook necessary features, security requirements, or interactions between components.
+
+### Pros
+
+#### Clarity in system role
+
+It explicitly shows which component or service is being enhanced, tying the requirement directly to the architecture.
+
+#### Consistency with broader architecture
+
+Keeping the story aligned with system diagrams, domain-driven designs, and architecture patterns helps cross-referencing multiple services or modules.
+
+#### Reduced ambiguity
+
+By naming the service as the _actor_, we remove confusion about which component needs the capability. It is easier to see how this story fits into the bigger picture.
+
+### Cons
+
+#### Less immediate business context
+
+Non-technical stakeholders might find it harder to see direct user or customer benefits when the _actor_ is a service. The business value might feel abstract unless carefully explained in the "So that" clause.
+
+#### Possibility of technical checklists
+
+The story can become overly focused on internal details (e.g., network ports, protocols, specific configuration parameters), drifting away from business-oriented outcomes.
+
+#### Risk of fragmentation
+
+If every service gets its own set of granular stories, you might have a large backlog of small technical tasks. This is manageable if your team is disciplined, but can overwhelm stakeholders if poorly organized.
+
+### BDD acceptance criteria example
+
+Below is a set of Given-When-Then acceptance criteria for a story where the actor is the service:
+
+**Scenario: Subscribing to the financial messages Kafka topic**
+
+- `Given` the service has valid Kafka broker credentials and addresses
+- `And` the service is connected to the Kafka cluster
+- `When` the service subscribes to the financial messages topic
+- `Then` the subscription is confirmed
+- `And` the service begins consuming messages
+
+**Scenario: Consuming valid messages**
+
+- `Given` valid financial messages exist on the financial messages topic
+- `When` the service consumes a message
+- `Then` the service processes the message successfully
+- `And` commits the message offset
+
+**Scenario: Handling invalid messages**
+
+- `Given` an invalid or malformed financial message is published
+- `When` the service attempts to parse the message
+- `Then` the parsing fails gracefully
+- `And` the service logs an error
+- `And` it routes the message to an error queue
+
+### Highlighting business value for "As a service"
+
+Even though we're talking about a service as the _actor_, it's crucial to maintain a clear "So that" statement. For example:
+
+- `So that` I can process financial messages in real time, ensuring quick and accurate financial transactions for downstream systems, reducing manual overhead, and supporting compliance.
+
+This ensures that even a technical story has a traceable link to a business requirement or a key organizational need.
+
+## "As a developer" actors
+
+### What are they?
+
+In these stories, the _actor_ is the developer (or a DevOps engineer, QA engineer, etc.). The story describes what they need to do - like configuring a new service, refactoring code, updating an environment, or running performance tests - to enable or improve a feature or system behavior.
+
+Example:
+
+- **As a** developer working on the financial messaging system,
+- **I want to** implement a Kafka consumer for the raw financial messages,
+- **So that** our application processes financial transactions in near real time and remains compliant with the standards.
+
+### Why use them?
+
+#### Clarity on responsibility
+
+Identifies the human role who will perform the work, making it straightforward to assign tasks during sprint planning. If we have multiple types of engineers (frontend, backend, DevOps, QA), we can specify which role is responsible for this story.
+
+#### Direct alignment with development tasks
+
+Many technical stories require coding, configuration, or debugging. Writing them from the developer's perspective can make daily stand-ups, task breakdown, and code reviews more intuitive.
+
+#### Encourages ownership and initiative
+
+Developers often need to drive certain implementations or improvements (e.g., code refactoring, writing integration tests, setting up infrastructure). By framing the story around the developer, we encourage accountability and autonomy.
+
+#### Bridge between technical and business value
+
+"As a developer" stories can still emphasize why the change matters to the business. For example, the benefit might be compliance, performance, security, or cost savings - helping the developer connect their code-level tasks to the bigger picture.
+
+#### Easier communication among technical stakeholders
+
+If our primary audience is other developers, DevOps, or architects, they'll immediately grasp the scope and purpose when they see "As a developer". It reduces confusion and fosters productive conversations about the "how" and "why".
+
+### Pros
+
+#### Clarity on ownership
+
+It's very clear who is expected to perform the work - helpful for sprint planning and assigning tasks.
+
+#### Direct alignment with development tasks
+
+The story closely matches the daily work developers do, so it's easier to discuss in stand-ups, backlog refinement, and retros.
+
+#### Better communication with technical stakeholders
+
+By calling out the developer as the _actor_, it focuses on tasks that directly involve coding, configuration, or troubleshooting.
+
+#### Supports developer autonomy
+
+Developers can quickly identify the boundaries of their work and how it connects to overarching product objectives.
+
+### Cons
+
+#### Abstracted from the system
+
+Focusing on the developer might reduce attention on the actual system-level behavior or value to the end user - if not carefully articulated.
+
+#### Potential for task-centric stories
+
+Risk of the story becoming purely about "what I need to do" rather than delivering a business or system requirement. We always need a strong "So that" clause tying it back to value.
+
+#### Less meaningful to non-technical stakeholders
+
+Management or business owners might not immediately see the underlying why behind developer-centric stories, so additional explanation may be needed.
+
+#### Overlap with standard tasks
+
+Sometimes, "As a developer" can sound like day-to-day tasks that might otherwise be part of a technical task or sub-task of a larger story. We need to be sure this approach doesn't overload our board with overly detailed "implement X method" tickets.
+
+### BDD acceptance criteria example
+
+```
+TODO
+```
+
+### Highlighting business value for "As a developer"
+
+It's easy for developer-focused stories to slip into purely technical tasks. To maintain a clear link to business or organizational goals, make sure our "So that" clause statement includes the benefit as it was mentioned earlier in the previous "As a service" section.
+
+## Choosing the right approach
+
+So, should we write "As a service" or "As a developer" stories? It largely depends on:
+
+### Team preferences
+
+If our architecture is heavily service-based and each team or pod owns one or more services, "As a service" might feel natural. It also fits well if our product owners and stakeholders are comfortable discussing requirements at a service or system level.
+
+### Audience
+
+If business stakeholders need high-level visibility, stories about microservices might feel too abstract unless well-explained. Conversely, if our backlog is very technical and primarily consumed by engineers, developer-centric stories might be more direct.
+
+### Maintaining business value
+
+No matter who the _actor_ is, always include a "So that" clause that underscores the real benefit - whether it's customer-facing, operational efficiency, compliance, or performance gains. This is especially important for technical stories to avoid becoming purely task-based.
+
+### Complexity and integration
+
+Consider how many services and integrations we have. If we have numerous microservices, writing user stories per service may help clarity but could also create a large backlog. Balance the detail level so we don't lose sight of the overall feature or epic.
+
+## Conclusion
+
+Technical user stories are essential for capturing the work required to keep systems running smoothly, securely, and efficiently. Whether we choose "As a service" or "As a developer" as our _actor_, ensure that each story maintains:
+
+- A clear **what** (capability or function).
+- A clear **why** (the value or benefit).
+- **BDD-style acceptance criteria** that test the feature in real or realistic scenarios.
+
+By doing so, even the most technical tasks remain grounded in delivering value - whether it's better performance, improved security, streamlined compliance, or a faster time-to-market. Keeping sight of why the technical work matters will help both technical and non-technical stakeholders appreciate the importance of each story in your backlog.
+
+By framing your stories this way, you bridge the gap between purely technical tasks and measurable business value—creating a shared understanding among developers, stakeholders, and management. You’ll also foster better planning, clearer accountability, and improved collaboration within and across teams. Over time, these well-structured technical stories become the backbone of a scalable and resilient architecture—one where every service and developer has a purpose directly aligned with the organization’s objectives.
+Remember, the ultimate goal of any user story—technical or otherwise—is to deliver meaningful outcomes. Whether it’s reduced downtime, enhanced compliance, or quicker feature releases, emphasizing why the work matters keeps the focus on results. This way, your technical stories remain actionable, transparent, and ultimately beneficial to your business and your users.
