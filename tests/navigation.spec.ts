@@ -104,17 +104,6 @@ test.describe('Post: Advanced static website hosting with Amazon S3 and CloudFro
 });
 
 test.describe('Post: URL redirect with Amazon CloudFront and Amazon Route 53', () => {
-    test('should be accessible from the home page', async ({ page }) => {
-        await page.goto('./');
-        await expect(page).toHaveTitle(/Broken Robot/);
-
-        await page
-            .getByRole('heading')
-            .getByRole('link', { name: 'URL redirect with Amazon CloudFront and Amazon Route 53' })
-            .click();
-        await expect(page).toHaveTitle(/URL redirect with Amazon CloudFront and Amazon Route 53/);
-    });
-
     test('should be accessible from the blog page', async ({ page }) => {
         await page.goto('./blog');
         await expect(page).toHaveTitle(/Blog/);
@@ -180,5 +169,29 @@ test.describe('Post: The power of coding conventions in large, distributed teams
             .getByRole('link', { name: 'The power of coding conventions in large, distributed teams' })
             .click();
         await expect(page).toHaveTitle(/The power of coding conventions in large, distributed teams/);
+    });
+});
+
+test.describe('Post: Beyond tabs and spaces: Finding a balance in coding conventions', () => {
+    test('should be accessible from the home page', async ({ page }) => {
+        await page.goto('./');
+        await expect(page).toHaveTitle(/Broken Robot/);
+
+        await page
+            .getByRole('heading')
+            .getByRole('link', { name: 'Beyond tabs and spaces: Finding a balance in coding conventions' })
+            .click();
+        await expect(page).toHaveTitle(/Beyond tabs and spaces: Finding a balance in coding conventions/);
+    });
+
+    test('should be accessible from the blog page', async ({ page }) => {
+        await page.goto('./blog');
+        await expect(page).toHaveTitle(/Blog/);
+
+        await page
+            .getByRole('heading')
+            .getByRole('link', { name: 'Beyond tabs and spaces: Finding a balance in coding conventions' })
+            .click();
+        await expect(page).toHaveTitle(/Beyond tabs and spaces: Finding a balance in coding conventions/);
     });
 });
