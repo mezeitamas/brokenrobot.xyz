@@ -125,17 +125,6 @@ test.describe('Post: URL redirect with Amazon CloudFront and Amazon Route 53', (
 });
 
 test.describe('Post: The human side of code reviews in large teams', () => {
-    test('should be accessible from the home page', async ({ page }) => {
-        await page.goto('./');
-        await expect(page).toHaveTitle(/Broken Robot/);
-
-        await page
-            .getByRole('heading')
-            .getByRole('link', { name: 'The human side of code reviews in large teams' })
-            .click();
-        await expect(page).toHaveTitle(/The human side of code reviews in large teams/);
-    });
-
     test('should be accessible from the blog page', async ({ page }) => {
         await page.goto('./blog');
         await expect(page).toHaveTitle(/Blog/);
@@ -193,5 +182,29 @@ test.describe('Post: Beyond tabs and spaces: Finding a balance in coding convent
             .getByRole('link', { name: 'Beyond tabs and spaces: Finding a balance in coding conventions' })
             .click();
         await expect(page).toHaveTitle(/Beyond tabs and spaces: Finding a balance in coding conventions/);
+    });
+});
+
+test.describe('Post: Navigating cultural clashes in global software teams', () => {
+    test('should be accessible from the home page', async ({ page }) => {
+        await page.goto('./');
+        await expect(page).toHaveTitle(/Broken Robot/);
+
+        await page
+            .getByRole('heading')
+            .getByRole('link', { name: 'Navigating cultural clashes in global software teams' })
+            .click();
+        await expect(page).toHaveTitle(/Navigating cultural clashes in global software teams/);
+    });
+
+    test('should be accessible from the blog page', async ({ page }) => {
+        await page.goto('./blog');
+        await expect(page).toHaveTitle(/Blog/);
+
+        await page
+            .getByRole('heading')
+            .getByRole('link', { name: 'Navigating cultural clashes in global software teams' })
+            .click();
+        await expect(page).toHaveTitle(/Navigating cultural clashes in global software teams/);
     });
 });
