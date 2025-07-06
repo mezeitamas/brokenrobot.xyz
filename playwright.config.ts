@@ -38,45 +38,11 @@ export default defineConfig({
             name: 'Desktop Chrome',
             use: { ...devices['Desktop Chrome'] }
         },
-        {
-            name: 'Desktop Edge',
-            use: { ...devices['Desktop Edge'] }
-        },
-        {
-            name: 'Desktop Firefox',
-            use: { ...devices['Desktop Firefox'] }
-        },
-        {
-            name: 'Desktop Safari',
-            use: { ...devices['Desktop Safari'] }
-        },
-
-        // Tablet browsers
-        {
-            name: 'iPad Pro 11',
-            use: { ...devices['iPad Pro 11'] }
-        },
-        {
-            name: 'iPad Pro 11 landscape',
-            use: { ...devices['iPad Pro 11 landscape'] }
-        },
 
         // Mobile browsers
         {
             name: 'Pixel 7',
             use: { ...devices['Pixel 7'] }
-        },
-        {
-            name: 'Pixel 7 landscape',
-            use: { ...devices['Pixel 7 landscape'] }
-        },
-        {
-            name: 'iPhone 12 Pro',
-            use: { ...devices['iPhone 12 Pro'] }
-        },
-        {
-            name: 'iPhone 12 Pro landscape',
-            use: { ...devices['iPhone 12 Pro landscape'] }
         }
     ],
     webServer: {
