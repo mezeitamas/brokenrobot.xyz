@@ -21,6 +21,7 @@ const { pageTitle, pageDescription } = Astro.props;
 <html
     lang={SITE_METADATA.LANGUAGE}
     dir={SITE_METADATA.DIR}
+    class="scheme-light"
     transition:animate="none"
 >
     <head>
@@ -82,7 +83,7 @@ const { pageTitle, pageDescription } = Astro.props;
     <body class="mx-auto max-w-screen-xl px-4 md:px-6 lg:px-8">
         <Header title={SITE_METADATA.TITLE} />
 
-        <main class="prose my-6 max-w-none md:prose-lg lg:prose-xl">
+        <main class="prose md:prose-lg lg:prose-xl my-6 max-w-none">
             <slot name="content" />
         </main>
 

@@ -1,6 +1,5 @@
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
-import tailwind from '@astrojs/tailwind';
 import { defineConfig } from 'astro/config';
 import { config } from 'dotenv';
 
@@ -8,7 +7,7 @@ config();
 
 export default defineConfig({
     site: 'https://www.brokenrobot.xyz',
-    integrations: [mdx(), sitemap(), tailwind({ applyBaseStyles: false })],
+    integrations: [mdx(), sitemap()],
     compressHTML: true,
     build: {
         inlineStylesheets: 'always'
