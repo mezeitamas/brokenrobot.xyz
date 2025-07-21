@@ -21,14 +21,11 @@ const { posts, HeadingType } = Astro.props;
         posts.map((post) => (
             <article class="flex flex-col items-start justify-between">
                 <header>
-                    <HeadingType transition:name={`post-title-${post.slug}`}>
+                    <HeadingType>
                         <InternalLink href={`/blog/${post.slug}/`}>{post.data.title}</InternalLink>
                     </HeadingType>
 
-                    <FormattedDate
-                        date={post.data.publishDate}
-                        transition:name={`post-publish-date-${post.slug}`}
-                    />
+                    <FormattedDate date={post.data.publishDate} />
 
                     <div class="flex flex-col justify-between gap-4 sm:flex-row sm:gap-8">
                         <div class="basis-1/3">
@@ -43,7 +40,6 @@ const { posts, HeadingType } = Astro.props;
                                     class: 'not-prose rounded-lg'
                                 }}
                                 class="not-prose rounded-lg"
-                                transition:name={`post-hero-image-${post.slug}`}
                             />
                         </div>
 

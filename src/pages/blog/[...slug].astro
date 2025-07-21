@@ -34,14 +34,11 @@ const {
     tags={tags}
 >
     <Fragment slot="content">
-        <article>
+        <article data-pagefind-body>
             <header>
-                <h1 transition:name={`post-title-${post.slug}`}>{title}</h1>
+                <h1>{title}</h1>
 
-                <FormattedDate
-                    date={publishDate}
-                    transition:name={`post-publish-date-${post.slug}`}
-                />
+                <FormattedDate date={publishDate} />
             </header>
 
             <section>
@@ -56,7 +53,6 @@ const {
                         class: 'not-prose rounded-lg'
                     }}
                     class="not-prose rounded-lg"
-                    transition:name={`post-hero-image-${post.slug}`}
                 />
 
                 <Content />
