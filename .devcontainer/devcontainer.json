@@ -4,7 +4,7 @@
     "features": {
         "ghcr.io/devcontainers/features/git:1": {},
         "ghcr.io/devcontainers/features/node:1": {
-            "version": "24.3.0"
+            "version": "24.9.0"
         },
         "ghcr.io/devcontainers/features/terraform:1": {}
     },
