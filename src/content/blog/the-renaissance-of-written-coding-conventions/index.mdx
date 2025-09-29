@@ -1,0 +1,115 @@
+---
+title: 'The renaissance of written coding conventions: Because AI reads manuals, too'
+excerpt: 'Coding conventions are having a renaissance. AI agents code with us now, and they learn what we teach. Time to dust off the manual, because AI reads manuals, too. This post is a bit more frontend-focused, but everything here maps to other areas of software development just as well.'
+publishDate: '2025-10-12T18:00:00.000Z'
+heroImage: './heroImage.jpg'
+tags:
+    [
+        'coding conventions',
+        'style guides',
+        'software development guidelines',
+        'AI pair programming',
+        'code quality',
+        'team collaboration'
+    ]
+---
+
+import BlogPostPicture from '@components/picture/BlogPostPicture.astro';
+
+import xkcdCodeQuality from './xkcd-code_quality.png';
+
+Coding conventions are having a renaissance. AI agents code with us now, and they learn what we teach. Time to dust off the manual, because AI reads manuals, too. This post is a bit more frontend-focused, but everything here maps to other areas of software development just as well.
+
+## The era of must-read coding conventions
+
+Not so long ago (around 15-20 years back), software teams often kicked off projects by creating a comprehensive coding conventions and style guide document. This written guide was essentially a required reading for every new developer joining the team. It spelled out everything from naming patterns to file organization and best practices including extensive reasoning why certain choices were made. The goal was to make the codebase feel consistent - "_as if a single developer is writing, debugging, and maintaining it_". By adhering to one agreed-upon style, teams got multiple benefits:
+
+- **Smoother onboarding**: New joiners (especially junior developers) could ramp up faster by studying the guide. It served as a condensed knowledge base of the team's collective experience and preferences.
+- **Consistent code reviews**: With clear expectations set on day one, code reviews were less contentious. Reviewers could point to the document instead of personal opinions, reducing friction.
+- **Unified codebase**: When everyone followed the same conventions, the project's code felt cohesive. A reader shouldn't tell which developer wrote which module. Consistency made the system easier to understand and maintain.
+
+As an example, the frontend world saw influential style guides. [John Papa's AngularJS Style Guide](https://github.com/johnpapa/angular-styleguide/blob/master/a1/README.md) became a must-read for AngularJS developers, outlining everything from project structure to naming conventions. Many teams adopted such public guides or their own variants to enforce best practices. Similarly, the broader JavaScript community often cited the [Airbnb JavaScript Style Guide](https://github.com/airbnb/javascript) as a gold standard for consistent ES5/ES6 code. Back then, reading and internalizing these manuals was just part of a developer's life. In fact, ignoring them wasn't wise-doing so could earn us some raised eyebrows in code reviews.
+
+## When code reviews ran on conventions
+
+<BlogPostPicture
+    src={xkcdCodeQuality}
+    alt="Code Quality - xkcd"
+/>
+
+Jokes aside, [this `xkcd` comic by Randall Munroe](https://xkcd.com/1513/) underscores a real point: without shared conventions, code quality suffers and reviews become painful. Back in the "golden age" of style guides, **teams believed in catching issues before they reached production by encoding lessons into their conventions**. For example, a style guide might forbid an antipattern or mandate certain file naming schemes - serving as preventive documentation.
+
+One software craftsmanship blog from 2016 advised:
+
+> Once you've decided on the JavaScript coding standards for your application, write them down. A written style guide is a great resource to use during development. It can help resolve issues before they become a problem.
+
+In other words, many disagreements were settled by, "_What does the guide say?_" rather than by who had the louder voice.
+
+## Automation changes the game: linters and "sane defaults"
+
+As tooling evolved in the 2010s, the landscape of coding conventions began to shift. We saw the rise of powerful linters and auto-formatters - think `ESLint` and `Prettier` for JavaScript, and so on. These tools could automatically enforce many low-level rules. Suddenly, **teams felt less pressure to maintain a prose document telling people where to put commas or semicolons**. The tools would simply refuse bad formatting or even auto-fix it on save.
+
+_This was incredibly liberating in some ways_. Teams stopped bikeshedding over tabs vs spaces or whether an if brace should go on a new line. The industry settled on broadly accepted defaults, thanks to popular configs like the Airbnb style guide or Google style guides baked into linters. Frontend projects gradually stopped updating old style guide documents - instead, an `.eslintrc.json` was dropped in the repo and we called it a day.
+
+In job interviews around that time, for the question "_What coding conventions do you use on your current project?_" the reply was often: "_We use `ESLint`_". Not exactly the comprehensive answer one can hope for, but it reflected the mindset of the era. Lint config = coding standard.
+
+There was truth in that. Modern linters cover a lot: they catch unused variables, enforce naming styles, flag complexity issues, and ensure everyone's editor formats the code consistently. By the late 2010s, developers largely let the machines have the final say on superficial style.
+
+However, there was a flip side. **Relying solely on tools for "_sane defaults_" meant that explicit agreements among team members became rarer**. The linters enforced the letter of style rules, but not necessarily the spirit or the higher-level design conventions. Teams would still encounter situations not covered by a linter rule, for example: _How should we structure our React components and folders? Or which patterns are preferred for state management?_ These are more architectural/style decisions that `ESLint` doesn't dictate. Without a written guide or deliberate discussion, such questions were answered inconsistently or left to each developer's personal preference. Over time, the following could be observed, leading to challenges:
+
+- **New team members beyond syntax**: Sure, they could run `npm run lint` and fix issues to appease the linter, but who would teach them why the codebase is organized a certain way? Or the naming convention for components vs utilities? In the absence of documentation, they learned by trial and error.
+- **Code review friction**: Ironically, code reviews didn't disappear. Humans now spent review time on semantic and structural disagreements (since formatting was handled by tools). Without a documented consensus, reviews could devolve into subjective debates: for example, one reviewer prefers a different project structure and there's no guide to back either side. This sometimes made the process frustrating - the very thing old style guides aimed to avoid.
+- **Lost learning opportunities**: Those old style guides often included rationales and examples ("_do X, here's why_"). Juniors could read them and absorb good practices proactively. With an "_`ESLint` is our convention_" approach, we only learn rules when we violate them, and we might never learn the rationale. The learning material aspect of coding conventions diminished.
+
+In short, while automated tools kept the code tidy, some teams started experiencing a subtle drift in human alignment. Moreover, [the real drivers why we're coding a certain way were forgotten](/blog/beyond-tabs-and-spaces-finding-a-balance-in-coding-conventions).
+
+The documented culture of code was thinning out. We hadn't quite realized what was missing - until another revolutionary force arrived on the scene.
+
+## Enter the AI pair programmer (and the return of written guidelines)
+
+Fast forward to the 2020s: the rise of AI coding assistants like GitHub Copilot and others. Suddenly, we have non-human agents writing significant chunks of code alongside us. This has been a game-changer for productivity and also for how we think about coding conventions. In an unexpected twist, **written coding standards are seeing a renaissance** - this time, for the sake of both our human teammates and our AI helpers.
+
+Why is this happening? It turns out AI is a stellar imitator - it learns from whatever codebase we give it. And if our codebase is inconsistent or chaotic... well, the AI will reflect that. As one engineering blog put it bluntly:
+
+> When your codebase follows consistent patterns, AI assistants become force multipliers. When it doesn't, they become chaos amplifiers.
+
+In other words, an undisciplined codebase can confuse our AI pair programmer, causing it to suggest wildly varying or odd solutions. Garbage in, garbage out!
+
+Teams are discovering that to harness AI effectively, they must explicitly define and feed their conventions to the AI. Remember those old style guides gathering dust? They're being revived in a new form. For example, GitHub has introduced [Custom Instructions for Copilot](https://docs.github.com/en/copilot/how-tos/configure-custom-instructions/add-repository-instructions), allowing developers to specify project-specific coding styles and standards. This way, Copilot can tailor its suggestions to the defined style rather than just some generic average.
+
+Other toolmakers are on the same track. The JetBrains team (makers of IntelliJ and WebStorm) recently discussed building AI-friendly style guides into their products. They envision a shared document of guidelines that becomes:
+
+> A contract to share with AI agents when prompting them to generate code.
+
+Essentially, we maintain a living style guide (covering coding style, dos and don'ts, common pitfalls, etc), and we literally add it into the AI's prompt or configuration. The AI will then attempt to follow those rules when writing code for us. This concept is so important that JetBrains is creating a [catalog of AI-ready coding guidelines](https://github.com/JetBrains/junie-guidelines) for popular frameworks (Spring, React, Angular, etc), which developers can customize and use.
+
+Why go through this trouble? Because it works. If we clearly tell an AI, for example, "_Use the project's naming conventions and error handling patterns_", we're far more likely to get output that doesn't need massive rework. An AI assistant can produce a working piece of code, but without guidance it might omit important details or stylistic nuances.
+
+Perhaps the most intriguing aspect of this AI-driven revival is how it's changing team dynamics. Now, instead of humans constantly reminding each other about code style, we externalize that role to a friendly AI. The team writes down the conventions (for the AI's sake as well as their own), and the AI becomes the tireless enforcer/suggester of those conventions.
+
+Developers today joke that working with an AI pair programmer is oddly pleasant because "_there's no ego, infinite patience, perfect memory_" on the AI's side. It will never tire of following the style guide or get annoyed at a nitpick. In fact, developers seem to have more patience for guiding AIs than for correcting fellow humans - after all, an AI won't take offense or argue back.
+
+If the AI suggests something off-base, we just tweak the instructions or correct it, and it learns. This dynamic has subtly improved the human side of teamwork too: code reviews between people can focus more on substance (since many stylistic issues were already handled by AI suggestions or automated checks). It's as if the AI has become an intermediary that absorbs the mundane stylistic feedback, leaving humans to collaborate on higher-level problems.
+
+## Conclusion: embracing the old to harness the new
+
+In the grand timeline of software development, coding conventions have come full circle. What started as detailed team manuals eventually gave way to automation and assumed defaults. We gained efficiency, but perhaps lost some shared understanding in the process. Now, with AI as the new kid on the team, we're rediscovering the value of being explicit. The act of writing down how we code - our styles, idioms, and little unwritten rules - turns out to be crucial for communicating with an AI partner (and still pretty helpful for human ones).
+
+The tone around coding standards has become analytical yet optimistic: teams realize that conventions aren't about pedantry or micromanaging developers. Coding standards aren't really about making the code pretty, but making the code predictable. Predictable for anyone who reads it, be it a colleague or an AI. **Predictability and consistency form the backbone of maintainable software**.
+
+So, here we are in 2025, essentially writing coding conventions / style guides for our AI. It might sound ironic, but it's a positive development. It means we care about quality and consistency enough to teach it to our tools. And unlike a static document sitting in a binder, today's style guide can be a living thing - enforced by linters, auto-formatters, and echoed by AI assistants in every pull request. The result? Onboarding new developers is smoother (they have both docs and lint rules to follow), code reviews are saner, and our AI helpers produce code that feels like our code.
+
+In embracing this revival of coding conventions, we aren't moving backwards - we're combining the best of both worlds: human wisdom captured in guidelines, and machine efficiency in enforcement. The humble style guide has evolved from a PDF on a wiki to a multi-faceted toolkit that ensures everyone - humans and AI agents alike - writes code in harmony. That's a win-win for code quality and team productivity.
+
+Ultimately, good coding conventions help fulfill the old adage that
+
+> Any fool can write code that a computer can understand. Good programmers write code that humans can understand.
+
+By investing in conventions, we ensure both humans and our new AI collaborators can understand and contribute to the codebase in a positive, predictable way. And if that means spending a bit of time writing down our do's and don'ts again, it's well worth the effort. **Consistency is back in style**, and our teams (and digital teammates) are better for it.
+
+## Used resources
+
+- [JavaScript Best Practices: Part 2 - JavaScript Coding Standards](https://www.bti360.com/javascript-coding-standards/)
+- [Enterprise Coding Standards: 12 Rules for AI-Ready Teams](https://www.augmentcode.com/guides/enterprise-coding-standards-12-rules-for-ai-ready-teams)
+- [Coding Guidelines for Your AI Agents](https://blog.jetbrains.com/idea/2025/05/coding-guidelines-for-your-ai-agents/)
+- [awesome-copilot](https://github.com/github/awesome-copilot)
