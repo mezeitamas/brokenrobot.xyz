@@ -125,17 +125,6 @@ test.describe('Post: URL redirect with Amazon CloudFront and Amazon Route 53', (
 });
 
 test.describe('Post: The human side of code reviews in large teams', () => {
-    test('should be accessible from the home page', async ({ page }) => {
-        await page.goto('./');
-        await expect(page).toHaveTitle(/Broken Robot/);
-
-        await page
-            .getByRole('heading')
-            .getByRole('link', { name: 'The human side of code reviews in large teams' })
-            .click();
-        await expect(page).toHaveTitle(/The human side of code reviews in large teams/);
-    });
-
     test('should be accessible from the blog page', async ({ page }) => {
         await page.goto('./blog');
         await expect(page).toHaveTitle(/Blog/);
@@ -193,5 +182,29 @@ test.describe('Post: Beyond tabs and spaces: Finding a balance in coding convent
             .getByRole('link', { name: 'Beyond tabs and spaces: Finding a balance in coding conventions' })
             .click();
         await expect(page).toHaveTitle(/Beyond tabs and spaces: Finding a balance in coding conventions/);
+    });
+});
+
+test.describe('Post: The renaissance of written coding conventions: Because AI reads manuals, too', () => {
+    test('should be accessible from the home page', async ({ page }) => {
+        await page.goto('./');
+        await expect(page).toHaveTitle(/Broken Robot/);
+
+        await page
+            .getByRole('heading')
+            .getByRole('link', { name: 'The renaissance of written coding conventions: Because AI reads manuals, too' })
+            .click();
+        await expect(page).toHaveTitle(/The renaissance of written coding conventions: Because AI reads manuals, too/);
+    });
+
+    test('should be accessible from the blog page', async ({ page }) => {
+        await page.goto('./blog');
+        await expect(page).toHaveTitle(/Blog/);
+
+        await page
+            .getByRole('heading')
+            .getByRole('link', { name: 'The renaissance of written coding conventions: Because AI reads manuals, too' })
+            .click();
+        await expect(page).toHaveTitle(/The renaissance of written coding conventions: Because AI reads manuals, too/);
     });
 });
