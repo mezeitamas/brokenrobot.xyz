@@ -138,17 +138,6 @@ test.describe('Post: The human side of code reviews in large teams', () => {
 });
 
 test.describe('Post: The power of coding conventions in large, distributed teams', () => {
-    test('should be accessible from the home page', async ({ page }) => {
-        await page.goto('./');
-        await expect(page).toHaveTitle(/Broken Robot/);
-
-        await page
-            .getByRole('heading')
-            .getByRole('link', { name: 'The power of coding conventions in large, distributed teams' })
-            .click();
-        await expect(page).toHaveTitle(/The power of coding conventions in large, distributed teams/);
-    });
-
     test('should be accessible from the blog page', async ({ page }) => {
         await page.goto('./blog');
         await expect(page).toHaveTitle(/Blog/);
@@ -206,5 +195,37 @@ test.describe('Post: The renaissance of written coding conventions: Because AI r
             .getByRole('link', { name: 'The renaissance of written coding conventions: Because AI reads manuals, too' })
             .click();
         await expect(page).toHaveTitle(/The renaissance of written coding conventions: Because AI reads manuals, too/);
+    });
+});
+
+test.describe('Post: Learned helplessness in software teams: Symptoms, causes, and the path to empowerment', () => {
+    test('should be accessible from the home page', async ({ page }) => {
+        await page.goto('./');
+        await expect(page).toHaveTitle(/Broken Robot/);
+
+        await page
+            .getByRole('heading')
+            .getByRole('link', {
+                name: 'Learned helplessness in software teams: Symptoms, causes, and the path to empowerment'
+            })
+            .click();
+        await expect(page).toHaveTitle(
+            /Learned helplessness in software teams: Symptoms, causes, and the path to empowerment/
+        );
+    });
+
+    test('should be accessible from the blog page', async ({ page }) => {
+        await page.goto('./blog');
+        await expect(page).toHaveTitle(/Blog/);
+
+        await page
+            .getByRole('heading')
+            .getByRole('link', {
+                name: 'Learned helplessness in software teams: Symptoms, causes, and the path to empowerment'
+            })
+            .click();
+        await expect(page).toHaveTitle(
+            /Learned helplessness in software teams: Symptoms, causes, and the path to empowerment/
+        );
     });
 });
