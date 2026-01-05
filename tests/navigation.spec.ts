@@ -150,30 +150,6 @@ test.describe('Post: The power of coding conventions in large, distributed teams
     });
 });
 
-test.describe('Post: Beyond tabs and spaces: Finding a balance in coding conventions', () => {
-    test('should be accessible from the home page', async ({ page }) => {
-        await page.goto('./');
-        await expect(page).toHaveTitle(/Broken Robot/);
-
-        await page
-            .getByRole('heading')
-            .getByRole('link', { name: 'Beyond tabs and spaces: Finding a balance in coding conventions' })
-            .click();
-        await expect(page).toHaveTitle(/Beyond tabs and spaces: Finding a balance in coding conventions/);
-    });
-
-    test('should be accessible from the blog page', async ({ page }) => {
-        await page.goto('./blog');
-        await expect(page).toHaveTitle(/Blog/);
-
-        await page
-            .getByRole('heading')
-            .getByRole('link', { name: 'Beyond tabs and spaces: Finding a balance in coding conventions' })
-            .click();
-        await expect(page).toHaveTitle(/Beyond tabs and spaces: Finding a balance in coding conventions/);
-    });
-});
-
 test.describe('Post: The renaissance of written coding conventions: Because AI reads manuals, too', () => {
     test('should be accessible from the home page', async ({ page }) => {
         await page.goto('./');
@@ -227,5 +203,29 @@ test.describe('Post: Learned helplessness in software teams: Symptoms, causes, a
         await expect(page).toHaveTitle(
             /Learned helplessness in software teams: Symptoms, causes, and the path to empowerment/
         );
+    });
+});
+
+test.describe('Post: Navigating cultural clashes in global software teams', () => {
+    test('should be accessible from the home page', async ({ page }) => {
+        await page.goto('./');
+        await expect(page).toHaveTitle(/Broken Robot/);
+
+        await page
+            .getByRole('heading')
+            .getByRole('link', { name: 'Navigating cultural clashes in global software teams' })
+            .click();
+        await expect(page).toHaveTitle(/Navigating cultural clashes in global software teams/);
+    });
+
+    test('should be accessible from the blog page', async ({ page }) => {
+        await page.goto('./blog');
+        await expect(page).toHaveTitle(/Blog/);
+
+        await page
+            .getByRole('heading')
+            .getByRole('link', { name: 'Navigating cultural clashes in global software teams' })
+            .click();
+        await expect(page).toHaveTitle(/Navigating cultural clashes in global software teams/);
     });
 });
