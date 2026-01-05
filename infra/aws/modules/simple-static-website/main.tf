@@ -71,9 +71,9 @@ module "cloudfront_website" {
     bucket_domain_name = module.s3_bucket_logs.bucket_domain_name
   }
 
-  aws_acm_certificate_arn = var.cloudfront_website.acm_certificate_arn
+  aws_acm_certificate_arn                    = var.cloudfront_website.acm_certificate_arn
   aws_cloudfront_function_viewer_request_arn = var.cloudfront_website.aws_cloudfront_function_viewer_request_arn
-  content_security_policy = var.cloudfront_website.content_security_policy
+  content_security_policy                    = var.cloudfront_website.content_security_policy
   aliases = [
     var.apex_domain_name,
     "www.${var.apex_domain_name}"

@@ -55,6 +55,18 @@ jobs:
       - name: TerraForm validate
         run: terraform validate -no-color
 
+      - name: Go to infra/cloudflare
+        run: cd infra/cloudflare
+
+      - name: TerraForm format check
+        run: terraform fmt -check
+
+      - name: TerraForm init
+        run: terraform init
+
+      - name: TerraForm validate
+        run: terraform validate -no-color
+
   build:
     name: 'Build'
     runs-on: ubuntu-24.04
@@ -122,8 +134,8 @@ jobs:
           path: reports/tests/e2e/
           retention-days: 3
 
-  deploy:
-    name: 'Deploy'
+  deploy-to-aws:
+    name: 'Deploy to AWS'
     runs-on: ubuntu-24.04
     needs: [verify, build, test]
     if: github.ref == 'refs/heads/main'
@@ -152,3 +164,31 @@ jobs:
 
       - name: Invalidate AWS CloudFront cache
         run: aws cloudfront create-invalidation --distribution-id ${{ secrets.AWS_CLOUDFRONT_DISTRIBUTION_ID }} --paths "/*"
+
+  deploy-to-cloudflare:
+    name: 'Deploy to Cloudflare'
+    runs-on: ubuntu-24.04
+    needs: [verify, build, test]
+    if: github.ref == 'refs/heads/main'
+    timeout-minutes: 10
+    environment: Cloudflare
+    concurrency:
+      group: Cloudflare
+      cancel-in-progress: true
+    permissions:
+      contents: read
+      deployments: write
+
+    steps:
+      - name: Download dist
+        uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist/
+
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy ./dist --project-name=${{ secrets.CLOUDFLARE_PROJECT_NAME }} --branch=main
