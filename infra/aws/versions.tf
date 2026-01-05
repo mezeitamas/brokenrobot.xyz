@@ -1,14 +1,12 @@
-# Contains version requirements for Terraform and providers
-
 terraform {
+  required_version = "~> 1.14.0"
+
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "~> 5.38.0"
+      version = "~> 6.27.0"
     }
   }
-
-  required_version = ">= 1.7.4"
 }
 
 provider "aws" {
