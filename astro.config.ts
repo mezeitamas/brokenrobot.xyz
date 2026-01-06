@@ -3,6 +3,8 @@ import sitemap from '@astrojs/sitemap';
 import { defineConfig } from 'astro/config';
 import { config } from 'dotenv';
 
+import { remarkReadingTimePlugin } from './src/utils/remarkReadingTimePlugin';
+
 config();
 
 export default defineConfig({
@@ -11,6 +13,9 @@ export default defineConfig({
     compressHTML: true,
     build: {
         inlineStylesheets: 'always'
+    },
+    markdown: {
+        remarkPlugins: [remarkReadingTimePlugin]
     },
     server: {
         port: process.env.BROKENROBOT_PORT === undefined ? 4321 : parseInt(process.env.BROKENROBOT_PORT, 10),

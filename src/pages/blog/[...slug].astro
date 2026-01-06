@@ -4,7 +4,8 @@ import { type CollectionEntry, getCollection } from 'astro:content';
 
 import ArticleLayout from '@layouts/ArticleLayout.astro';
 
-import FormattedDate from '@components/FormattedDate.astro';
+import PublishDate from '@components/blog-posts/PublishDate.astro';
+import ReadingTime from '@components/blog-posts/ReadingTime.astro';
 
 import { SITE_METADATA } from '../../consts';
 
@@ -20,7 +21,7 @@ export async function getStaticPaths() {
 type Props = CollectionEntry<'blog'>;
 
 const post = Astro.props;
-const { Content } = await post.render();
+const { Content, remarkPluginFrontmatter } = await post.render();
 const {
     data: { title, excerpt, publishDate, heroImage, tags }
 } = post;
@@ -36,12 +37,13 @@ const {
     <Fragment slot="content">
         <article>
             <header>
-                <h1 transition:name={`post-title-${post.slug}`}>{title}</h1>
+                <h1>{title}</h1>
 
-                <FormattedDate
-                    date={publishDate}
-                    transition:name={`post-publish-date-${post.slug}`}
-                />
+                <div class="flex flex-col sm:flex-row sm:gap-8">
+                    <PublishDate date={publishDate} />
+
+                    <ReadingTime minutesRead={remarkPluginFrontmatter.minutesRead} />
+                </div>
             </header>
 
             <section>
@@ -56,7 +58,6 @@ const {
                         class: 'not-prose rounded-lg'
                     }}
                     class="not-prose rounded-lg"
-                    transition:name={`post-hero-image-${post.slug}`}
                 />
 
                 <Content />
