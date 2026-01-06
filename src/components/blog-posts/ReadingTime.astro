@@ -1,0 +1,14 @@
+---
+import { ClockIcon } from 'astro-feather';
+
+type Props = {
+    minutesRead: string;
+};
+
+const { minutesRead } = Astro.props;
+---
+
+<div class="flex items-center gap-2">
+    <ClockIcon />
+    {minutesRead}
+</div>

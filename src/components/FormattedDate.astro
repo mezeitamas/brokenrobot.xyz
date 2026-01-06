@@ -3,14 +3,15 @@ import { SITE_METADATA } from '../consts';
 
 type Props = {
     date: Date;
+    locale?: string;
 };
 
-const { date } = Astro.props;
+const { date, locale } = Astro.props;
 ---
 
 <time datetime={date.toISOString()}>
     {
-        date.toLocaleDateString(SITE_METADATA.LANGUAGE, {
+        date.toLocaleDateString(locale ?? SITE_METADATA.LANGUAGE, {
             year: 'numeric',
             month: 'long',
             day: 'numeric'

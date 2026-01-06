@@ -1,0 +1,16 @@
+---
+import { CalendarIcon } from 'astro-feather';
+
+import FormattedDate from '@components/FormattedDate.astro';
+
+type Props = {
+    date: Date;
+};
+
+const { date } = Astro.props;
+---
+
+<div class="flex items-center gap-2">
+    <CalendarIcon />
+    <FormattedDate date={date} />
+</div>
