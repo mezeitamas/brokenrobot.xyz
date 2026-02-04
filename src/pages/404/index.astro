@@ -5,8 +5,6 @@ import PageLayout from '@layouts/PageLayout.astro';
 
 import InternalLink from '@components/links/InternalLink.astro';
 
-import { SITE_METADATA } from '../../consts';
-
 import n404Image from './404.jpg';
 ---
 
@@ -21,10 +19,7 @@ import n404Image from './404.jpg';
             <Picture
                 src={n404Image}
                 alt="404"
-                formats={['avif', 'webp']}
-                widths={SITE_METADATA.SRC_SET_BREAKPOINTS}
-                loading="lazy"
-                decoding="async"
+                layout="full-width"
                 pictureAttributes={{
                     class: 'rounded-lg'
                 }}

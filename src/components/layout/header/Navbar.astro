@@ -1,0 +1,25 @@
+---
+import { HomeIcon, BookOpenIcon, UserIcon } from 'astro-feather';
+
+import NavbarItem from './NavbarItem.astro';
+---
+
+<nav>
+    <div class="flex items-center justify-center gap-6 sm:gap-10">
+        <NavbarItem
+            title="Home"
+            href="/"
+            Icon={HomeIcon}
+        />
+        <NavbarItem
+            title="Blog"
+            href="/blog"
+            Icon={BookOpenIcon}
+        />
+        <NavbarItem
+            title="About"
+            href="/about"
+            Icon={UserIcon}
+        />
+    </div>
+</nav>

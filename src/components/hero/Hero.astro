@@ -1,0 +1,54 @@
+---
+import { Picture } from 'astro:assets';
+
+import { Title } from './title/Title';
+import { RecentPostsButton } from './/RecentPostsButton';
+
+import iBrokenRobotImage from './broken-robot.png';
+---
+
+<section class="mx-auto flex min-h-svh max-w-3xl flex-col items-center justify-center gap-5">
+    {/* Broken Robot image */}
+    <div class="w-64 sm:w-100">
+        <Picture
+            src={iBrokenRobotImage}
+            alt="Broken Robot"
+            layout="full-width"
+            loading="eager"
+            fetchpriority="high"
+        />
+    </div>
+
+    {/* Status indicator */}
+    <div class="flex items-center gap-2 rounded-full border border-solid border-black px-5 py-1.5">
+        <span class="relative flex size-3">
+            <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-amber-500 opacity-75"></span>
+            <span class="relative inline-flex size-3 rounded-full bg-amber-600"></span>
+        </span>
+
+        <span class="text-xs"> SYSTEM ONLINE </span>
+    </div>
+
+    {/* Title */}
+    <Title client:load />
+
+    {/* Description */}
+    <div class="text-center">
+        Welcome to my little corner of the web, where I share my professional experiences, thoughts, adventures, and
+        projects with the world.
+    </div>
+
+    {/* Call to action */}
+    <div class="flex gap-4">
+        <RecentPostsButton
+            client:load
+            scrollToPostsSectionId="recent-posts-section"
+        />
+
+        <a
+            href="/about"
+            class="inline-flex h-12 min-h-12 shrink-0 cursor-pointer flex-wrap items-center justify-center rounded-xl border border-solid border-black px-4 text-center hover:bg-slate-100"
+            >About me</a
+        >
+    </div>
+</section>

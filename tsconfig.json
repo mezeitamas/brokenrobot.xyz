@@ -5,9 +5,12 @@
         "strictNullChecks": true,
         "verbatimModuleSyntax": true,
         "baseUrl": ".",
+        "jsx": "react-jsx",
+        "jsxImportSource": "react",
         "paths": {
             "@assets/*": ["src/assets/*"],
             "@components/*": ["src/components/*"],
+            "@fonts/*": ["src/fonts/*"],
             "@layouts/*": ["src/layouts/*"],
             "@styles/*": ["src/styles/*"]
         },

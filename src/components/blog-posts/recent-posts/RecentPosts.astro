@@ -1,0 +1,58 @@
+---
+import { getCollection } from 'astro:content';
+import { ArrowRightIcon, CalendarIcon } from 'astro-feather';
+
+import FormattedDate from '@components/FormattedDate.astro';
+
+const posts = (await getCollection('blog'))
+    .sort((a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf())
+    .slice(0, 3);
+---
+
+<section
+    id="recent-posts-section"
+    class="mx-auto flex max-w-5xl flex-col gap-5"
+>
+    <h2 class="text-center text-2xl font-bold sm:text-5xl">Recent posts</h2>
+
+    <div class="text-center">Thoughts on software architecture, team dynamics, and the craft of coding.</div>
+
+    {
+        posts.map((post) => (
+            <article class="group flex flex-col items-start justify-between gap-4 rounded-xl border border-solid border-black p-6">
+                <div class="flex items-center gap-2">
+                    <CalendarIcon size={14} />
+                    <FormattedDate date={post.data.publishDate} />
+                </div>
+
+                <h3 class="line-clamp-2 text-lg font-bold sm:text-xl">{post.data.title}</h3>
+
+                <div class="line-clamp-2">{post.data.excerpt}</div>
+
+                <div class="flex justify-center">
+                    <a
+                        href={`/blog/${post.id}/`}
+                        class="flex cursor-pointer flex-wrap items-center justify-center gap-2 text-center"
+                    >
+                        <span>Read post</span>
+                        <span class="transition-transform group-hover:translate-x-1">
+                            <ArrowRightIcon size={16} />
+                        </span>
+                    </a>
+                </div>
+            </article>
+        ))
+    }
+
+    <div class="flex justify-center">
+        <a
+            href="/blog"
+            class="group flex h-12 min-h-12 shrink-0 cursor-pointer flex-wrap items-center justify-center gap-2 rounded-xl border border-solid border-black px-4 text-center hover:bg-slate-100"
+        >
+            <span>View all posts</span>
+            <span class="transition-transform group-hover:translate-x-1">
+                <ArrowRightIcon size={16} />
+            </span>
+        </a>
+    </div>
+</section>

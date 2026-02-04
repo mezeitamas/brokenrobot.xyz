@@ -1,8 +1,9 @@
 ---
+import '@fonts/poppins';
 import '@styles/base.css';
 
 import PreloadFonts from '@components/fonts/PreloadFonts.astro';
-import Header from '@components/layout/Header.astro';
+import Header from '@components/layout/header/Header.astro';
 import Footer from '@components/layout/Footer.astro';
 
 import { SITE_METADATA } from '../consts';
@@ -75,10 +76,10 @@ const { pageTitle, pageDescription } = Astro.props;
         <slot name="seo" />
     </head>
 
-    <body class="mx-auto max-w-screen-xl px-4 md:px-6 lg:px-8">
+    <body class="mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
         <Header title={SITE_METADATA.TITLE} />
 
-        <main class="prose md:prose-lg lg:prose-xl my-6 max-w-none">
+        <main>
             <slot name="content" />
         </main>
 

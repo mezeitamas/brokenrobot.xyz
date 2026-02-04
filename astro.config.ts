@@ -1,4 +1,5 @@
 import mdx from '@astrojs/mdx';
+import react from '@astrojs/react';
 import sitemap from '@astrojs/sitemap';
 import { defineConfig } from 'astro/config';
 import { config } from 'dotenv';
@@ -9,10 +10,13 @@ config();
 
 export default defineConfig({
     site: 'https://www.brokenrobot.xyz',
-    integrations: [mdx(), sitemap()],
+    integrations: [react(), mdx(), sitemap()],
     compressHTML: true,
     build: {
         inlineStylesheets: 'always'
+    },
+    image: {
+        responsiveStyles: true
     },
     markdown: {
         remarkPlugins: [remarkReadingTimePlugin]

@@ -1,0 +1,17 @@
+---
+import Navbar from './Navbar.astro';
+
+type Props = {
+    title: string;
+};
+
+const { title } = Astro.props;
+---
+
+<header class="flex flex-col items-center justify-between px-6 py-2 sm:flex-row">
+    <div class="flex h-12 min-h-12 items-center text-xl font-bold">
+        <a href="/">{title}</a>
+    </div>
+
+    <Navbar />
+</header>

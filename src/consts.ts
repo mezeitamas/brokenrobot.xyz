@@ -17,8 +17,7 @@ const SITE_METADATA = {
             TWITTER_URL: 'https://twitter.com/brokenrobot_xyz',
             TWITTER_USERNAME: '@brokenrobot_xyz'
         }
-    },
-    SRC_SET_BREAKPOINTS: [384, 640, 768, 1024, 1280]
+    }
 };
 
 export { SITE_METADATA };
