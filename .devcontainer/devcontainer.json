@@ -3,10 +3,12 @@
     "image": "mcr.microsoft.com/devcontainers/base:ubuntu-24.04",
     "features": {
         "ghcr.io/devcontainers/features/git:1": {},
-        "ghcr.io/devcontainers/features/node:1": {
-            "version": "25.4.0"
+        "ghcr.io/devcontainers/features/node:2": {
+            "version": "26.1.0"
         },
-        "ghcr.io/devcontainers/features/terraform:1": {}
+        "ghcr.io/devcontainers/features/terraform:1": {
+            "version": "1.15.3"
+        }
     },
     "postCreateCommand": "npm install && npm run install:playwright",
     "customizations": {
