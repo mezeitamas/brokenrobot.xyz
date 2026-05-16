@@ -41,7 +41,9 @@ jobs:
         run: npm run type:check
 
       - name: Set up TerraForm
-        uses: hashicorp/setup-terraform@v3
+        uses: hashicorp/setup-terraform@v4
+        with:
+          terraform_version: '1.15.3'
 
       - name: Go to infra/aws
         run: cd infra/aws
