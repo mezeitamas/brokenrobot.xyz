@@ -19,7 +19,7 @@ const { posts, HeadingType } = Astro.props;
             <article class="flex flex-col items-start justify-between">
                 <header>
                     <HeadingType>
-                        <InternalLink href={`/blog/${post.slug}/`}>{post.data.title}</InternalLink>
+                        <InternalLink href={`/blog/${post.id}/`}>{post.data.title}</InternalLink>
                     </HeadingType>
 
                     <PublishDate date={post.data.publishDate} />

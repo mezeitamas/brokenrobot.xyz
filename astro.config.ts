@@ -14,6 +14,9 @@ export default defineConfig({
     build: {
         inlineStylesheets: 'always'
     },
+    image: {
+        responsiveStyles: true
+    },
     markdown: {
         remarkPlugins: [remarkReadingTimePlugin]
     },

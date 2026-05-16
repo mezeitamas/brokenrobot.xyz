@@ -116,7 +116,7 @@ const posts = (await getCollection('blog'))
                 {
                     posts.map((post) => (
                         <li>
-                            <InternalLink href={`/blog/${post.slug}/`}>{post.data.title}</InternalLink>
+                            <InternalLink href={`/blog/${post.id}/`}>{post.data.title}</InternalLink>
                         </li>
                     ))
                 }
