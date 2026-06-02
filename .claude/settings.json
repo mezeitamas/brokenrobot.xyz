@@ -1,4 +1,8 @@
 {
+    "env": {
+        "ASTRO_TELEMETRY_DISABLED": "1",
+        "OPENSPEC_TELEMETRY": "0"
+    },
     "sandbox": {
         "enabled": true,
         "failIfUnavailable": true,
@@ -13,10 +17,11 @@
                 "~/.docker",
                 "/var/run/docker.sock",
                 "~/.local/share/fnm",
-                "~/.local/state/fnm_multishells"
+                "~/.local/state/fnm_multishells",
+                "~/Library/Preferences/astro"
             ],
             "denyWrite": ["/tmp", "/etc", "/usr", "/opt"],
-            "allowWrite": [".", "/var/folders"]
+            "allowWrite": [".", "/var/folders", "~/Library/Preferences/astro"]
         },
         "network": {
             "allowedDomains": ["localhost", "127.0.0.1", "host.docker.internal", "github.com", "*.npmjs.org"],
@@ -110,6 +115,9 @@
             "Bash(mv *)",
             "Bash(ln *)",
             "Bash(rm *)",
+
+            "Bash(npm run *)",
+            "Bash(npm run)",
 
             "Bash(openspec *)"
         ],

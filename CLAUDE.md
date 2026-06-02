@@ -80,3 +80,4 @@ Read these before working on the design overhaul — they are the shared source 
 - [docs/architecture.md](docs/architecture.md) — code structure, content model, and theming guidance.
 - [docs/coding-conventions.md](docs/coding-conventions.md) — TypeScript, formatting, Astro patterns, and testing rules.
 - [docs/commit-conventions.md](docs/commit-conventions.md) — Conventional Commits and commit message guidance.
+- [docs/spec-driven-development.md](docs/spec-driven-development.md) — plan site changes (features, design, infra) with OpenSpec; writing blog articles is out of scope.
