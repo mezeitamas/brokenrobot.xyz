@@ -14,3 +14,5 @@ feel, and how the code is built. Read these before working on the design overhau
   and testing rules.
 - [commit-conventions.md](commit-conventions.md) — Conventional Commits and commit message
   guidance.
+- [spec-driven-development.md](spec-driven-development.md) — how site changes are planned with
+  OpenSpec (and why writing blog articles is out of scope).
