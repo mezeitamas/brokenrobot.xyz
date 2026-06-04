@@ -7,15 +7,20 @@ design overhaul.
 
 ## Shape of the stack
 
-- **Astro** is the foundation — a static-site generator. There is no client-side UI framework
-  (no React/Vue/Svelte); pages are Astro components rendered to static HTML at build time.
+- **Astro** is the foundation — a static-site generator. Pages are Astro components rendered
+  to static HTML at build time, shipping zero JS by default.
+- **Preact** (via `@astrojs/preact`) is the standard for interactive UI, added as hydrated
+  **islands** (`client:*`) to minimize hand-written vanilla JS. Non-interactive pages still
+  ship no JS; only islands (e.g. the header theme toggle) load the small Preact runtime. The
+  one deliberate vanilla exception is a tiny pre-paint theme-init script (see below).
 - **Content is Markdown/MDX**, authored as one folder per post under `src/content/blog/` and
   loaded through Astro's content collections (see [architecture](architecture.md)). A small
   remark plugin adds reading-time to each post.
 - **Styling is Tailwind CSS** (via PostCSS) plus the typography plugin for long-form `prose`.
 - **TypeScript runs in the strictest mode** — the type system is a first-class guardrail (see
   [coding-conventions](coding-conventions.md)).
-- **Fonts are self-hosted** (currently Poppins), not pulled from a third-party CDN.
+- **Fonts are self-hosted** (Space Grotesk for display/UI, Newsreader for article prose, Space
+  Mono for code/labels), not pulled from a third-party CDN.
 - **Discoverability is built in:** an RSS feed and an XML sitemap are generated at build time,
   and structured data (JSON-LD) is typed.
 - **Quality is automated:** ESLint + Prettier for static analysis and formatting; Playwright
@@ -42,12 +47,15 @@ design overhaul.
 
 ## Implications for the overhaul
 
-- **Theme toggle without a UI framework.** Light/dark must be done with Astro + a small inline
-  script and CSS custom properties. It must be **CSP-safe** (the CSP allows
-  `script-src 'self' 'unsafe-inline'`; avoid inline `on*` handlers). See
-  [architecture](architecture.md).
-- **Fonts stay self-hosted** (`font-src 'self'`, no third-party font CDNs). New typefaces are
-  added the same way Poppins is, with preloading and `font-display: swap`.
+- **Interactivity via Preact islands.** Stateful UI (e.g. the theme toggle) is a Preact island
+  hydrated with `client:*`; its hydration loads as an external module under `script-src 'self'`
+  (no inline handlers). Prefer this over hand-written vanilla JS.
+- **Theme set before paint by one inline script.** The pre-paint theme resolution (read
+  preference → set `data-theme`) cannot be an island — hydration runs after load and would
+  flash. It stays a tiny inline script, CSP-safe via the already-allowed
+  `script-src 'unsafe-inline'`, with no inline `on*` handlers. See [architecture](architecture.md).
+- **Fonts stay self-hosted** (`font-src 'self'`, no third-party font CDNs), with preloading and
+  `font-display: swap`; only the weights actually used are shipped.
 - **Stylesheets are inlined**, so keep CSS lean; design tokens belong in `src/styles/base.css`.
 - **Everything is static** — there is no server runtime to lean on for theming or
   personalization.

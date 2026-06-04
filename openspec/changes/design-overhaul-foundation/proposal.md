@@ -17,12 +17,14 @@ Out of scope (follow-up change): page redesigns (home/blog/article/about/404) an
 ## Capabilities
 
 ### New Capabilities
+
 - `theming`: Semantic design tokens for light + dark, and the theme-toggle behavior (no-flash inline init, persistence, `prefers-color-scheme`, WCAG AA contrast in both themes).
 - `typography`: The self-hosted typeface system (Space Grotesk / Newsreader / Space Mono), preloading, and `font-display: swap`.
 - `brand-mascot`: The reusable broken-robot SVG component — poses, theme-awareness, and reduced-motion behavior.
 - `site-chrome`: The redesigned header (logo, nav, theme toggle) and footer (mascot, blurb, links, sign-off).
 
 ### Modified Capabilities
+
 <!-- None — no existing specs; all capabilities are new. -->
 
 ## Impact

@@ -68,27 +68,35 @@ the `ReadingTime` component.
 ## Conventions
 
 - **Component organization:** group by feature in subfolders (`seo/`, `blog-posts/`,
-  `links/`, `layout/`). PascalCase component files.
+  `links/`, `layout/`, `mascot/`, `theme/`). PascalCase component files.
+- **Interactive components are Preact islands.** Non-interactive UI is plain Astro (zero JS).
+  For interactivity, add a Preact component (`.tsx`) and mount it with a `client:*` directive
+  (e.g. `src/components/theme/ThemeToggle.tsx` mounted `client:load` in the header). Keep
+  islands small and few; hydration loads from `self` (CSP-friendly).
 - **SEO / structured data:** OpenGraph (`meta-og/`), Twitter cards (`meta-twitter/`), and
   JSON-LD (`rich-results/`, typed with `schema-dts`). Fonts preloaded via `PreloadFonts`.
 - **Links:** use `InternalLink` / `ExternalLink` rather than raw `<a>`.
 - **Site metadata:** centralized in `src/consts.ts` (`SITE_METADATA`) — title, description,
   author, socials, image breakpoints. Add new global constants here.
 
-## Theming architecture (for the overhaul)
+## Theming architecture
 
-The light/dark system is new work. Guidance:
+The light/dark system, as implemented in the foundation:
 
-- **Design tokens as CSS custom properties** defined in `src/styles/base.css` under
-  `@layer base`. Express the semantic roles from [brand](brand.md) (`--color-bg`,
-  `--color-surface`, `--color-text`, `--color-muted`, `--color-accent`, …).
-- **Theme selection on `<html>`** via a `class` or `data-theme` attribute (today it's
-  `class="scheme-light"`). Define token values once for light and override them for dark.
-  Map Tailwind to these tokens so utilities and `prose` follow the theme.
-- **Toggle must be CSP-safe.** No inline `on*` event handlers. Use a small `<script>`
-  (allowed by `script-src 'self' 'unsafe-inline'`) to read/persist the preference
-  (localStorage), honor `prefers-color-scheme`, and set the attribute before paint to avoid
-  a flash. See [tech-stack](tech-stack.md) for the CSP details.
+- **Design tokens as CSS custom properties** in `src/styles/base.css` under `@layer base`:
+  light values on `:root`, dark overrides on `html[data-theme="dark"]`. They express the
+  semantic roles from [brand](brand.md) (`--bg`, `--surface`, `--surface-2`, `--text`,
+  `--muted`, `--border`, `--accent`, `--accent-ink`, code colors, shadows, `--ff-*`).
+- **Tokens exposed to Tailwind** via `@theme inline` (e.g. `--color-bg: var(--bg)`), so
+  utilities like `bg-bg`/`text-muted` and the `prose` mapping (`--tw-prose-*`) follow the
+  theme.
+- **Theme selection on `<html>`** via the `data-theme` attribute. A tiny **inline script** in
+  `BaseLayout`'s `<head>` (passed as a string via `set:html`) resolves the theme before paint
+  (localStorage → `prefers-color-scheme` → light) to avoid a flash — CSP-safe via the
+  already-allowed `script-src 'unsafe-inline'`, with no inline `on*` handlers.
+- **The toggle is a Preact island** (`src/components/theme/ThemeToggle.tsx`, `client:load`)
+  that flips `data-theme`, persists the choice, and updates its `aria-pressed`/label. It is a
+  separate concern from the pre-paint init above.
 - **Both themes are first-class** — every component, the mascot, and `prose` article styling
-  must be verified in light and dark (see [coding-conventions](coding-conventions.md) for
+  must read well in light and dark (see [coding-conventions](coding-conventions.md) for
   snapshot coverage).

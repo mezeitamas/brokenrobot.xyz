@@ -43,6 +43,18 @@ index, with `exports-last`. Prefer the path aliases (`@components`, `@layouts`, 
 - Use **named slots** for content/SEO injection (e.g. `<slot name="content" />`).
 - Prefer the existing `InternalLink` / `ExternalLink` components over raw anchors.
 
+## Preact islands
+
+- **Interactivity is a Preact island, not vanilla JS.** Write interactive UI as a Preact
+  component (`.tsx`) and mount it from an Astro file with a `client:*` directive (e.g.
+  `client:load`). Reserve plain inline scripts for the rare pre-paint case (the theme init).
+- Keep islands **small and few** — they ship the Preact runtime to the page. Non-interactive
+  UI stays plain Astro.
+- `.tsx` follows the same strict TypeScript rules as `.ts` (and jsx-a11y); it is covered by
+  `lint:check`, `format:check`, and `type:check`. JSX uses Preact (`jsxImportSource: preact`).
+- Use the idiomatic `class` attribute (not `className`) and style via Tailwind utilities that
+  resolve to tokens (e.g. `bg-surface`, `text-text`, `border-border`).
+
 ## Styling
 
 - **Tailwind-first.** Reach for utilities before custom CSS.
