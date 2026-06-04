@@ -23,10 +23,10 @@
 - [x] 4.2 Add a dark `theme-color` meta variant alongside the existing light one
 - [x] 4.3 Confirm the inline init introduces no `on*` handlers and leaves the CSP unchanged (relies on the already-allowed `script-src 'unsafe-inline'`)
 
-## 5. Theme toggle (Preact island)
+## 5. Theme toggle (Astro client-side script)
 
-- [x] 5.1 Create a `ThemeToggle` Preact component (sun/moon `<button>`) that reads the current `data-theme`, flips it on click, persists to `localStorage`, and keeps `aria-pressed`/`aria-label` in sync (server-stable initial state synced via `useEffect` to avoid hydration mismatch)
-- [x] 5.2 Mount it in the header with a `client:load` directive; confirmed hydration ships as an external module under `script-src 'self'` (no inline handler) and the inline init guarantees correct state before hydration
+- [x] 5.1 Create `ThemeToggle.astro` rendering both sun/moon SVGs, with CSS choosing the icon from `html[data-theme]` so it's correct on the first frame (no flash); a bundled `<script>` importing `theme-toggle.ts` wires the click (flip `data-theme`, persist to `localStorage`, sync `aria-pressed`)
+- [x] 5.2 Mount it in the header; confirmed the script loads as an external module under `script-src 'self'` (no inline handler) and there is no island/hydration. Add the `*.astro/*.ts` ESLint override so component `<script>`s lint. (Initially built as a Preact island; switched to an Astro script to eliminate a post-hydration icon flash.)
 
 ## 6. Mascot component
 

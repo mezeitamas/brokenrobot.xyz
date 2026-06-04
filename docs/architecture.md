@@ -69,10 +69,12 @@ the `ReadingTime` component.
 
 - **Component organization:** group by feature in subfolders (`seo/`, `blog-posts/`,
   `links/`, `layout/`, `mascot/`, `theme/`). PascalCase component files.
-- **Interactive components are Preact islands.** Non-interactive UI is plain Astro (zero JS).
-  For interactivity, add a Preact component (`.tsx`) and mount it with a `client:*` directive
-  (e.g. `src/components/theme/ThemeToggle.tsx` mounted `client:load` in the header). Keep
-  islands small and few; hydration loads from `self` (CSP-friendly).
+- **Interactivity: Preact islands for stateful UI, Astro scripts for simple DOM wiring.**
+  Non-interactive UI is plain Astro (zero JS). For stateful widgets, add a Preact component
+  (`.tsx`) and mount it `client:*` (page phase: search, mobile menu, code-copy). For small
+  behavior, prefer a bundled Astro `<script>` importing a `.ts` module — e.g. the theme toggle
+  (`ThemeToggle.astro` + `theme-toggle.ts`). Keep client JS small; it loads from `self`
+  (CSP-friendly).
 - **SEO / structured data:** OpenGraph (`meta-og/`), Twitter cards (`meta-twitter/`), and
   JSON-LD (`rich-results/`, typed with `schema-dts`). Fonts preloaded via `PreloadFonts`.
 - **Links:** use `InternalLink` / `ExternalLink` rather than raw `<a>`.
@@ -94,9 +96,11 @@ The light/dark system, as implemented in the foundation:
   `BaseLayout`'s `<head>` (passed as a string via `set:html`) resolves the theme before paint
   (localStorage → `prefers-color-scheme` → light) to avoid a flash — CSP-safe via the
   already-allowed `script-src 'unsafe-inline'`, with no inline `on*` handlers.
-- **The toggle is a Preact island** (`src/components/theme/ThemeToggle.tsx`, `client:load`)
-  that flips `data-theme`, persists the choice, and updates its `aria-pressed`/label. It is a
-  separate concern from the pre-paint init above.
+- **The toggle is a bundled Astro client-side script** (`ThemeToggle.astro` importing
+  `theme-toggle.ts`): the correct sun/moon icon is chosen by CSS from `html[data-theme]` (so
+  it's right on the first frame — no flash), and the script only wires the click (flip
+  `data-theme`, persist, update `aria-pressed`). It is deliberately **not** a Preact island —
+  an island renders before it knows the theme, which flashes the wrong icon on load.
 - **Both themes are first-class** — every component, the mascot, and `prose` article styling
   must read well in light and dark (see [coding-conventions](coding-conventions.md) for
   snapshot coverage).

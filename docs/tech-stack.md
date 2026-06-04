@@ -9,10 +9,11 @@ design overhaul.
 
 - **Astro** is the foundation — a static-site generator. Pages are Astro components rendered
   to static HTML at build time, shipping zero JS by default.
-- **Preact** (via `@astrojs/preact`) is the standard for interactive UI, added as hydrated
-  **islands** (`client:*`) to minimize hand-written vanilla JS. Non-interactive pages still
-  ship no JS; only islands (e.g. the header theme toggle) load the small Preact runtime. The
-  one deliberate vanilla exception is a tiny pre-paint theme-init script (see below).
+- **Preact** (via `@astrojs/preact`) is the standard for **stateful** interactive UI, added as
+  hydrated **islands** (`client:*`) to minimize hand-written vanilla JS — reserved for the page
+  phase (search, mobile menu, code-copy). Non-interactive pages ship no JS. Simple DOM wiring
+  (like the theme toggle) uses a bundled Astro `<script>` instead of an island, and the
+  pre-paint theme-init is a tiny inline script (see below).
 - **Content is Markdown/MDX**, authored as one folder per post under `src/content/blog/` and
   loaded through Astro's content collections (see [architecture](architecture.md)). A small
   remark plugin adds reading-time to each post.
@@ -47,13 +48,14 @@ design overhaul.
 
 ## Implications for the overhaul
 
-- **Interactivity via Preact islands.** Stateful UI (e.g. the theme toggle) is a Preact island
-  hydrated with `client:*`; its hydration loads as an external module under `script-src 'self'`
-  (no inline handlers). Prefer this over hand-written vanilla JS.
+- **Interactivity loads from `self`.** Both Preact islands and bundled Astro `<script>`s ship
+  as external modules under `script-src 'self'` (no inline handlers). Stateful UI → Preact
+  island; simple DOM wiring → an Astro `<script>` importing a `.ts` module (the theme toggle).
 - **Theme set before paint by one inline script.** The pre-paint theme resolution (read
-  preference → set `data-theme`) cannot be an island — hydration runs after load and would
-  flash. It stays a tiny inline script, CSP-safe via the already-allowed
-  `script-src 'unsafe-inline'`, with no inline `on*` handlers. See [architecture](architecture.md).
+  preference → set `data-theme`) cannot be deferred to a module/island — it would flash. It
+  stays a tiny inline script, CSP-safe via the already-allowed `script-src 'unsafe-inline'`,
+  with no inline `on*` handlers. The toggle's icon is then chosen by CSS from `data-theme`, so
+  it's correct on the first frame. See [architecture](architecture.md).
 - **Fonts stay self-hosted** (`font-src 'self'`, no third-party font CDNs), with preloading and
   `font-display: swap`; only the weights actually used are shipped.
 - **Stylesheets are inlined**, so keep CSS lean; design tokens belong in `src/styles/base.css`.
