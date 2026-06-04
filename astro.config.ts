@@ -1,4 +1,5 @@
 import mdx from '@astrojs/mdx';
+import preact from '@astrojs/preact';
 import sitemap from '@astrojs/sitemap';
 import { defineConfig } from 'astro/config';
 import { config } from 'dotenv';
@@ -9,7 +10,7 @@ config();
 
 export default defineConfig({
     site: 'https://www.brokenrobot.xyz',
-    integrations: [mdx(), sitemap()],
+    integrations: [preact(), mdx(), sitemap()],
     compressHTML: true,
     build: {
         inlineStylesheets: 'always'

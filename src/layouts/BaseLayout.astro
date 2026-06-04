@@ -13,15 +13,32 @@ type Props = {
 };
 
 const { pageTitle, pageDescription } = Astro.props;
+
+// Resolve the theme before first paint to avoid a flash of the wrong theme.
+// Kept as an inline string so it runs synchronously in <head> (CSP allows inline scripts).
+const themeInitScript = `(function () {
+  try {
+    var stored = localStorage.getItem('theme');
+    var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    document.documentElement.dataset.theme =
+      stored === 'light' || stored === 'dark' ? stored : prefersDark ? 'dark' : 'light';
+  } catch (e) {
+    document.documentElement.dataset.theme = 'light';
+  }
+})();`;
 ---
 
 <!doctype html>
 <html
     lang={SITE_METADATA.LANGUAGE}
     dir={SITE_METADATA.DIR}
-    class="scheme-light"
 >
     <head>
+        <script
+            is:inline
+            set:html={themeInitScript}
+        />
+
         <meta charset="utf-8" />
         <meta
             name="viewport"
@@ -34,7 +51,12 @@ const { pageTitle, pageDescription } = Astro.props;
         <meta
             name="theme-color"
             media="(prefers-color-scheme: light)"
-            content="white"
+            content="#faf7f2"
+        />
+        <meta
+            name="theme-color"
+            media="(prefers-color-scheme: dark)"
+            content="#17150f"
         />
         <link
             rel="sitemap"
@@ -75,10 +97,10 @@ const { pageTitle, pageDescription } = Astro.props;
         <slot name="seo" />
     </head>
 
-    <body class="mx-auto max-w-screen-xl px-4 md:px-6 lg:px-8">
+    <body>
         <Header title={SITE_METADATA.TITLE} />
 
-        <main class="prose md:prose-lg lg:prose-xl my-6 max-w-none">
+        <main class="prose md:prose-lg lg:prose-xl mx-auto my-10 max-w-screen-xl px-4 md:px-6 lg:px-8">
             <slot name="content" />
         </main>
 

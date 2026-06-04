@@ -1,172 +1,182 @@
 @import 'tailwindcss';
 @plugin '@tailwindcss/typography';
 
+/* Expose semantic tokens to Tailwind utilities (e.g. bg-bg, text-muted, font-prose).
+   `inline` keeps them as var() references so utilities stay theme-aware. */
+@theme inline {
+    --color-bg: var(--bg);
+    --color-surface: var(--surface);
+    --color-surface-2: var(--surface-2);
+    --color-text: var(--text);
+    --color-muted: var(--muted);
+    --color-border: var(--border);
+    --color-accent: var(--accent);
+    --color-accent-ink: var(--accent-ink);
+
+    --font-display: var(--ff-display);
+    --font-prose: var(--ff-prose);
+    --font-mono: var(--ff-mono);
+}
+
 @layer base {
+    /* ---- Design tokens: light (default) ---- */
     :root {
-        font-family: 'Poppins';
+        --bg: #faf7f2;
+        --surface: #ffffff;
+        --surface-2: #f4f0e8;
+        --text: #211d18;
+        --muted: #7c7264;
+        --border: #e8e1d5;
+        --accent: #f59e0b;
+        --accent-ink: #b45309;
+        --code-bg: #211e19;
+        --code-text: #ece6da;
+        --code-line: #33302a;
+        --shadow: 0 1px 2px rgba(33, 29, 24, 0.05), 0 8px 24px -12px rgba(33, 29, 24, 0.18);
+        --shadow-lift: 0 2px 4px rgba(33, 29, 24, 0.06), 0 18px 40px -18px rgba(33, 29, 24, 0.3);
+        --accent-soft: color-mix(in srgb, var(--accent) 14%, var(--bg));
+        --tape: color-mix(in srgb, var(--accent) 34%, transparent);
+
+        --ff-display: 'Space Grotesk', system-ui, sans-serif;
+        --ff-prose: 'Newsreader', Georgia, serif;
+        --ff-mono: 'Space Mono', ui-monospace, monospace;
+
+        font-family: var(--ff-display);
+        color-scheme: light;
     }
 
-    @font-face {
-        font-family: 'Poppins';
-        font-style: normal;
-        font-display: swap;
-        font-weight: 100;
-        src:
-            url(/assets/fonts/poppins-latin-100-normal.woff2) format('woff2'),
-            url(/assets/fonts/poppins-latin-100-normal.woff) format('woff');
+    /* ---- Design tokens: dark overrides ---- */
+    html[data-theme='dark'] {
+        --bg: #17150f;
+        --surface: #201d17;
+        --surface-2: #2a2620;
+        --text: #f4efe4;
+        --muted: #a89e8d;
+        --border: #332e25;
+        --accent: #f59e0b;
+        --accent-ink: #fbbf24;
+        --code-bg: #0f0e0b;
+        --code-text: #ece6da;
+        --code-line: #262320;
+        --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 10px 30px -14px rgba(0, 0, 0, 0.6);
+        --shadow-lift: 0 2px 4px rgba(0, 0, 0, 0.4), 0 22px 48px -20px rgba(0, 0, 0, 0.7);
+
+        color-scheme: dark;
     }
-    @font-face {
-        font-family: 'Poppins';
-        font-style: normal;
-        font-display: swap;
-        font-weight: 200;
-        src:
-            url(/assets/fonts/poppins-latin-200-normal.woff2) format('woff2'),
-            url(/assets/fonts/poppins-latin-200-normal.woff) format('woff');
+
+    body {
+        background: var(--bg);
+        color: var(--text);
+        font-family: var(--ff-display);
+        transition:
+            background 0.35s ease,
+            color 0.35s ease;
     }
-    @font-face {
-        font-family: 'Poppins';
-        font-style: normal;
-        font-display: swap;
-        font-weight: 300;
-        src:
-            url(/assets/fonts/poppins-latin-300-normal.woff2) format('woff2'),
-            url(/assets/fonts/poppins-latin-300-normal.woff) format('woff');
+
+    /* ---- Long-form article prose: map Tailwind Typography to tokens ---- */
+    .prose {
+        --tw-prose-body: var(--text);
+        --tw-prose-headings: var(--text);
+        --tw-prose-lead: var(--muted);
+        --tw-prose-links: var(--accent-ink);
+        --tw-prose-bold: var(--text);
+        --tw-prose-counters: var(--muted);
+        --tw-prose-bullets: var(--border);
+        --tw-prose-hr: var(--border);
+        --tw-prose-quotes: var(--text);
+        --tw-prose-quote-borders: var(--accent);
+        --tw-prose-captions: var(--muted);
+        --tw-prose-code: var(--text);
+        --tw-prose-pre-code: var(--code-text);
+        --tw-prose-pre-bg: var(--code-bg);
+        --tw-prose-th-borders: var(--border);
+        --tw-prose-td-borders: var(--border);
+
+        font-family: var(--ff-prose);
     }
+
+    .prose :is(h1, h2, h3, h4) {
+        font-family: var(--ff-display);
+    }
+
+    /* ---- Self-hosted fonts (woff2) ---- */
     @font-face {
-        font-family: 'Poppins';
+        font-family: 'Space Grotesk';
         font-style: normal;
         font-display: swap;
         font-weight: 400;
-        src:
-            url(/assets/fonts/poppins-latin-400-normal.woff2) format('woff2'),
-            url(/assets/fonts/poppins-latin-400-normal.woff) format('woff');
+        src: url(/assets/fonts/space-grotesk-latin-400-normal.woff2) format('woff2');
     }
     @font-face {
-        font-family: 'Poppins';
+        font-family: 'Space Grotesk';
         font-style: normal;
         font-display: swap;
         font-weight: 500;
-        src:
-            url(/assets/fonts/poppins-latin-500-normal.woff2) format('woff2'),
-            url(/assets/fonts/poppins-latin-500-normal.woff) format('woff');
+        src: url(/assets/fonts/space-grotesk-latin-500-normal.woff2) format('woff2');
     }
     @font-face {
-        font-family: 'Poppins';
+        font-family: 'Space Grotesk';
         font-style: normal;
         font-display: swap;
         font-weight: 600;
-        src:
-            url(/assets/fonts/poppins-latin-600-normal.woff2) format('woff2'),
-            url(/assets/fonts/poppins-latin-600-normal.woff) format('woff');
+        src: url(/assets/fonts/space-grotesk-latin-600-normal.woff2) format('woff2');
     }
     @font-face {
-        font-family: 'Poppins';
+        font-family: 'Space Grotesk';
         font-style: normal;
         font-display: swap;
         font-weight: 700;
-        src:
-            url(/assets/fonts/poppins-latin-700-normal.woff2) format('woff2'),
-            url(/assets/fonts/poppins-latin-700-normal.woff) format('woff');
-    }
-    @font-face {
-        font-family: 'Poppins';
-        font-style: normal;
-        font-display: swap;
-        font-weight: 800;
-        src:
-            url(/assets/fonts/poppins-latin-800-normal.woff2) format('woff2'),
-            url(/assets/fonts/poppins-latin-800-normal.woff) format('woff');
-    }
-    @font-face {
-        font-family: 'Poppins';
-        font-style: normal;
-        font-display: swap;
-        font-weight: 900;
-        src:
-            url(/assets/fonts/poppins-latin-900-normal.woff2) format('woff2'),
-            url(/assets/fonts/poppins-latin-900-normal.woff) format('woff');
+        src: url(/assets/fonts/space-grotesk-latin-700-normal.woff2) format('woff2');
     }
 
     @font-face {
-        font-family: 'Poppins';
-        font-style: italic;
+        font-family: 'Newsreader';
+        font-style: normal;
         font-display: swap;
-        font-weight: 100;
-        src:
-            url(/assets/fonts/poppins-latin-100-italic.woff2) format('woff2'),
-            url(/assets/fonts/poppins-latin-100-italic.woff) format('woff');
+        font-weight: 400;
+        src: url(/assets/fonts/newsreader-latin-400-normal.woff2) format('woff2');
     }
     @font-face {
-        font-family: 'Poppins';
-        font-style: italic;
-        font-display: swap;
-        font-weight: 200;
-        src:
-            url(/assets/fonts/poppins-latin-200-italic.woff2) format('woff2'),
-            url(/assets/fonts/poppins-latin-200-italic.woff) format('woff');
-    }
-    @font-face {
-        font-family: 'Poppins';
-        font-style: italic;
-        font-display: swap;
-        font-weight: 300;
-        src:
-            url(/assets/fonts/poppins-latin-300-italic.woff2) format('woff2'),
-            url(/assets/fonts/poppins-latin-300-italic.woff) format('woff');
-    }
-    @font-face {
-        font-family: 'Poppins';
+        font-family: 'Newsreader';
         font-style: italic;
         font-display: swap;
         font-weight: 400;
-        src:
-            url(/assets/fonts/poppins-latin-400-italic.woff2) format('woff2'),
-            url(/assets/fonts/poppins-latin-400-italic.woff) format('woff');
+        src: url(/assets/fonts/newsreader-latin-400-italic.woff2) format('woff2');
     }
     @font-face {
-        font-family: 'Poppins';
-        font-style: italic;
+        font-family: 'Newsreader';
+        font-style: normal;
         font-display: swap;
         font-weight: 500;
-        src:
-            url(/assets/fonts/poppins-latin-500-italic.woff2) format('woff2'),
-            url(/assets/fonts/poppins-latin-500-italic.woff) format('woff');
+        src: url(/assets/fonts/newsreader-latin-500-normal.woff2) format('woff2');
     }
     @font-face {
-        font-family: 'Poppins';
-        font-style: italic;
+        font-family: 'Newsreader';
+        font-style: normal;
         font-display: swap;
         font-weight: 600;
-        src:
-            url(/assets/fonts/poppins-latin-600-italic.woff2) format('woff2'),
-            url(/assets/fonts/poppins-latin-600-italic.woff) format('woff');
+        src: url(/assets/fonts/newsreader-latin-600-normal.woff2) format('woff2');
+    }
+
+    @font-face {
+        font-family: 'Space Mono';
+        font-style: normal;
+        font-display: swap;
+        font-weight: 400;
+        src: url(/assets/fonts/space-mono-latin-400-normal.woff2) format('woff2');
     }
     @font-face {
-        font-family: 'Poppins';
+        font-family: 'Space Mono';
         font-style: italic;
+        font-display: swap;
+        font-weight: 400;
+        src: url(/assets/fonts/space-mono-latin-400-italic.woff2) format('woff2');
+    }
+    @font-face {
+        font-family: 'Space Mono';
+        font-style: normal;
         font-display: swap;
         font-weight: 700;
-        src:
-            url(/assets/fonts/poppins-latin-700-italic.woff2) format('woff2'),
-            url(/assets/fonts/poppins-latin-700-italic.woff) format('woff');
-    }
-    @font-face {
-        font-family: 'Poppins';
-        font-style: italic;
-        font-display: swap;
-        font-weight: 800;
-        src:
-            url(/assets/fonts/poppins-latin-800-italic.woff2) format('woff2'),
-            url(/assets/fonts/poppins-latin-800-italic.woff) format('woff');
-    }
-    @font-face {
-        font-family: 'Poppins';
-        font-style: italic;
-        font-display: swap;
-        font-weight: 900;
-        src:
-            url(/assets/fonts/poppins-latin-900-italic.woff2) format('woff2'),
-            url(/assets/fonts/poppins-latin-900-italic.woff) format('woff');
+        src: url(/assets/fonts/space-mono-latin-700-normal.woff2) format('woff2');
     }
 }

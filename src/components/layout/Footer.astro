@@ -1,5 +1,5 @@
 ---
-import { GithubIcon, LinkedinIcon, GlobeIcon, RssIcon } from 'astro-feather';
+import Mascot from '@components/mascot/Mascot.astro';
 
 import ExternalLink from '@components/links/ExternalLink.astro';
 import InternalLink from '@components/links/InternalLink.astro';
@@ -13,52 +13,85 @@ type Props = {
 };
 
 const { githubLink, linkedinLink, blueskyLink, mastodonLink, authorName } = Astro.props;
-const today = new Date();
+
+const year = new Date().getFullYear();
 ---
 
-<footer class="mt-12 mb-6 flex flex-col gap-4 text-gray-600">
-    <div class="flex flex-col justify-between gap-6 whitespace-nowrap sm:flex-row sm:gap-10">
-        <div class="flex flex-col gap-4 sm:flex-row">
-            <div class="flex flex-row gap-4">
-                <div class="flex items-center gap-2">
-                    <GithubIcon />
-                    <ExternalLink href={githubLink}>GitHub</ExternalLink>
+<footer class="border-border mt-20 border-t">
+    <div class="mx-auto max-w-screen-xl px-4 md:px-6 lg:px-8">
+        <div class="flex flex-col justify-between gap-10 py-12 sm:flex-row">
+            <div class="max-w-xs">
+                <div class="mb-3 flex items-center gap-2.5">
+                    <Mascot
+                        pose="head"
+                        size={36}
+                        decorative
+                    />
+                    <span class="font-display font-bold">Broken Robot</span>
                 </div>
-
-                <div class="flex items-center gap-2">
-                    <LinkedinIcon />
-                    <ExternalLink href={linkedinLink}>LinkedIn</ExternalLink>
-                </div>
+                <p class="text-muted text-sm leading-relaxed">
+                    A calm, ad-free corner of the web for writing about software. No trackers, no spyware, no marketing
+                    department. Just a human and a slightly broken robot.
+                </p>
             </div>
 
-            <div class="flex flex-row gap-4">
-                <div class="flex items-center gap-2">
-                    <GlobeIcon />
-                    <ExternalLink
-                        href={blueskyLink}
-                        rel="me"
-                    >
-                        Bluesky
-                    </ExternalLink>
-                </div>
+            <div>
+                <div class="footer-col-title">Writing</div>
+                <ul class="text-muted flex flex-col gap-2.5">
+                    <li>
+                        <InternalLink href="/blog">All posts</InternalLink>
+                    </li>
+                    <li>
+                        <InternalLink href="/about">About</InternalLink>
+                    </li>
+                    <li>
+                        <InternalLink href="/rss.xml">RSS feed</InternalLink>
+                    </li>
+                </ul>
+            </div>
 
-                <div class="flex items-center gap-2">
-                    <GlobeIcon />
-                    <ExternalLink
-                        href={mastodonLink}
-                        rel="me"
-                    >
-                        Mastodon
-                    </ExternalLink>
-                </div>
+            <div>
+                <div class="footer-col-title">Elsewhere</div>
+                <ul class="text-muted flex flex-col gap-2.5">
+                    <li>
+                        <ExternalLink href={githubLink}>GitHub</ExternalLink>
+                    </li>
+                    <li>
+                        <ExternalLink
+                            href={blueskyLink}
+                            rel="me"
+                        >
+                            Bluesky
+                        </ExternalLink>
+                    </li>
+                    <li>
+                        <ExternalLink
+                            href={mastodonLink}
+                            rel="me"
+                        >
+                            Mastodon
+                        </ExternalLink>
+                    </li>
+                    <li>
+                        <ExternalLink href={linkedinLink}>LinkedIn</ExternalLink>
+                    </li>
+                </ul>
             </div>
         </div>
 
-        <div class="flex items-center gap-2">
-            <RssIcon />
-            <InternalLink href="/rss.xml">RSS Feed</InternalLink>
+        <div
+            class="border-border text-muted flex flex-col justify-between gap-2 border-t py-5 font-mono text-xs sm:flex-row"
+        >
+            <span>&copy; {year} {authorName} · built with care, held together with tape</span>
+            <span>no cookies were harmed</span>
         </div>
     </div>
-
-    <div class="text-sm">&copy; {today.getFullYear()} {` `} {authorName}. All rights reserved.</div>
 </footer>
+
+<style>
+    @reference '../../styles/base.css';
+
+    .footer-col-title {
+        @apply text-muted mb-3.5 font-mono text-xs font-semibold tracking-wider uppercase;
+    }
+</style>

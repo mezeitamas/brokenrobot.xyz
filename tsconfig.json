@@ -5,6 +5,8 @@
         "noEmit": true,
         "strictNullChecks": true,
         "verbatimModuleSyntax": true,
+        "jsx": "react-jsx",
+        "jsxImportSource": "preact",
         "baseUrl": ".",
         "paths": {
             "@assets/*": ["src/assets/*"],
@@ -17,5 +19,6 @@
                 "name": "@astrojs/ts-plugin"
             }
         ]
-    }
+    },
+    "exclude": ["dist", "design-handoff"]
 }
