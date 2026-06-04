@@ -12,6 +12,7 @@
             "denyRead": ["~/"],
             "allowRead": [
                 ".",
+                "../../../.git",
                 "~/.config/git/ignore",
                 "~/.testcontainers.properties",
                 "~/.docker",
@@ -21,7 +22,12 @@
                 "~/Library/Preferences/astro"
             ],
             "denyWrite": ["/tmp", "/etc", "/usr", "/opt"],
-            "allowWrite": [".", "/var/folders", "~/Library/Preferences/astro"]
+            "allowWrite": [
+                ".",
+                "../../../.git",
+                "/var/folders",
+                "~/Library/Preferences/astro"
+            ]
         },
         "network": {
             "allowedDomains": [
