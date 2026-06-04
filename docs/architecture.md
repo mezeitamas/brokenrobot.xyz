@@ -104,3 +104,11 @@ The light/dark system, as implemented in the foundation:
 - **Both themes are first-class** — every component, the mascot, and `prose` article styling
   must read well in light and dark (see [coding-conventions](coding-conventions.md) for
   snapshot coverage).
+
+> **View Transitions caveat (future).** This works because every navigation is a full page
+> load, so both the inline init and the toggle's bundled script re-run per page. If we ever
+> adopt View Transitions (`<ClientRouter />`), bundled module scripts run only once and are
+> **not** re-executed on client-side navigation — so the toggle's click listener would need
+> re-binding via `astro:page-load`, and the theme should be re-applied in an `astro:after-swap`
+> listener to avoid a flash on navigation. See the
+> [Astro view-transitions docs](https://docs.astro.build/en/guides/view-transitions/#script-behavior-with-view-transitions).
