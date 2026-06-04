@@ -68,27 +68,47 @@ the `ReadingTime` component.
 ## Conventions
 
 - **Component organization:** group by feature in subfolders (`seo/`, `blog-posts/`,
-  `links/`, `layout/`). PascalCase component files.
+  `links/`, `layout/`, `mascot/`, `theme/`). PascalCase component files.
+- **Interactivity: Preact islands for stateful UI, Astro scripts for simple DOM wiring.**
+  Non-interactive UI is plain Astro (zero JS). For stateful widgets, add a Preact component
+  (`.tsx`) and mount it `client:*` (page phase: search, mobile menu, code-copy). For small
+  behavior, prefer a bundled Astro `<script>` importing a `.ts` module — e.g. the theme toggle
+  (`ThemeToggle.astro` + `theme-toggle.ts`). Keep client JS small; it loads from `self`
+  (CSP-friendly).
 - **SEO / structured data:** OpenGraph (`meta-og/`), Twitter cards (`meta-twitter/`), and
   JSON-LD (`rich-results/`, typed with `schema-dts`). Fonts preloaded via `PreloadFonts`.
 - **Links:** use `InternalLink` / `ExternalLink` rather than raw `<a>`.
 - **Site metadata:** centralized in `src/consts.ts` (`SITE_METADATA`) — title, description,
   author, socials, image breakpoints. Add new global constants here.
 
-## Theming architecture (for the overhaul)
+## Theming architecture
 
-The light/dark system is new work. Guidance:
+The light/dark system, as implemented in the foundation:
 
-- **Design tokens as CSS custom properties** defined in `src/styles/base.css` under
-  `@layer base`. Express the semantic roles from [brand](brand.md) (`--color-bg`,
-  `--color-surface`, `--color-text`, `--color-muted`, `--color-accent`, …).
-- **Theme selection on `<html>`** via a `class` or `data-theme` attribute (today it's
-  `class="scheme-light"`). Define token values once for light and override them for dark.
-  Map Tailwind to these tokens so utilities and `prose` follow the theme.
-- **Toggle must be CSP-safe.** No inline `on*` event handlers. Use a small `<script>`
-  (allowed by `script-src 'self' 'unsafe-inline'`) to read/persist the preference
-  (localStorage), honor `prefers-color-scheme`, and set the attribute before paint to avoid
-  a flash. See [tech-stack](tech-stack.md) for the CSP details.
+- **Design tokens as CSS custom properties** in `src/styles/base.css` under `@layer base`:
+  light values on `:root`, dark overrides on `html[data-theme="dark"]`. They express the
+  semantic roles from [brand](brand.md) (`--bg`, `--surface`, `--surface-2`, `--text`,
+  `--muted`, `--border`, `--accent`, `--accent-ink`, code colors, shadows, `--ff-*`).
+- **Tokens exposed to Tailwind** via `@theme inline` (e.g. `--color-bg: var(--bg)`), so
+  utilities like `bg-bg`/`text-muted` and the `prose` mapping (`--tw-prose-*`) follow the
+  theme.
+- **Theme selection on `<html>`** via the `data-theme` attribute. A tiny **inline script** in
+  `BaseLayout`'s `<head>` (passed as a string via `set:html`) resolves the theme before paint
+  (localStorage → `prefers-color-scheme` → light) to avoid a flash — CSP-safe via the
+  already-allowed `script-src 'unsafe-inline'`, with no inline `on*` handlers.
+- **The toggle is a bundled Astro client-side script** (`ThemeToggle.astro` importing
+  `theme-toggle.ts`): the correct sun/moon icon is chosen by CSS from `html[data-theme]` (so
+  it's right on the first frame — no flash), and the script only wires the click (flip
+  `data-theme`, persist, update `aria-pressed`). It is deliberately **not** a Preact island —
+  an island renders before it knows the theme, which flashes the wrong icon on load.
 - **Both themes are first-class** — every component, the mascot, and `prose` article styling
-  must be verified in light and dark (see [coding-conventions](coding-conventions.md) for
+  must read well in light and dark (see [coding-conventions](coding-conventions.md) for
   snapshot coverage).
+
+> **View Transitions caveat (future).** This works because every navigation is a full page
+> load, so both the inline init and the toggle's bundled script re-run per page. If we ever
+> adopt View Transitions (`<ClientRouter />`), bundled module scripts run only once and are
+> **not** re-executed on client-side navigation — so the toggle's click listener would need
+> re-binding via `astro:page-load`, and the theme should be re-applied in an `astro:after-swap`
+> listener to avoid a flash on navigation. See the
+> [Astro view-transitions docs](https://docs.astro.build/en/guides/view-transitions/#script-behavior-with-view-transitions).

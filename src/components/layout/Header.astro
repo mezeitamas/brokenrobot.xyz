@@ -1,42 +1,93 @@
 ---
+import Mascot from '@components/mascot/Mascot.astro';
+import ThemeToggle from '@components/theme/ThemeToggle.astro';
+
 type Props = {
     title: string;
 };
 
 const { title } = Astro.props;
+
+const pathname = Astro.url.pathname;
+
+const navItems = [
+    { href: '/', label: 'Home', hideOnMobile: true },
+    { href: '/blog', label: 'Blog', hideOnMobile: false },
+    { href: '/about', label: 'About', hideOnMobile: false }
+];
+
+const isActive = (href: string): boolean => (href === '/' ? pathname === '/' : pathname.startsWith(href));
 ---
+
+<header class="site-header border-border sticky top-0 z-40 border-b">
+    <div class="mx-auto flex h-[70px] max-w-screen-xl items-center justify-between gap-2 px-4 sm:gap-5 md:px-6 lg:px-8">
+        <a
+            href="/"
+            class="flex items-center gap-2 sm:gap-3"
+            aria-label={title}
+        >
+            <Mascot
+                pose="head"
+                size={40}
+                decorative
+            />
+            <span class="leading-tight">
+                <span class="font-display block text-base font-bold tracking-tight sm:text-lg">
+                    Broken<span class="text-accent-ink">Robot</span>
+                </span>
+                <span class="text-muted hidden font-mono text-xs sm:block">// brokenrobot.xyz</span>
+            </span>
+        </a>
+
+        <nav class="flex items-center gap-0.5 sm:gap-1">
+            {
+                navItems.map((item) => (
+                    <a
+                        href={item.href}
+                        class:list={[
+                            'nav-link',
+                            { active: isActive(item.href) },
+                            item.hideOnMobile ? 'max-sm:hidden' : undefined
+                        ]}
+                        aria-current={isActive(item.href) ? 'page' : undefined}
+                    >
+                        {item.label}
+                    </a>
+                ))
+            }
+            <ThemeToggle />
+        </nav>
+    </div>
+</header>
 
 <style>
     @reference '../../styles/base.css';
 
-    ul a {
-        @apply inline-flex h-12 min-h-12 shrink-0 cursor-pointer flex-wrap items-center justify-center rounded-xl px-4 text-center;
+    .site-header {
+        background: color-mix(in srgb, var(--bg) 82%, transparent);
+        backdrop-filter: blur(12px);
+    }
 
-        &:hover,
-        &:focus {
-            @apply bg-slate-100;
-        }
+    .nav-link {
+        @apply text-muted rounded-lg px-2.5 py-2 text-sm font-medium transition-colors sm:px-3.5;
+    }
+
+    .nav-link:hover {
+        @apply bg-surface-2 text-text;
+    }
+
+    .nav-link.active {
+        @apply text-text relative;
+    }
+
+    .nav-link.active::after {
+        content: '';
+        position: absolute;
+        right: 14px;
+        bottom: 4px;
+        left: 14px;
+        height: 2px;
+        border-radius: 2px;
+        background: var(--accent);
     }
 </style>
-
-<header class="flex items-center sm:h-24 sm:min-h-24">
-    <nav class="flex grow flex-col justify-between sm:flex-row">
-        <div class="flex h-12 min-h-12 items-center text-2xl font-bold">
-            <a href="/">{title}</a>
-        </div>
-
-        <div>
-            <ul class="flex flex-row justify-between gap-6 sm:gap-10">
-                <li>
-                    <a href="/">Home</a>
-                </li>
-                <li>
-                    <a href="/blog">Blog</a>
-                </li>
-                <li>
-                    <a href="/about">About</a>
-                </li>
-            </ul>
-        </div>
-    </nav>
-</header>

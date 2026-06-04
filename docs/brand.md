@@ -1,9 +1,10 @@
 # Brand
 
-This document defines the personality and visual direction of Broken Robot. It sets
-**directional principles**: the personality and voice _are_ the lasting commitments, while
-the visual recommendations below (palette, typography, mascot) are **illustrative starting
-points** — the brand evolves toward them, and the exact hex values and font names stay open.
+This document defines the personality and visual direction of Broken Robot. The personality
+and voice are the lasting commitments. The palette, typography, and mascot below were left
+open during early planning and are now **locked** by the design overhaul (explored in Claude
+Design, implemented in the foundation) — they can still evolve, but they are decisions, not
+suggestions.
 
 ## Brand essence
 
@@ -43,8 +44,10 @@ substantive, lightly playful.
 ## Mascot direction
 
 A **broken robot character** is the recurring brand motif — the face of "embracing
-imperfection" and the human-behind-the-machine idea. This is a directional concept; the
-exact illustration stays open.
+imperfection" and the human-behind-the-machine idea. It is implemented as a theme-aware inline
+SVG component (`src/components/mascot/Mascot.astro`): a friendly robot with a crooked
+amber-tipped antenna, one round eye + one X eye, a head crack, headphone ears, and an amber
+chest button, with poses `head` (logo/footer/callouts) and `sit404` (the 404 page).
 
 Where the mascot shows up:
 
@@ -57,40 +60,38 @@ Principles for the mascot: expressive but simple, friendly not creepy, works at 
 and renders well in **both light and dark themes**. Keep file weight modest (see performance
 budget below).
 
-## Visual direction (directional, stays open)
+## Visual direction (locked)
 
 ### Color & theme
 
 Both **light and dark themes are first-class**, with the reader's preference respected. The
-architecture for this lives in [architecture](architecture.md) (CSS custom properties,
-CSP-friendly).
+theming architecture lives in [architecture](architecture.md) — semantic tokens as CSS custom
+properties defined in `src/styles/base.css`, switched by `data-theme` on `<html>`.
 
-Think in **semantic token roles**, not raw colors, so both themes map cleanly:
+Components reference **semantic token roles**, not raw colors:
 
 - `bg` — page background
-- `surface` — cards, code blocks, raised areas
+- `surface` / `surface-2` — cards, code blocks, raised areas
 - `text` — primary foreground
 - `muted` — secondary text, borders, meta
-- `accent` — the signature, ownable brand color (links, highlights, mascot cue)
+- `border` — hairlines and dividers
+- `accent` / `accent-ink` — the signature brand color, and its AA-contrast ink for text/links
 
-_Starting suggestion (stays open):_ a near-neutral base (off-white in light, deep charcoal —
-not pure black — in dark) paired with a single confident accent (e.g. a warm amber or an
-electric teal evoking circuitry). The accent should read as "Broken Robot" and clear contrast
-requirements in both themes. **The final palette stays open.**
+The signature accent is a **warm amber** (`#f59e0b`), with `accent-ink` tuned per theme for
+contrast (light `#b45309`, dark `#fbbf24`). The base is a warm near-neutral: off-white in
+light (`--bg` `#faf7f2`), deep warm charcoal in dark (`--bg` `#17150f`) — never pure black.
+`base.css` holds the full token values for both themes.
 
 ### Typography
 
-The current site uses **Poppins** (friendly geometric sans) as the baseline to evolve from.
+Three self-hosted typefaces, by role (see [tech-stack](tech-stack.md)):
 
-_Recommended direction (stays open):_ pair a **characterful display face for headings** with
-a **highly readable body face** for long-form articles, and a **monospace** for code that can
-double as a playful "robot/engineering" accent in small doses (labels, tags, the mascot's
-voice).
+- **Space Grotesk** — display & UI (headings, nav, buttons).
+- **Newsreader** — long-form article prose; body legibility is the priority.
+- **Space Mono** — code, labels, tags, and the robot's "voice".
 
-- Keep total font payload small and self-hosted (see [tech-stack](tech-stack.md));
-  `font-display: swap` and preloading as today.
-- Body legibility for long articles is the priority — don't sacrifice it for character.
-- **The final type pairing stays open.**
+Fonts are self-hosted with `font-display: swap` and the primary weights preloaded; only the
+weights actually used are shipped.
 
 ### Motifs & imagery
 
