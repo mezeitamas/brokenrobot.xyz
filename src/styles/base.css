@@ -181,3 +181,14 @@
 .prose :is(h1, h2, h3, h4) {
     font-family: var(--ff-display);
 }
+
+/* Article links: amber, with a translucent-accent underline that solidifies on hover. */
+.prose a {
+    text-decoration-color: color-mix(in srgb, var(--accent) 55%, transparent);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 3px;
+}
+
+.prose a:hover {
+    text-decoration-color: var(--accent);
+}

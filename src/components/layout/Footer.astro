@@ -94,4 +94,13 @@ const year = new Date().getFullYear();
     .footer-col-title {
         @apply text-muted mb-3.5 font-mono text-xs font-semibold tracking-wider uppercase;
     }
+
+    /* Footer links sit muted, then warm to the accent on hover (matches the prototype). */
+    footer :global(a) {
+        transition: color 0.15s ease;
+    }
+
+    footer :global(a:hover) {
+        color: var(--accent-ink);
+    }
 </style>
