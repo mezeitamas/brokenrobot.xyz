@@ -1,20 +1,26 @@
-schema: spec-driven
+schema: brokenrobot
 
-# Project context (optional)
-# This is shown to AI when creating artifacts.
-# Add your tech stack, conventions, style guides, domain knowledge, etc.
-# Example:
-#   context: |
-#     Tech stack: TypeScript, React, Node.js
-#     We use conventional commits
-#     Domain: e-commerce platform
+# Project context — shown to the AI when creating any artifact (proposal, specs, design, tasks).
+# These are the site's enduring constraints; honor them in every change. See docs/ for detail.
+# Workflow structure (the tasks Verify section, primitives-first ordering, etc.) lives in the
+# brokenrobot schema's templates and instructions, not here.
+context: |
+  brokenrobot.xyz is a static, ad-free, CSP-strict personal site: Astro with Preact islands,
+  self-hosted fonts, and first-class light/dark theming. Honor these enduring constraints in
+  every change:
 
-# Per-artifact rules (optional)
-# Add custom rules for specific artifacts.
-# Example:
-#   rules:
-#     proposal:
-#       - Keep proposals under 500 words
-#       - Always include a "Non-goals" section
-#     tasks:
-#       - Break tasks into chunks of max 2 hours
+  - Static output only — no SSR, no runtime backend.
+  - Strict CSP — no third-party scripts, no inline `on*` handlers; client JS loads from `self`.
+    The only inline script is the pre-paint theme-init in BaseLayout (passed via set:html).
+  - Both themes are first-class — components read design tokens (CSS custom properties on
+    <html>), never hard-coded colors; light and dark each carry Playwright visual + a11y coverage.
+  - Interactivity ladder — stateful UI → Preact island (client:*); small DOM wiring → a bundled
+    Astro <script> importing a .ts module; pre-paint only → the single inline theme-init.
+  - Stable contracts — the /blog/<slug>/ permalinks and rss.xml must keep working.
+
+  Authoritative docs: docs/architecture.md, docs/coding-conventions.md,
+  docs/spec-driven-development.md, plus docs/vision.md, docs/brand.md, docs/tech-stack.md.
+
+  Out of scope for OpenSpec: authoring or editing blog article prose under src/content/blog/**
+  (written directly, not specced). Blog *infrastructure* — components, the content schema, remark
+  plugins, the RSS feed — IS in scope.

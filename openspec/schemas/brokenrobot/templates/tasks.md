@@ -1,0 +1,20 @@
+## 1. <!-- First work group — establish any design-system primitives this slice needs BEFORE using them -->
+
+- [ ] 1.1 <!-- Task description -->
+- [ ] 1.2 <!-- Task description -->
+
+## 2. <!-- Task Group Name -->
+
+- [ ] 2.1 <!-- Task description -->
+
+<!--
+  Keep the Verify group LAST and renumber it to follow your work groups (e.g. ## 5. Verify).
+  Do not drop or water down its items — every UI change carries both-theme visual + a11y coverage.
+-->
+
+## N. Verify
+
+- [ ] Visual + a11y snapshots pass in **both themes** for every touched view (both-theme-snapshots skill)
+- [ ] `type:check`, `lint:check`, `format:check` all pass (frontend-preflight skill)
+- [ ] `build` succeeds — no third-party requests, no CSP violations
+- [ ] Manual preview: no theme flash, interactions work, console clean, responsive at 375px

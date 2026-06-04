@@ -33,9 +33,10 @@ Four subagents, each with focused instructions, tool access, and the guardrails 
 them with the Agent/Task tool, or let the main session delegate.
 
 - **`spec-author`** (opus) — the architecture-aware proposer. Reads the specs, docs, and codebase
-  and writes an OpenSpec change (`proposal.md`, `tasks.md`, optional `design.md`, spec deltas) that
-  already honors the guardrails. Emits `tasks.md` in the enforced template (below). Writes only
-  under `openspec/`; never application code.
+  and drives the OpenSpec propose flow to write a change (`proposal.md`, `tasks.md`, optional
+  `design.md`, spec deltas). It deliberately does **not** carry the guardrails or the task structure
+  itself — the `brokenrobot` schema and `config.yaml` inject those (see below), so there's one
+  source of truth. Writes only under `openspec/`; never application code.
 - **`frontend-implementer`** (inherit) — applies an agreed change's `tasks.md`: Astro/Preact/CSS to
   the repo's conventions (scoped `<style>` + `@reference`, token utilities, path aliases,
   `InternalLink`/`ExternalLink`). Surgical edits under `src/`; stops at the Verify step.
@@ -57,12 +58,22 @@ Procedure skills the agents (or you) invoke, alongside the `openspec-*` lifecycl
 - **`frontend-preflight`** — run the non-visual gate (`type:check` + `lint:check` + `format:check` +
   `build`) and summarize failures.
 
-## The enforced `tasks.md` template
+## How the proposer is customized (OpenSpec)
 
-Every change the `spec-author` produces ends with a mandatory **Verify** section and follows
-**primitives-first** ordering (a slice that uses a design-system primitive — `.btn`, `.tag`,
-`.card`, … — must establish it first, since the foundation shipped tokens only). The Verify section
-is always:
+Rather than living in the `spec-author` prompt, the proposal/task shaping is baked into OpenSpec's
+own customization, so the standard `/opsx:propose` flow (any agent, not just `spec-author`) produces
+it. There is one source of truth:
+
+- **`openspec/config.yaml` → `context`** — the five guardrails (below), injected into every
+  artifact's generation.
+- **`openspec/schemas/brokenrobot/`** — a project-local schema (forked from `spec-driven`). Its
+  `templates/tasks.md` pre-seeds the mandatory **Verify** section, and its `tasks` instruction
+  carries the **primitives-first** rule (a slice that uses a `.btn`/`.tag`/`.card`/… primitive must
+  establish it first — the foundation shipped tokens only). `config.yaml` selects it via
+  `schema: brokenrobot`.
+
+`openspec instructions tasks --change <name>` prints the composed result (template + schema
+instruction + context) — the exact text the flow follows. The seeded Verify section is:
 
 ```markdown
 ## N. Verify
@@ -73,9 +84,14 @@ is always:
 - [ ] Manual preview: no theme flash, interactions work, console clean, responsive at 375px
 ```
 
+This shapes _generation_; it doesn't _block_ a non-compliant change (that would be a separate
+validation/CI step). The schema fork is OpenSpec-experimental — it's pinned in the repo and may need
+reconciling when OpenSpec updates its upstream templates.
+
 ## The guardrails
 
-Every agent and skill repeats these and points at the canonical docs rather than restating them:
+The five constraints `config.yaml` injects (and the execution-phase agents also honor), with the
+canonical docs as the authoritative source:
 
 1. **Static output** — no SSR, no runtime backend.
 2. **Strict CSP** — no third-party scripts, no inline `on*` handlers; the only inline script is the
