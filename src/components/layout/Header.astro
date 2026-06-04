@@ -1,6 +1,6 @@
 ---
 import Mascot from '@components/mascot/Mascot.astro';
-import { ThemeToggle } from '@components/theme/ThemeToggle';
+import ThemeToggle from '@components/theme/ThemeToggle.astro';
 
 type Props = {
     title: string;
@@ -55,7 +55,7 @@ const isActive = (href: string): boolean => (href === '/' ? pathname === '/' : p
                     </a>
                 ))
             }
-            <ThemeToggle client:load />
+            <ThemeToggle />
         </nav>
     </div>
 </header>
