@@ -1,19 +1,22 @@
 import { test, expect } from '@playwright/test';
 
 test.describe('Home page', () => {
-    test('should be accessible via the header mavigation', async ({ page }) => {
-        await page.goto('./');
-        await expect(page).toHaveTitle(/Broken Robot/);
+    test('should be accessible via the header navigation', async ({ page }, testInfo) => {
+        // The "Home" nav link is hidden on mobile; the logo links home there instead.
+        test.skip(testInfo.project.name === 'Pixel 7', 'The "Home" nav link is hidden on mobile.');
+
+        await page.goto('./about');
+        await expect(page).toHaveTitle(/About/);
 
         await page.getByRole('navigation').getByRole('link', { name: 'Home' }).click();
         await expect(page).toHaveTitle(/Broken Robot/);
     });
 
-    test('should be accessible via the page title', async ({ page }) => {
-        await page.goto('./');
-        await expect(page).toHaveTitle(/Broken Robot/);
+    test('should be accessible via the logo', async ({ page }) => {
+        await page.goto('./about');
+        await expect(page).toHaveTitle(/About/);
 
-        await page.getByRole('navigation').getByRole('link', { name: 'Broken Robot' }).click();
+        await page.getByRole('banner').getByRole('link', { name: 'Broken Robot' }).click();
         await expect(page).toHaveTitle(/Broken Robot/);
     });
 });
