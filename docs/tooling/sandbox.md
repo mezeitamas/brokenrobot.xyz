@@ -5,10 +5,6 @@ the network, and why the rules are shaped the way they are. The configuration li
 [`.claude/settings.json`](../../.claude/settings.json); this document explains the intent so the
 config can stay free of comments (it's strict JSON) without becoming a set of magic incantations.
 
-The guiding posture, for a solo developer's personal site where the author reviews what the agent
-does: **deny by default outside the project, give freedom inside it, and allow only what the
-toolchain genuinely needs.**
-
 ## Two independent layers
 
 Two separate mechanisms enforce the rules, and it helps to keep them apart:
@@ -19,62 +15,67 @@ Two separate mechanisms enforce the rules, and it helps to keep them apart:
    `python`. These hold regardless of the OS sandbox.
 2. **`sandbox`** (OS level) — what any spawned process can physically read, write, or reach on the
    network. This is the `denyRead` / `allowRead` / `denyWrite` / `allowWrite` / `network` block.
-   It is _extra_ isolation layered under the permission rules.
 
-Most of the filesystem nuance below lives in layer 2.
+## Filesystem model: locked writes, open reads, denied secrets
 
-## Filesystem model: default-deny outside, freedom inside
+The read and write rules are deliberately **asymmetric** — writes are where damage happens, so
+that's where the isolation sits:
 
-- **Reads:** `denyRead: ["~/"]` blocks the entire home directory — for _every_ spawned process,
-  not just the agent. The project working directory is granted back via `allowRead: ["."]`, and a
-  short allow-list re-grants the specific out-of-project paths the toolchain needs (the Node
-  version manager, Docker, the Astro CLI's prefs, the global gitignore).
-- **Writes:** writes are allow-listed (default-deny). Only the project (`.`), the OS temp area,
-  and a couple of tool-pref dirs are writable.
+- **Writes are default-deny.** Only an explicit `allowWrite` list is writable: the project (`.`),
+  the repo's `.git` (so git works in a worktree — see below), the npm cache (`~/.npm`), the OS temp
+  area, and a couple of tool-pref dirs. A process cannot modify anything outside the project.
+- **Reads are open, except secrets.** `denyRead` lists a focused set of credential locations
+  (`~/.ssh`, `~/.aws`, `~/.gnupg`, `~/.kube`, `~/.netrc`, `~/.npmrc`, `~/.config/gh`,
+  `~/.config/gcloud`, `~/.git-credentials`, `~/Library/Keychains`); everything else is readable.
+  The list is the obvious extension point — add a path here to deny it.
 
-This is exactly the "deny by default, project is the exception" posture. Secrets are covered by the
-blanket home deny — `~/.ssh`, `~/.aws`, `~/.netrc`, and `~/Library/Keychains` are all unreadable.
+### Why reads are open rather than locked to the project
 
-### Precedence: allow wins (an important gotcha)
+Claude Code runs in a **worktree nested at `.claude/worktrees/<name>/`**, and the Node toolchain
+constantly walks _up_ the directory tree (browserslist hunting for a config, ESLint cascading
+configs, `tsc` looking for `tsconfig`, …). With the whole home directory denied, every such walk
+hit `EPERM` on a parent directory it couldn't read, breaking `type:check`, `build`, and `lint`.
+
+The choice was: scatter a per-tool workaround into the **application's** config for each walker, or
+move the isolation to the layer that actually matters. We chose the latter — reads are open (minus
+secrets), and **writes** carry the isolation. This keeps the application config pristine: the only
+related change is `root: true` in [`.eslintrc.json`](../../.eslintrc.json), which is a correct,
+standard setting for any project-root ESLint config (it stops config cascade into ancestor
+directories) — not a sandbox workaround.
+
+This does trade away read-isolation of non-secret files. The trade is acceptable here because the
+Docker socket (below) already makes the filesystem sandbox a guard against accidents rather than a
+hard wall — so denying non-secret reads bought little while costing constant friction. The
+protections that carry real weight are unchanged: **writes locked to the project, the network
+allow-list, the `permissions.deny` list, and secrets denied.**
+
+### Precedence: allow wins
 
 `sandbox.filesystem` is **allow-wins, not longest-match.** If a path sits under an `allowRead`
-entry, it stays readable even if a _more specific_ `denyRead` entry also matches it. Concretely:
-adding `~/.docker/config.json` to `denyRead` does **nothing**, because `~/.docker` is in
-`allowRead`.
-
-Consequences:
-
-- Listing individual secret paths in `sandbox.filesystem.denyRead` is **non-functional** when
-  their parent is already denied (redundant) and **misleading** when a parent is allowed (it
-  implies a protection the engine doesn't provide). Don't do it.
-- To deny something _inside_ an allowed directory, use a **`permissions.deny` `Read(<path>)`** rule
-  instead — that layer does override allows. This is how `.env` files stay blocked even though the
-  project (`.`) is otherwise a freedom zone. Use it sparingly: it can also block legitimate
-  subprocesses (e.g. denying `~/.docker/config.json` would break Docker's own context resolution).
+entry, it stays readable even if a more specific `denyRead` entry also matches it. That's why the
+secret denials are absolute: nothing in `allowRead` covers them (it only lists `.`). The corollary
+— **don't put a secret deny _inside_ an allowed directory and expect it to bite.** To deny
+something within an allowed tree (e.g. `.env` inside the project), use a `permissions.deny`
+`Read(<path>)` rule, which _does_ override allows. That is how `.env` stays blocked inside the
+otherwise-readable project.
 
 ## The `../../../.git` carve-out
 
-When Claude Code runs in a **worktree** (under `.claude/worktrees/<name>/`), git's real database —
-objects, refs, this worktree's index and HEAD — lives in the **main repo's `.git`**, not in the
-worktree. The worktree only holds a one-line pointer file. Since the main `.git` is under the
-denied home directory, every git command fails with `not a git repository` until it's granted.
+When Claude Code runs in a worktree, git's real database — objects, refs, this worktree's index and
+HEAD — lives in the **main repo's `.git`**, not in the worktree (which holds only a one-line
+pointer file). Reads of it are covered by the open read policy; **writes** need an explicit grant,
+so `../../../.git` appears in `allowWrite`: from the worktree cwd, the repo root is exactly three
+levels up.
 
-The carve-out is therefore `../../../.git` in both `allowRead` and `allowWrite`: from the worktree
-cwd, the repo root is exactly three levels up. It's deliberately **relative**, so the committed
-config is portable across machines and checkout locations. The pair `"."` **+** `"../../../.git"`
-is the safe portable form — `"."` is always the correct project dir in both worktree and normal
-checkouts, while `"../../../.git"` only resolves to something real inside a worktree and is a
-harmless no-op otherwise. (Collapsing to `"../../.."` would over-grant in a normal checkout, where
-it points _above_ the repo.)
-
-This carve-out is the "allow only what's needed" rule in action: running git is needed, so it gets
-one minimal, explicit allowance — the same category as the `fnm` entry that lets `npm` run.
+It's deliberately **relative**, so the committed config is portable across machines and checkout
+locations. In a normal (non-worktree) checkout the entry is a harmless no-op — `.` already covers
+`./.git`, and `../../../.git` points above the repo at nothing relevant.
 
 ## The real trust boundary: the Docker socket
 
 `network.allowAllUnixSockets: true` exposes the Docker socket, and **the Docker socket is
 effectively host-root**: anything that can talk to it can launch a container that bind-mounts the
-whole home directory as root and read or write anything — bypassing every filesystem deny above.
+whole home directory as root and read or write anything — bypassing every filesystem rule above.
 
 Docker is kept **deliberately**. The end-to-end tests run Playwright inside a devcontainer so the
 visual-regression snapshots render in a consistent Linux environment that matches CI; running them
@@ -83,23 +84,29 @@ on the macOS host would produce different pixel output and break the tight snaps
 
 The consequence to hold honestly: **with Docker enabled, the filesystem sandbox is a guard against
 accidents, not a hard wall against a compromised or injected agent.** The real security rests on
-the three cheap, high-value layers — the `permissions.deny` list, the `network.allowedDomains`
-allow-list, and the author reviewing what the agent does.
-
-`~/.docker/config.json` is left readable. On this machine it is keychain-backed (`credsStore` set,
-empty `auths`), so it holds no raw registry credentials — those live in the macOS keychain, which
-_is_ blocked.
+the `permissions.deny` list, the `network.allowedDomains` allow-list, and the author reviewing what
+the agent does. This is also _why_ opening non-secret reads (above) costs little.
 
 ## What protects what (summary)
 
-- **Home secrets** (`~/.ssh`, `~/.aws`, `~/.netrc`, the keychain) — `sandbox.filesystem.denyRead:
-  ["~/"]`, which applies to every spawned process, not just the agent.
+- **Home secrets** (`~/.ssh`, `~/.aws`, `~/.npmrc`, the keychain, …) — the `denyRead` secret list,
+  applied to every spawned process.
 - **Secrets inside the project** (`.env*`) — `permissions.deny: Read(...)`, which overrides the
-  project freedom zone.
+  readable project tree.
+- **Writes outside the project** — default-denied; only the `allowWrite` list is writable.
 - **Irreversible / outbound actions** (`git push` / `fetch`, `gh`, `rm -rf`, `python`) — the
   `permissions.deny` list.
 - **Network egress** — the `network.allowedDomains` allow-list.
-- **Git inside a worktree** — the `allowRead` / `allowWrite` carve-out `../../../.git`.
+- **Git writes inside a worktree** — the `allowWrite` carve-out `../../../.git`.
+
+## Operational notes
+
+- A fresh worktree has no `node_modules`. Installing works once the npm cache is reachable; `~/.npm`
+  is in both the read (via the open policy) and `allowWrite` lists, so `npm ci` / `npx` work
+  normally.
+- These frictions are **local-only**. A normal checkout (CI, plain `git clone`) is not nested under
+  a denied home, so `npm run format:check` / `type:check` / `lint:check` / `build` all run there
+  without any of this — which is why none of the fixes live in application config.
 
 ## Possible future hardening
 

@@ -9,22 +9,24 @@
         "autoAllowBashIfSandboxed": true,
         "allowUnsandboxedCommands": false,
         "filesystem": {
-            "denyRead": ["~/"],
-            "allowRead": [
-                ".",
-                "../../../.git",
-                "~/.config/git/ignore",
-                "~/.testcontainers.properties",
-                "~/.docker",
-                "/var/run/docker.sock",
-                "~/.local/share/fnm",
-                "~/.local/state/fnm_multishells",
-                "~/Library/Preferences/astro"
+            "denyRead": [
+                "~/.ssh",
+                "~/.aws",
+                "~/.gnupg",
+                "~/.kube",
+                "~/.netrc",
+                "~/.npmrc",
+                "~/.config/gh",
+                "~/.config/gcloud",
+                "~/.git-credentials",
+                "~/Library/Keychains"
             ],
+            "allowRead": ["."],
             "denyWrite": ["/tmp", "/etc", "/usr", "/opt"],
             "allowWrite": [
                 ".",
                 "../../../.git",
+                "~/.npm",
                 "/var/folders",
                 "~/Library/Preferences/astro"
             ]
