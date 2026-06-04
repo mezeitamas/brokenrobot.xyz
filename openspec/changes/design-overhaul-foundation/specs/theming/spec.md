@@ -26,7 +26,7 @@ The site SHALL provide both a light and a dark theme as first-class options, sel
 #### Scenario: WCAG AA contrast in both themes
 
 - **WHEN** text, links, and UI controls are rendered in either theme
-- **THEN** their color/background pairings meet WCAG AA contrast, and automated accessibility checks (axe) pass for both themes
+- **THEN** their color/background pairings meet WCAG AA contrast in both themes, and the automated accessibility (axe) checks pass (run against the light theme; dark-theme automated coverage is added with the page redesign)
 
 ### Requirement: Theme preference selection and persistence
 

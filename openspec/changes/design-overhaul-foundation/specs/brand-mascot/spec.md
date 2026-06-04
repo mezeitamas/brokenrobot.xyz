@@ -9,9 +9,9 @@ The site SHALL provide a reusable Broken Robot mascot as an inline SVG Astro com
 - **WHEN** the logo, footer, or an article callout needs the mascot
 - **THEN** the head-only variant renders at the requested size
 
-#### Scenario: 404 pose
+#### Scenario: Sitting 404 pose is available
 
-- **WHEN** the 404 page renders the mascot
+- **WHEN** the mascot is requested with the `sit404` pose
 - **THEN** the sitting "404" pose renders
 
 ### Requirement: Theme-aware mascot
