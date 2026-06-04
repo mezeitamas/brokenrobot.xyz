@@ -1,8 +1,11 @@
 # theming Specification
 
 ## Purpose
+
 TBD - created by archiving change design-overhaul-foundation. Update Purpose after archive.
+
 ## Requirements
+
 ### Requirement: Semantic design tokens
 
 The site SHALL define its visual style through semantic CSS custom properties (e.g. `--bg`, `--surface`, `--surface-2`, `--text`, `--muted`, `--border`, `--accent`, `--accent-ink`, `--code-bg`, `--code-text`, `--code-line`, shadow and font-family tokens) rather than hard-coded colors, so components reference roles, not raw values.
@@ -72,4 +75,3 @@ The site header SHALL provide an accessible control to switch between light and 
 
 - **WHEN** the toggle is reached by keyboard or screen reader
 - **THEN** it is focusable, operable via keyboard, and has an accessible name describing its action
-

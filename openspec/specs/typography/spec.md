@@ -1,8 +1,11 @@
 # typography Specification
 
 ## Purpose
+
 TBD - created by archiving change design-overhaul-foundation. Update Purpose after archive.
+
 ## Requirements
+
 ### Requirement: Three-role typeface system
 
 The site SHALL use three typefaces by role: a display/UI face (**Space Grotesk**), a long-form prose face (**Newsreader**), and a monospace face (**Space Mono**), exposed via font-family tokens (`--ff-display`, `--ff-prose`, `--ff-mono`). Article body text SHALL use the prose face for readability.
@@ -39,4 +42,3 @@ Fonts SHALL load without blocking text rendering and SHALL not regress load perf
 
 - **WHEN** the build runs
 - **THEN** only the font weights actually used by the design are included
-

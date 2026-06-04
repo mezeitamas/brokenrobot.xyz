@@ -1,8 +1,11 @@
 # site-chrome Specification
 
 ## Purpose
+
 TBD - created by archiving change design-overhaul-foundation. Update Purpose after archive.
+
 ## Requirements
+
 ### Requirement: Site header
 
 The site SHALL render a header containing a logo (mascot head + "BrokenRobot" wordmark + a monospace `brokenrobot.xyz` line), primary navigation, and the theme toggle. The header SHALL be responsive and SHALL not overflow on small screens.
@@ -44,4 +47,3 @@ The redesigned header and footer SHALL preserve existing destinations and link s
 
 - **WHEN** a reader uses the header or footer links
 - **THEN** they reach the same destinations as before (home, writing index, about, RSS), with no broken or changed permalinks
-

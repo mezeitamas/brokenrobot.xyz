@@ -1,8 +1,11 @@
 # brand-mascot Specification
 
 ## Purpose
+
 TBD - created by archiving change design-overhaul-foundation. Update Purpose after archive.
+
 ## Requirements
+
 ### Requirement: Reusable mascot component
 
 The site SHALL provide a reusable Broken Robot mascot as an inline SVG Astro component — a friendly robot with the established character cues (crooked amber-tipped antenna, one round eye + one X eye, a head crack, headphone ears, amber chest button). It SHALL support, at minimum, a head-only variant and a sitting "404" pose, and accept a size.
@@ -39,4 +42,3 @@ The mascot SHALL expose an appropriate accessible name (or be marked decorative 
 
 - **WHEN** the mascot conveys meaning (e.g. on the 404 page)
 - **THEN** it provides an accessible label; where purely decorative, it is hidden from assistive tech
-
