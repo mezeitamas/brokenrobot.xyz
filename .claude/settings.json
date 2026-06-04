@@ -24,7 +24,7 @@
             "allowWrite": [".", "/var/folders", "~/Library/Preferences/astro"]
         },
         "network": {
-            "allowedDomains": ["localhost", "127.0.0.1", "host.docker.internal", "github.com", "*.npmjs.org"],
+            "allowedDomains": ["localhost", "127.0.0.1", "api.anthropic.com", "host.docker.internal", "github.com", "*.npmjs.org"],
             "allowLocalBinding": true,
             "allowAllUnixSockets": true
         }
@@ -157,9 +157,6 @@
             "Bash(rm -rf*)",
             "Bash(rm -fr*)",
 
-            "Bash(curl *)",
-            "Bash(wget *)",
-            "Bash(unzip *)",
             "Bash(python *)",
             "Bash(python3 *)"
         ]
