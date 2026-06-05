@@ -84,9 +84,12 @@ instruction + context) — the exact text the flow follows. The seeded Verify se
 - [ ] Manual preview: no theme flash, interactions work, console clean, responsive at 375px
 ```
 
-This shapes _generation_; it doesn't _block_ a non-compliant change (that would be a separate
-validation/CI step). The schema fork is OpenSpec-experimental — it's pinned in the repo and may need
-reconciling when OpenSpec updates its upstream templates.
+This shapes _generation_. Structural validity is also **enforced** in CI: the `verify` job runs
+`openspec validate --all --strict`, so malformed proposals or spec deltas fail a PR. The _content_
+rules above (the Verify section, primitives-first ordering) are still only generation-shaped — not
+hard-checked — so the reviewer and your review remain the backstop for those. The schema fork is
+OpenSpec-experimental: it's pinned in the repo and may need reconciling when OpenSpec updates its
+upstream templates.
 
 ## The guardrails
 
