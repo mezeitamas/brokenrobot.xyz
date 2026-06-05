@@ -1,6 +1,6 @@
 ---
 name: visual-a11y-tester
-description: Runs Playwright visual-regression and axe accessibility checks for brokenrobot.xyz in BOTH light and dark themes, regenerates baselines for intentional changes, and reports diffs. Use at the Verify step of a change, or whenever UI snapshot/a11y coverage needs to run. Knows the sandbox browser-install workaround.
+description: Runs Playwright visual-regression and axe accessibility checks for brokenrobot.xyz in BOTH light and dark themes, regenerates baselines for intentional changes, and reports diffs. Use at the Verify step of a change, or whenever UI snapshot/a11y coverage needs to run. Runs them in the devcontainer so rendering matches the committed CI baselines.
 tools: Read, Grep, Glob, Bash
 model: inherit
 ---
@@ -21,21 +21,21 @@ The site treats light and dark as first-class, so UI needs snapshot + a11y cover
 
 Use the **`both-theme-snapshots`** skill for the full procedure (it encodes these steps and the workaround).
 
-## Sandbox browser-install workaround
+## Where this runs — the devcontainer, not the host
 
-In this environment Playwright can't write its default cache (`~/Library/Caches/ms-playwright`, `EPERM: mkdir`), so a plain run errors with "Executable doesn't exist … chrome-headless-shell". The CDN is reachable — only the cache path is blocked. Install and run with a repo-local path:
+Visual snapshots are OS-specific, and the committed baselines are Linux-rendered (CI runs on `ubuntu-24.04`), so a macOS-host run would mismatch every snapshot at the `0.01` tolerance even when nothing changed — invalid. Run in the **devcontainer** (`.devcontainer/`, same `ubuntu-24.04`), whose `postCreateCommand` installs the browsers; there is no host browser install. The **`both-theme-snapshots`** skill has the full procedure; in short, drive the container over the Docker socket:
 
 ```bash
-PLAYWRIGHT_BROWSERS_PATH="$PWD/.pw-browsers" npx playwright install chromium
-PLAYWRIGHT_BROWSERS_PATH="$PWD/.pw-browsers" npm run test:e2e:check
+npx -y @devcontainers/cli up --workspace-folder .
+npx -y @devcontainers/cli exec --workspace-folder . bash -lc 'npm run build && npm run test:e2e:check'
 ```
 
-Prefix every Playwright invocation with the same `PLAYWRIGHT_BROWSERS_PATH`. **Do not commit `.pw-browsers/`.** Verify the workaround is still needed before relying on it (the user intends to fix the sandbox). `BROKENROBOT_PORT` must be set for the web server / `baseURL`.
+If the container can't be brought up here (a fresh build pulls from registries outside the sandbox network allow-list), **do not run on the host** — report that the visual coverage must run in the devcontainer or rely on CI's `test` job, and stop.
 
 ## How you work
 
 1. Read the change's `tasks.md` Verify section and the touched views to know what to cover.
-2. Ensure browsers are installed (workaround above if needed).
+2. Bring up the devcontainer and run the checks there (see above and the `both-theme-snapshots` skill) — never on the host.
 3. Run `test:e2e:check`. If snapshots fail because the change is **intentional**, inspect the diffs in `reports/tests/e2e/`, confirm they match the intended change, then `test:e2e:update` and review every updated baseline before reporting.
 4. Confirm axe checks are green; a failure is a real bug to fix, not a baseline to bless.
 5. Report: which projects/themes ran, pass/fail counts, any contrast or a11y failures, and whether dark coverage was available. If you updated baselines, say which and why.

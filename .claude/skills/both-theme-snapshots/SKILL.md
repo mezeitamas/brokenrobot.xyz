@@ -1,9 +1,9 @@
 ---
 name: both-theme-snapshots
-description: Run and update Playwright visual-regression + axe accessibility checks for brokenrobot.xyz in both light and dark themes. Use at a change's Verify step, when UI snapshots need refreshing after an intentional visual change, or when an a11y check needs to run. Encodes the sandbox browser-install workaround and the both-theme dependency.
+description: Run and update Playwright visual-regression + axe accessibility checks for brokenrobot.xyz in both light and dark themes. Use at a change's Verify step, when UI snapshots need refreshing after an intentional visual change, or when an a11y check needs to run. Runs inside the devcontainer so rendering matches the committed CI baselines.
 metadata:
     author: brokenrobot.xyz
-    version: '1.0'
+    version: '2.0'
 ---
 
 Run the site's visual-regression and accessibility coverage in **both themes**, and refresh baselines when a visual change is intentional. This is the automated half of every change's **Verify** step.
@@ -11,19 +11,24 @@ Run the site's visual-regression and accessibility coverage in **both themes**, 
 ## Ground truth
 
 - Config: `playwright.config.ts`. Specs: `tests/`. Snapshot tolerance `maxDiffPixelRatio: 0.01`; shared `tests/screenshot.css`.
-- Web server: `npm run serve` on `http://localhost:${BROKENROBOT_PORT}` (set `BROKENROBOT_PORT`).
+- Web server: `npm run serve` (astro preview of `dist/`) on `http://localhost:${BROKENROBOT_PORT}` — so `build` before running. `BROKENROBOT_PORT` comes from `.env`.
 - Scripts: `npm run test:e2e:check` (run), `npm run test:e2e:update` (regenerate snapshots).
 - A11y: `@axe-core/playwright` runs inside the specs — a failure is a real bug, not a baseline to bless.
 
-## Step 1 — Ensure browsers are installed (sandbox workaround)
+## Step 1 — Run inside the devcontainer, never on the host
 
-In this environment Playwright can't write its default cache (`~/Library/Caches/ms-playwright` → `EPERM: mkdir`); a plain run errors with "Executable doesn't exist … chrome-headless-shell". The CDN is reachable — only the cache path is blocked. Install to a repo-local path:
+Playwright visual snapshots are **OS-specific** (fonts and anti-aliasing differ), and the committed baselines are **Linux**-rendered (CI runs on `ubuntu-24.04`). Running on the macOS host would mismatch every snapshot at the `0.01` tolerance even when nothing changed — invalid results. So run in the **devcontainer** (`.devcontainer/`, also `ubuntu-24.04`), whose `postCreateCommand` already installs the browsers. There is no host browser install and no `PLAYWRIGHT_BROWSERS_PATH` to manage.
+
+Drive the container via the devcontainer CLI over the Docker socket:
 
 ```bash
-PLAYWRIGHT_BROWSERS_PATH="$PWD/.pw-browsers" npx playwright install chromium
+npx -y @devcontainers/cli up --workspace-folder .
 ```
 
-**Prefix every Playwright run with the same `PLAYWRIGHT_BROWSERS_PATH`.** Do **not** commit `.pw-browsers/` (and don't commit `.env` with the port). Re-check whether this workaround is still needed — the sandbox is being fixed; if a normal install works, skip the prefix.
+Notes:
+
+- Building the image the first time pulls from `mcr.microsoft.com` / `ghcr.io`; do that in your normal dev/VS Code flow (those hosts aren't in the sandbox network allow-list). Once the container exists, `up` reuses it.
+- If the container can't be brought up here, **do not fall back to a host run** — report that the visual coverage must run in the devcontainer or rely on CI's `test` job, and stop.
 
 ## Step 2 — Know which themes you can cover
 
@@ -35,19 +40,19 @@ Both themes are first-class, so UI needs coverage in light AND dark. Check `play
 ## Step 3 — Run the checks
 
 ```bash
-PLAYWRIGHT_BROWSERS_PATH="$PWD/.pw-browsers" npm run test:e2e:check
+npx -y @devcontainers/cli exec --workspace-folder . bash -lc 'npm run build && npm run test:e2e:check'
 ```
 
-Reports land in `reports/tests/e2e/` (list, html, json, junit). Read failures from there.
+Reports land in `reports/tests/e2e/` (list, html, json, junit) in the workspace. Read failures from there.
 
 ## Step 4 — Update baselines (only for intentional visual changes)
 
 If snapshots fail because the change is deliberate:
 
 1. Open the diffs in `reports/tests/e2e/` and confirm each matches the intended change — never bless a diff you can't explain.
-2. Regenerate:
+2. Regenerate (in the container, so the new baselines are Linux-rendered and match CI):
    ```bash
-   PLAYWRIGHT_BROWSERS_PATH="$PWD/.pw-browsers" npm run test:e2e:update
+   npx -y @devcontainers/cli exec --workspace-folder . bash -lc 'npm run build && npm run test:e2e:update'
    ```
 3. Review every updated baseline under `tests/__screenshots__/` (both themes if available) before staging. An a11y failure is **not** fixed by updating snapshots — fix the underlying issue.
 
