@@ -51,6 +51,7 @@
     },
     "devDependencies": {
         "@axe-core/playwright": "4.11.3",
+        "@devcontainers/cli": "0.87.0",
         "@fission-ai/openspec": "1.4.0",
         "@playwright/test": "1.60.0",
         "@types/mdast": "4.0.4",
