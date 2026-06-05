@@ -11,7 +11,7 @@ Run the site's visual-regression and accessibility coverage in **both themes**, 
 ## Ground truth
 
 - Config: `playwright.config.ts`. Specs: `tests/`. Snapshot tolerance `maxDiffPixelRatio: 0.01`; shared `tests/screenshot.css`.
-- Web server: `npm run serve` (astro preview of `dist/`) on `http://localhost:${BROKENROBOT_PORT}` — so `build` before running. `BROKENROBOT_PORT` comes from `.env`.
+- Web server: `npm run serve` (astro preview of `dist/`) on `http://localhost:${BROKENROBOT_PORT}` — so `build` before running. **`BROKENROBOT_PORT` must be set** — a git worktree has no `.env` (it's gitignored), so the commands below default it to `8080`, matching CI.
 - Scripts: `npm run test:e2e:check` (run), `npm run test:e2e:update` (regenerate snapshots).
 - A11y: `@axe-core/playwright` runs inside the specs — a failure is a real bug, not a baseline to bless.
 
@@ -40,7 +40,7 @@ Both themes are first-class, so UI needs coverage in light AND dark. Check `play
 ## Step 3 — Run the checks
 
 ```bash
-npx @devcontainers/cli exec --workspace-folder . bash -lc 'npm run build && npm run test:e2e:check'
+npx @devcontainers/cli exec --workspace-folder . bash -lc 'export BROKENROBOT_PORT="${BROKENROBOT_PORT:-8080}"; npm run build && npm run test:e2e:check'
 ```
 
 Reports land in `reports/tests/e2e/` (list, html, json, junit) in the workspace. Read failures from there.
@@ -52,7 +52,7 @@ If snapshots fail because the change is deliberate:
 1. Open the diffs in `reports/tests/e2e/` and confirm each matches the intended change — never bless a diff you can't explain.
 2. Regenerate (in the container, so the new baselines are Linux-rendered and match CI):
    ```bash
-   npx @devcontainers/cli exec --workspace-folder . bash -lc 'npm run build && npm run test:e2e:update'
+   npx @devcontainers/cli exec --workspace-folder . bash -lc 'export BROKENROBOT_PORT="${BROKENROBOT_PORT:-8080}"; npm run build && npm run test:e2e:update'
    ```
 3. Review every updated baseline under `tests/__screenshots__/` (both themes if available) before staging. An a11y failure is **not** fixed by updating snapshots — fix the underlying issue.
 

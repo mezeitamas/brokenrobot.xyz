@@ -27,6 +27,7 @@
                 ".",
                 "../../../.git",
                 "~/.npm",
+                "~/.docker/buildx",
                 "/var/folders",
                 "~/Library/Preferences/astro"
             ]
@@ -38,7 +39,10 @@
                 "api.anthropic.com",
                 "host.docker.internal",
                 "github.com",
-                "*.npmjs.org"
+                "*.npmjs.org",
+                "mcr.microsoft.com",
+                "ghcr.io",
+                "pkg-containers.githubusercontent.com"
             ],
             "allowLocalBinding": true,
             "allowAllUnixSockets": true

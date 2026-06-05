@@ -22,8 +22,10 @@ The read and write rules are deliberately **asymmetric** — writes are where da
 that's where the isolation sits:
 
 - **Writes are default-deny.** Only an explicit `allowWrite` list is writable: the project (`.`),
-  the repo's `.git` (so git works in a worktree — see below), the npm cache (`~/.npm`), the OS temp
-  area, and a couple of tool-pref dirs. A process cannot modify anything outside the project.
+  the repo's `.git` (so git works in a worktree — see below), the npm cache (`~/.npm`), the buildx
+  state dir (`~/.docker/buildx`, for the devcontainer build — `~/.docker/config.json` stays
+  read-only), the OS temp area, and a couple of tool-pref dirs. A process cannot modify anything
+  outside the project.
 - **Reads are open, except secrets.** `denyRead` lists a focused set of credential locations
   (`~/.ssh`, `~/.aws`, `~/.gnupg`, `~/.kube`, `~/.netrc`, `~/.npmrc`, `~/.config/gh`,
   `~/.config/gcloud`, `~/.git-credentials`, `~/Library/Keychains`); everything else is readable.
@@ -107,6 +109,12 @@ the agent does. This is also _why_ opening non-secret reads (above) costs little
 - These frictions are **local-only**. A normal checkout (CI, plain `git clone`) is not nested under
   a denied home, so `npm run format:check` / `type:check` / `lint:check` / `build` all run there
   without any of this — which is why none of the fixes live in application config.
+- **Running the devcontainer e2e from the agent** works: `network.allowedDomains` includes
+  `ghcr.io` / `pkg-containers.githubusercontent.com` / `mcr.microsoft.com` (the devcontainer CLI's
+  direct registry fetches — image layers and in-container installs go through the Docker daemon,
+  outside the sandbox), and `~/.docker/buildx` is writable for buildx state. A worktree has no
+  `.env`, so set `BROKENROBOT_PORT` (default `8080`) when running the suite. See the
+  `both-theme-snapshots` skill.
 
 ## Possible future hardening
 
