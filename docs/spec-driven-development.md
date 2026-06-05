@@ -70,8 +70,14 @@ carry Playwright visual + accessibility coverage.
 
 ## Setup
 
-OpenSpec is a local authoring tool, not a project dependency — it is installed on the host
-(`npm install -g @fission-ai/openspec@latest`, Node ≥ 20.19) rather than added to `package.json`,
-and it is not part of the build or runtime. Its Claude Code integration lives in `.claude/skills/`;
-run `openspec init --tools claude` (or `openspec update` after a CLI upgrade) to install or refresh
-it. The `openspec/` tree it manages is committed to the repository.
+OpenSpec is pinned as a **devDependency** (`@fission-ai/openspec`), so `npm ci` installs it for both
+CI and local use, and `npm run specs:check` (`openspec validate --all --strict`) runs that pinned
+version — it's what CI gates on. It is dev-only (not part of the build or runtime), and `audit:check`
+omits devDependencies.
+
+For **interactive** authoring the `opsx` slash commands call `openspec` directly on your `PATH`, so
+also install the CLI on the host (`npm install -g @fission-ai/openspec`, Node ≥ 20.19). Its Claude
+Code integration lives in `.claude/skills/`; run `openspec init --tools claude` (or `openspec update`
+after a CLI upgrade) to install or refresh it. The customized workflow schema
+(`openspec/schemas/brokenrobot/`) and the rest of the `openspec/` tree are committed to the
+repository.

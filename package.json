@@ -20,6 +20,7 @@
         "format:fix": "prettier '**/*.{astro,js,jsx,ts,tsx,cjs,mjs,css,json,md,mdx,yml}' --write",
         "lint:check": "astro sync && eslint 'src/**/*.{astro,ts,tsx}'",
         "type:check": "astro check && tsc --noEmit",
+        "specs:check": "openspec validate --all --strict",
         "test:e2e:check": "playwright test",
         "test:e2e:update": "playwright test --update-snapshots",
         "audit:check": "npm audit --package-lock-only --omit=dev",
@@ -50,6 +51,7 @@
     },
     "devDependencies": {
         "@axe-core/playwright": "4.11.3",
+        "@fission-ai/openspec": "1.4.0",
         "@playwright/test": "1.60.0",
         "@types/mdast": "4.0.4",
         "@typescript-eslint/eslint-plugin": "8.60.0",
