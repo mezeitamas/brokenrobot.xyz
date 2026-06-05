@@ -40,6 +40,9 @@ jobs:
       - name: Type check
         run: npm run type:check
 
+      - name: OpenSpec validate
+        run: npx -y @fission-ai/openspec@1.4.0 validate --all --strict
+
       - name: Set up TerraForm
         uses: hashicorp/setup-terraform@v4
         with:
