@@ -138,6 +138,10 @@
 
             "Bash(npm run *)",
             "Bash(npm run)",
+            "Bash(npm ci)",
+            "Bash(npm ci *)",
+            "Bash(npm install)",
+            "Bash(npm install *)",
 
             "Bash(openspec *)",
             "Bash(npx @devcontainers/cli *)"
