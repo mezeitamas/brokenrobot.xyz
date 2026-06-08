@@ -4,17 +4,18 @@ The mechanics behind [spec-driven development](../spec-driven-development.md). W
 workflow with **OpenSpec** for the artifacts, **role-based Claude Code agents** for the phases, and a
 few **skills** for the repeatable procedures. Each workflow phase maps to a concrete tool:
 
-| Phase             | How it's run                                            |
-| ----------------- | ------------------------------------------------------- |
-| Explore           | `/opsx:explore` (or the `openspec-explore` skill)       |
-| Propose           | `spec-author` agent / `/opsx:propose`                   |
-| Review (proposal) | a human reads the change folder                         |
-| Implement         | `frontend-implementer` agent / `/opsx:apply`            |
-| Verify            | `visual-a11y-tester` agent + `frontend-preflight` skill |
-| Review (diff)     | `frontend-reviewer` agent                               |
-| Archive           | `/opsx:archive`                                         |
+| Phase                     | How it's run                                                 |
+| ------------------------- | ------------------------------------------------------------ |
+| Explore                   | `/opsx:explore` (or the `openspec-explore` skill)            |
+| Propose                   | `spec-author` agent / `/opsx:propose`                        |
+| Review the proposal       | **you** read and approve the change folder                   |
+| Implement                 | `frontend-implementer` agent / `/opsx:apply`                 |
+| Verify                    | `visual-a11y-tester` agent + `frontend-preflight` skill      |
+| Review the implementation | `frontend-reviewer` agent surfaces findings; **you** approve |
+| Archive                   | `/opsx:archive`                                              |
 
-Nothing is automatic: each agent hands back to you, and the proposal review is the key checkpoint.
+Nothing is automatic: each agent hands back to you, and **you** hold both review gates — the proposal
+before any code, and the implementation before it merges.
 
 ## OpenSpec — the artifacts and commands
 

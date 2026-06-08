@@ -30,22 +30,25 @@ is ordinary feature work and **is** in scope.
 
 ## The workflow
 
-A change moves through these phases. Agreeing the proposal — before any code — is the checkpoint
-that matters most.
+A change moves through these phases. Two of them are explicitly **yours to decide** — you approve the
+proposal before any code, and the implementation before it merges; the rest is work done for you to
+accept or send back.
 
 1. **Explore** _(optional)_ — clarify the idea and investigate the codebase before committing to a
    proposal. No code is written.
 2. **Propose** — capture the intent: the why and scope, how the site's behaviour changes, and the
    work broken into small steps. This is the agreement.
-3. **Review the proposal** — a human reads and refines it **before any code is written**. The key
-   gate.
+3. **Review the proposal** — **you** read and refine it, then approve it **before any code is
+   written**. The most important gate.
 4. **Implement** — do the agreed work, surgically; nothing beyond the proposal.
-5. **Verify** — every change is verified: visual + accessibility coverage in **both themes**, and
-   the quality gate (types, lint, formatting, build).
-6. **Review** — a final pass over the diff against the guardrails (below) before it's merged.
+5. **Verify** — every change is checked: visual + accessibility coverage in **both themes**, and the
+   quality gate (types, lint, formatting, build).
+6. **Review the implementation** — **you** examine the result against the guardrails (below) and
+   approve it before it merges.
 7. **Archive** — fold the agreed behaviour into the living record of how the site works.
 
-_Explore_ and _Propose_ form the agreement; _Verify_ and _Review_ defend it.
+The two **you** steps are the decision gates: accept the plan, then accept the result. Everything
+between is execution you oversee.
 
 ## The living record
 
