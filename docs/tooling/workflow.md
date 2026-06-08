@@ -11,7 +11,7 @@ branch = one PR). Each phase maps to a concrete tool:
 | Propose                   | `spec-architect` agent / `/opsx:propose`                                                         |
 | Review the proposal       | **you** read and approve the change folder                                                       |
 | Implement                 | `frontend-engineer` agent / `/opsx:apply`, on a `<type>/<change-name>` branch                    |
-| Verify                    | `frontend-qa-engineer` agent + `frontend-preflight` skill                                        |
+| Verify                    | `frontend-qa-engineer` agent + `preflight-checks` skill                                          |
 | Archive                   | `/opsx:archive` (on the branch, so the PR carries code + spec)                                   |
 | Review the implementation | the pull request: CI runs the gates, `frontend-code-reviewer` surfaces findings, **you** approve |
 | Integrate                 | merge the PR into `main`                                                                         |
@@ -52,7 +52,7 @@ Each change is one short-lived branch and one pull request — the trunk-based h
   updated spec together — they land atomically.
 - **The PR runs CI** ([`pipeline.yml`](../../.github/workflows/pipeline.yml)): `format` / `lint` /
   `type` / `specs:check` in the verify job, the build, and the e2e suite — the same gates the
-  `frontend-preflight` and `both-theme-snapshots` skills run locally.
+  `preflight-checks` and `visual-regression-tests` skills run locally.
 - **Merge to `main` deploys.** No release branches; the deploy jobs ship to production on every merge
   — see [tech-stack](../tech-stack.md) for the targets.
 - **The deploy gate** (the third human gate) is meant to be a required approval on the `Production`
@@ -82,12 +82,12 @@ Agent/Task tool, or let the main session delegate.
 
 Procedure skills the agents (or you) invoke, alongside the `openspec-*` lifecycle skills:
 
-- **`both-theme-snapshots`** — run/update Playwright visual + a11y in light **and** dark (in the
+- **`visual-regression-tests`** — run/update Playwright visual + a11y in light **and** dark (in the
   devcontainer), with the baseline-review steps. Knows the both-theme dependency on the dark
   Playwright projects.
 - **`component-scaffold`** — scaffold a new Astro component or Preact island to convention
   (placement, typed props, scoped token-driven styles, the right interactivity tier).
-- **`frontend-preflight`** — run the non-visual gate (`type:check` + `lint:check` + `format:check` +
+- **`preflight-checks`** — run the non-visual gate (`type:check` + `lint:check` + `format:check` +
   `build`) and summarize failures.
 
 ## How the proposer is customized
@@ -112,8 +112,8 @@ instruction + context). The seeded Verify section is:
 ```markdown
 ## N. Verify
 
-- [ ] Visual + a11y snapshots pass in **both themes** for every touched view (both-theme-snapshots)
-- [ ] `type:check`, `lint:check`, `format:check` all pass (frontend-preflight)
+- [ ] Visual + a11y snapshots pass in **both themes** for every touched view (visual-regression-tests)
+- [ ] `type:check`, `lint:check`, `format:check` all pass (preflight-checks)
 - [ ] `build` succeeds — no third-party requests, no CSP violations
 - [ ] Manual preview: no theme flash, interactions work, console clean, responsive at 375px
 ```

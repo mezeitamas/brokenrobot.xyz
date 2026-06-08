@@ -114,7 +114,7 @@ the agent does. This is also _why_ opening non-secret reads (above) costs little
   direct registry fetches — image layers and in-container installs go through the Docker daemon,
   outside the sandbox), and `~/.docker/buildx` is writable for buildx state. A worktree has no
   `.env`, so set `BROKENROBOT_PORT` (default `8080`) when running the suite. See the
-  `both-theme-snapshots` skill.
+  `visual-regression-tests` skill.
 
 ## Possible future hardening
 

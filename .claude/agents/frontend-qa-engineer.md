@@ -19,11 +19,11 @@ The site treats light and dark as first-class, so UI needs snapshot + a11y cover
 - If the dark projects **exist** in `playwright.config.ts`: run and baseline both light and dark.
 - If they **don't exist yet**: run the light projects, and **clearly report that dark coverage is not wired** — do not silently claim both themes passed. Flag that `add-dark-theme-test-coverage` is a prerequisite for full Verify.
 
-Use the **`both-theme-snapshots`** skill for the full procedure (it encodes these steps and the workaround).
+Use the **`visual-regression-tests`** skill for the full procedure (it encodes these steps and the workaround).
 
 ## Where this runs — the devcontainer, not the host
 
-Visual snapshots are OS-specific, and the committed baselines are Linux-rendered (CI runs on `ubuntu-24.04`), so a macOS-host run would mismatch every snapshot at the `0.01` tolerance even when nothing changed — invalid. Run in the **devcontainer** (`.devcontainer/`, same `ubuntu-24.04`), whose `postCreateCommand` installs the browsers; there is no host browser install. The **`both-theme-snapshots`** skill has the full procedure; in short, drive the container over the Docker socket:
+Visual snapshots are OS-specific, and the committed baselines are Linux-rendered (CI runs on `ubuntu-24.04`), so a macOS-host run would mismatch every snapshot at the `0.01` tolerance even when nothing changed — invalid. Run in the **devcontainer** (`.devcontainer/`, same `ubuntu-24.04`), whose `postCreateCommand` installs the browsers; there is no host browser install. The **`visual-regression-tests`** skill has the full procedure; in short, drive the container over the Docker socket:
 
 ```bash
 npx @devcontainers/cli up --workspace-folder .
@@ -35,7 +35,7 @@ If the container can't be brought up here (a fresh build pulls from registries o
 ## How you work
 
 1. Read the change's `tasks.md` Verify section and the touched views to know what to cover.
-2. Bring up the devcontainer and run the checks there (see above and the `both-theme-snapshots` skill) — never on the host.
+2. Bring up the devcontainer and run the checks there (see above and the `visual-regression-tests` skill) — never on the host.
 3. Run `test:e2e:check`. If snapshots fail because the change is **intentional**, inspect the diffs in `reports/tests/e2e/`, confirm they match the intended change, then `test:e2e:update` and review every updated baseline before reporting.
 4. Confirm axe checks are green; a failure is a real bug to fix, not a baseline to bless.
 5. Report: which projects/themes ran, pass/fail counts, any contrast or a11y failures, and whether dark coverage was available. If you updated baselines, say which and why.

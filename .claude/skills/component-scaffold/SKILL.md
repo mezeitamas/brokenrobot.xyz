@@ -85,6 +85,6 @@ export function Thing({ label }: Props) {
 
 ## 4 — Don't forget
 
-- **Both themes:** sanity-check the component reads well in light and dark (token usage, not hard-coded values). New UI needs both-theme snapshot + a11y coverage — see the `both-theme-snapshots` skill.
+- **Both themes:** sanity-check the component reads well in light and dark (token usage, not hard-coded values). New UI needs both-theme snapshot + a11y coverage — see the `visual-regression-tests` skill.
 - Keep it **surgical** — scaffold only what the task needs; no speculative props or configurability.
-- Run the `frontend-preflight` skill (or `type:check` / `lint:check` / `format:fix`) before handing off.
+- Run the `preflight-checks` skill (or `type:check` / `lint:check` / `format:fix`) before handing off.
