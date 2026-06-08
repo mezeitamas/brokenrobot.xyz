@@ -5,17 +5,17 @@ The mechanics behind the [development workflow](../development-workflow.md). We 
 the repeatable procedures, and **scaled trunk-based** integration (one change = one short-lived
 branch = one PR). Each phase maps to a concrete tool:
 
-| Phase                     | How it's run                                                                                |
-| ------------------------- | ------------------------------------------------------------------------------------------- |
-| Explore                   | `/opsx:explore` (or the `openspec-explore` skill)                                           |
-| Propose                   | `spec-author` agent / `/opsx:propose`                                                       |
-| Review the proposal       | **you** read and approve the change folder                                                  |
-| Implement                 | `frontend-implementer` agent / `/opsx:apply`, on a `<type>/<change-name>` branch            |
-| Verify                    | `visual-a11y-tester` agent + `frontend-preflight` skill                                     |
-| Archive                   | `/opsx:archive` (on the branch, so the PR carries code + spec)                              |
-| Review the implementation | the pull request: CI runs the gates, `frontend-reviewer` surfaces findings, **you** approve |
-| Integrate                 | merge the PR into `main`                                                                    |
-| Deploy                    | `pipeline.yml` releases to production (the environment-approval gate is pending)            |
+| Phase                     | How it's run                                                                                     |
+| ------------------------- | ------------------------------------------------------------------------------------------------ |
+| Explore                   | `/opsx:explore` (or the `openspec-explore` skill)                                                |
+| Propose                   | `spec-architect` agent / `/opsx:propose`                                                         |
+| Review the proposal       | **you** read and approve the change folder                                                       |
+| Implement                 | `frontend-engineer` agent / `/opsx:apply`, on a `<type>/<change-name>` branch                    |
+| Verify                    | `frontend-qa-engineer` agent + `frontend-preflight` skill                                        |
+| Archive                   | `/opsx:archive` (on the branch, so the PR carries code + spec)                                   |
+| Review the implementation | the pull request: CI runs the gates, `frontend-code-reviewer` surfaces findings, **you** approve |
+| Integrate                 | merge the PR into `main`                                                                         |
+| Deploy                    | `pipeline.yml` releases to production (the environment-approval gate is pending)                 |
 
 Nothing is automatic: each agent hands back to you, and **you** hold the three gates — the proposal
 before any code, the implementation before it merges, and the production release.
@@ -63,18 +63,18 @@ Each change is one short-lived branch and one pull request — the trunk-based h
 Four role-based subagents, each with focused instructions and tool access. Invoke them with the
 Agent/Task tool, or let the main session delegate.
 
-- **`spec-author`** (opus) — the architecture-aware proposer. Reads the specs, docs, and codebase
+- **`spec-architect`** (opus) — the architecture-aware proposer. Reads the specs, docs, and codebase
   and drives the propose flow to write a change (`proposal.md`, `tasks.md`, optional `design.md`,
   spec deltas). It deliberately does **not** carry the guardrails or the task structure itself — the
   `brokenrobot` schema and `config.yaml` inject those (see below), so there's one source of truth.
   Writes only under `openspec/`; never application code.
-- **`frontend-implementer`** (inherit) — applies an agreed change's `tasks.md`: Astro/Preact/CSS to
+- **`frontend-engineer`** (inherit) — applies an agreed change's `tasks.md`: Astro/Preact/CSS to
   the repo's conventions (scoped `<style>` + `@reference`, token utilities, path aliases,
   `InternalLink`/`ExternalLink`). Surgical edits under `src/`; stops at the Verify step.
-- **`visual-a11y-tester`** (inherit) — runs Playwright visual-regression + axe in **both** themes (in
+- **`frontend-qa-engineer`** (inherit) — runs Playwright visual-regression + axe in **both** themes (in
   the devcontainer, so rendering matches CI), regenerates baselines for intentional changes, and
   reports diffs. Read-only on `src/`; hands styling bugs back to the implementer.
-- **`frontend-reviewer`** (opus) — a read-only guardrail gate over the diff before commit, grouping
+- **`frontend-code-reviewer`** (opus) — a read-only guardrail gate over the diff before commit, grouping
   findings as Blocking / Should-fix / Nits. Flags CSP, theming, interactivity-ladder, and convention
   violations the implementer missed.
 
@@ -92,8 +92,8 @@ Procedure skills the agents (or you) invoke, alongside the `openspec-*` lifecycl
 
 ## How the proposer is customized
 
-Rather than living in the `spec-author` prompt, the proposal/task shaping is baked into OpenSpec's
-own customization, so the standard `/opsx:propose` flow (any agent, not just `spec-author`) produces
+Rather than living in the `spec-architect` prompt, the proposal/task shaping is baked into OpenSpec's
+own customization, so the standard `/opsx:propose` flow (any agent, not just `spec-architect`) produces
 it. One source of truth:
 
 - **`openspec/config.yaml` → `context`** — the site's enduring guardrails, injected into every
@@ -121,7 +121,7 @@ instruction + context). The seeded Verify section is:
 This shapes _generation_. Structural validity is also **enforced** in CI: the `verify` job runs
 `npm run specs:check` (`openspec validate --all --strict`), so malformed proposals or spec deltas
 fail a PR. The _content_ rules above (the Verify section, primitives-first) are generation-shaped
-only — not hard-checked — so the `frontend-reviewer` and your review are the backstop. The schema
+only — not hard-checked — so the `frontend-code-reviewer` and your review are the backstop. The schema
 fork is OpenSpec-experimental: it's pinned in the repo and may need reconciling when OpenSpec updates
 its upstream templates.
 
