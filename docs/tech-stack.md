@@ -34,10 +34,12 @@ design overhaul.
 - `astro build` produces a fully **static** `dist/`. HTML is compressed, stylesheets are
   **always inlined**, and images use responsive styles (see `astro.config.ts`).
 - **CI/CD** runs in GitHub Actions (`.github/workflows/pipeline.yml`): a `verify` →
-  `build` → `test` sequence (format, lint, type-check, then build, then Playwright), followed
-  by deployment from `main`.
+  `build` → `test` sequence (format, lint, type-check, OpenSpec validation, then build, then
+  Playwright), followed by deployment from `main`.
 - **Dual-cloud delivery:** the built site is published to both **AWS** (S3 sync + CloudFront
-  invalidation) and **Cloudflare Pages**. Production deploys are gated by environment approval.
+  invalidation) and **Cloudflare Pages**, on every merge to `main`. The deploy jobs target the
+  `Production` and `Cloudflare` GitHub Environments; a required-approval gate on those environments
+  is intended but **not yet configured** (see [development-workflow](development-workflow.md)).
 
 ## Infrastructure & tooling
 

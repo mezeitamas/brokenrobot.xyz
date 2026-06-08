@@ -1,21 +1,24 @@
 # How we run the workflow
 
-The mechanics behind [spec-driven development](../spec-driven-development.md). We implement that
-workflow with **OpenSpec** for the artifacts, **role-based Claude Code agents** for the phases, and a
-few **skills** for the repeatable procedures. Each workflow phase maps to a concrete tool:
+The mechanics behind the [development workflow](../development-workflow.md). We implement it with
+**OpenSpec** for the artifacts, **role-based Claude Code agents** for the phases, a few **skills** for
+the repeatable procedures, and **scaled trunk-based** integration (one change = one short-lived
+branch = one PR). Each phase maps to a concrete tool:
 
-| Phase                     | How it's run                                                 |
-| ------------------------- | ------------------------------------------------------------ |
-| Explore                   | `/opsx:explore` (or the `openspec-explore` skill)            |
-| Propose                   | `spec-author` agent / `/opsx:propose`                        |
-| Review the proposal       | **you** read and approve the change folder                   |
-| Implement                 | `frontend-implementer` agent / `/opsx:apply`                 |
-| Verify                    | `visual-a11y-tester` agent + `frontend-preflight` skill      |
-| Review the implementation | `frontend-reviewer` agent surfaces findings; **you** approve |
-| Archive                   | `/opsx:archive`                                              |
+| Phase                     | How it's run                                                                                |
+| ------------------------- | ------------------------------------------------------------------------------------------- |
+| Explore                   | `/opsx:explore` (or the `openspec-explore` skill)                                           |
+| Propose                   | `spec-author` agent / `/opsx:propose`                                                       |
+| Review the proposal       | **you** read and approve the change folder                                                  |
+| Implement                 | `frontend-implementer` agent / `/opsx:apply`, on a `<type>/<change-name>` branch            |
+| Verify                    | `visual-a11y-tester` agent + `frontend-preflight` skill                                     |
+| Archive                   | `/opsx:archive` (on the branch, so the PR carries code + spec)                              |
+| Review the implementation | the pull request: CI runs the gates, `frontend-reviewer` surfaces findings, **you** approve |
+| Integrate                 | merge the PR into `main`                                                                    |
+| Deploy                    | `pipeline.yml` releases to production (the environment-approval gate is pending)            |
 
-Nothing is automatic: each agent hands back to you, and **you** hold both review gates — the proposal
-before any code, and the implementation before it merges.
+Nothing is automatic: each agent hands back to you, and **you** hold the three gates — the proposal
+before any code, the implementation before it merges, and the production release.
 
 ## OpenSpec — the artifacts and commands
 
@@ -38,6 +41,22 @@ openspec/
 ├── changes/    # in-flight proposals; completed ones move to changes/archive/
 └── schemas/    # the project-local workflow schema (see "How the proposer is customized")
 ```
+
+## Branches, integration, and deploy
+
+Each change is one short-lived branch and one pull request — the trunk-based half of the workflow:
+
+- **Branch naming** — `<type>/<change-name>`: a Conventional-Commits type plus the OpenSpec change
+  name, e.g. `feat/tags-index`, `fix/rss-urls`. Branch ↔ change ↔ commit type line up.
+- **Archive on the branch**, before opening the PR, so the pull request carries the code and the
+  updated spec together — they land atomically.
+- **The PR runs CI** ([`pipeline.yml`](../../.github/workflows/pipeline.yml)): `format` / `lint` /
+  `type` / `specs:check` in the verify job, the build, and the e2e suite — the same gates the
+  `frontend-preflight` and `both-theme-snapshots` skills run locally.
+- **Merge to `main` deploys.** No release branches; the deploy jobs ship to production on every merge
+  — see [tech-stack](../tech-stack.md) for the targets.
+- **The deploy gate** (the third human gate) is meant to be a required approval on the `Production`
+  and `Cloudflare` GitHub Environments. It isn't configured yet — a planned change.
 
 ## The agents (`.claude/agents/`)
 

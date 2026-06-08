@@ -17,4 +17,4 @@ The committed tooling configuration lives under [`.claude/`](../../.claude): `ag
 and `settings.json` (the sandbox & permissions — see [sandbox.md](sandbox.md)).
 
 The _what_ this implements — the way we work, independent of any tool — is the application doc
-[../spec-driven-development.md](../spec-driven-development.md). `workflow.md` is the _how_.
+[../development-workflow.md](../development-workflow.md). `workflow.md` is the _how_.
