@@ -1,66 +1,62 @@
 # Spec-driven development
 
-Changes to this site are planned with [OpenSpec](https://github.com/Fission-AI/OpenSpec) — a
-lightweight spec layer that gets a human and the AI agent to **agree on what to build before any
-code is written**. A proposal captures the intent, the work is applied against it, and the agreed
-spec is then folded into a living record of how the site behaves.
+We agree on **what to build before any code is written**. A change starts by capturing intent — the
+why, the scope, and the work — and once it's done, the agreed behaviour is folded into a living
+record of how the site behaves. The intent is written first and updated as part of the change, so
+the documentation never drifts behind the code.
 
-This keeps the documentation honest: the spec is written first and updated as part of the change,
-so it never drifts behind the code.
+This page is the _what_: the way we work, independent of any tool. The _how_ — the specific tooling,
+commands, and agents that implement it — is in [tooling/workflow.md](tooling/workflow.md).
 
 ## When to use it
 
-Use OpenSpec for changes to the site itself:
+For changes to the site itself:
 
 - **Features** — new capabilities or behaviour (e.g. a theme toggle, a tags index, search).
 - **Design** — visual and layout changes (typography, colour, spacing, components).
 - **Infrastructure** — Terraform, deployment, CI/CD, and hosting changes under `infra/`.
 
-Refactors and other non-trivial code changes follow the same flow when they're worth agreeing on
-up front.
+Refactors and other non-trivial code changes follow the same flow when they're worth agreeing on up
+front.
 
 ### Out of scope: writing blog articles
 
-Authoring or editing a **blog article** is _not_ an OpenSpec change. Article content lives under
+Authoring or editing a **blog article** is _not_ a spec-driven change. Article content lives under
 `src/content/blog/**` and is written directly, then committed with the custom `post` type (see
 [commit-conventions](commit-conventions.md)). There is no spec for prose.
 
-The blog _infrastructure_ — rendering components, the content schema in `src/content.config.ts`,
-remark plugins, the RSS feed — is ordinary feature work and **is** in scope.
+The blog _infrastructure_ — rendering components, the content schema, remark plugins, the RSS feed —
+is ordinary feature work and **is** in scope.
 
 ## The workflow
 
-OpenSpec is driven from Claude Code through slash commands:
+A change moves through these phases. Agreeing the proposal — before any code — is the checkpoint
+that matters most.
 
-1. **`/opsx:explore "<topic>"`** _(optional)_ — a thinking mode for clarifying an idea or
-   investigating the codebase before committing to a proposal. It never writes application code.
-2. **`/opsx:propose "<idea>"`** — the agent reads the existing specs and the codebase, then writes
-   a change folder under `openspec/changes/<name>/`: a `proposal.md` (the why and the scope),
-   `tasks.md` (the work, broken into steps), an optional `design.md` (technical decisions), and
-   spec deltas under `specs/`. Review and refine this before any code is written.
-3. **`/opsx:apply`** — the agent implements the tasks against the agreed proposal.
-4. **`/opsx:archive`** — once the change is done, its spec deltas are merged into the living
-   `openspec/specs/` tree and the change is moved to `openspec/changes/archive/`.
+1. **Explore** _(optional)_ — clarify the idea and investigate the codebase before committing to a
+   proposal. No code is written.
+2. **Propose** — capture the intent: the why and scope, how the site's behaviour changes, and the
+   work broken into small steps. This is the agreement.
+3. **Review the proposal** — a human reads and refines it **before any code is written**. The key
+   gate.
+4. **Implement** — do the agreed work, surgically; nothing beyond the proposal.
+5. **Verify** — every change is verified: visual + accessibility coverage in **both themes**, and
+   the quality gate (types, lint, formatting, build).
+6. **Review** — a final pass over the diff against the guardrails (below) before it's merged.
+7. **Archive** — fold the agreed behaviour into the living record of how the site works.
 
-`openspec list` and `openspec validate` are useful from the CLI.
+_Explore_ and _Propose_ form the agreement; _Verify_ and _Review_ defend it.
 
-This repo layers role-based agents and skills on top of this lifecycle (adding `verify` and
-`review` steps and baking the guardrails into the propose flow). That tooling is documented
-separately in [tooling/workflow.md](tooling/workflow.md).
+## The living record
 
-## Where things live
+We keep two things: a **living record of how the site behaves today**, and the **in-flight changes**
+modifying it. The record answers "how does it work now?"; a change answers "what are we changing, and
+why?". When a change is done, its agreed behaviour merges into the record — which is what keeps the
+record honest.
 
-```
-openspec/
-├── specs/      # the living source of truth — how the site behaves today
-└── changes/    # in-flight proposals; completed ones move to changes/archive/
-```
+## Guardrails
 
-`specs/` answers "how does it work now?"; `changes/` answers "what are we changing, and why?".
-
-## Guardrails for proposals
-
-A proposal must respect the site's enduring constraints — don't restate them in each spec, but
+Every change must respect the site's enduring constraints — don't restate them in each proposal, but
 honour them. The authoritative sources are:
 
 - [architecture](architecture.md) — code structure, content model, and theming (CSS custom
@@ -70,18 +66,4 @@ honour them. The authoritative sources are:
   shape of the site (no third-party scripts, no inline `on*` handlers) and the principles behind it.
 
 In short: output stays static, the CSP stays strict, both themes stay first-class, and UI changes
-carry Playwright visual + accessibility coverage.
-
-## Setup
-
-OpenSpec is pinned as a **devDependency** (`@fission-ai/openspec`), so `npm ci` installs it for both
-CI and local use, and `npm run specs:check` (`openspec validate --all --strict`) runs that pinned
-version — it's what CI gates on. It is dev-only (not part of the build or runtime), and `audit:check`
-omits devDependencies.
-
-For **interactive** authoring the `opsx` slash commands call `openspec` directly on your `PATH`, so
-also install the CLI on the host (`npm install -g @fission-ai/openspec`, Node ≥ 20.19). Its Claude
-Code integration lives in `.claude/skills/`; run `openspec init --tools claude` (or `openspec update`
-after a CLI upgrade) to install or refresh it. The customized workflow schema
-(`openspec/schemas/brokenrobot/`) and the rest of the `openspec/` tree are committed to the
-repository.
+carry visual + accessibility coverage.

@@ -5,8 +5,8 @@ the sandbox that constrains it. This is deliberately kept separate from the appl
 documentation in [../README.md](../README.md), which covers what the site _is_ and how its code is
 built. These docs cover _how we work on it_.
 
-- [workflow.md](workflow.md) — the frontend spec-driven workflow: the role-based agents, the
-  skills, and the propose → apply → verify → review loop a change moves through.
+- [workflow.md](workflow.md) — how we run the workflow: OpenSpec, the role-based agents, the skills,
+  and the schema/config that bakes the guardrails into the propose flow.
 - [sandbox.md](sandbox.md) — the Claude Code sandbox & permission model: what the agent may read,
   write, run, and reach on the network, and why.
 
@@ -16,6 +16,5 @@ The committed tooling configuration lives under [`.claude/`](../../.claude): `ag
 `skills/` (the workflow — see [workflow.md](workflow.md)), `commands/` (the `opsx` slash commands),
 and `settings.json` (the sandbox & permissions — see [sandbox.md](sandbox.md)).
 
-The OpenSpec _process_ these agents follow (proposing and applying site changes) is part of the
-application workflow and is documented with the project docs in
-[../spec-driven-development.md](../spec-driven-development.md).
+The _what_ this implements — the way we work, independent of any tool — is the application doc
+[../spec-driven-development.md](../spec-driven-development.md). `workflow.md` is the _how_.
