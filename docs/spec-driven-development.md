@@ -44,6 +44,10 @@ OpenSpec is driven from Claude Code through slash commands:
 
 `openspec list` and `openspec validate` are useful from the CLI.
 
+This repo layers role-based agents and skills on top of this lifecycle (adding `verify` and
+`review` steps and baking the guardrails into the propose flow). That tooling is documented
+separately in [tooling/workflow.md](tooling/workflow.md).
+
 ## Where things live
 
 ```
