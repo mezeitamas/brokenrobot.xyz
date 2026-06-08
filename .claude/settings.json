@@ -42,7 +42,8 @@
                 "*.npmjs.org",
                 "mcr.microsoft.com",
                 "ghcr.io",
-                "pkg-containers.githubusercontent.com"
+                "pkg-containers.githubusercontent.com",
+                "containers.dev"
             ],
             "allowLocalBinding": true,
             "allowAllUnixSockets": true
