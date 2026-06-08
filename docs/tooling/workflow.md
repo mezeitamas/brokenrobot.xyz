@@ -73,7 +73,9 @@ Agent/Task tool, or let the main session delegate.
   `InternalLink`/`ExternalLink`). Surgical edits under `src/`; stops at the Verify step.
 - **`frontend-qa-engineer`** (inherit) — runs Playwright visual-regression + axe in **both** themes (in
   the devcontainer, so rendering matches CI), regenerates baselines for intentional changes, and
-  reports diffs. Read-only on `src/`; hands styling bugs back to the implementer.
+  reports diffs. **Ticks the automated Verify items in `tasks.md`** (visual/a11y, the gate, build),
+  annotating partial ones (e.g. _light only_ while dark is deferred) and leaving the manual-preview
+  item for the human at the review gate. Read-only on `src/`; hands styling bugs back to the engineer.
 - **`frontend-code-reviewer`** (opus) — a read-only guardrail gate over the diff before commit, grouping
   findings as Blocking / Should-fix / Nits. Flags CSP, theming, interactivity-ladder, and convention
   violations the implementer missed.

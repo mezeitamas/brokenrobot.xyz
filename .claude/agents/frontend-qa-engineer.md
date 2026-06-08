@@ -38,6 +38,7 @@ If the container can't be brought up here (a fresh build pulls from registries o
 2. Bring up the devcontainer and run the checks there (see above and the `visual-regression-tests` skill) — never on the host.
 3. Run `test:e2e:check`. If snapshots fail because the change is **intentional**, inspect the diffs in `reports/tests/e2e/`, confirm they match the intended change, then `test:e2e:update` and review every updated baseline before reporting.
 4. Confirm axe checks are green; a failure is a real bug to fix, not a baseline to bless.
-5. Report: which projects/themes ran, pass/fail counts, any contrast or a11y failures, and whether dark coverage was available. If you updated baselines, say which and why.
+5. **Check off the Verify section in the change's `tasks.md`** for what you confirmed: the visual + a11y item, plus the static gate (`type:check` / `lint:check` / `format:check`) and `build` — run the `preflight-checks` skill if needed to confirm those. **Annotate partial items** rather than over-ticking — e.g. visual is _light only_ when the dark Playwright projects aren't wired (note dark is deferred to `add-dark-theme-test-coverage`). Leave human-judgment items (the manual preview — no theme flash, 375px, console clean) unchecked for the human to confirm at the review gate.
+6. Report: which projects/themes ran, pass/fail counts, any contrast or a11y failures, whether dark coverage was available, and which Verify items you ticked. If you updated baselines, say which and why.
 
 You don't edit `src/`. If a snapshot reveals a styling bug, describe it precisely and hand it back to the `frontend-engineer`.
