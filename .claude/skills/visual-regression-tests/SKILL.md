@@ -19,15 +19,15 @@ Run the site's visual-regression and accessibility coverage in **both themes**, 
 
 Playwright visual snapshots are **OS-specific** (fonts and anti-aliasing differ), and the committed baselines are **Linux**-rendered (CI runs on `ubuntu-24.04`). Running on the macOS host would mismatch every snapshot at the `0.01` tolerance even when nothing changed — invalid results. So run in the **devcontainer** (`.devcontainer/`, also `ubuntu-24.04`), whose `postCreateCommand` already installs the browsers. There is no host browser install and no `PLAYWRIGHT_BROWSERS_PATH` to manage.
 
-Drive the container via the devcontainer CLI over the Docker socket. `npx @devcontainers/cli` resolves the pinned `@devcontainers/cli` devDependency (run `npm ci` on the host first):
+Drive the container with the `dc:*` npm scripts, which wrap the pinned `@devcontainers/cli` devDependency over the Docker socket (run `npm ci` on the host first):
 
 ```bash
-npx @devcontainers/cli up --workspace-folder .
+npm run dc:up
 ```
 
 Notes:
 
-- Building the image the first time pulls from `mcr.microsoft.com` / `ghcr.io`; do that in your normal dev/VS Code flow (those hosts aren't in the sandbox network allow-list). Once the container exists, `up` reuses it.
+- Building the image the first time fetches features and the base image from `containers.dev` / `ghcr.io` / `mcr.microsoft.com` — all in the sandbox network allow-list, so `dc:up` can build here. Once the container exists, it's reused.
 - If the container can't be brought up here, **do not fall back to a host run** — report that the visual coverage must run in the devcontainer or rely on CI's `test` job, and stop.
 
 ## Step 2 — Know which themes you can cover
@@ -40,7 +40,7 @@ Both themes are first-class, so UI needs coverage in light AND dark. Check `play
 ## Step 3 — Run the checks
 
 ```bash
-npx @devcontainers/cli exec --workspace-folder . bash -lc 'export BROKENROBOT_PORT="${BROKENROBOT_PORT:-8080}"; npm run build && npm run test:e2e:check'
+npm run dc:e2e:check
 ```
 
 Reports land in `reports/tests/e2e/` (list, html, json, junit) in the workspace. Read failures from there.
@@ -52,7 +52,7 @@ If snapshots fail because the change is deliberate:
 1. Open the diffs in `reports/tests/e2e/` and confirm each matches the intended change — never bless a diff you can't explain.
 2. Regenerate (in the container, so the new baselines are Linux-rendered and match CI):
    ```bash
-   npx @devcontainers/cli exec --workspace-folder . bash -lc 'export BROKENROBOT_PORT="${BROKENROBOT_PORT:-8080}"; npm run build && npm run test:e2e:update'
+   npm run dc:e2e:update
    ```
 3. Review every updated baseline under `tests/__screenshots__/` (both themes if available) before staging. An a11y failure is **not** fixed by updating snapshots — fix the underlying issue.
 

@@ -26,11 +26,11 @@ Use the **`visual-regression-tests`** skill for the full procedure (it encodes t
 Visual snapshots are OS-specific, and the committed baselines are Linux-rendered (CI runs on `ubuntu-24.04`), so a macOS-host run would mismatch every snapshot at the `0.01` tolerance even when nothing changed — invalid. Run in the **devcontainer** (`.devcontainer/`, same `ubuntu-24.04`), whose `postCreateCommand` installs the browsers; there is no host browser install. The **`visual-regression-tests`** skill has the full procedure; in short, drive the container over the Docker socket:
 
 ```bash
-npx @devcontainers/cli up --workspace-folder .
-npx @devcontainers/cli exec --workspace-folder . bash -lc 'export BROKENROBOT_PORT="${BROKENROBOT_PORT:-8080}"; npm run build && npm run test:e2e:check'
+npm run dc:up
+npm run dc:e2e:check
 ```
 
-If the container can't be brought up here (a fresh build pulls from registries outside the sandbox network allow-list), **do not run on the host** — report that the visual coverage must run in the devcontainer or rely on CI's `test` job, and stop.
+If the container can't be brought up here, **do not run on the host** — report that the visual coverage must run in the devcontainer or rely on CI's `test` job, and stop.
 
 ## How you work
 

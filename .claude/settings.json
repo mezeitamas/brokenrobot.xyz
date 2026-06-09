@@ -143,8 +143,7 @@
             "Bash(npm install)",
             "Bash(npm install *)",
 
-            "Bash(openspec *)",
-            "Bash(npx @devcontainers/cli *)"
+            "Bash(openspec *)"
         ],
         "deny": [
             "Bash(cd /*)",
