@@ -121,6 +121,10 @@ the agent does. This is also _why_ opening non-secret reads (above) costs little
   `http://localhost:${BROKENROBOT_PORT}` — both already allowed. It backs the manual-preview Verify
   checks and interactive browsing; macOS rendering is non-authoritative, so pixel baselines stay in the
   devcontainer suite.
+- **The `chrome-devtools` and `terraform` MCP servers** share that boundary: `chrome-devtools` drives host
+  Chrome like Playwright; `terraform` runs as a short-lived Docker container (image pulled daemon-side) that
+  queries the public Terraform Registry. Like all MCP servers they're launched by Claude Desktop, not the
+  bash sandbox.
 
 ## Possible future hardening
 

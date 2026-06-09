@@ -7,6 +7,14 @@
         "playwright": {
             "command": "npx",
             "args": ["@playwright/mcp", "--browser=chrome", "--headless", "--isolated"]
+        },
+        "chrome-devtools": {
+            "command": "npx",
+            "args": ["chrome-devtools-mcp", "--headless", "--isolated"]
+        },
+        "terraform": {
+            "command": "docker",
+            "args": ["run", "-i", "--rm", "hashicorp/terraform-mcp-server:0.5.2", "--toolsets=registry"]
         }
     }
 }

@@ -104,6 +104,13 @@ Project-scoped and committed, so the team shares them:
   item (theme flash, console, interactions, 375px); it also serves interactive exploration and
   locating selectors when authoring specs. Host rendering is **non-authoritative** — pixel baselines
   stay in the devcontainer suite. Approve it once in `/mcp`.
+- **`chrome-devtools`** — Google's `chrome-devtools-mcp` (a pinned devDependency), host Chrome headless.
+  Performance traces (Core Web Vitals) and a `lighthouse_audit` (a11y / SEO / best-practices) against the
+  local preview — the perf/SEO signal the axe + visual-regression gate doesn't cover. Local-preview scores
+  are a **relative regression signal**, not prod-authoritative.
+- **`terraform`** — HashiCorp's official `terraform-mcp-server` (Docker, pinned `:0.5.2`, `--toolsets=registry`).
+  Public Terraform Registry docs — AWS/Cloudflare provider and module lookup — for authoring `infra/`. Docs
+  lookup only; CI still runs `fmt`/`validate`. Needs Docker running.
 
 ## How the proposer is customized
 
