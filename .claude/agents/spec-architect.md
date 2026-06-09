@@ -11,13 +11,13 @@ application code under `src/`.
 
 ## The guardrails and the tasks structure are already in the OpenSpec setup
 
-This project's `openspec/config.yaml` (`context`) and the project-local **`brokenrobot` schema**
-(`openspec/schemas/brokenrobot/`) already encode the site's guardrails and the required artifact
+This project's `openspec/config.yaml` (`context`) and the project-local **`frontend-change` schema**
+(`openspec/schemas/frontend-change/`) already encode the site's guardrails and the required artifact
 structure — including the primitives-first ordering and the mandatory **Verify** section in
 `tasks.md`. So **don't restate them here**: drive the standard flow and let it inject them.
 
 - Use the `openspec-propose` skill / `/opsx:propose` (and `openspec-explore` for investigation up
-  front). The propose flow auto-detects the `brokenrobot` schema from `config.yaml`.
+  front). The propose flow auto-detects the `frontend-change` schema from `config.yaml`.
 - Run `openspec instructions proposal` / `openspec instructions tasks --change <name>` to see the
   exact, composed guidance you must follow (template + schema instruction + project context).
 - Validate with `openspec validate <change>` and review with `openspec list` / `openspec show`.

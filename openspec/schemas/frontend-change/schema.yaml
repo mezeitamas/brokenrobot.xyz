@@ -20,7 +20,7 @@ artifacts:
       **BREAKING**.
 
       - **Capabilities**: Identify which specs will be created or modified:
-        - **New Capabilities**: List capabilities being introduced. Each becomes a new `specs/<name>/spec.md`. Use kebab-case names (e.g., `user-auth`, `data-export`).
+        - **New Capabilities**: List capabilities being introduced. Each becomes a new `specs/<name>/spec.md`. Use kebab-case names (e.g., `tags-index`, `theme-toggle`).
         - **Modified Capabilities**: List existing capabilities whose REQUIREMENTS are changing. Only include if spec-level behavior changes (not just implementation details). Each needs a delta spec file. Check `openspec/specs/` for existing spec names. Leave empty if no requirement changes.
       - **Impact**: Affected code, APIs, dependencies, or systems.
 
@@ -122,26 +122,26 @@ artifacts:
       ## ADDED Requirements
 
 
-      ### Requirement: User can export data
+      ### Requirement: Tag index page
 
-      The system SHALL allow users to export their data in CSV format.
+      The site SHALL render a `/tags/` page listing every tag with its post count.
 
 
-      #### Scenario: Successful export
+      #### Scenario: Visiting the tag index
 
-      - **WHEN** user clicks "Export" button
+      - **WHEN** a visitor opens `/tags/`
 
-      - **THEN** system downloads a CSV file with all user data
+      - **THEN** the page lists each tag linking to its filtered view
 
 
       ## REMOVED Requirements
 
 
-      ### Requirement: Legacy export
+      ### Requirement: Flat category list
 
-      **Reason**: Replaced by new export system
+      **Reason**: Replaced by the tag index
 
-      **Migration**: Use new export endpoint at /api/v2/export
+      **Migration**: Link to `/tags/` instead of the old `/categories` page
 
       ```
 

@@ -38,7 +38,7 @@ const { title, class: className } = Astro.props;
 </section>
 
 <style>
-    @reference '../../styles/base.css';
+    @reference '../../styles/base.css'; /* adjust depth to reach src/styles/ */
 
     section {
         @apply bg-surface text-text border-border rounded-lg border p-6;

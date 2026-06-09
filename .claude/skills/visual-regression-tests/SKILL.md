@@ -11,7 +11,7 @@ Run the site's visual-regression and accessibility coverage in **both themes**, 
 ## Ground truth
 
 - Config: `playwright.config.ts`. Specs: `tests/`. Snapshot tolerance `maxDiffPixelRatio: 0.01`; shared `tests/screenshot.css`.
-- Web server: `npm run serve` (astro preview of `dist/`) on `http://localhost:${BROKENROBOT_PORT}` — so `build` before running. **`BROKENROBOT_PORT` must be set** — a git worktree has no `.env` (it's gitignored), so the commands below default it to `8080`, matching CI.
+- Web server: `npm run serve` (astro preview of `dist/`) on `http://localhost:${BROKENROBOT_PORT}` — it serves the built `dist/`, so a build must precede it (the `dc:e2e:*` scripts in Step 3 do this for you). **`BROKENROBOT_PORT` must be set** — a git worktree has no `.env` (it's gitignored), so the commands below default it to `8080`, matching CI.
 - Scripts: `npm run test:e2e:check` (run), `npm run test:e2e:update` (regenerate snapshots).
 - A11y: `@axe-core/playwright` runs inside the specs — a failure is a real bug, not a baseline to bless.
 
@@ -38,6 +38,8 @@ Both themes are first-class, so UI needs coverage in light AND dark. Check `play
 - **Absent** → they ship with the **`add-dark-theme-test-coverage`** change. Run the light projects (`Desktop Chrome`, `Pixel 7`) and **explicitly report that dark coverage is not wired yet** — never claim both themes passed when only light ran. Note the prerequisite.
 
 ## Step 3 — Run the checks
+
+`dc:e2e:check` builds inside the container first, then runs the suite — no separate `build` step needed.
 
 ```bash
 npm run dc:e2e:check

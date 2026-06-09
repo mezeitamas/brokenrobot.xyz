@@ -56,7 +56,7 @@ allow-list, the `permissions.deny` list, and secrets denied.**
 `sandbox.filesystem` is **allow-wins, not longest-match.** If a path sits under an `allowRead`
 entry, it stays readable even if a more specific `denyRead` entry also matches it. That's why the
 secret denials are absolute: nothing in `allowRead` covers them (it only lists `.`). The corollary
-— **don't put a secret deny _inside_ an allowed directory and expect it to bite.** To deny
+— **don't put a secret deny _inside_ an allowed directory and expect it to take effect.** To deny
 something within an allowed tree (e.g. `.env` inside the project), use a `permissions.deny`
 `Read(<path>)` rule, which _does_ override allows. That is how `.env` stays blocked inside the
 otherwise-readable project.
@@ -114,10 +114,10 @@ the agent does. This is also _why_ opening non-secret reads (above) costs little
   `pkg-containers.githubusercontent.com` / `mcr.microsoft.com` (the devcontainer CLI's direct
   feature/registry fetches — image layers and in-container installs go through the Docker daemon,
   outside the sandbox), and `~/.docker/buildx` is writable for buildx state. A worktree has no
-  `.env`, so set `BROKENROBOT_PORT` (default `8080`) when running the suite. See the
+  `.env` (which normally sets `BROKENROBOT_PORT`), so set it (default `8080`) when running the suite. See the
   `visual-regression-tests` skill.
 - **The Playwright MCP** (`@playwright/mcp`, in `.mcp.json`) runs on the **host** with system Chrome
-  (`--browser=chrome`, so no Chromium download) and browses the local preview at
+  (`--browser=chrome --headless --isolated`, so no Chromium download) and browses the local preview at
   `http://localhost:${BROKENROBOT_PORT}` — both already allowed. It backs the manual-preview Verify
   checks and interactive browsing; macOS rendering is non-authoritative, so pixel baselines stay in the
   devcontainer suite.

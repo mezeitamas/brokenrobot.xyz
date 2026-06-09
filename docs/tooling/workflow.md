@@ -2,7 +2,7 @@
 
 The mechanics behind the [development workflow](../development-workflow.md). We implement it with
 **OpenSpec** for the artifacts, **role-based Claude Code agents** for the phases, a few **skills** for
-the repeatable procedures, and **scaled trunk-based** integration (one change = one short-lived
+the repeatable procedures, and **scaled trunk-based** development (one change = one short-lived
 branch = one PR). Each phase maps to a concrete tool:
 
 | Phase                     | How it's run                                                                                     |
@@ -15,7 +15,7 @@ branch = one PR). Each phase maps to a concrete tool:
 | Archive                   | `/opsx:archive` (on the branch, so the PR carries code + spec)                                   |
 | Review the implementation | the pull request: CI runs the gates, `frontend-code-reviewer` surfaces findings, **you** approve |
 | Integrate                 | merge the PR into `main`                                                                         |
-| Deploy                    | `pipeline.yml` releases to production (the environment-approval gate is pending)                 |
+| Deploy                    | `pipeline.yml` releases to production (the environment-approval gate is not yet configured)      |
 
 Nothing is automatic: each agent hands back to you, and **you** hold the three gates — the proposal
 before any code, the implementation before it merges, and the production release.
@@ -47,7 +47,8 @@ openspec/
 Each change is one short-lived branch and one pull request — the trunk-based half of the workflow:
 
 - **Branch naming** — `<type>/<change-name>`: a Conventional-Commits type plus the OpenSpec change
-  name, e.g. `feat/tags-index`, `fix/rss-urls`. Branch ↔ change ↔ commit type line up.
+  name, e.g. `feat/tags-index`, `fix/rss-urls`. The branch name, the OpenSpec change name, and the
+  Conventional-Commits type all line up.
 - **Archive on the branch**, before opening the PR, so the pull request carries the code and the
   updated spec together — they land atomically.
 - **The PR runs CI** ([`pipeline.yml`](../../.github/workflows/pipeline.yml)): `format` / `lint` /
@@ -56,7 +57,7 @@ Each change is one short-lived branch and one pull request — the trunk-based h
 - **Merge to `main` deploys.** No release branches; the deploy jobs ship to production on every merge
   — see [tech-stack](../tech-stack.md) for the targets.
 - **The deploy gate** (the third human gate) is meant to be a required approval on the `Production`
-  and `Cloudflare` GitHub Environments. It isn't configured yet — a planned change.
+  and `Cloudflare` GitHub Environments. It is not yet configured — a planned change.
 
 ## The agents (`.claude/agents/`)
 
@@ -75,9 +76,9 @@ Agent/Task tool, or let the main session delegate.
   the devcontainer, so rendering matches CI), regenerates baselines for intentional changes, and
   reports diffs. Also drives an **agent-assisted manual preview** via the Playwright MCP (host Chrome):
   console clean, no theme flash, interactions, 375px — plus an **advisory perf/SEO audit** via the Chrome
-  DevTools MCP (SEO/best-practices + Core Web Vitals, not a gate). **Ticks the automated Verify items in `tasks.md`**
-  (visual/a11y, the gate, build), annotating partial ones (e.g. _light only_ while dark is deferred);
-  it reports the manual-preview findings but leaves that item for the human at the review gate. Read-only
+  DevTools MCP (SEO/best-practices + Core Web Vitals, not a gate). It **ticks the automated Verify items
+  in `tasks.md`** (visual/a11y, the gate, build), marking partial ones — e.g. _light only_ while dark is
+  deferred. It reports the manual-preview findings but leaves that checkbox for the human at the review gate. Read-only
   on `src/`; hands styling bugs back to the engineer.
 - **`frontend-code-reviewer`** (opus) — a read-only guardrail gate over the diff before commit, grouping
   findings as Blocking / Should-fix / Nits. Flags CSP, theming, interactivity-ladder, and convention
@@ -107,7 +108,7 @@ Project-scoped and committed, so the team shares them:
   stay in the devcontainer suite. Approve it once in `/mcp`.
 - **`chrome-devtools`** — Google's `chrome-devtools-mcp` (a pinned devDependency), host Chrome headless.
   Performance traces (Core Web Vitals) and a `lighthouse_audit` (a11y / SEO / best-practices) against the
-  local preview — the perf/SEO signal the axe + visual-regression gate doesn't cover. Local-preview scores
+  local preview — the perf/SEO angle that axe and visual-regression don't cover. Local-preview scores
   are a **relative regression signal**, not prod-authoritative.
 - **`terraform`** — HashiCorp's official `terraform-mcp-server` (Docker, pinned `:0.5.2`, `--toolsets=registry`).
   Public Terraform Registry docs — AWS/Cloudflare provider and module lookup — for authoring `infra/`. Docs

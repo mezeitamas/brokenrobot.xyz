@@ -46,7 +46,7 @@ send back.
    The most important gate.
 4. **Implement** — do the agreed work on a short-lived branch, surgically; nothing beyond the
    proposal.
-5. **Verify** — every change is checked: visual + accessibility coverage in **both themes**, and the
+5. **Verify** — the change is checked: visual + accessibility coverage in **both themes**, and the
    quality gate (types, lint, formatting, build).
 6. **Archive** — fold the agreed behaviour into the living record, so the change carries its code
    and its spec together.
@@ -56,8 +56,8 @@ send back.
    merge, so the trunk stays releasable.
 9. **Deploy** — the merge releases the change to production; **you** approve the release.
 
-The three **you** steps are the decision gates: accept the plan, accept the result, accept the
-release. Everything between is execution you oversee.
+The three **you** steps are the decision gates: accept the proposal, accept the implementation,
+accept the release. Everything between is execution you oversee.
 
 ## Trunk-based integration
 
@@ -69,10 +69,11 @@ The integration half keeps a few invariants:
   partial work stays on the branch. We keep the units small rather than hide incomplete work behind
   flags.
 - **Every merge deploys.** There are no release branches; merging to the trunk releases to
-  production. The version label is bumped deliberately for notable changes, not per release.
+  production. The site's version (in `package.json`) is bumped deliberately for notable releases, not
+  on every merge.
 
 > The **release gate** (step 9) — a required approval before the production deploy — is the intended
-> third checkpoint, but it isn't enforced yet. Setting it up is a planned infrastructure change. See
+> third gate, but it is not yet configured. Setting it up is a planned infrastructure change. See
 > [tech-stack](tech-stack.md) for how deployment works today.
 
 ## The living record
