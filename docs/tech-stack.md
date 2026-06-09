@@ -10,8 +10,8 @@ design overhaul.
 - **Astro** is the foundation — a static-site generator. Pages are Astro components rendered
   to static HTML at build time, shipping zero JS by default.
 - **Preact** (via `@astrojs/preact`) is the standard for **stateful** interactive UI, added as
-  hydrated **islands** (`client:*`) to minimize hand-written vanilla JS — planned for interactive
-  features like search, a mobile menu, and code-copy. Non-interactive pages ship no JS. Simple DOM wiring
+  hydrated **islands** (`client:*`) to minimize hand-written vanilla JS (planned for interactive
+  features like search, a mobile menu, and code-copy). Non-interactive pages ship no JS. Simple DOM wiring
   (like the theme toggle) uses a bundled Astro `<script>` instead of an island, and the
   pre-paint theme-init is a tiny inline script (see below).
 - **Content is Markdown/MDX**, authored as one folder per post under `src/content/blog/` and
@@ -38,8 +38,8 @@ design overhaul.
   Playwright), followed by deployment from `main`.
 - **Dual-cloud delivery:** the built site is published to both **AWS** (S3 sync + CloudFront
   invalidation) and **Cloudflare Pages**, on every merge to `main`. The deploy jobs target the
-  `Production` and `Cloudflare` GitHub Environments; a required-approval gate on those environments
-  is intended but **not yet configured** (see [development-workflow](development-workflow.md)).
+  `Production` and `Cloudflare` GitHub Environments; the release gate — a required approval on those
+  environments — is intended but **not yet configured** (see [development-workflow](development-workflow.md)).
 
 ## Infrastructure & tooling
 

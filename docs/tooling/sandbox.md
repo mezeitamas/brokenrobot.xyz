@@ -114,7 +114,7 @@ the agent does. This is also _why_ opening non-secret reads (above) costs little
   `pkg-containers.githubusercontent.com` / `mcr.microsoft.com` (the devcontainer CLI's direct
   feature/registry fetches — image layers and in-container installs go through the Docker daemon,
   outside the sandbox), and `~/.docker/buildx` is writable for buildx state. A worktree has no
-  `.env` (which normally sets `BROKENROBOT_PORT`), so set it (default `8080`) when running the suite. See the
+  `.env` (which normally sets `BROKENROBOT_PORT`), so set it to `8080` (matching CI) when running the suite. See the
   `visual-regression-tests` skill.
 - **The Playwright MCP** (`@playwright/mcp`, in `.mcp.json`) runs on the **host** with system Chrome
   (`--browser=chrome --headless --isolated`, so no Chromium download) and browses the local preview at

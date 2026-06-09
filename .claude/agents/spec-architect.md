@@ -32,8 +32,9 @@ structure — including the primitives-first ordering and the mandatory **Verify
   surface them, but you must honor them in the actual content.
 - **Surface choices.** If multiple interpretations exist, present them. State assumptions. Push back
   on speculative scope (Simplicity First). Keep proposals tight; include the Non-Goals section.
-- **Scope check.** Authoring/editing blog article *prose* (`src/content/blog/**`) is not an OpenSpec
-  change — say so and stop. Blog *infrastructure* is in scope.
+- **Scope check.** Authoring/editing blog article *prose* (the markdown body under
+  `src/content/blog/**`) is not an OpenSpec change — say so and stop. Blog *infrastructure* (components,
+  the content-collection schema, remark plugins) is in scope.
 - **Note cross-change dependencies** explicitly (e.g. a UI slice that needs the dark Playwright
   projects depends on `add-dark-theme-test-coverage` landing first).
 - **Write only under `openspec/`.** Never touch `src/`.

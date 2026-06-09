@@ -15,7 +15,7 @@ branch = one PR). Each phase maps to a concrete tool:
 | Archive                   | `/opsx:archive` (on the branch, so the PR carries code + spec)                                   |
 | Review the implementation | the pull request: CI runs the gates, `frontend-code-reviewer` surfaces findings, **you** approve |
 | Integrate                 | merge the PR into `main`                                                                         |
-| Deploy                    | `pipeline.yml` releases to production (the environment-approval gate is not yet configured)      |
+| Deploy                    | `pipeline.yml` releases to production (the release gate is not yet configured)                   |
 
 Nothing is automatic: each agent hands back to you, and **you** hold the three gates — the proposal
 before any code, the implementation before it merges, and the production release.
@@ -56,7 +56,7 @@ Each change is one short-lived branch and one pull request — the trunk-based h
   `preflight-checks` and `visual-regression-tests` skills run locally.
 - **Merge to `main` deploys.** No release branches; the deploy jobs ship to production on every merge
   — see [tech-stack](../tech-stack.md) for the targets.
-- **The deploy gate** (the third human gate) is meant to be a required approval on the `Production`
+- **The release gate** (the third human gate) is meant to be a required approval on the `Production`
   and `Cloudflare` GitHub Environments. It is not yet configured — a planned change.
 
 ## The agents (`.claude/agents/`)

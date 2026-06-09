@@ -35,21 +35,21 @@ is ordinary feature work and **is** in scope.
 ## The workflow
 
 A change moves through these phases. Three are explicitly **yours to decide** — you approve the
-proposal, the implementation, and the production release; the rest is work done for you to accept or
-send back.
+proposal, the implementation, and the production release; the rest is execution you accept or send
+back.
 
 1. **Explore** _(optional)_ — clarify the idea and investigate the codebase before committing to a
    proposal. No code is written.
 2. **Propose** — capture the intent: the why and scope, how the site's behaviour changes, and the
    work broken into small steps. This is the agreement.
 3. **Review the proposal** — **you** read, refine, and approve it **before any code is written**.
-   The most important gate.
+   The earliest and cheapest gate.
 4. **Implement** — do the agreed work on a short-lived branch, surgically; nothing beyond the
    proposal.
 5. **Verify** — the change is checked: visual + accessibility coverage in **both themes**, and the
    quality gate (types, lint, formatting, build).
-6. **Archive** — fold the agreed behaviour into the living record, so the change carries its code
-   and its spec together.
+6. **Archive** — fold the agreed behaviour into the living record **on the branch**, so the change
+   carries its code and its spec together when it goes to review.
 7. **Review the implementation** — **you** examine the change against the guardrails (below) and
    approve it before it merges.
 8. **Integrate** — merge the short-lived branch into the trunk. Only complete, verified changes
