@@ -143,7 +143,9 @@
             "Bash(npm install)",
             "Bash(npm install *)",
 
-            "Bash(openspec *)"
+            "Bash(openspec *)",
+
+            "mcp__playwright"
         ],
         "deny": [
             "Bash(cd /*)",
