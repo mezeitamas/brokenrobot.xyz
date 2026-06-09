@@ -1,2 +1,10 @@
 # Vendored Claude Design handoff bundle — keep as-exported, don't reformat.
 design-handoff/
+
+# Claude Code tooling config (agents, skills, commands, settings) — managed via Claude Code
+# and not writable by tooling subprocesses in the sandbox; it's tooling, not application source.
+.claude/
+
+# Forked OpenSpec workflow schema (templates + manifest) — workflow tooling, kept close to its
+# upstream fork source for easy reconciliation; not application source.
+openspec/schemas/

@@ -9,19 +9,28 @@
         "autoAllowBashIfSandboxed": true,
         "allowUnsandboxedCommands": false,
         "filesystem": {
-            "denyRead": ["~/"],
-            "allowRead": [
-                ".",
-                "~/.config/git/ignore",
-                "~/.testcontainers.properties",
-                "~/.docker",
-                "/var/run/docker.sock",
-                "~/.local/share/fnm",
-                "~/.local/state/fnm_multishells",
-                "~/Library/Preferences/astro"
+            "denyRead": [
+                "~/.ssh",
+                "~/.aws",
+                "~/.gnupg",
+                "~/.kube",
+                "~/.netrc",
+                "~/.npmrc",
+                "~/.config/gh",
+                "~/.config/gcloud",
+                "~/.git-credentials",
+                "~/Library/Keychains"
             ],
+            "allowRead": ["."],
             "denyWrite": ["/tmp", "/etc", "/usr", "/opt"],
-            "allowWrite": [".", "/var/folders", "~/Library/Preferences/astro"]
+            "allowWrite": [
+                ".",
+                "../../../.git",
+                "~/.npm",
+                "~/.docker/buildx",
+                "/var/folders",
+                "~/Library/Preferences/astro"
+            ]
         },
         "network": {
             "allowedDomains": [
@@ -30,7 +39,11 @@
                 "api.anthropic.com",
                 "host.docker.internal",
                 "github.com",
-                "*.npmjs.org"
+                "*.npmjs.org",
+                "mcr.microsoft.com",
+                "ghcr.io",
+                "pkg-containers.githubusercontent.com",
+                "containers.dev"
             ],
             "allowLocalBinding": true,
             "allowAllUnixSockets": true
@@ -125,8 +138,16 @@
 
             "Bash(npm run *)",
             "Bash(npm run)",
+            "Bash(npm ci)",
+            "Bash(npm ci *)",
+            "Bash(npm install)",
+            "Bash(npm install *)",
 
-            "Bash(openspec *)"
+            "Bash(openspec *)",
+
+            "mcp__playwright",
+            "mcp__chrome-devtools",
+            "mcp__terraform"
         ],
         "deny": [
             "Bash(cd /*)",

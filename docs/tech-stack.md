@@ -10,8 +10,8 @@ design overhaul.
 - **Astro** is the foundation — a static-site generator. Pages are Astro components rendered
   to static HTML at build time, shipping zero JS by default.
 - **Preact** (via `@astrojs/preact`) is the standard for **stateful** interactive UI, added as
-  hydrated **islands** (`client:*`) to minimize hand-written vanilla JS — reserved for the page
-  phase (search, mobile menu, code-copy). Non-interactive pages ship no JS. Simple DOM wiring
+  hydrated **islands** (`client:*`) to minimize hand-written vanilla JS (planned for interactive
+  features like search, a mobile menu, and code-copy). Non-interactive pages ship no JS. Simple DOM wiring
   (like the theme toggle) uses a bundled Astro `<script>` instead of an island, and the
   pre-paint theme-init is a tiny inline script (see below).
 - **Content is Markdown/MDX**, authored as one folder per post under `src/content/blog/` and
@@ -25,7 +25,7 @@ design overhaul.
 - **Discoverability is built in:** an RSS feed and an XML sitemap are generated at build time,
   and structured data (JSON-LD) is typed.
 - **Quality is automated:** ESLint + Prettier for static analysis and formatting; Playwright
-  for end-to-end and visual-regression tests, with axe-core for accessibility checks.
+  for end-to-end (e2e) and visual-regression tests, with axe-core for accessibility checks.
 - **npm is the package manager**, configured for reproducibility (exact version pinning,
   engine-strict, committed lockfile).
 
@@ -34,10 +34,12 @@ design overhaul.
 - `astro build` produces a fully **static** `dist/`. HTML is compressed, stylesheets are
   **always inlined**, and images use responsive styles (see `astro.config.ts`).
 - **CI/CD** runs in GitHub Actions (`.github/workflows/pipeline.yml`): a `verify` →
-  `build` → `test` sequence (format, lint, type-check, then build, then Playwright), followed
-  by deployment from `main`.
+  `build` → `test` sequence (format, lint, type-check, OpenSpec validation, then build, then
+  Playwright), followed by deployment from `main`.
 - **Dual-cloud delivery:** the built site is published to both **AWS** (S3 sync + CloudFront
-  invalidation) and **Cloudflare Pages**. Production deploys are gated by environment approval.
+  invalidation) and **Cloudflare Pages**, on every merge to `main`. The deploy jobs target the
+  `Production` and `Cloudflare` GitHub Environments; the release gate — a required approval on those
+  environments — is intended but **not yet configured** (see [development-workflow](development-workflow.md)).
 
 ## Infrastructure & tooling
 

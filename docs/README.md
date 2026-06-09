@@ -14,5 +14,9 @@ feel, and how the code is built. Read these before working on the design overhau
   and testing rules.
 - [commit-conventions.md](commit-conventions.md) — Conventional Commits and commit message
   guidance.
-- [spec-driven-development.md](spec-driven-development.md) — how site changes are planned with
-  OpenSpec (and why writing blog articles is out of scope).
+- [development-workflow.md](development-workflow.md) — the way we work: spec-driven planning +
+  scaled trunk-based development (and why writing blog articles is out of scope). Tool-agnostic; the
+  mechanics live in [tooling/workflow.md](tooling/workflow.md).
+
+These describe the **application**. For how the repository is _worked on_ with Claude Code — the
+agent/skill workflow and the sandbox that constrains it — see [tooling/](tooling/README.md).

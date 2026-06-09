@@ -29,6 +29,7 @@ coverage
 /test-results/
 /playwright-report/
 /playwright/.cache/
+/.playwright-mcp/
 
 # Logs
 npm-debug.log*
