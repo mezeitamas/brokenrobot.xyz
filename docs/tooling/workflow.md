@@ -66,7 +66,7 @@ Agent/Task tool, or let the main session delegate.
 - **`spec-architect`** (opus) — the architecture-aware proposer. Reads the specs, docs, and codebase
   and drives the propose flow to write a change (`proposal.md`, `tasks.md`, optional `design.md`,
   spec deltas). It deliberately does **not** carry the guardrails or the task structure itself — the
-  `brokenrobot` schema and `config.yaml` inject those (see below), so there's one source of truth.
+  `frontend-change` schema and `config.yaml` inject those (see below), so there's one source of truth.
   Writes only under `openspec/`; never application code.
 - **`frontend-engineer`** (inherit) — applies an agreed change's `tasks.md`: Astro/Preact/CSS to
   the repo's conventions (scoped `<style>` + `@reference`, token utilities, path aliases,
@@ -102,11 +102,11 @@ it. One source of truth:
   artifact's generation. Their canonical home is the project docs ([architecture](../architecture.md),
   [coding-conventions](../coding-conventions.md), [vision](../vision.md)); `config.yaml` points the
   propose flow at them rather than redefining them.
-- **`openspec/schemas/brokenrobot/`** — a project-local schema (forked from `spec-driven`). Its
+- **`openspec/schemas/frontend-change/`** — a project-local schema (forked from `spec-driven`). Its
   `templates/tasks.md` pre-seeds the mandatory **Verify** section, and its `tasks` instruction
   carries the **primitives-first** rule (a slice that uses a `.btn`/`.tag`/`.card`/… primitive must
   establish it first — the foundation shipped tokens only). `config.yaml` selects it via
-  `schema: brokenrobot`.
+  `schema: frontend-change`.
 
 `openspec instructions tasks --change <name>` prints the composed result (template + schema
 instruction + context). The seeded Verify section is:
@@ -136,7 +136,7 @@ dev-only (not part of the build or runtime), and `audit:check` omits devDependen
 For **interactive** authoring the `opsx` slash commands call `openspec` directly on your `PATH`, so
 also install the CLI on the host (`npm install -g @fission-ai/openspec`, Node ≥ 20.19). Its Claude
 Code integration lives in `.claude/skills/`; run `openspec init --tools claude` (or `openspec update`
-after a CLI upgrade) to install or refresh it. The customized schema (`openspec/schemas/brokenrobot/`)
+after a CLI upgrade) to install or refresh it. The customized schema (`openspec/schemas/frontend-change/`)
 and the rest of the `openspec/` tree are committed to the repository.
 
 The local sandbox that constrains the agents is documented in [sandbox.md](sandbox.md).

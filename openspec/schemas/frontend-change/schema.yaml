@@ -1,6 +1,6 @@
-name: brokenrobot
+name: frontend-change
 version: 1
-description: Default OpenSpec workflow - proposal → specs → design → tasks
+description: Frontend change workflow for brokenrobot.xyz — guardrails, primitives-first tasks, and a both-theme Verify gate
 artifacts:
   - id: proposal
     generates: proposal.md

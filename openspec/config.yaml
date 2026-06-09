@@ -1,9 +1,9 @@
-schema: brokenrobot
+schema: frontend-change
 
 # Project context — shown to the AI when creating any artifact (proposal, specs, design, tasks).
 # These are the site's enduring constraints; honor them in every change. See docs/ for detail.
 # Workflow structure (the tasks Verify section, primitives-first ordering, etc.) lives in the
-# brokenrobot schema's templates and instructions, not here.
+# frontend-change schema's templates and instructions, not here.
 context: |
   brokenrobot.xyz is a static, ad-free, CSP-strict personal site: Astro with Preact islands,
   self-hosted fonts, and first-class light/dark theming. Honor these enduring constraints in
