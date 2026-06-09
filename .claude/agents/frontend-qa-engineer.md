@@ -44,7 +44,7 @@ Serve the built site on the host, then drive it:
    - **No theme flash** — reload and watch first paint, then toggle the theme; the pre-paint init means there should be no flash either way.
    - **Interactions** — exercise the view's controls (nav, theme toggle, menus); they work, with no console errors.
    - **375px responsive** — resize to 375px wide; layout holds, nothing clips or overflows.
-3. Stop the preview server when done.
+3. Stop the preview server when done. Save any screenshots under `.playwright-mcp/` (gitignored) — never to the repo root (pass `filename` like `.playwright-mcp/home-375.png`, or omit it for the default location).
 
 This is **assistance, not the gate** — report what you observed; the human still confirms the manual-preview item at the review gate.
 
