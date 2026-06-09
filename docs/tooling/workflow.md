@@ -68,14 +68,16 @@ Agent/Task tool, or let the main session delegate.
   spec deltas). It deliberately does **not** carry the guardrails or the task structure itself — the
   `frontend-change` schema and `config.yaml` inject those (see below), so there's one source of truth.
   Writes only under `openspec/`; never application code.
-- **`frontend-engineer`** (inherit) — applies an agreed change's `tasks.md`: Astro/Preact/CSS to
+- **`frontend-engineer`** (sonnet) — applies an agreed change's `tasks.md`: Astro/Preact/CSS to
   the repo's conventions (scoped `<style>` + `@reference`, token utilities, path aliases,
   `InternalLink`/`ExternalLink`). Surgical edits under `src/`; stops at the Verify step.
-- **`frontend-qa-engineer`** (inherit) — runs Playwright visual-regression + axe in **both** themes (in
+- **`frontend-qa-engineer`** (sonnet) — runs Playwright visual-regression + axe in **both** themes (in
   the devcontainer, so rendering matches CI), regenerates baselines for intentional changes, and
-  reports diffs. **Ticks the automated Verify items in `tasks.md`** (visual/a11y, the gate, build),
-  annotating partial ones (e.g. _light only_ while dark is deferred) and leaving the manual-preview
-  item for the human at the review gate. Read-only on `src/`; hands styling bugs back to the engineer.
+  reports diffs. Also drives an **agent-assisted manual preview** via the Playwright MCP (host Chrome):
+  console clean, no theme flash, interactions, 375px. **Ticks the automated Verify items in `tasks.md`**
+  (visual/a11y, the gate, build), annotating partial ones (e.g. _light only_ while dark is deferred);
+  it reports the manual-preview findings but leaves that item for the human at the review gate. Read-only
+  on `src/`; hands styling bugs back to the engineer.
 - **`frontend-code-reviewer`** (opus) — a read-only guardrail gate over the diff before commit, grouping
   findings as Blocking / Should-fix / Nits. Flags CSP, theming, interactivity-ladder, and convention
   violations the implementer missed.
@@ -91,6 +93,17 @@ Procedure skills the agents (or you) invoke, alongside the `openspec-*` lifecycl
   (placement, typed props, scoped token-driven styles, the right interactivity tier).
 - **`preflight-checks`** — run the non-visual gate (`type:check` + `lint:check` + `format:check` +
   `build`) and summarize failures.
+
+## MCP servers (`.mcp.json`)
+
+Project-scoped and committed, so the team shares them:
+
+- **`astro-docs`** (http) — Astro's documentation, for framework questions during propose/implement.
+- **`playwright`** — Microsoft's `@playwright/mcp` (a pinned devDependency), driving **host Chrome**
+  (`--browser=chrome --isolated`). The `frontend-qa-engineer` uses it for the manual-preview Verify
+  item (theme flash, console, interactions, 375px); it also serves interactive exploration and
+  locating selectors when authoring specs. Host rendering is **non-authoritative** — pixel baselines
+  stay in the devcontainer suite. Approve it once in `/mcp`.
 
 ## How the proposer is customized
 

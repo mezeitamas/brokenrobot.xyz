@@ -116,6 +116,11 @@ the agent does. This is also _why_ opening non-secret reads (above) costs little
   outside the sandbox), and `~/.docker/buildx` is writable for buildx state. A worktree has no
   `.env`, so set `BROKENROBOT_PORT` (default `8080`) when running the suite. See the
   `visual-regression-tests` skill.
+- **The Playwright MCP** (`@playwright/mcp`, in `.mcp.json`) runs on the **host** with system Chrome
+  (`--browser=chrome`, so no Chromium download) and browses the local preview at
+  `http://localhost:${BROKENROBOT_PORT}` — both already allowed. It backs the manual-preview Verify
+  checks and interactive browsing; macOS rendering is non-authoritative, so pixel baselines stay in the
+  devcontainer suite.
 
 ## Possible future hardening
 
