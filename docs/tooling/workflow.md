@@ -100,7 +100,7 @@ Project-scoped and committed, so the team shares them:
 
 - **`astro-docs`** (http) — Astro's documentation, for framework questions during propose/implement.
 - **`playwright`** — Microsoft's `@playwright/mcp` (a pinned devDependency), driving **host Chrome**
-  (`--browser=chrome --isolated`). The `frontend-qa-engineer` uses it for the manual-preview Verify
+  (`--browser=chrome --headless --isolated`). The `frontend-qa-engineer` uses it for the manual-preview Verify
   item (theme flash, console, interactions, 375px); it also serves interactive exploration and
   locating selectors when authoring specs. Host rendering is **non-authoritative** — pixel baselines
   stay in the devcontainer suite. Approve it once in `/mcp`.
