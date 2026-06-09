@@ -74,7 +74,8 @@ Agent/Task tool, or let the main session delegate.
 - **`frontend-qa-engineer`** (sonnet) — runs Playwright visual-regression + axe in **both** themes (in
   the devcontainer, so rendering matches CI), regenerates baselines for intentional changes, and
   reports diffs. Also drives an **agent-assisted manual preview** via the Playwright MCP (host Chrome):
-  console clean, no theme flash, interactions, 375px. **Ticks the automated Verify items in `tasks.md`**
+  console clean, no theme flash, interactions, 375px — plus an **advisory perf/SEO audit** via the Chrome
+  DevTools MCP (SEO/best-practices + Core Web Vitals, not a gate). **Ticks the automated Verify items in `tasks.md`**
   (visual/a11y, the gate, build), annotating partial ones (e.g. _light only_ while dark is deferred);
   it reports the manual-preview findings but leaves that item for the human at the review gate. Read-only
   on `src/`; hands styling bugs back to the engineer.
