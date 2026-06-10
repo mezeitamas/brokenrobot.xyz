@@ -16,7 +16,7 @@ test.describe('Home page', () => {
         await page.goto('./about');
         await expect(page).toHaveTitle(/About/);
 
-        await page.getByRole('banner').getByRole('link', { name: 'Broken Robot' }).click();
+        await page.getByRole('banner').getByRole('link', { name: 'BrokenRobot' }).click();
         await expect(page).toHaveTitle(/Broken Robot/);
     });
 });

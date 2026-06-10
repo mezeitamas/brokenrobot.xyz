@@ -13,15 +13,14 @@ src/
     links/         InternalLink, ExternalLink
     picture/       BlogPostPicture
     seo/           meta-og/, meta-twitter/, rich-results/ (JSON-LD)
-    fonts/         PreloadFonts
   content/blog/    One folder per post: index.mdx + collocated images
   layouts/         BaseLayout, PageLayout, ArticleLayout
   pages/           File-based routes
-  styles/          base.css (global styles, tokens, font-face)
+  styles/          base.css (global styles, tokens)
   utils/           remarkReadingTimePlugin.ts
   consts.ts        Centralized site metadata
   content.config.ts Content collection schema
-public/            Static assets (favicon, robots.txt, self-hosted fonts)
+public/            Static assets (favicon, robots.txt)
 tests/             Playwright specs + visual snapshots
 infra/             Terraform (AWS, Cloudflare) + Kubernetes
 ```
@@ -76,7 +75,10 @@ the `ReadingTime` component.
   (`ThemeToggle.astro` + `theme-toggle.ts`). Keep client JS small; it loads from `self`
   (CSP-friendly).
 - **SEO / structured data:** OpenGraph (`meta-og/`), Twitter cards (`meta-twitter/`), and
-  JSON-LD (`rich-results/`, typed with `schema-dts`). Fonts preloaded via `PreloadFonts`.
+  JSON-LD (`rich-results/`, typed with `schema-dts`). Fonts use the native Astro Fonts
+  API (`fonts` in `astro.config.ts`), resolved offline from the installed
+  `@fontsource/*` packages via the `npm` provider and emitted via `<Font>` in
+  `BaseLayout` (`@font-face` + preload generated at build).
 - **Links:** use `InternalLink` / `ExternalLink` rather than raw `<a>`.
 - **Site metadata:** centralized in `src/consts.ts` (`SITE_METADATA`) — title, description,
   author, socials, image breakpoints. Add new global constants here.

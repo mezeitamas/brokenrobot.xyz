@@ -1,7 +1,7 @@
 import mdx from '@astrojs/mdx';
 import preact from '@astrojs/preact';
 import sitemap from '@astrojs/sitemap';
-import { defineConfig } from 'astro/config';
+import { defineConfig, fontProviders } from 'astro/config';
 import { config } from 'dotenv';
 
 import { remarkReadingTimePlugin } from './src/utils/remarkReadingTimePlugin';
@@ -18,6 +18,58 @@ export default defineConfig({
     image: {
         responsiveStyles: true
     },
+    fonts: [
+        {
+            provider: fontProviders.npm({ remote: false }),
+            name: 'Space Grotesk',
+            cssVariable: '--font-space-grotesk',
+            weights: [400, 500, 600, 700],
+            styles: ['normal'],
+            subsets: ['latin'],
+            fallbacks: ['system-ui', 'sans-serif'],
+            options: { package: '@fontsource/space-grotesk', file: 'latin.css' }
+        },
+        {
+            provider: fontProviders.npm({ remote: false }),
+            name: 'Newsreader',
+            cssVariable: '--font-newsreader',
+            weights: [400, 500, 600],
+            styles: ['normal'],
+            subsets: ['latin'],
+            fallbacks: ['Georgia', 'serif'],
+            options: { package: '@fontsource/newsreader', file: 'latin.css' }
+        },
+        {
+            provider: fontProviders.npm({ remote: false }),
+            name: 'Newsreader',
+            cssVariable: '--font-newsreader',
+            weights: [400],
+            styles: ['italic'],
+            subsets: ['latin'],
+            fallbacks: ['Georgia', 'serif'],
+            options: { package: '@fontsource/newsreader', file: 'latin-400-italic.css' }
+        },
+        {
+            provider: fontProviders.npm({ remote: false }),
+            name: 'Space Mono',
+            cssVariable: '--font-space-mono',
+            weights: [400, 700],
+            styles: ['normal'],
+            subsets: ['latin'],
+            fallbacks: ['ui-monospace', 'monospace'],
+            options: { package: '@fontsource/space-mono', file: 'latin.css' }
+        },
+        {
+            provider: fontProviders.npm({ remote: false }),
+            name: 'Space Mono',
+            cssVariable: '--font-space-mono',
+            weights: [400],
+            styles: ['italic'],
+            subsets: ['latin'],
+            fallbacks: ['ui-monospace', 'monospace'],
+            options: { package: '@fontsource/space-mono', file: 'latin-400-italic.css' }
+        }
+    ],
     markdown: {
         remarkPlugins: [remarkReadingTimePlugin]
     },
