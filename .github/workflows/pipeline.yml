@@ -129,7 +129,7 @@ jobs:
         run: npm run install:playwright
 
       - name: E2E test check
-        run: npm run test:e2e:check
+        run: node_modules/.bin/playwright test
 
       - name: Upload e2e test reports
         uses: actions/upload-artifact@v6
