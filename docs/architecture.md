@@ -7,7 +7,6 @@ How the codebase is organized today, and the architectural guidance for the over
 
 ```
 src/
-  assets/fonts/    Self-hosted font files (woff2), delivered via the Astro Fonts API
   components/      Reusable Astro components, grouped by feature
     blog-posts/    BlogPosts, CompactBlogPosts, ReadingTime, PublishDate
     layout/        Header, Footer
@@ -76,8 +75,9 @@ the `ReadingTime` component.
   (`ThemeToggle.astro` + `theme-toggle.ts`). Keep client JS small; it loads from `self`
   (CSP-friendly).
 - **SEO / structured data:** OpenGraph (`meta-og/`), Twitter cards (`meta-twitter/`), and
-  JSON-LD (`rich-results/`, typed with `schema-dts`). Fonts are configured with the
-  native Astro Fonts API (`fonts` in `astro.config.ts`) and emitted via `<Font>` in
+  JSON-LD (`rich-results/`, typed with `schema-dts`). Fonts use the native Astro Fonts
+  API (`fonts` in `astro.config.ts`), resolved offline from the installed
+  `@fontsource/*` packages via the `npm` provider and emitted via `<Font>` in
   `BaseLayout` (`@font-face` + preload generated at build).
 - **Links:** use `InternalLink` / `ExternalLink` rather than raw `<a>`.
 - **Site metadata:** centralized in `src/consts.ts` (`SITE_METADATA`) — title, description,

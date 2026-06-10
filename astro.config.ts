@@ -20,45 +20,54 @@ export default defineConfig({
     },
     fonts: [
         {
-            provider: fontProviders.local(),
+            provider: fontProviders.npm({ remote: false }),
             name: 'Space Grotesk',
             cssVariable: '--font-space-grotesk',
+            weights: [400, 500, 600, 700],
+            styles: ['normal'],
+            subsets: ['latin'],
             fallbacks: ['system-ui', 'sans-serif'],
-            options: {
-                variants: [
-                    { weight: 400, style: 'normal', src: ['./src/assets/fonts/space-grotesk-latin-400-normal.woff2'] },
-                    { weight: 500, style: 'normal', src: ['./src/assets/fonts/space-grotesk-latin-500-normal.woff2'] },
-                    { weight: 600, style: 'normal', src: ['./src/assets/fonts/space-grotesk-latin-600-normal.woff2'] },
-                    { weight: 700, style: 'normal', src: ['./src/assets/fonts/space-grotesk-latin-700-normal.woff2'] }
-                ]
-            }
+            options: { package: '@fontsource/space-grotesk', file: 'latin.css' }
         },
         {
-            provider: fontProviders.local(),
+            provider: fontProviders.npm({ remote: false }),
             name: 'Newsreader',
             cssVariable: '--font-newsreader',
+            weights: [400, 500, 600],
+            styles: ['normal'],
+            subsets: ['latin'],
             fallbacks: ['Georgia', 'serif'],
-            options: {
-                variants: [
-                    { weight: 400, style: 'normal', src: ['./src/assets/fonts/newsreader-latin-400-normal.woff2'] },
-                    { weight: 400, style: 'italic', src: ['./src/assets/fonts/newsreader-latin-400-italic.woff2'] },
-                    { weight: 500, style: 'normal', src: ['./src/assets/fonts/newsreader-latin-500-normal.woff2'] },
-                    { weight: 600, style: 'normal', src: ['./src/assets/fonts/newsreader-latin-600-normal.woff2'] }
-                ]
-            }
+            options: { package: '@fontsource/newsreader', file: 'latin.css' }
         },
         {
-            provider: fontProviders.local(),
+            provider: fontProviders.npm({ remote: false }),
+            name: 'Newsreader',
+            cssVariable: '--font-newsreader',
+            weights: [400],
+            styles: ['italic'],
+            subsets: ['latin'],
+            fallbacks: ['Georgia', 'serif'],
+            options: { package: '@fontsource/newsreader', file: 'latin-400-italic.css' }
+        },
+        {
+            provider: fontProviders.npm({ remote: false }),
             name: 'Space Mono',
             cssVariable: '--font-space-mono',
+            weights: [400, 700],
+            styles: ['normal'],
+            subsets: ['latin'],
             fallbacks: ['ui-monospace', 'monospace'],
-            options: {
-                variants: [
-                    { weight: 400, style: 'normal', src: ['./src/assets/fonts/space-mono-latin-400-normal.woff2'] },
-                    { weight: 400, style: 'italic', src: ['./src/assets/fonts/space-mono-latin-400-italic.woff2'] },
-                    { weight: 700, style: 'normal', src: ['./src/assets/fonts/space-mono-latin-700-normal.woff2'] }
-                ]
-            }
+            options: { package: '@fontsource/space-mono', file: 'latin.css' }
+        },
+        {
+            provider: fontProviders.npm({ remote: false }),
+            name: 'Space Mono',
+            cssVariable: '--font-space-mono',
+            weights: [400],
+            styles: ['italic'],
+            subsets: ['latin'],
+            fallbacks: ['ui-monospace', 'monospace'],
+            options: { package: '@fontsource/space-mono', file: 'latin-400-italic.css' }
         }
     ],
     markdown: {
