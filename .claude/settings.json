@@ -182,9 +182,6 @@
 
             "Bash(gh *)",
 
-            "Bash(rm -rf*)",
-            "Bash(rm -fr*)",
-
             "Bash(python *)",
             "Bash(python3 *)"
         ]
