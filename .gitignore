@@ -25,6 +25,9 @@ coverage
 .env
 .env.production
 
+# Claude Code local settings (may hold secrets, e.g. the GitHub MCP token)
+.claude/settings.local.json
+
 # Playwright
 /test-results/
 /playwright-report/
