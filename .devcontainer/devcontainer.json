@@ -10,7 +10,10 @@
             "version": "1.15.3"
         }
     },
-    "postCreateCommand": "npm install && npm run install:playwright",
+    "mounts": [
+        "source=${localWorkspaceFolderBasename}-node-modules,target=${containerWorkspaceFolder}/node_modules,type=volume"
+    ],
+    "postCreateCommand": "sudo chown vscode:vscode node_modules && npm install && npm run install:playwright",
     "customizations": {
         "vscode": {
             "settings": {},
