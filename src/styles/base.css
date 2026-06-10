@@ -37,9 +37,11 @@
         --accent-soft: color-mix(in srgb, var(--accent) 14%, var(--bg));
         --tape: color-mix(in srgb, var(--accent) 34%, transparent);
 
-        --ff-display: 'Space Grotesk', system-ui, sans-serif;
-        --ff-prose: 'Newsreader', Georgia, serif;
-        --ff-mono: 'Space Mono', ui-monospace, monospace;
+        /* Font families come from the Astro Fonts API (<Font> in BaseLayout); the
+           cssVariable each emits already includes the fallback stack. */
+        --ff-display: var(--font-space-grotesk);
+        --ff-prose: var(--font-newsreader);
+        --ff-mono: var(--font-space-mono);
 
         font-family: var(--ff-display);
         color-scheme: light;
@@ -71,87 +73,6 @@
         transition:
             background 0.35s ease,
             color 0.35s ease;
-    }
-
-    /* ---- Self-hosted fonts (woff2) ---- */
-    @font-face {
-        font-family: 'Space Grotesk';
-        font-style: normal;
-        font-display: swap;
-        font-weight: 400;
-        src: url(/assets/fonts/space-grotesk-latin-400-normal.woff2) format('woff2');
-    }
-    @font-face {
-        font-family: 'Space Grotesk';
-        font-style: normal;
-        font-display: swap;
-        font-weight: 500;
-        src: url(/assets/fonts/space-grotesk-latin-500-normal.woff2) format('woff2');
-    }
-    @font-face {
-        font-family: 'Space Grotesk';
-        font-style: normal;
-        font-display: swap;
-        font-weight: 600;
-        src: url(/assets/fonts/space-grotesk-latin-600-normal.woff2) format('woff2');
-    }
-    @font-face {
-        font-family: 'Space Grotesk';
-        font-style: normal;
-        font-display: swap;
-        font-weight: 700;
-        src: url(/assets/fonts/space-grotesk-latin-700-normal.woff2) format('woff2');
-    }
-
-    @font-face {
-        font-family: 'Newsreader';
-        font-style: normal;
-        font-display: swap;
-        font-weight: 400;
-        src: url(/assets/fonts/newsreader-latin-400-normal.woff2) format('woff2');
-    }
-    @font-face {
-        font-family: 'Newsreader';
-        font-style: italic;
-        font-display: swap;
-        font-weight: 400;
-        src: url(/assets/fonts/newsreader-latin-400-italic.woff2) format('woff2');
-    }
-    @font-face {
-        font-family: 'Newsreader';
-        font-style: normal;
-        font-display: swap;
-        font-weight: 500;
-        src: url(/assets/fonts/newsreader-latin-500-normal.woff2) format('woff2');
-    }
-    @font-face {
-        font-family: 'Newsreader';
-        font-style: normal;
-        font-display: swap;
-        font-weight: 600;
-        src: url(/assets/fonts/newsreader-latin-600-normal.woff2) format('woff2');
-    }
-
-    @font-face {
-        font-family: 'Space Mono';
-        font-style: normal;
-        font-display: swap;
-        font-weight: 400;
-        src: url(/assets/fonts/space-mono-latin-400-normal.woff2) format('woff2');
-    }
-    @font-face {
-        font-family: 'Space Mono';
-        font-style: italic;
-        font-display: swap;
-        font-weight: 400;
-        src: url(/assets/fonts/space-mono-latin-400-italic.woff2) format('woff2');
-    }
-    @font-face {
-        font-family: 'Space Mono';
-        font-style: normal;
-        font-display: swap;
-        font-weight: 700;
-        src: url(/assets/fonts/space-mono-latin-700-normal.woff2) format('woff2');
     }
 }
 

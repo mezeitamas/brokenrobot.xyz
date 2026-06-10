@@ -1,7 +1,7 @@
 import mdx from '@astrojs/mdx';
 import preact from '@astrojs/preact';
 import sitemap from '@astrojs/sitemap';
-import { defineConfig } from 'astro/config';
+import { defineConfig, fontProviders } from 'astro/config';
 import { config } from 'dotenv';
 
 import { remarkReadingTimePlugin } from './src/utils/remarkReadingTimePlugin';
@@ -18,6 +18,49 @@ export default defineConfig({
     image: {
         responsiveStyles: true
     },
+    fonts: [
+        {
+            provider: fontProviders.local(),
+            name: 'Space Grotesk',
+            cssVariable: '--font-space-grotesk',
+            fallbacks: ['system-ui', 'sans-serif'],
+            options: {
+                variants: [
+                    { weight: 400, style: 'normal', src: ['./src/assets/fonts/space-grotesk-latin-400-normal.woff2'] },
+                    { weight: 500, style: 'normal', src: ['./src/assets/fonts/space-grotesk-latin-500-normal.woff2'] },
+                    { weight: 600, style: 'normal', src: ['./src/assets/fonts/space-grotesk-latin-600-normal.woff2'] },
+                    { weight: 700, style: 'normal', src: ['./src/assets/fonts/space-grotesk-latin-700-normal.woff2'] }
+                ]
+            }
+        },
+        {
+            provider: fontProviders.local(),
+            name: 'Newsreader',
+            cssVariable: '--font-newsreader',
+            fallbacks: ['Georgia', 'serif'],
+            options: {
+                variants: [
+                    { weight: 400, style: 'normal', src: ['./src/assets/fonts/newsreader-latin-400-normal.woff2'] },
+                    { weight: 400, style: 'italic', src: ['./src/assets/fonts/newsreader-latin-400-italic.woff2'] },
+                    { weight: 500, style: 'normal', src: ['./src/assets/fonts/newsreader-latin-500-normal.woff2'] },
+                    { weight: 600, style: 'normal', src: ['./src/assets/fonts/newsreader-latin-600-normal.woff2'] }
+                ]
+            }
+        },
+        {
+            provider: fontProviders.local(),
+            name: 'Space Mono',
+            cssVariable: '--font-space-mono',
+            fallbacks: ['ui-monospace', 'monospace'],
+            options: {
+                variants: [
+                    { weight: 400, style: 'normal', src: ['./src/assets/fonts/space-mono-latin-400-normal.woff2'] },
+                    { weight: 400, style: 'italic', src: ['./src/assets/fonts/space-mono-latin-400-italic.woff2'] },
+                    { weight: 700, style: 'normal', src: ['./src/assets/fonts/space-mono-latin-700-normal.woff2'] }
+                ]
+            }
+        }
+    ],
     markdown: {
         remarkPlugins: [remarkReadingTimePlugin]
     },

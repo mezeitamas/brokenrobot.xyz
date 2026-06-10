@@ -1,7 +1,8 @@
 ---
 import '@styles/base.css';
 
-import PreloadFonts from '@components/fonts/PreloadFonts.astro';
+import { Font } from 'astro:assets';
+
 import Header from '@components/layout/Header.astro';
 import Footer from '@components/layout/Footer.astro';
 
@@ -78,7 +79,15 @@ const themeInitScript = `(function () {
             href="/favicon.svg"
         />
 
-        <PreloadFonts />
+        <Font
+            cssVariable="--font-space-grotesk"
+            preload
+        />
+        <Font
+            cssVariable="--font-newsreader"
+            preload
+        />
+        <Font cssVariable="--font-space-mono" />
 
         <title>{pageTitle}</title>
         <meta
