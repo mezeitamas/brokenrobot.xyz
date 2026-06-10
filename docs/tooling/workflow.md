@@ -113,6 +113,47 @@ Project-scoped and committed, so the team shares them:
 - **`terraform`** — HashiCorp's official `terraform-mcp-server` (Docker, pinned `:0.5.2`, `--toolsets=registry`).
   Public Terraform Registry docs — AWS/Cloudflare provider and module lookup — for authoring `infra/`. Docs
   lookup only; CI still runs `fmt`/`validate`. Needs Docker running.
+- **`github`** — GitHub's official `github-mcp-server` (Docker, pinned `:v1.2.0`), forced **read-only**
+  (`GITHUB_READ_ONLY=1`) with the `context,repos,issues,pull_requests,actions` toolsets. Lets the agent
+  inspect PRs, diffs, CI/Actions runs and logs, and issues during local work — e.g. debugging a red PR
+  check. Read-only by design: it cannot comment, merge, or otherwise write. Needs Docker running and a
+  token (see below).
+
+### Administering the `github` server
+
+Unlike the other servers, `github` needs a credential. Keep it read-only and out of version control.
+
+- **Token.** Create a [fine-grained PAT](https://github.com/settings/personal-access-tokens) scoped to
+  this repo, with an **expiry**, and **read-only** permissions: Metadata (required), Contents, Pull
+  requests, Issues, Actions, Commit statuses. Nothing more — the server runs read-only and write actions
+  are out of scope.
+- **Where it lives.** Put it in `.claude/settings.local.json` (gitignored), whose `env` block Claude Code
+  injects into the session — including the MCP Docker subprocess via `-e GITHUB_PERSONAL_ACCESS_TOKEN`:
+
+    ```json
+    { "env": { "GITHUB_PERSONAL_ACCESS_TOKEN": "github_pat_…" } }
+    ```
+
+    Use this file — **not** `.zshrc` (a Dock/Finder launch of the desktop app doesn't source it) and **not**
+    the committed `.claude/settings.json` (that would commit the secret). `.claude/settings.local.json` is
+    ignored by the repo `.gitignore`. **Restart Claude Code** after adding or changing the token so the
+    server reconnects.
+
+- **Rotation.** The token is plaintext at rest and is visible to the session environment (including the
+  agent's shell). Use an expiring PAT, rotate periodically, and revoke immediately (github.com → Settings
+  → Developer settings) if it is ever exposed.
+- **Bumping the image.** Check the latest release at `github.com/github/github-mcp-server/releases`,
+  update the `:vX.Y.Z` tag in `.mcp.json`, and restart. You can't verify the tag with
+  `docker manifest inspect` from inside the sandbox — its TLS interception breaks the registry handshake
+  (`x509` / OSStatus error); the server itself runs on the **host** (launched by Claude Code, outside the
+  sandbox), so it pulls normally.
+- **Write access.** Out of scope by default. It would need a write-scoped PAT and dropping
+  `GITHUB_READ_ONLY` — and any outward action (commenting, merging) is a deliberate, per-action decision,
+  not something to enable ambiently.
+- **Troubleshooting — `mcp__github__*` tools don't appear:** token unset in the environment Claude was
+  launched with (most common — especially a GUI launch; confirm it's in `.claude/settings.local.json` and
+  restart); Docker not running or the pinned image can't be pulled; or a config change that needs a
+  restart to take effect.
 
 ## How the proposer is customized
 
