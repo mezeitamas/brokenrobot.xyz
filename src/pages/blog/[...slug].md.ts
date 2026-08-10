@@ -2,8 +2,8 @@ import type { APIRoute, GetStaticPaths } from 'astro';
 import { type CollectionEntry, getCollection } from 'astro:content';
 import { parseDocument } from 'yaml';
 
-import { ATTRIBUTION, markdownTwinRouteParam, postPagePath } from '../../utils/markdownTwin';
-import { mdxToMarkdown } from '../../utils/mdxToMarkdown';
+import { ATTRIBUTION, markdownTwinRouteParam, postPagePath } from '@utils/markdownTwin';
+import { mdxToMarkdown } from '@utils/mdxToMarkdown';
 
 // The Markdown twin of every blog post, at `/blog/<slug>/index.md`. One endpoint file covers all of
 // them: `getStaticPaths` appends `/index` to each post's id, and the rest parameter matches slashes,
