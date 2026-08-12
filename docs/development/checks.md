@@ -45,6 +45,7 @@ npm run format:check
 npm run specs:check
 npm run designmd:check
 npm run tokens:check
+npm run headers:check
 npm run build
 npm run thirdparty:check
 npm run twins:check
@@ -64,7 +65,7 @@ The gate covers no visual regression and no accessibility. A change is not verif
 
 | Job                   | Checks                                                                                      |
 | --------------------- | ------------------------------------------------------------------------------------------- |
-| Verify site           | `format:check`, `lint:check`, `type:check`, `specs:check`, `designmd:check`, `tokens:check` |
+| Verify site           | `format:check`, `lint:check`, `type:check`, `specs:check`, `designmd:check`, `tokens:check`, `headers:check` |
 | Verify infrastructure | the Terraform check, with its own `init` step                                               |
 | Verify tooling        | `hooks:check`                                                                               |
 | Build site            | `build`                                                                                     |
@@ -162,9 +163,35 @@ npm run tokens:generate # regenerates the file
 the repository commits the result. This check verifies that the committed file still matches what
 the generator produces now.
 
+It also compares the two `theme-color` `<meta>` values hard-coded in `BaseLayout.astro` against the
+generated light and dark `--bg` tokens. A meta tag cannot read a CSS custom property, so those two
+literals are the one place a token value is duplicated by hand; without this comparison nothing
+would notice when `DESIGN.md` moves on and the browser chrome keeps the old background.
+
 The check exists because the failure it catches is invisible otherwise. Editing a token in `DESIGN.md`
 without regenerating leaves a stale CSS file that types, lints, formats, and builds perfectly —
 every other check passes, and the site renders the old value.
+
+## Cross-file consistency
+
+### `headers:check`
+
+```bash
+npm run headers:check # node scripts/check-header-sync.mjs
+```
+
+The site's security headers are declared in three places that must stay byte-identical:
+`server.headers` in `astro.config.ts`, `nginx.conf`, and
+`infra/cloudflare/modules/domain/main.tf`. This check extracts all three and compares them.
+
+Nothing else catches drift between them. The Playwright suite exercises the `astro.config.ts` copy
+alone, because that is the one `astro preview` serves — so a change to the CSP that lands in the
+preview copy and not in the Cloudflare module passes every other check and every test, and reaches
+production as a header nobody serves. See
+[Security headers](../architecture.md#security-headers) for what each copy serves.
+
+An exit code of 2 means extraction itself broke — a file moved, or its shape changed enough that
+the script could not find the header. Report that as `not run` rather than a pass or a failure.
 
 ## Build output (`dist/`)
 
