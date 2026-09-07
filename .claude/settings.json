@@ -15,13 +15,12 @@
             "source": {
                 "source": "github",
                 "repo": "brokenrobot-xyz/agent-skills"
-            }
+            },
+            "autoUpdate": true
         }
     },
     "enabledMcpjsonServers": [
         "astro-docs",
-        "playwright",
-        "chrome-devtools",
         "codegraph",
         "terraform",
         "github"
