@@ -113,10 +113,11 @@ Agent/Task tool, or let the main session delegate.
 - **`frontend-code-reviewer`** (opus) — a read-only guardrail gate over the diff before commit, grouping
   findings as Blocking / Should-fix / Nits. Flags CSP, theming, interactivity-ladder, and convention
   violations the implementer missed.
-- **`dependency-update-researcher`** (opus) — read-only research on a single npm dependency bump
-  (current → target version): reads the changelog, checks how the repo actually uses the package, and
-  returns a compatibility verdict with the concrete edits the bump would require. Invoked per
-  minor/major bump by the `updating-dependencies` skill; never edits files or runs installs.
+- **`dependency-update-researcher`** (external plugin, from `frontend-toolkit`) — read-only research
+  on a single npm dependency bump (current → target version): reads the changelog, checks how the
+  repo actually uses the package, and returns a compatibility verdict with the concrete edits the
+  bump would require. Invoked per selected bump by the `updating-dependencies` skill; never edits
+  files or runs installs.
 
 ## The skills (`.claude/skills/` and marketplace plugins)
 
@@ -148,10 +149,11 @@ vendored names. The `reviewing-claude-skills` skill enforces this as checklist i
   [commit-conventions](../development/conventions/commit-conventions.md), inferring type and scope
   from the changed paths. The plugin also carries the commit-message deny-hook; both read the
   vocabulary from [`.brokenrobot-xyz/commits.json`](../../.brokenrobot-xyz/commits.json).
-- **`updating-dependencies`** — refresh npm dependencies: detect what's outdated, bucket into
-  patch/minor/major, apply patches directly, and research minor/major bumps (one
-  `dependency-update-researcher` run per bump) before recommending them. Delegates verification to
-  `running-preflight-checks` and `testing-visual-regression`.
+- **`updating-dependencies`** (external plugin) — refresh npm dependencies: detect what's outdated,
+  bucket into patch/minor/major, research the bumps you select (one `dependency-update-researcher`
+  run per bump), and apply only the ones you approve. It edits `package.json`, the lockfile, and the
+  source a migration requires, and never commits. It holds no reference to this repository, so run
+  `running-preflight-checks` and `testing-visual-regression` afterwards yourself.
 - **`reviewing-claude-skills`** (external plugin) — review a skill (its SKILL.md, evals, and
   referenced files) against Anthropic's skill-authoring and prompting best practices plus the host
   project's conventions, producing a severity-ranked gap analysis and optionally applying approved
@@ -166,21 +168,25 @@ vendored names. The `reviewing-claude-skills` skill enforces this as checklist i
   this repository; how this project applies it is recorded in
   [conventions/writing-conventions.md](conventions/writing-conventions.md).
 
-## MCP servers (`.mcp.json`)
+## MCP servers
 
-Project-scoped and committed, so the team shares them. Every server's version is pinned in
-[`.mcp.json`](../../.mcp.json) — in the `npx` command for the node servers, in the image tag for the
-Docker ones — and is **deliberately not repeated here**. That file is the single source of truth;
-a number copied into prose only rots. Version numbers below name a release where behaviour
-_changed_, which stays true no matter what is pinned today.
+They arrive from two places. Most are project-scoped and committed in
+[`.mcp.json`](../../.mcp.json), so the team shares them. The two browser servers come from the
+`frontend-toolkit` plugin instead, which is why their tools carry a
+`mcp__plugin_frontend-toolkit_…` prefix; the plugin owns their pins, and this repository does not.
+
+Every version is pinned where its server is declared — in the `npx` command for the node servers, in
+the image tag for the Docker ones — and is **deliberately not repeated here**. The declaring file is
+the single source of truth; a number copied into prose only rots. Version numbers below name a
+release where behaviour _changed_, which stays true no matter what is pinned today.
 
 - **`astro-docs`** (http) — Astro's documentation, for framework questions during propose/implement.
-- **`playwright`** — Microsoft's `@playwright/mcp`, driving **host Chrome**
+- **`playwright`** (from `frontend-toolkit`) — Microsoft's `@playwright/mcp`, driving **host Chrome**
   (`--browser=chrome --headless --isolated`). The `frontend-qa-engineer` uses it for the manual-preview Verify
   item (theme flash, console, interactions, 375px); it also serves interactive exploration and
   locating selectors when authoring specs. Host rendering is **non-authoritative** — pixel baselines
   stay in the devcontainer suite. Approve it once in `/mcp`.
-- **`chrome-devtools`** — Google's `chrome-devtools-mcp`, host Chrome headless.
+- **`chrome-devtools`** (from `frontend-toolkit`) — Google's `chrome-devtools-mcp`, host Chrome headless.
   Performance traces (Core Web Vitals) and a `lighthouse_audit` (a11y / SEO / best-practices) against the
   local preview — the perf/SEO angle that axe and visual-regression don't cover. Local-preview scores
   are a **relative regression signal**, not prod-authoritative.

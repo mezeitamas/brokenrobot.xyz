@@ -4,14 +4,6 @@
             "type": "http",
             "url": "https://mcp.docs.astro.build/mcp"
         },
-        "playwright": {
-            "command": "npx",
-            "args": ["-y", "@playwright/mcp@0.0.80", "--browser=chrome", "--headless", "--isolated"]
-        },
-        "chrome-devtools": {
-            "command": "npx",
-            "args": ["-y", "chrome-devtools-mcp@1.8.0", "--headless", "--isolated"]
-        },
         "codegraph": {
             "command": "npx",
             "args": ["-y", "@colbymchenry/codegraph@1.6.0", "serve", "--mcp"]

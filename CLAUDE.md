@@ -19,6 +19,15 @@ Before implementing:
 - If a simpler approach exists, say so. Push back when warranted.
 - If something is unclear, stop. Name what's confusing. Ask.
 
+### Verify, Don't Assert
+
+**A claim about how something behaves is either checked, or labelled as unchecked.**
+
+- Before stating how a library, tool, or platform behaves, run something that demonstrates it - a probe, a request, a build - and say what was run.
+- Conventions and "standard practice" need a source. Recalled knowledge is a hypothesis, not evidence.
+- Never cite a document as support for a claim taken from that same document.
+- When verification isn't possible, say so plainly and name what would settle it.
+
 ### Simplicity First
 
 **Minimum code that solves the problem. Nothing speculative.**
@@ -84,5 +93,6 @@ Read these before working on the design overhaul — they are the shared source 
 - [docs/development/conventions/branching-conventions.md](docs/development/conventions/branching-conventions.md) — branch naming, worktrees, the human-only push gate, and squash-merging.
 - [docs/development-workflow.md](docs/development-workflow.md) — the way we work: spec-driven planning + scaled trunk-based development (the tool-agnostic _what_); writing blog articles is out of scope.
 - [docs/development/checks.md](docs/development/checks.md) — every automated check: what it inspects, how to run it, and why it exists. The only place they are listed.
+- [docs/known-gaps.md](docs/known-gaps.md) — intent the site does not yet meet, or does not yet record. Read it before assuming the docs above describe what actually happens.
 
 Those cover the **application**. For how this repo is worked on with Claude Code — the agent/skill workflow and the sandbox (why git in worktrees and Docker behave as they do) — see [docs/tooling/](docs/tooling/README.md), in particular [docs/tooling/sandbox.md](docs/tooling/sandbox.md).
