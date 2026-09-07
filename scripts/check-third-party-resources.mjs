@@ -3,7 +3,8 @@
 //
 // The site serves `default-src 'none'` with every fetch directive at `'self'` or `'none'`, so a
 // third-party resource in the output is a silently broken page, not a style preference. Runs
-// locally as `npm run thirdparty:check` and in CI's Build job after `astro build`.
+// locally as `npm run thirdparty:check` and in CI's Test job against the `dist/` that Build
+// produced.
 //
 //   node scripts/check-third-party-resources.mjs [dist/]
 //

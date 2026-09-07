@@ -1,0 +1,5 @@
+schema: frontend-change
+created: 2026-09-07
+# No spec-level behavior changes: this moves existing checks between CI jobs and orders the jobs.
+# No site output, permalink, feed, or check result changes. See proposal.md — Capabilities.
+skip_specs: true

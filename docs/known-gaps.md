@@ -60,3 +60,19 @@ machine and in CI.
 
 **Resolves by:** undecided. This needs discovery — whether a platform emulator, or the project's own
 container image, can serve the suite instead.
+
+## Only the light theme carries visual and accessibility coverage
+
+**Intent:** both themes are first-class, and each carries its own Playwright visual and axe coverage.
+`CLAUDE.md` states this, and every change's Verify step asks for snapshots "in both themes".
+
+**Reality:** `playwright.config.ts` defines two projects, `Desktop Chrome` and `Pixel 7`, both at the
+default colour scheme. Nothing under `tests/` sets a theme. Every baseline in
+`tests/__screenshots__/` is therefore a light-theme image, and no axe run inspects the dark palette —
+a dark-only contrast regression would pass the suite. The Verify step's "both themes" wording
+therefore rests on a human checking the dark theme by hand, which nothing records or enforces.
+
+**Resolves by:** changing the code. The intent is not in doubt; the coverage is missing. It needs
+dark variants of the existing projects, a baseline set for them, and a decision on whether the theme
+is forced through `colorScheme` or through the site's own persisted preference — which is what the
+pre-paint theme-init actually reads.

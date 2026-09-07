@@ -62,13 +62,19 @@ The gate covers no visual regression and no accessibility. A change is not verif
 
 [`pipeline.yml`](../../.github/workflows/pipeline.yml) enforces the checks as named jobs:
 
-| Job              | Checks                                                                                      |
-| ---------------- | ------------------------------------------------------------------------------------------- |
-| Verify site      | `format:check`, `lint:check`, `type:check`, `specs:check`, `designmd:check`, `tokens:check` |
-| Verify Terraform | the Terraform check, with its own `init` step                                               |
-| Verify tooling   | `hooks:check`                                                                               |
-| Build site       | `build`, then `thirdparty:check`, then `twins:check`                                        |
-| Test site        | the e2e suite                                                                               |
+| Job                   | Checks                                                                                      |
+| --------------------- | ------------------------------------------------------------------------------------------- |
+| Verify site           | `format:check`, `lint:check`, `type:check`, `specs:check`, `designmd:check`, `tokens:check` |
+| Verify infrastructure | the Terraform check, with its own `init` step                                               |
+| Verify tooling        | `hooks:check`                                                                               |
+| Build site            | `build`                                                                                     |
+| Test site             | `thirdparty:check`, `twins:check`, then the e2e suite                                       |
+
+The jobs form three phases, and the pipeline runs them in that order: the three Verify jobs
+inspect source and run first, Build produces `dist/` and only `dist/`, and Test inspects the
+`dist/` that Build uploaded. Each phase waits for the one before it, so a failed Verify stops the
+run before the build — nothing is built from source already known to be broken. Within Verify site,
+one failing check does not hide the checks after it; all six report and the job still fails.
 
 CI runs more than the preflight gate. It adds `hooks:check` and the e2e suite, which the gate
 leaves out. A green gate therefore predicts a green pipeline, but it does not guarantee one.
@@ -253,7 +259,7 @@ container, so it runs as its own part of Verify.
 # locally
 npm run terraform:check # fmt -check -recursive, then validate -no-color, in infra/cloudflare
 
-# in CI — the Verify Terraform job adds an init step
+# in CI — the Verify infrastructure job adds an init step
 terraform fmt -check -recursive
 terraform init -backend=false
 terraform validate -no-color

@@ -5,8 +5,8 @@
 // every build, so they cannot drift apart; the failure worth auditing is a missing or empty twin,
 // which is a real failure mode in the wild — sites serving `.md` that answer 200 with no body, where
 // nothing looks broken to anyone. Content faults belong to the transform, which fails the build and
-// names the offending post. Runs locally as `npm run twins:check` and in CI's Build job after
-// `astro build`.
+// names the offending post. Runs locally as `npm run twins:check` and in CI's Test job against the
+// `dist/` that Build produced.
 //
 //   node scripts/check-markdown-twins.mjs [dist/]
 //

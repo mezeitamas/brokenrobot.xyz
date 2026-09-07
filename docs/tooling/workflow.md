@@ -68,13 +68,13 @@ does with them:
   updated spec together — they land atomically.
 - **CI is two workflows: one that checks, one that ships.**
   [`pipeline.yml`](../../.github/workflows/pipeline.yml) holds every check as a named job — **Verify
-  site**, **Verify Terraform**, **Verify tooling**, **Build site**, and **Test site**. Which check
+  site**, **Verify infrastructure**, **Verify tooling**, **Build site**, and **Test site**. Which check
   belongs to which job is in
   [checks.md](../development/checks.md#the-ci-pipeline); it is close to what the
   `running-preflight-checks` and `testing-visual-regression` skills run locally, but CI runs more. It runs on every pull request **and** on every push to `main`, unfiltered, so
   a merge always gets the full picture rather than only the parts a path filter thought were
   affected. [`deploy.yml`](../../.github/workflows/deploy.yml) ships the result.
-- **`infra/` is checked, but only shallowly.** **Verify Terraform** is one job with a
+- **`infra/` is checked, but only shallowly.** **Verify infrastructure** is one job with a
   `working-directory` of `infra/cloudflare`, running `fmt -check -recursive`, `init -backend=false`,
   and `validate`; `running-preflight-checks` runs the same `fmt` and `validate` locally as its
   `terraform:check` step, against the devcontainer's Terraform 1.16.0 pin. What neither covers is
