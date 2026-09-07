@@ -47,11 +47,13 @@ npm run designmd:check
 npm run tokens:check
 npm run build
 npm run thirdparty:check
+npm run twins:check
 npm run terraform:check
 ```
 
-The order is not arbitrary. `build` comes before `thirdparty:check` because that check reads
-`dist/`. The cheap source checks come first, so an obvious failure appears before the slow build.
+The order is not arbitrary. `build` comes before `thirdparty:check` and `twins:check` because those
+checks read `dist/`. The cheap source checks come first, so an obvious failure appears before the
+slow build.
 
 The gate covers no visual regression and no accessibility. A change is not verified until
 [visual verification](#visual-verification) has also run.
@@ -65,7 +67,7 @@ The gate covers no visual regression and no accessibility. A change is not verif
 | Verify site      | `format:check`, `lint:check`, `type:check`, `specs:check`, `designmd:check`, `tokens:check` |
 | Verify Terraform | the Terraform check, with its own `init` step                                               |
 | Verify tooling   | `hooks:check`                                                                               |
-| Build site       | `build`, then `thirdparty:check`                                                            |
+| Build site       | `build`, then `thirdparty:check`, then `twins:check`                                        |
 | Test site        | the e2e suite                                                                               |
 
 CI runs more than the preflight gate. It adds `hooks:check` and the e2e suite, which the gate
@@ -191,6 +193,36 @@ Its exit codes carry meaning:
 The check has one known blind spot. Cloudflare injects the Web Analytics beacon at the edge, so
 the beacon never appears in `dist/` and this check cannot see it. The CSP list in
 [`astro.config.ts`](../../astro.config.ts) is the only place that dependency is visible.
+
+It skips `.md` files. The check exists because a resource a browser fetches from a third party is a
+page the site's own CSP silently breaks. A Markdown file is data an agent reads, not a document a
+browser parses into requests, so nothing inside one can produce a fetch. Without the exclusion, one
+post's fenced `<link rel="canonical" href="https://…">` code sample — which the HTML page escapes
+and the Markdown twin carries raw — fails the Build job.
+
+### `twins:check`
+
+```bash
+npm run twins:check # node scripts/check-markdown-twins.mjs
+```
+
+Every blog post is published twice: as the HTML page a person reads, and as the Markdown twin at
+`/blog/<slug>/index.md` that an agent reads. This check confirms the build produced the second one —
+a twin beside every built post page and no orphan beside none, each twin non-empty, each opening
+with a frontmatter block that parses.
+
+It audits **coverage, not content**. Twins and pages are generated from one source on every build,
+so they cannot drift apart. A wrong twin is the transform's failure, and the transform fails the
+build and names the offending post; what this check catches is the missing or empty one — a real
+failure mode in the wild, where a site serves `.md` that answers 200 with no body and nothing looks
+broken to anyone.
+
+Its exit codes carry the same meaning as `thirdparty:check`'s:
+
+- **1** — a twin is missing, empty, orphaned, or does not open with parseable frontmatter. This is a
+  failure.
+- **2** — `dist/blog/` is missing or holds no post directories. The check did not run. Report the
+  result as `not run` and never as a pass. Fix the build first.
 
 ### `test:e2e:check`
 

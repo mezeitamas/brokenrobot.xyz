@@ -1,6 +1,6 @@
 ---
 name: running-preflight-checks
-description: Runs the brokenrobot.xyz quality gate — type-check, lint, format-check, spec validation, DESIGN lint, design-token drift, build, the third-party-resource guardrail, and the Terraform check — and summarizes failures. Use before committing a change or handing it to review; the same set CI's Pipeline jobs enforce. This is the non-visual half of Verify; pair it with testing-visual-regression.
+description: Runs the brokenrobot.xyz quality gate — type-check, lint, format-check, spec validation, DESIGN lint, design-token drift, build, the third-party-resource guardrail, the Markdown-twin audit, and the Terraform check — and summarizes failures. Use before committing a change or handing it to review; the same set CI's Pipeline jobs enforce. This is the non-visual half of Verify; pair it with testing-visual-regression.
 compatibility: Requires Node and npm at the package.json engine versions, with dependencies installed. `terraform:check` additionally needs Terraform on PATH (the devcontainer pins 1.15.8 to match CI) and `infra/cloudflare` already initialized.
 model: claude-sonnet-5
 allowed-tools: Bash

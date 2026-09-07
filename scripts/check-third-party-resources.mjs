@@ -23,6 +23,13 @@ const OWN_HOST = 'brokenrobot.xyz';
 // is not text output and there is nothing in it for these patterns to match.
 const BINARY_SNIFF_BYTES = 8000;
 
+// The Markdown twins are out of this check's remit. It exists because a resource a browser fetches
+// from a third party is a page the site's own CSP silently breaks; a Markdown file is data an agent
+// reads, not a document a browser parses into requests, so nothing inside one can produce a fetch.
+// One post's fenced code sample is a `<link rel="canonical" href="https://…">` snippet, which the
+// HTML page escapes and the twin carries raw.
+const SKIPPED_EXTENSIONS = ['.md'];
+
 // Each pattern matches a position that makes the browser fetch the URL. `href` is deliberately
 // confined to `<link>`: an outbound `<a href>` in prose is a link the reader clicks, not a request
 // the page makes. The attribute patterns allow either quote character and whitespace around `=`,
@@ -54,6 +61,9 @@ function textFiles(dir) {
             continue;
         }
         if (!entry.isFile()) {
+            continue;
+        }
+        if (SKIPPED_EXTENSIONS.some((extension) => entry.name.endsWith(extension))) {
             continue;
         }
         const contents = readFileSync(path);

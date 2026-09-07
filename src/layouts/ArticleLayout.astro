@@ -7,9 +7,19 @@ import MetaOgArticle from '@components/seo/meta-og/MetaOgArticle.astro';
 import MetaTwitter from '@components/seo/meta-twitter/MetaTwitter.astro';
 import RichResultsArticle from '@components/seo/rich-results/RichResultsArticle.astro';
 
-type Props = CollectionEntry<'blog'>['data'];
+import { markdownTwinPath } from '../utils/markdownTwin';
 
-const { title, excerpt, publishDate, heroImage, tags } = Astro.props;
+// The `seo` slot carries the pair the llms.txt convention recommends, beside the RSS `alternate`
+// link BaseLayout already emits: `alternate` names this page's Markdown twin, and `describedby`
+// names the index covering the rest, so an agent landing on one post can reach the others. Neither
+// relation fetches anything, so neither touches the CSP.
+
+type Props = CollectionEntry<'blog'>['data'] & {
+    // The post's id, which its frontmatter does not carry — the layout needs it to name the twin.
+    postId: string;
+};
+
+const { postId, title, excerpt, publishDate, heroImage, tags } = Astro.props;
 ---
 
 <BaseLayout
@@ -20,6 +30,17 @@ const { title, excerpt, publishDate, heroImage, tags } = Astro.props;
         <meta
             name="keywords"
             content={tags?.join(', ')}
+        />
+
+        <link
+            rel="alternate"
+            type="text/markdown"
+            href={markdownTwinPath(postId)}
+        />
+
+        <link
+            rel="describedby"
+            href="/llms.txt"
         />
 
         <MetaOgArticle

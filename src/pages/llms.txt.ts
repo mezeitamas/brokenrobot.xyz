@@ -2,6 +2,7 @@ import type { APIRoute } from 'astro';
 import { getCollection } from 'astro:content';
 
 import { SITE_METADATA } from '../consts';
+import { ATTRIBUTION, markdownTwinPath } from '../utils/markdownTwin';
 
 // A Markdown map of the site for language models, following the llms.txt convention
 // (https://llmstxt.org): an H1 name, a blockquote summary, free prose, then sections of links.
@@ -20,17 +21,22 @@ export const GET: APIRoute = async ({ site }) => {
         '',
         `> ${SUMMARY}`,
         '',
-        `Content is © ${SITE_METADATA.AUTHOR.NAME}, all rights reserved. Quote briefly with attribution and a link to the canonical URL.`,
+        ATTRIBUTION,
         '',
         '## Pages',
         '',
+        // These three link the pages themselves: they have no Markdown twin to point at. About is
+        // hand-authored markup with no Markdown source, and Home and Blog are link lists.
         `- [Home](${toUrl('/')}): Latest posts and a short introduction.`,
         `- [About](${toUrl('/about')}): Who Tamas is and what he works on.`,
         `- [Blog](${toUrl('/blog')}): Every post, newest first.`,
         '',
         '## Blog posts',
         '',
-        ...posts.map((post) => `- [${post.data.title}](${toUrl(`/blog/${post.id}`)}): ${post.data.excerpt}`),
+        // The spec is explicit that the links in an llms.txt file should lead to LLM-friendly
+        // content, so each post is listed by its twin. The twin names its own `canonical`, so an
+        // agent that needs the human page is one hop away.
+        ...posts.map((post) => `- [${post.data.title}](${toUrl(markdownTwinPath(post.id))}): ${post.data.excerpt}`),
         '',
         '## Optional',
         '',
