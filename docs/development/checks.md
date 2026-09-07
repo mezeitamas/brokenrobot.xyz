@@ -267,7 +267,7 @@ catches such a change.
 
 Two failures are not the author's code, and both are `not run` rather than a real failure:
 
-- Terraform is missing from `PATH` (exit 127). The devcontainer pins 1.15.8 to match CI.
+- Terraform is missing from `PATH` (exit 127). The devcontainer pins 1.16.0 to match CI.
 - `infra/cloudflare` was never initialized. `validate` reports `Module not installed`. Fix it with
   `terraform -chdir=infra/cloudflare init -backend=false`, which needs network access to the
   Terraform registry.
