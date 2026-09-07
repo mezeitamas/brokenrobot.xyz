@@ -19,6 +19,15 @@ Before implementing:
 - If a simpler approach exists, say so. Push back when warranted.
 - If something is unclear, stop. Name what's confusing. Ask.
 
+### Verify, Don't Assert
+
+**A claim about how something behaves is either checked, or labelled as unchecked.**
+
+- Before stating how a library, tool, or platform behaves, run something that demonstrates it - a probe, a request, a build - and say what was run.
+- Conventions and "standard practice" need a source. Recalled knowledge is a hypothesis, not evidence.
+- Never cite a document as support for a claim taken from that same document.
+- When verification isn't possible, say so plainly and name what would settle it.
+
 ### Simplicity First
 
 **Minimum code that solves the problem. Nothing speculative.**
