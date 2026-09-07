@@ -33,26 +33,44 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      # Every step below carries `if: ${{ !cancelled() }}` so that one failing
+      # check does not hide the five after it — stopping at the first failure
+      # costs a whole pipeline round trip now that Verify gates Build. The job
+      # still concludes `failure`, because the failed step is not excused.
+      #
+      # Never replace this with `continue-on-error: true`. That forces a step's
+      # conclusion to `success`, so the job would pass with a failing check inside
+      # it and Deploy's gate would open on broken source.
+      #
+      # Checkout, setup-node and `npm ci` above keep the implicit `if: success()`:
+      # there is nothing to report when the setup failed. A failed `npm ci` does
+      # make all six run and fail together, which is noisy but not misleading.
       - name: Format check
+        if: ${{ !cancelled() }}
         run: npm run format:check
 
       - name: Lint check
+        if: ${{ !cancelled() }}
         run: npm run lint:check
 
       - name: Type check
+        if: ${{ !cancelled() }}
         run: npm run type:check
 
       - name: OpenSpec validate
+        if: ${{ !cancelled() }}
         run: npm run specs:check
 
       - name: DESIGN lint
+        if: ${{ !cancelled() }}
         run: npm run designmd:check
 
       - name: DESIGN token drift check
+        if: ${{ !cancelled() }}
         run: npm run tokens:check
 
-  verify-terraform:
-    name: 'Verify Terraform'
+  verify-infrastructure:
+    name: 'Verify infrastructure'
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     permissions:
@@ -107,6 +125,10 @@ jobs:
   build-site:
     name: 'Build site'
     runs-on: ubuntu-24.04
+    # The phase rule: if Verify does not pass, Build does not run. This costs
+    # wall-clock time — the critical path becomes Verify + Build + Test — and buys
+    # never building source already known to be broken.
+    needs: [verify-site, verify-infrastructure, verify-tooling]
     timeout-minutes: 10
 
     steps:
@@ -124,12 +146,6 @@ jobs:
 
       - name: Build
         run: npm run build
-
-      - name: Third-party resource check
-        run: npm run thirdparty:check
-
-      - name: Markdown twin check
-        run: npm run twins:check
 
       - name: Upload dist
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
@@ -162,6 +178,14 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
+
+      # Both checks read the downloaded `dist/`. `twins:check` imports `yaml`, so
+      # both wait for `npm ci` above.
+      - name: Third-party resource check
+        run: npm run thirdparty:check
+
+      - name: Markdown twin check
+        run: npm run twins:check
 
       - name: Install Playwright Browsers
         run: npm run install:playwright

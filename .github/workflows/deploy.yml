@@ -1,10 +1,11 @@
 name: Deploy
 
 # Pipeline's conclusion is `success` only when every one of its jobs passed —
-# Verify site, Verify Terraform, Build site, Test site. Triggering on that one
-# workflow is therefore the entire gate: if anything on `main` is wrong, nothing
-# ships. Keeping the Terraform check inside Pipeline rather than in a workflow of
-# its own is what makes that true, so do not split it back out.
+# whichever jobs it declares, so this comment does not list them and cannot go
+# stale as they change. Triggering on that one workflow is therefore the entire
+# gate: if anything on `main` is wrong, nothing ships. Keeping the Terraform check
+# inside Pipeline rather than in a workflow of its own is what makes that true, so
+# do not split it back out.
 #
 # `workflow_run` fires once per matching run, not once when several finish, so
 # listing a second workflow here would deploy twice per push instead of waiting
