@@ -28,9 +28,12 @@
     ],
     "enabledPlugins": {
         "typescript-lsp@claude-plugins-official": true,
-        "committing-conventionally@brokenrobot-xyz": true,
+
         "writing-simplified-technical-english@brokenrobot-xyz": true,
-        "reviewing-claude-skills@brokenrobot-xyz": true
+        "prompt-quality-criteria@brokenrobot-xyz": true,
+        "committing-conventionally@brokenrobot-xyz": true,
+        "frontend-toolkit@brokenrobot-xyz": true,
+        "agent-authoring-toolkit@brokenrobot-xyz": true
     },
     "sandbox": {
         "enabled": true,
@@ -192,14 +195,17 @@
             "Bash(bash .claude/hooks/lib/dev-env-checks.sh)",
 
             "Skill(checking-dev-env)",
-            "Skill(committing-conventionally:committing-conventionally)",
-            "Skill(reviewing-claude-skills:reviewing-claude-skills)",
             "Skill(running-preflight-checks)",
             "Skill(updating-dependencies)",
-            "Skill(writing-simplified-technical-english:writing-simplified-technical-english)",
 
-            "mcp__playwright",
-            "mcp__chrome-devtools",
+            "Skill(writing-simplified-technical-english:writing-simplified-technical-english)",
+            "Skill(prompt-quality-criteria:prompt-quality-criteria)",
+            "Skill(committing-conventionally:committing-conventionally)",
+            "Skill(agent-authoring-toolkit:*)",
+            "Skill(frontend-toolkit:*)",
+
+            "mcp__plugin_frontend-toolkit_playwright__*",
+            "mcp__plugin_frontend-toolkit_chrome-devtools__*",
             "mcp__terraform",
             "mcp__codegraph"
         ],

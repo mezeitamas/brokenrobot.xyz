@@ -1,7 +1,7 @@
 ---
 name: frontend-qa-engineer
 description: Runs Playwright visual-regression and axe accessibility checks for brokenrobot.xyz in BOTH light and dark themes, regenerates baselines for intentional changes, and reports diffs. Also drives an agent-assisted manual preview (theme flash, console, interactions, 375px) via the Playwright MCP, plus an advisory performance/SEO audit via the Chrome DevTools MCP, against host Chrome. Use at the Verify step of a change, or whenever UI snapshot/a11y coverage needs to run. Runs snapshots in the devcontainer so rendering matches the committed CI baselines.
-tools: Read, Grep, Glob, Bash, mcp__playwright, mcp__chrome-devtools
+tools: Read, Grep, Glob, Bash, mcp__plugin_frontend-toolkit_playwright, mcp__plugin_frontend-toolkit_chrome-devtools
 model: sonnet
 ---
 
@@ -34,7 +34,7 @@ If the container can't be brought up here, **do not run on the host** — report
 
 ## Manual preview — the Playwright MCP (host)
 
-The snapshots above are pixel baselines and must stay in the devcontainer. The **manual-preview** Verify item is different — it's behaviour and judgment (no theme flash, console clean, interactions work, responsive at 375px) — so you drive it with the **Playwright MCP** (`mcp__playwright`, headless host Chrome). macOS rendering is fine for these checks; never use it for pixel baselines.
+The snapshots above are pixel baselines and must stay in the devcontainer. The **manual-preview** Verify item is different — it's behaviour and judgment (no theme flash, console clean, interactions work, responsive at 375px) — so you drive it with the **Playwright MCP** (`mcp__plugin_frontend-toolkit_playwright`, headless host Chrome). macOS rendering is fine for these checks; never use it for pixel baselines.
 
 Serve the built site on the host, then drive it:
 
@@ -50,11 +50,11 @@ This is **assistance, not the gate** — report what you observed; the human sti
 
 ## Performance & SEO audit — the Chrome DevTools MCP (advisory)
 
-Against the same host preview, run a Lighthouse + perf pass with the **Chrome DevTools MCP** (`mcp__chrome-devtools`, headless host Chrome) for the signal that axe and visual-regression don't cover. **`lighthouse_audit`** gives **SEO** and **best-practices** (it also returns an accessibility score — **ignore it**, axe owns a11y); **`performance_start_trace`** gives **Core Web Vitals**.
+Against the same host preview, run a Lighthouse + perf pass with the **Chrome DevTools MCP** (`mcp__plugin_frontend-toolkit_chrome-devtools`, headless host Chrome) for the signal that axe and visual-regression don't cover. **`lighthouse_audit`** gives **SEO** and **best-practices** (it also returns an accessibility score — **ignore it**, axe owns a11y); **`performance_start_trace`** gives **Core Web Vitals**.
 
-1. `new_page` with `http://localhost:8080/<view>`, then take the page id from its result and pass it as **`pageId`** on every later call. Since chrome-devtools-mcp 1.8.0 every page-scoped tool **requires** `pageId` — 27 of its 29 tools, with only `list_pages` and `new_page` exempt — so a call that omits it fails schema validation before it runs. `list_pages` takes no arguments and re-lists the ids if you lose one.
-2. `lighthouse_audit` (mode `navigation`, device `mobile`) on that `pageId` — report the **SEO** and **best-practices** scores and any failed audits.
-3. `performance_start_trace` (reload, autoStop) on that `pageId` — report **LCP** and **CLS** (and INP if present).
+1. `new_page` with `http://localhost:8080/<view>`. The plugin pins chrome-devtools-mcp **1.6.0**, which carries no `pageId` parameter: the page you open becomes the selected one and later calls act on that selection. Use `select_page` to switch pages and `list_pages` to see what is open.
+2. `lighthouse_audit` (mode `navigation`, device `mobile`) — report the **SEO** and **best-practices** scores and any failed audits.
+3. `performance_start_trace` (reload, autoStop) — report **LCP** and **CLS** (and INP if present).
 
 This is **advisory, not a gate.** Local-preview scores run over loopback with no CDN or throttling, so treat them as a **relative regression signal** — flag a notable drop versus the page's usual, but never fail Verify on an absolute number, and never present them as prod figures.
 
