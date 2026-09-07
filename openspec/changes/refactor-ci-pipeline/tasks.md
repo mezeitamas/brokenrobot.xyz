@@ -41,9 +41,9 @@
 - [x] Visual + a11y snapshots pass in **both themes** for every touched view (testing-visual-regression skill)
 - [x] All preflight gate checks pass — the set in `docs/development/checks.md` (running-preflight-checks skill)
 - [x] Manual preview: no theme flash, interactions work, console clean, responsive at 375px
-- [ ] On the change's pull request, confirm the run this repository cannot verify locally: the three
+- [x] On the change's pull request, confirm the run this repository cannot verify locally: the three
       Verify jobs start first, `build-site` waits for all three, `test-site` waits for `build-site`,
       and both moved checks execute inside **Test site**
-- [ ] On that same run, confirm a failing check in `verify-site` does not hide the checks after it —
+- [x] On that same run, confirm a failing check in `verify-site` does not hide the checks after it —
       push a deliberate formatting error on a scratch commit, observe all six check steps report and
       the job still conclude `failure`, then drop the commit
