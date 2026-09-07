@@ -17,6 +17,10 @@ Constraints and current state that shape the approach:
   `../advanced-static-website-hosting-with-amazon-s3-and-cloudfront/`, so the asset lookup spans the
   blog tree rather than one post folder. One `<link` occurrence exists but sits _inside a fenced code
   block_, so it is article content and must survive untouched.
+- **Two image forms, not one.** Four posts embed images through `BlogPostPicture`; a fifth,
+  `beyond-tabs-and-spaces-finding-a-balance-in-coding-conventions`, uses native Markdown images with
+  relative paths instead. Both resolve through Astro's asset pipeline, and the spec requires both to
+  reach the twin as absolute URLs.
 - **The repo already owns an MDX parser.** `@astrojs/mdx` compiles through
   `@astrojs/markdown-satteri` → `satteri`, a declared dependency; there is no `@mdx-js` in the tree.
   Whatever this change does to MDX, it can do with the same parser Astro runs on these exact files.
@@ -124,6 +128,19 @@ the configured `site`, so the twin is self-contained when read away from the ori
 `mdxjsEsm` nodes group consecutive import lines, so one node can carry several statements: the map is
 built from the statements, not from the nodes. Aliased specifiers such as
 `@components/picture/BlogPostPicture.astro` are skipped — they bind components, not images.
+
+Body images come in two forms, not one. `beyond-tabs-and-spaces-finding-a-balance-in-coding-conventions`
+embeds its five diagrams as native Markdown images — `![alt](./coding-conventions-*.svg)` — with no
+component and no import. Astro rewrites those relative paths to hashed asset URLs on build exactly as
+it does the component ones, so an mdast `image` node whose `url` is relative goes through the same
+lookup and the same loud-failure guard, and reaches the twin as an absolute URL. An image URL that is
+already absolute is the author's own reference and passes through untouched.
+
+The eager glob is what makes those URLs resolvable, not merely what reports them. Verified during
+implementation: before any module imported these assets, Astro emitted only the hashed responsive
+variants a `<Picture>` renders — `dist/_astro/target-architecture-s3-cdn.COA8O0d-.png`, the URL
+`ImageMetadata.src` names, did not exist. The glob is itself an import of every asset, so declaring it
+emits the base file the twin links.
 
 The hero image is not part of the body — the non-goals above count it as presentation — so it stays in
 frontmatter, rewritten to an absolute URL from the `heroImage` the collection schema already resolves.

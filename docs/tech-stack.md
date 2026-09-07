@@ -27,8 +27,10 @@ design overhaul.
   [coding-conventions](development/conventions/coding-conventions.md)).
 - **Fonts are self-hosted** (Space Grotesk for display/UI, Newsreader for article prose, Space
   Mono for code/labels), not pulled from a third-party CDN.
-- **Discoverability is built in:** an RSS feed and an XML sitemap are generated at build time,
-  and structured data (JSON-LD) is typed.
+- **Discoverability is built in:** an RSS feed, an XML sitemap, an `llms.txt` index, and a Markdown
+  twin of every blog post at `/blog/<slug>/index.md` are generated at build time, and structured
+  data (JSON-LD) is typed. The twins are generated from each post's MDX source, so agents read the
+  article as written rather than an HTML→Markdown re-derivation of it.
 - **Quality is automated:** ESLint + Prettier for static analysis and formatting; Playwright
   for end-to-end (e2e) and visual-regression tests, with axe-core for accessibility checks.
 - **npm is the package manager**, configured for reproducibility (exact version pinning,
@@ -55,6 +57,14 @@ design overhaul.
   release — and reuses that run's `dist/` artifact. It targets the `Cloudflare` GitHub
   Environment; the release gate — a required approval on that environment — is intended but
   **not yet configured** (see [development-workflow](development-workflow.md)).
+- **Cloudflare's Agent Readiness "Content" check is knowingly left red.** It scores exactly one
+  behaviour — whether the origin negotiates on `Accept: text/markdown` — and it explicitly ignores
+  `llms.txt`, which this site serves. Implementing the negotiation needs zone Transform Rules or a
+  Pages Function, which puts request-time behaviour into a static-by-design site; Cloudflare's own
+  "Markdown for Agents" remedy is Pro-plan and up, roughly $25/month per domain, on a zone that is
+  on Free. The underlying goal is met instead by the Markdown twins above, generated from source at
+  no cost and with no vendor coupling. This is the decided outcome, not an open task — do not
+  re-derive it at the next dashboard scan.
 
 ## Infrastructure & tooling
 

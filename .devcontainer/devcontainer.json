@@ -7,7 +7,7 @@
             "version": "26.8.1"
         },
         "ghcr.io/devcontainers/features/terraform:1": {
-            "version": "1.15.8"
+            "version": "1.16.0"
         }
     },
     "mounts": [

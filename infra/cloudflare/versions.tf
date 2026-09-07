@@ -1,5 +1,5 @@
 terraform {
-  required_version = "~> 1.15.8"
+  required_version = "~> 1.16.0"
 
   # Remote runs are VCS-driven and ignore this block; it is here so the repo
   # states where state lives, and so a local `terraform` cannot quietly start a
