@@ -2,8 +2,9 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Home page', () => {
     test('should be accessible via the header navigation', async ({ page }, testInfo) => {
-        // The "Home" nav link is hidden on mobile; the logo links home there instead.
-        test.skip(testInfo.project.name === 'Pixel 7', 'The "Home" nav link is hidden on mobile.');
+        // The "Home" nav link is hidden on mobile; the logo links home there instead. Matched by
+        // prefix so every mobile project skips, whichever theme it runs in.
+        test.skip(testInfo.project.name.startsWith('Pixel 7'), 'The "Home" nav link is hidden on mobile.');
 
         await page.goto('./about');
         await expect(page).toHaveTitle(/About/);

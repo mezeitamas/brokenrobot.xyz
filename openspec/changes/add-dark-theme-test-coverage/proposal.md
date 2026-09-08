@@ -87,6 +87,13 @@ not alter what the site does.
   `snapshotPathTemplate` interpolates `{testDir}`, so a per-project value would send the dark
   baselines to a second, parallel tree.
 
+**Modified tests**
+
+- `tests/navigation.spec.ts` — its mobile skip matched the project name `Pixel 7` exactly, so
+  `Pixel 7 Dark` ran a test that only makes sense on desktop. Matched by prefix instead. Mirroring
+  makes every project-name comparison in the suite a place the new names must be recognised; this is
+  the only one.
+
 **New tests**
 
 - `tests/theme.spec.ts` — the toggle, persistence, stored preference, and system preference.
@@ -114,7 +121,10 @@ not alter what the site does.
 **Docs**
 
 - `docs/known-gaps.md` — the entry "Only the light theme carries visual and accessibility coverage"
-  is deleted, and a narrower entry for the unproven no-flash requirement replaces it.
+  is deleted, and a narrower entry for the unproven no-flash requirement replaces it. Two further
+  entries record what running this change's own coverage exposed: architecture diagrams that are
+  near-unreadable in the dark theme, and a preview server that can answer the suite's readiness
+  probe before it serves the site. Neither is fixed here, and neither is about the dark palette.
 - `docs/development/checks.md` — its claim that the suite covers both themes becomes true. The
   wording is reviewed rather than assumed correct; no check is added, so no section is added.
 

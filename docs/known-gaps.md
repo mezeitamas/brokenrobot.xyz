@@ -61,18 +61,55 @@ machine and in CI.
 **Resolves by:** undecided. This needs discovery — whether a platform emulator, or the project's own
 container image, can serve the suite instead.
 
-## Only the light theme carries visual and accessibility coverage
+## The e2e suite can start against a server that is not yet serving the site
 
-**Intent:** both themes are first-class, and each carries its own Playwright visual and axe coverage.
-`CLAUDE.md` states this, and every change's Verify step asks for snapshots "in both themes".
+**Intent:** when the suite starts, the server under test serves the build the suite is meant to
+check. A test never fails because the server was not ready.
 
-**Reality:** `playwright.config.ts` defines two projects, `Desktop Chrome` and `Pixel 7`, both at the
-default colour scheme. Nothing under `tests/` sets a theme. Every baseline in
-`tests/__screenshots__/` is therefore a light-theme image, and no axe run inspects the dark palette —
-a dark-only contrast regression would pass the suite. The Verify step's "both themes" wording
-therefore rests on a human checking the dark theme by hand, which nothing records or enforces.
+**Reality:** observed once, and it did not reproduce on the next run. A test asserting the home
+page's title received `"Error"` — Astro's generic error page — with
+`ENOENT: no such file or directory, open '/workspaces/website/dist/index.html'` behind it. So
+`astro preview` answered Playwright's `webServer` readiness probe during a window in which
+`dist/index.html` was absent. Which window is not established. Two candidates: `webServer` treats
+any response as ready, including an error page, so a server that binds before its files are in
+place passes the probe; and `reuseExistingServer` is on outside CI, so a preview server left over
+from an earlier run can be serving `dist/` while `npm run build` rewrites it underneath. The two
+are not exclusive, and a single non-reproducing observation cannot separate them.
 
-**Resolves by:** changing the code. The intent is not in doubt; the coverage is missing. It needs
-dark variants of the existing projects, a baseline set for them, and a decision on whether the theme
-is forced through `colorScheme` or through the site's own persisted preference — which is what the
-pre-paint theme-init actually reads.
+**Resolves by:** undecided. It needs the mechanism established before a fix, because the two
+candidates take opposite fixes — a stricter readiness condition against the first, and not reusing
+a server across a rebuild against the second. Its rarity is not evidence that it is harmless: it
+fails an arbitrary test with an unrelated-looking message, which costs more to diagnose than to
+prevent.
+
+## Nothing proves the absence of a flash of the wrong theme
+
+**Intent:** a visitor never sees a frame of the wrong theme.
+`openspec/specs/theming/spec.md` requires it, and it is the whole reason the theme is resolved by a
+blocking inline script in `<head>` rather than by the bundled toggle module.
+
+**Reality:** every theme assertion in `tests/` reads `html[data-theme]` after the page has settled.
+Nothing inspects the first painted frame. A dark baseline fails if the pre-paint init breaks
+altogether, because the whole page would then capture light — but that is protection by accident,
+and it says nothing about a flash that resolves within a frame or two.
+
+**Resolves by:** undecided. Asserting on first paint needs a capture the current setup does not take,
+and it is not yet established which of a trace, a video, or a paint-timing probe can carry that
+assertion without becoming flaky.
+
+## Architecture diagrams are near-unreadable in the dark theme
+
+**Intent:** unrecorded for content images. Both themes are first-class, and the site's own chrome and
+prose honour that through design tokens; nothing states what is expected of an image the author
+supplies.
+
+**Reality:** the Excalidraw diagrams are transparent PNGs drawn in dark ink — seven of them, across
+the `advanced-static-website-hosting-with-amazon-s3-and-cloudfront`,
+`hosting-a-static-website-on-amazon-s3`, and `url-redirect-with-amazon-cloudfront-and-amazon-route-53`
+posts, plus five SVGs in `beyond-tabs-and-spaces-finding-a-balance-in-coding-conventions`. On the
+light ground they read cleanly. On the dark ground the strokes and labels sit near-black on
+near-black. The dark baselines in `tests/__screenshots__/` capture this, and axe does not report it,
+because the text is inside an image.
+
+**Resolves by:** undecided. The choice is between a dark variant of each diagram and a CSS treatment
+for transparent content images, and it is a design decision rather than a token value.
