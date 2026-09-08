@@ -126,4 +126,4 @@
 
 - [x] Visual + a11y snapshots pass in **both themes** for every touched view (testing-visual-regression skill)
 - [x] All preflight gate checks pass — the set in `docs/development/checks.md` (running-preflight-checks skill)
-- [ ] Manual preview: no theme flash, interactions work, console clean, responsive at 375px
+- [x] Manual preview: no theme flash, interactions work, console clean, responsive at 375px
