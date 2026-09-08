@@ -133,6 +133,32 @@ The light/dark system, as implemented in the foundation:
 > listener to avoid a flash on navigation. See the
 > [Astro view-transitions docs](https://docs.astro.build/en/guides/view-transitions/#script-behavior-with-view-transitions).
 
+## Security headers
+
+The site's security headers are declared in **three places, and they must stay byte-identical**:
+
+| Location                                  | Serves                                                    |
+| ----------------------------------------- | --------------------------------------------------------- |
+| `infra/cloudflare/modules/domain/main.tf` | Cloudflare — production, the only one a reader ever meets |
+| `nginx.conf`                              | The container image, run under Kubernetes                 |
+| `server.headers` in `astro.config.ts`     | `astro preview`, and therefore the Playwright suite       |
+
+The rule covers the whole set — `Content-Security-Policy`, `Strict-Transport-Security`,
+`Referrer-Policy`, `Permissions-Policy`, `X-Content-Type-Options`, `X-Frame-Options` — not any one
+header. Nothing enforces it; when you change one copy, change all three. `Cache-Control` is the one
+deliberate exception: it is absent from the Cloudflare header ruleset, which drives caching from a
+separate cache ruleset.
+
+The intended `Strict-Transport-Security` value is:
+
+```
+max-age=31536000; includeSubDomains
+```
+
+No `preload` token — see
+[HSTS is served without `preload`](../infra/cloudflare/README.md#hsts-is-served-without-preload)
+for why that is declined, and why the domain would be ineligible for it anyway.
+
 ## Content-Security-Policy
 
 The policy is delivered in **two layers**, and browsers enforce both — a resource must satisfy
@@ -143,19 +169,15 @@ each one.
    and styles and **no `unsafe-inline`**, so an injected inline script does not run. Because the
    hashes are per-page and follow the content, only the build can produce this layer — and
    because it lives in the HTML, it travels unchanged to any host.
-2. **An edge header**, defined in three places that must stay byte-identical: the
-   `Content-Security-Policy` header in `infra/cloudflare/modules/domain/main.tf` (Cloudflare —
-   production), `nginx.conf` (Kubernetes), and `server.headers` in `astro.config.ts` (what
-   `astro preview`, and therefore the Playwright suite, serves). This layer carries what a
-   `<meta>` element cannot express — `frame-ancestors` — and additionally covers non-HTML
-   responses and host-generated error pages, starting from the first byte rather than from the
-   meta tag.
+2. **An edge header**, carried by the three locations in [Security headers](#security-headers)
+   above. This layer carries what a `<meta>` element cannot express — `frame-ancestors` — and
+   additionally covers non-HTML responses and host-generated error pages, starting from the first
+   byte rather than from the meta tag.
 
-    A third copy is a third chance to drift, and the drift is quiet: the site keeps rendering
-    because the inline CSS survives, while fonts and every bundled script fail. When the
-    Cloudflare stack was first stood up it carried a single-layer policy copied from another
-    site, which intersected with the `<meta>` layer to block `font-src` outright and admit no
-    script at all. Check all three when changing any.
+    For this header, drift is quiet: the site keeps rendering because the inline CSS survives,
+    while fonts and every bundled script fail. When the Cloudflare stack was first stood up it
+    carried a single-layer policy copied from another site, which intersected with the `<meta>`
+    layer to block `font-src` outright and admit no script at all.
 
 The header keeps `'unsafe-inline'` on `script-src`/`style-src` **deliberately**: a static header
 cannot carry per-page hashes, so without it this layer would block the very inline scripts the

@@ -1,0 +1,6 @@
+schema: frontend-change
+created: 2026-09-08
+# No spec-level behavior changes: this aligns two non-production copies of a response header with
+# the value production already sends, and relocates a documentation rule. No capability covers
+# response headers, and the site's output, permalinks, and feed are untouched. See proposal.md.
+skip_specs: true
