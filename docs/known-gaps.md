@@ -39,16 +39,6 @@ target. The Markdown twins are the first files this affects.
 **Resolves by:** undecided. Each target may need its own mapping, and something must verify the
 served type per target rather than against a local server.
 
-## The container and production disagree on HSTS
-
-**Intent:** unrecorded. No document states the intended `Strict-Transport-Security` max-age.
-
-**Reality:** `nginx.conf` declares `max-age=63072000`. Production returns `max-age=31536000`. The
-two have drifted apart, and nothing records which one is correct.
-
-**Resolves by:** undecided. Write the intended value first; only then is it possible to say which
-side is wrong.
-
 ## The end-to-end suite runs against a server the site never deploys to
 
 **Intent:** what the tests exercise before a release behaves like production.

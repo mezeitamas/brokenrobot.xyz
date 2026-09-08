@@ -4,11 +4,11 @@ See [proposal.md](proposal.md) — Why.
 
 Three surfaces send the site's security headers, and they are not peers:
 
-| Surface                                       | Role                                          |
-| --------------------------------------------- | --------------------------------------------- |
-| `infra/cloudflare/modules/domain/main.tf`     | Production. The only one a reader ever meets.  |
-| `nginx.conf`                                  | The container image, run under Kubernetes.     |
-| `server.headers` in `astro.config.ts`         | `astro preview`, and the Playwright suite.     |
+| Surface                                   | Role                                          |
+| ----------------------------------------- | --------------------------------------------- |
+| `infra/cloudflare/modules/domain/main.tf` | Production. The only one a reader ever meets. |
+| `nginx.conf`                              | The container image, run under Kubernetes.    |
+| `server.headers` in `astro.config.ts`     | `astro preview`, and the Playwright suite.    |
 
 Two facts shaped the approach:
 
