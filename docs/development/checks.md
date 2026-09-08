@@ -84,9 +84,10 @@ ships only when the whole pipeline succeeds.
 
 ### Visual verification
 
-The e2e suite is the visual half of Verify. The
-[`testing-visual-regression`](../../.claude/skills/testing-visual-regression/SKILL.md) skill runs
-it in both themes. See [test:e2e:check](#teste2echeck) below.
+The e2e suite is the visual half of Verify, and it covers both themes by configuration rather than
+by how it is invoked, so CI gets the same coverage a local run does. The
+[`testing-visual-regression`](../../.claude/skills/testing-visual-regression/SKILL.md) skill wraps
+it. See [test:e2e:check](#teste2echeck) below.
 
 ## Source code
 
@@ -240,7 +241,10 @@ npm run test:e2e:check
 node_modules/.bin/playwright test
 ```
 
-Playwright runs visual regression and axe accessibility checks in **both themes**. The
+Playwright runs visual regression and axe accessibility checks in **both themes**. Four projects
+carry that: `Desktop Chrome` and `Pixel 7`, and a dark counterpart of each. A dark project differs
+from its light one in `colorScheme` alone and runs the same specs, so every page holds a baseline
+and an axe scan per theme, and a new spec gets dark coverage without being told to. The
 [`testing-visual-regression`](../../.claude/skills/testing-visual-regression/SKILL.md) skill wraps
 this check, including the baseline-review steps.
 

@@ -37,11 +37,19 @@ export default defineConfig({
             name: 'Desktop Chrome',
             use: { ...devices['Desktop Chrome'] }
         },
+        {
+            name: 'Desktop Chrome Dark',
+            use: { ...devices['Desktop Chrome'], colorScheme: 'dark' }
+        },
 
         // Mobile browsers
         {
             name: 'Pixel 7',
             use: { ...devices['Pixel 7'] }
+        },
+        {
+            name: 'Pixel 7 Dark',
+            use: { ...devices['Pixel 7'], colorScheme: 'dark' }
         }
     ],
     webServer: {
