@@ -110,8 +110,8 @@ subagent, so routing implementation through one would trade that gate for contex
   reports diffs. Also drives an **agent-assisted manual preview** via the Playwright MCP (host Chrome):
   console clean, no theme flash, interactions, 375px — plus an **advisory perf/SEO audit** via the Chrome
   DevTools MCP (SEO/best-practices + Core Web Vitals, not a gate). It **reports which Verify items its
-  evidence supports** (visual/a11y, the gate), marking partial ones — e.g. _light only_ while dark is
-  deferred — and the main session ticks `tasks.md` where you can see the edit. The manual-preview
+  evidence supports** (visual/a11y, the gate), marking partial ones — e.g. one theme covered and the
+  other not run — and the main session ticks `tasks.md` where you can see the edit. The manual-preview
   checkbox stays yours at the review gate. Fully read-only; hands styling bugs back to the engineer.
 - **`frontend-code-reviewer`** (opus) — a read-only guardrail gate over the diff, at either placement:
   the working tree before commit, or the branch at the pull-request gate (the delegation says which,

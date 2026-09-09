@@ -93,7 +93,7 @@ The performance and SEO audit is **advisory, not a gate.** Local-preview scores 
 Open with a one-line verdict: **red** when any project failed, when any axe violation fired, when the change touches UI and dark coverage was unavailable, or when the gate failed; **green** otherwise. Then give these sections, in this order and under these names:
 
 ```
-verdict          red — 1 of 2 projects failed; dark coverage unavailable
+verdict          red — Desktop Chrome Dark failed on 2 views
 
 visual + a11y    which projects and themes ran, pass/fail counts, every
                  axe violation with its rule, selector, and view
@@ -104,9 +104,9 @@ perf & seo       SEO and best-practices scores, LCP, CLS, INP —
 gate             the per-step result from running-preflight-checks
 verify items     for each item in the change's Verify section, whether
                  your evidence supports ticking it:
-                   visual + a11y   supported (light only — dark projects
-                                   not wired)
-                   gate            supported (9/9 pass)
+                   visual + a11y   not supported (Desktop Chrome Dark
+                                   failed; the other projects passed)
+                   gate            supported (every check passed)
                    manual preview  not yours to judge — human gate
 ```
 
