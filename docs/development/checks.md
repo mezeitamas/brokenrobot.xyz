@@ -63,19 +63,19 @@ The gate covers no visual regression and no accessibility. A change is not verif
 
 [`pipeline.yml`](../../.github/workflows/pipeline.yml) enforces the checks as named jobs:
 
-| Job                   | Checks                                                                                      |
-| --------------------- | ------------------------------------------------------------------------------------------- |
+| Job                   | Checks                                                                                                       |
+| --------------------- | ------------------------------------------------------------------------------------------------------------ |
 | Verify site           | `format:check`, `lint:check`, `type:check`, `specs:check`, `designmd:check`, `tokens:check`, `headers:check` |
-| Verify infrastructure | the Terraform check, with its own `init` step                                               |
-| Verify tooling        | `hooks:check`                                                                               |
-| Build site            | `build`                                                                                     |
-| Test site             | `thirdparty:check`, `twins:check`, then the e2e suite                                       |
+| Verify infrastructure | the Terraform check, with its own `init` step                                                                |
+| Verify tooling        | `hooks:check`                                                                                                |
+| Build site            | `build`                                                                                                      |
+| Test site             | `thirdparty:check`, `twins:check`, then the e2e suite                                                        |
 
 The jobs form three phases, and the pipeline runs them in that order: the three Verify jobs
 inspect source and run first, Build produces `dist/` and only `dist/`, and Test inspects the
 `dist/` that Build uploaded. Each phase waits for the one before it, so a failed Verify stops the
 run before the build — nothing is built from source already known to be broken. Within Verify site,
-one failing check does not hide the checks after it; all six report and the job still fails.
+one failing check does not hide the checks after it; every check reports and the job still fails.
 
 CI runs more than the preflight gate. It adds `hooks:check` and the e2e suite, which the gate
 leaves out. A green gate therefore predicts a green pipeline, but it does not guarantee one.
@@ -182,13 +182,19 @@ npm run headers:check # node scripts/check-header-sync.mjs
 
 The site's security headers are declared in three places that must stay byte-identical:
 `server.headers` in `astro.config.ts`, `nginx.conf`, and
-`infra/cloudflare/modules/domain/main.tf`. This check extracts all three and compares them.
+`infra/cloudflare/modules/domain/main.tf`. This check extracts the
+**`Content-Security-Policy`** header from each of the three and compares them byte for byte.
 
-Nothing else catches drift between them. The Playwright suite exercises the `astro.config.ts` copy
-alone, because that is the one `astro preview` serves — so a change to the CSP that lands in the
-preview copy and not in the Cloudflare module passes every other check and every test, and reaches
-production as a header nobody serves. See
-[Security headers](../architecture.md#security-headers) for what each copy serves.
+It covers that one header, not the whole set. The others —
+`Strict-Transport-Security`, `Referrer-Policy`, `Permissions-Policy`, `X-Content-Type-Options`,
+`X-Frame-Options` — still rest on a human checking all three copies, so
+[Security headers](../architecture.md#security-headers) remains the rule this check only partly
+enforces.
+
+Nothing else catches CSP drift. The Playwright suite exercises the `astro.config.ts` copy alone,
+because that is the one `astro preview` serves — so a policy change that lands in the preview copy
+and not in the Cloudflare module passes every other check and every test, and reaches production as
+a header nobody serves.
 
 An exit code of 2 means extraction itself broke — a file moved, or its shape changed enough that
 the script could not find the header. Report that as `not run` rather than a pass or a failure.
