@@ -197,7 +197,13 @@
             "Skill(running-preflight-checks)",
             "Skill(testing-visual-regression)",
             "Skill(scaffolding-components)",
+
+            "Skill(openspec-explore)",
+            "Skill(openspec-propose)",
             "Skill(openspec-apply-change)",
+            "Skill(opsx:explore)",
+            "Skill(opsx:propose)",
+            "Skill(opsx:apply)",
 
             "Skill(writing-simplified-technical-english:writing-simplified-technical-english)",
             "Skill(prompt-quality-criteria:prompt-quality-criteria)",
