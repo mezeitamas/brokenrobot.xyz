@@ -1,7 +1,8 @@
 ## Context
 
 See proposal.md — **Why** for the defect. What shapes the approach is the surrounding machinery,
-all of it verified against the repository and the current `dist/`:
+all of it verified against the repository and against the `dist/` built from `main` (`e45d91a`),
+before this change's first commit:
 
 - **The theme is `data-theme` on `<html>`**, resolved by the pre-paint script from
   localStorage → `prefers-color-scheme` → light, and flippable by the toggle. The reader's choice can
@@ -29,6 +30,11 @@ all of it verified against the repository and the current `dist/`:
   out, blaming a capture limit — "Cannot take screenshot larger than 32767 pixels on any dimension" —
   on iPhone 12 Pro, a device `playwright.config.ts` no longer defines.
 
+One thing has moved since: the author exported all eleven diagrams by hand and committed them as
+`bab8318`, ahead of the task list. So the assets are already theme-neutral, the six PNGs are gone, and
+`npm run build` fails on the MDX imports that still name them. Every decision below was taken before
+that commit and none is changed by it; the sequence in tasks.md is.
+
 ## Goals / Non-Goals
 
 **Goals:**
@@ -37,7 +43,8 @@ all of it verified against the repository and the current `dist/`:
 - A treatment that is a property of the page's CSS, so it follows the toggle with no JavaScript.
 - A handle narrow enough that the hero photograph and the two exempted rasters cannot be caught by
   it.
-- Coverage on the five SVGs before they are touched.
+- Coverage on the five SVGs that had none, and a plain record of the fact that it arrives after they
+  were changed rather than before.
 
 **Non-Goals:**
 
@@ -134,20 +141,35 @@ redraw.
 ## Risks / Trade-offs
 
 - **The `-geo` exports embed a data-URI SVG, and it is not established that it renders inside an
-  `<img>`-loaded SVG under this site's CSP.** If it does not, the world map disappears and those two
-  diagrams are worse than before → one diagram is exported and checked on a served build before the
-  other ten are touched. If the map does not render, the change stops and reports rather than
-  improvising; the fallback would be to keep those two as PNGs and treat them as a separate problem.
+  `<img>`-loaded SVG under this site's CSP.** Confirmed present in the committed exports: one data URI
+  in `baseline-architecture-s3-geo.svg`, two in `target-architecture-s3-cdn-geo.svg`. If they do not
+  render, the world map disappears and those two diagrams are worse than before → checked on a served
+  build, in both themes, with the console read for a blocked resource. This was planned as a gate on
+  doing the remaining exports; those are already committed, so it is now a gate on the change
+  proceeding at all. If the map does not render, the change stops and reports rather than improvising:
+  those two diagrams then need a decision, and reverting them to PNG is one option rather than the
+  answer.
 - **The 47×47 marker embedded five times in `target-architecture-s3-cdn-geo`, and the world map
   itself, are inverted along with everything else** — the filter applies to the whole image. That is
   the same treatment Excalidraw's own dark mode gives them, but it is a visual judgement, not a
   provable one → both `-geo` diagrams get a named look at the rendered dark result before the
   baselines are accepted.
+- **The five `beyond-tabs-...` diagrams changed with nothing watching them.** The plan put that post's
+  missing baseline first, precisely so the re-export would show up as a diff; the export landed before
+  the plan reached that step, and reconstructing a pre-fix baseline now means building at `e45d91a`
+  with the old MDX, PNGs and SVGs — a detour for evidence the files' own git history already carries.
+  Accepted, not hidden: those five figures get their first baseline in the post-export state, and
+  their re-export will never appear as a baseline diff → the substitute is a direct review against
+  `git show e45d91a:…/<name>.svg`, and the eight byte-identical baselines of the two exempted-image
+  posts remain the change's real control. This does not earn a `docs/known-gaps.md` entry: that page
+  records intent the site does not meet, and this is a one-off sequencing accident with no "resolves
+  by" to write.
 - **`beyond-tabs-...` may be uncapturable.** Its screenshot test was disabled for exceeding 32767 px
   on a device no longer configured; the tallest capture in the suite today is 25497 px, on
-  `advanced-...` under Pixel 7, so there is headroom but not proof → the height is measured as the
-  first step, before anything depends on the baseline existing. If it exceeds the limit, capturing
-  the five figures individually is the fallback, and the SVG re-export waits for whichever lands.
+  `advanced-...` under Pixel 7, so there is headroom but not proof → the height is measured when the
+  test is restored, before the baselines are generated. If it exceeds the limit, capturing the five
+  figures individually is the fallback. There is no longer an export to hold back if it does: the
+  change would ship its diagram fix with that one post watched per figure instead of per page.
 - **`url-redirect-...` references two diagrams from the other post's folder**, and after the change
   it does so with a `../…/name.svg` Markdown image rather than an ESM import → the build is the
   proof; the fallback is to copy those two SVGs into the post's own folder, which is cheap now that
@@ -155,9 +177,10 @@ redraw.
 - **The selector infers "SVG in prose means diagram".** A future prose SVG that is artwork would be
   inverted silently → the rule carries a comment saying so, and `docs/architecture.md` records the
   expectation for authors: supply raster for artwork that must keep its own colours.
-- **Asset weight is expected to fall but is not assumed.** 4.5 MB of PNG plus its avif/webp matrix is
-  replaced by eleven SVGs, two of which embed a ~148 KB map → the sizes are measured and recorded
-  rather than predicted, and an SVG larger than the PNG it replaces is reported.
+- **Asset weight — measured, not predicted.** The eleven SVGs total 984 kB against 4.5 MB of PNG
+  removed, plus the avif/webp matrix no longer generated from it. Nine are 12–65 kB; the two `-geo`
+  files are 318 kB and 333 kB because of the embedded map, and both are still well under the PNGs they
+  replace. No file needs reporting as a regression on this count.
 - **Both light and dark baselines move for two posts.** A wrong export would be accepted by a blanket
-  snapshot update → every regenerated image is reviewed individually, and the four baselines of the
-  two exempted-image posts must come back byte-identical, which is the control.
+  snapshot update → every regenerated image is reviewed individually, and the eight baselines of the
+  two exempted-image posts — four each — must come back byte-identical, which is the control.

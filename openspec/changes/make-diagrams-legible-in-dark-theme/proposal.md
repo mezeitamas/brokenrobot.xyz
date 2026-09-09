@@ -33,7 +33,8 @@ intent graduates into `docs/architecture.md` and the specs, and the gap closes.
   export dialog set to Background **off**, Dark mode **off**, Embed scene **off**, Scale 3, default
   padding. That yields one theme-neutral asset per diagram: dark ink on a transparent ground, no
   baked theme, no light/dark pair. This is a manual authoring step the author performs in Excalidraw;
-  no build step and no script produces these files.
+  no build step and no script produces these files. Landed as `bab8318`, ahead of the task list — see
+  **Impact** for what that re-ordered.
 - **Apply the dark treatment at read time**, in CSS, under `html[data-theme='dark']`, to diagram
   images only: `filter: invert(93%) hue-rotate(180deg)`. That constant is `THEME_FILTER` from the
   Excalidraw bundle — the same filter its own "Dark mode" export checkbox applies — so the rendered
@@ -48,10 +49,10 @@ intent graduates into `docs/architecture.md` and the specs, and the gap closes.
   source beside it, official-AWS-icon style — its solid brand tiles glare under the filter) and
   `the-renaissance-of-written-coding-conventions/xkcd-code_quality.png` (a third-party comic). Both
   are opaque light-ground rasters today and stay exactly as they are.
-- **Give the unwatched post a visual baseline before anything is re-exported**, by re-enabling the
-  screenshot test commented out in
-  `tests/pages/blog-posts/beyond-tabs-and-spaces-finding-a-balance-in-coding-conventions.spec.ts`, so
-  the five SVGs are not changed with nothing watching them.
+- **Give the unwatched post a visual baseline**, by re-enabling the screenshot test commented out in
+  `tests/pages/blog-posts/beyond-tabs-and-spaces-finding-a-balance-in-coding-conventions.spec.ts`. The
+  plan put this before the re-export, so that changing the five SVGs would show as a diff; the export
+  landed first, so the baseline instead starts from the post-export state. See **Impact** — Tests.
 - **Assert the treatment, not only its pixels**: the suite reads the computed `filter` on the diagram
   images under the dark projects, so the rule's removal fails a named test rather than only a
   snapshot diff.
@@ -105,14 +106,17 @@ changes.
 `advanced-static-website-hosting-with-amazon-s3-and-cloudfront`, and
 `target-architecture-s3-cdn-cloudfront-function.png` in
 `url-redirect-with-amazon-cloudfront-and-amazon-route-53` — 4.5 MB of source, plus the avif/webp
-variant matrix the build generated from them. Five SVGs are overwritten in place. The two `-geo`
-exports will each embed the drawing's ~148 KB world-map SVG as a data URI, so they will not be small.
+variant matrix the build generated from them. Five SVGs are overwritten in place. Landed already, as
+`bab8318`: the eleven exports total 984 kB, nine of them 12–65 kB, with the two `-geo` files at
+318 kB and 333 kB because each embeds the drawing's ~148 kB world map as a data URI. Every
+`.excalidraw` source is kept, which is what makes the export repeatable.
 
-**Content sources** — three `index.mdx` files. `advanced-...` and `url-redirect-...` lose their
+**Content sources** — two `index.mdx` files. `advanced-...` and `url-redirect-...` lose their
 `BlogPostPicture` import and their five and three image imports, and their eight `<BlogPostPicture>`
 elements become Markdown images; `url-redirect-...` keeps referring to two of the diagrams across the
-post-folder boundary. `beyond-tabs-...` changes only if a reference needs adjusting — its five
-Markdown images already name the files being overwritten.
+post-folder boundary. Until that lands the site does not build, because those imports still name
+deleted PNGs. `beyond-tabs-...` needs no edit at all: its five Markdown images name the files that
+were overwritten in place.
 
 **Styles** — one rule in `src/styles/base.css`, beside the existing `.prose` block.
 
@@ -122,6 +126,15 @@ baselines change too, because the white-ground SVGs and the PNG-to-SVG swap alte
 both themes. `hosting-a-static-website-on-amazon-s3` and `the-renaissance-of-written-coding-conventions`
 hold only exempted images, so their four baselines each must come back byte-identical — that is the
 check that the exemption worked.
+
+One cost is carried openly rather than papered over. The five `beyond-tabs-...` diagrams were changed
+before that post had any baseline, because the re-export landed ahead of the plan that would have
+captured one first. Reconstructing a pre-fix baseline means building at `e45d91a` with the old MDX,
+PNGs and SVGs, for evidence the SVG files' own git history already holds, so it is not done. Those
+five figures therefore get their first baseline in the post-export state, and their re-export will
+never show as a baseline diff; they are reviewed against `git show e45d91a:…` instead. This is a
+sequencing accident in one change, not intent the site fails to meet, so it does not become a
+`docs/known-gaps.md` entry — it is recorded here and in design.md — **Risks / Trade-offs**.
 
 **Markdown twins** — `src/pages/blog/[...slug].md.ts` already globs `svg` and already resolves
 Markdown images, so the twins keep building; the URLs they carry change extension. Removing eight
