@@ -70,6 +70,34 @@ test.describe('Stored preference', () => {
     });
 });
 
+test.describe('Diagram theme treatment', () => {
+    test('should invert diagram SVGs in dark, leave them untouched in light, and never touch the hero photograph', async ({
+        page
+    }) => {
+        await page.goto('./blog/beyond-tabs-and-spaces-finding-a-balance-in-coding-conventions');
+
+        const theme = await startingTheme(page);
+
+        const diagramFilters = await page
+            .locator('.prose img[src$=".svg"]')
+            .evaluateAll((images) => images.map((image) => getComputedStyle(image).filter));
+
+        expect(diagramFilters.length).toBeGreaterThan(0);
+
+        for (const filter of diagramFilters) {
+            if (theme === 'dark') {
+                expect(filter).not.toBe('none');
+            } else {
+                expect(filter).toBe('none');
+            }
+        }
+
+        const heroFilter = await page.locator('img.not-prose').evaluate((image) => getComputedStyle(image).filter);
+
+        expect(heroFilter).toBe('none');
+    });
+});
+
 test.describe('System preference on a first visit', () => {
     test.describe('under a dark system', () => {
         test.use({ colorScheme: 'dark' });

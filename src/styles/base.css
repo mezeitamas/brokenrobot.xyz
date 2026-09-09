@@ -126,3 +126,11 @@
 .prose :is(.token.number, .token.boolean) {
     color: var(--syntax-number);
 }
+
+/* Diagrams are exported theme-neutral (dark ink on a transparent ground) and inverted here for
+   dark mode. `invert(93%) hue-rotate(180deg)` is `THEME_FILTER` from the Excalidraw bundle — the
+   same filter its own "Dark mode" export checkbox applies. The selector treats an SVG in article
+   prose as line art; artwork that must keep its own colours is supplied as raster instead. */
+html[data-theme='dark'] .prose img[src$='.svg'] {
+    filter: invert(93%) hue-rotate(180deg);
+}

@@ -60,7 +60,9 @@ Defined in `src/content.config.ts` via a `glob` loader (`**/[^_]*.{md,mdx}`) and
 | `heroImage`   | `image()`                 | Astro-optimized; collocated with post |
 | `tags`        | `string[]`                |                                       |
 
-Posts live at `src/content/blog/<slug>/index.mdx` with images in the same folder.
+Posts live at `src/content/blog/<slug>/index.mdx` with images in the same folder. A post's diagrams
+are referenced as plain Markdown images; `<BlogPostPicture>` (`src/components/picture/`) is for
+raster images that need responsive `avif`/`webp` variants, which an SVG has none to generate.
 
 Markdown and MDX are rendered by **Sätteri**, Astro's native pipeline and the default since
 Astro 7 (the remark/rehype pipeline is now opt-in via `@astrojs/markdown-remark`). Two Sätteri
@@ -123,7 +125,11 @@ The light/dark system, as implemented in the foundation:
   an island renders before it knows the theme, which flashes the wrong icon on load.
 - **Both themes are first-class** — every component, the mascot, and `prose` article styling
   must read well in light and dark (see [coding-conventions](development/conventions/coding-conventions.md) for
-  snapshot coverage).
+  snapshot coverage). This extends to content images: a diagram is exported theme-neutral from its
+  committed `.excalidraw` source (dark ink on a transparent ground, no baked theme) and inverted for
+  dark mode by a rule in `base.css` — `html[data-theme='dark'] .prose img[src$='.svg']`. The selector
+  treats an SVG in article prose as line art; artwork that must keep its own colours is supplied as
+  raster instead.
 
 > **View Transitions caveat (future).** This works because every navigation is a full page
 > load, so both the inline init and the toggle's bundled script re-run per page. If we ever
