@@ -86,3 +86,38 @@ and it says nothing about a flash that resolves within a frame or two.
 **Resolves by:** undecided. Asserting on first paint needs a capture the current setup does not take,
 and it is not yet established which of a trace, a video, or a paint-timing probe can carry that
 assertion without becoming flaky.
+
+## The main session does the work it is meant to coordinate
+
+**Intent:** one Claude Code session carries a change end to end — Explore, Propose, an adversarial
+review of the proposal by a subagent and then by the human, Apply, Verify by a subagent, a review
+of the implementation by a subagent and then by the human, Archive — with the main thread as the
+coordinator. Its context holds only what matters: the explore conversation, the human's gate
+decisions, one short report per phase, and the questions a subagent returned instead of guessing.
+Every phase that reads files, runs commands, or writes artifacts runs in a subagent's context, and
+each subagent stops and returns the question when the phase would need to ask the human.
+
+**Reality:** three phases are delegated and return short reports — Apply (`frontend-engineer`),
+Verify (`frontend-qa-engineer`), and the implementation review (`frontend-code-reviewer`). The
+rest run inline. Propose reads the specs, the docs, and the codebase, and writes four artifacts,
+all in the main thread; it sits there so it can ask questions. No subagent reviews the proposal
+before the human does. The `running-preflight-checks`, `testing-visual-regression`, and
+`scaffolding-components` skills carry a `model:` pin and nothing else, which switches the model for
+one turn and isolates nothing, so their output lands in the main thread whenever it calls them
+directly. The committing skill replays the full diff into the main thread on every commit. Nothing
+loaded in a fresh session names the sequence, the owner of each phase, or the two points where the
+main thread must stop for the human, so a session can drift into doing the work itself.
+
+**Resolves by:** change the tooling, through the OpenSpec flow, even though tooling under
+`.claude/` otherwise commits directly. The shape is known: a planner subagent that wraps the
+vanilla propose and update skills and returns questions instead of guessing, as the engineer does;
+a read-only proposal reviewer that attacks the change folder — untestable scenarios, requirements
+that contradict the living specs, tasks that use a primitive nobody establishes, a missing tier
+decision, unnamed scope, a `skip_specs` claim that hides a behaviour change; `context: fork` with an
+`agent:` on the project-owned skills and on the committing skill in the marketplace plugin, which
+the docs confirm isolates a skill's tool output; and a coordinator skill, with one pointer line in
+`CLAUDE.md`, that names the sequence, the owners, and the stops. The vendored `openspec-*` skills
+stay untouched, because `openspec update` regenerates them. Archive and update stay in the main
+thread until they prove noisy. Open decisions: whether Blocking proposal findings reach the human
+directly or after one automatic planner fix round, and whether this lands on the branch that
+restored the engineer or on a branch after it.
