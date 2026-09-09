@@ -178,6 +178,14 @@
       control-post baselines (`hosting-a-static-website-on-amazon-s3`,
       `the-renaissance-of-written-coding-conventions`) are confirmed **byte-identical** — `git status`
       shows nothing under either directory.
+      **Superseded.** The author then deleted all fifty-two baselines and regenerated them from a clean
+      slate. Forty came back byte-identical, which is what makes the rest trustworthy: the rendering is
+      reproducible, so a file that moved held stale bytes rather than noise. That run rewrote the two
+      `url-redirect-...` Pixel 7 baselines described above — they are no longer stale — and refreshed ten
+      older light-theme captures on pages this change does not touch, which the author reviewed and
+      accepted. No baseline was lost: fifty-two in `HEAD`, fifty-two on disk, nothing deleted or added.
+      The exemption still holds — the two control posts' dark captures never moved, and their diagrams
+      render un-inverted.
 - [x] 6.2 Review all twelve images individually before staging. Verify in the dark capture of each
       post that every diagram's strokes and labels read against `--bg: #17150f`, and in the light
       capture that no diagram shows a cool-white panel against `--bg: #faf7f2` any more. Verify
@@ -211,16 +219,16 @@
       "Home" link test skips on `Pixel 7*` by design) across all four projects — dark coverage **is**
       wired (`Desktop Chrome Dark` / `Pixel 7 Dark` in `playwright.config.ts`), so this covers both
       themes, not light-only. Axe reported zero violations on `advanced-...`, `beyond-tabs-...` and
-      `url-redirect-...` in all four projects. See 6.1 for the one deviation worth carrying forward:
-      two of `url-redirect-...`'s baselines (Pixel 7, Pixel 7 Dark) did not rewrite and stay visually
-      stale, verified not to be a defect in the fix itself.
+      `url-redirect-...` in all four projects. See 6.1: two of `url-redirect-...`'s baselines (Pixel 7,
+      Pixel 7 Dark) did not rewrite on the first pass, verified not to be a defect in the fix itself,
+      and the author's later clean regeneration of all fifty-two resolved them.
 - [x] All preflight gate checks pass — the set in `docs/development/checks.md` (running-preflight-checks skill)
       — not re-run: no `src/` file or config was touched during this Verify pass (only binary test
       baselines under `tests/__screenshots__/` and this file), so the clean run reported at the start of
       this task stands.
-- [ ] Manual preview: no theme flash, interactions work, console clean, responsive at 375px —
-      **assisted via the Playwright MCP against a host build/preview** (`npm run build` +
-      `BROKENROBOT_PORT=8080 npm run serve`); leaving this box for the human, per process. Findings on
+- [x] Manual preview: no theme flash, interactions work, console clean, responsive at 375px —
+      **reviewed and accepted by the author.** Assisted beforehand via the Playwright MCP against a host
+      build/preview (`npm run build` + `BROKENROBOT_PORT=8080 npm run serve`). Findings on
       all three touched posts (`advanced-...`, `beyond-tabs-...`, `url-redirect-...`): console clean on
       load, on theme toggle, and on in-app navigation (only the four pre-existing, page-load
       `Permissions-Policy: Unrecognized feature` warnings, unrelated to this change and present
