@@ -195,7 +195,6 @@
 
             "Skill(checking-dev-env)",
             "Skill(running-preflight-checks)",
-            "Skill(updating-dependencies)",
 
             "Skill(writing-simplified-technical-english:writing-simplified-technical-english)",
             "Skill(prompt-quality-criteria:prompt-quality-criteria)",
