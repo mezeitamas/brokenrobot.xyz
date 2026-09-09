@@ -195,6 +195,9 @@
 
             "Skill(checking-dev-env)",
             "Skill(running-preflight-checks)",
+            "Skill(testing-visual-regression)",
+            "Skill(scaffolding-components)",
+            "Skill(openspec-apply-change)",
 
             "Skill(writing-simplified-technical-english:writing-simplified-technical-english)",
             "Skill(prompt-quality-criteria:prompt-quality-criteria)",

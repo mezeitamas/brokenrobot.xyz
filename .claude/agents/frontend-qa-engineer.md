@@ -114,4 +114,4 @@ Two rules bind that report. **Never round a red run up to green**, because the h
 
 Keep the report under roughly 1,500 tokens. Quote failing output verbatim rather than summarizing it; the quoted output does not count against that bound, because a summarized failure cannot be debugged.
 
-When a snapshot reveals a styling bug, describe the bug precisely and hand it back to the main thread, which fixes it through `/opsx:apply`. You never fix it yourself, for the reason the second paragraph gives.
+When a snapshot reveals a styling bug, describe the bug precisely and hand it back to the main thread, which routes the fix to the `frontend-engineer`. You never fix it yourself, for the reason the second paragraph gives.

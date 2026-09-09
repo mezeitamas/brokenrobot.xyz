@@ -10,7 +10,7 @@ branch = one PR). Each phase maps to a concrete tool:
 | Explore                   | `/opsx:explore` (or the `openspec-explore` skill)                                                |
 | Propose                   | `/opsx:propose` (or the `openspec-propose` skill)                                                |
 | Review the proposal       | **you** read and approve the change folder                                                       |
-| Implement                 | `/opsx:apply` (or the `openspec-apply-change` skill), on a `<type>/<change-name>` branch         |
+| Implement                 | `frontend-engineer` agent (drives `/opsx:apply`), on a `<type>/<change-name>` branch             |
 | Verify                    | `frontend-qa-engineer` agent + `running-preflight-checks` skill                                  |
 | Archive                   | `/opsx:archive` (on the branch, so the PR carries code + spec)                                   |
 | Review the implementation | the pull request: CI runs the gates, `frontend-code-reviewer` surfaces findings, **you** approve |
@@ -96,15 +96,17 @@ does with them:
 
 ## The agents (`.claude/agents/`)
 
-Three role-based subagents, each with focused instructions and tool access. Invoke them with the
+Four role-based subagents, each with focused instructions and tool access. Invoke them with the
 Agent/Task tool, or let the main session delegate.
 
-Implementing has no agent, for the same reason planning has none. `/opsx:apply` already carries the
-site's guardrails — `openspec instructions apply` returns both the `context` block and the
-`operations.apply` guidance from `openspec/config.yaml` — and the apply flow pauses to ask when a
-task is ambiguous. A subagent cannot ask, because Claude Code strips `AskUserQuestion` from every
-subagent, so routing implementation through one would trade that gate for context isolation.
-
+- **`frontend-engineer`** (sonnet) — implements an agreed change by driving `/opsx:apply` inside its
+  own context, so a long implementation's file reads, lint output, and edits stay out of the main
+  session. It carries no guardrails of its own: `openspec instructions apply` returns both the
+  `context` block and the `operations.apply` guidance from `openspec/config.yaml`, and the agent
+  reads `architecture.md` and the coding conventions before its first edit. The trade is deliberate:
+  a subagent cannot ask, because Claude Code strips `AskUserQuestion` from every subagent, so an
+  ambiguous task comes back **unticked, with the question**, and the main thread re-delegates with
+  the answer. Ticks tasks as it goes; stops at the Verify group; never commits.
 - **`frontend-qa-engineer`** (sonnet) — runs Playwright visual-regression + axe in **both** themes (in
   the devcontainer, so rendering matches CI), regenerates baselines for intentional changes, and
   reports diffs. Also drives an **agent-assisted manual preview** via the Playwright MCP (host Chrome):
