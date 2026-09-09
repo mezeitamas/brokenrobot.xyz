@@ -28,7 +28,7 @@
                         "patterns": [
                             {
                                 "group": ["../*"],
-                                "message": "Use a path alias (@assets, @components, @consts, @layouts, @styles) instead of a parent-relative import, because a relative path silently breaks when the file moves. Sibling imports (./) are fine."
+                                "message": "Use a path alias (@assets, @components, @consts, @layouts, @styles, @utils) instead of a parent-relative import, because a relative path silently breaks when the file moves. Sibling imports (./) are fine."
                             }
                         ]
                     }
