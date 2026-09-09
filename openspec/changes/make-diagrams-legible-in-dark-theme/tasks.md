@@ -38,7 +38,7 @@
 
 ## 2. Make the tree build again
 
-- [ ] 2.1 Convert the eight diagram references in
+- [x] 2.1 Convert the eight diagram references in
       `advanced-static-website-hosting-with-amazon-s3-and-cloudfront/index.mdx` and
       `url-redirect-with-amazon-cloudfront-and-amazon-route-53/index.mdx` from `<BlogPostPicture>` to
       Markdown images pointing at the `.svg` files, carrying each one's `alt` text across verbatim,
@@ -54,7 +54,7 @@
       `hosting-a-static-website-on-amazon-s3` and `the-renaissance-of-written-coding-conventions` —
       the two exempted rasters, which keep the component and keep `mdxToMarkdown`'s component branch
       exercised.
-- [ ] 2.2 Verify the built output and the Markdown twins against `dist/`: each of the eleven diagrams
+- [x] 2.2 Verify the built output and the Markdown twins against `dist/`: each of the eleven diagrams
       is a bare `<img src="/_astro/<name>.<hash>.svg" …>` with no `<picture>` wrapper and no `srcset`,
       the two exempted rasters still build to a `<picture>`, and no `<img>` with an `.svg` source
       appears anywhere outside the eleven — the selector in task 3.1 depends on that last point.
@@ -63,14 +63,14 @@
 
 ## 3. The read-time treatment
 
-- [ ] 3.1 Add the treatment to `src/styles/base.css`, beside the existing `.prose` rules:
+- [x] 3.1 Add the treatment to `src/styles/base.css`, beside the existing `.prose` rules:
       `html[data-theme='dark'] .prose img[src$='.svg'] { filter: invert(93%) hue-rotate(180deg); }`.
       Carry a comment saying where the constant comes from (`THEME_FILTER` in the Excalidraw bundle,
       the same filter its "Dark mode" export applies) and that the selector treats an SVG in article
       prose as line art — artwork that must keep its own colours is supplied as raster. Verify
       `npm run format:check` and `npm run tokens:check` pass: this is a filter, not a colour token, so
       `tokens.generated.css`, `DESIGN.md` and `DESIGN.dark.md` must all be untouched.
-- [ ] 3.2 Gate the change on the open risk. `baseline-architecture-s3-geo.svg` and
+- [x] 3.2 Gate the change on the open risk. `baseline-architecture-s3-geo.svg` and
       `target-architecture-s3-cdn-geo.svg` carry the world map and the marker as data URIs (one and
       two respectively, confirmed in task 1.2), and it is not established that a data-URI image
       renders inside an `<img>`-loaded SVG under this site's two-layer CSP. Run `npm run build` then
@@ -86,7 +86,7 @@
 
 ## 4. Coverage
 
-- [ ] 4.1 Restore the screenshot test commented out in
+- [x] 4.1 Restore the screenshot test commented out in
       `tests/pages/blog-posts/beyond-tabs-and-spaces-finding-a-balance-in-coding-conventions.spec.ts`:
       uncomment it, delete the stale comment about iPhone 12 Pro — a device `playwright.config.ts` no
       longer defines — and add the `settleImages(page)` call and its import that every other post
@@ -98,7 +98,14 @@
       old comment blamed. Record the four heights in this task. The tallest capture in the suite today
       is 25497 px, on `advanced-...` under Pixel 7, so there is headroom but not proof. If any capture
       exceeds the limit, stop and take the per-figure fallback in design.md — **Risks / Trade-offs**.
-- [ ] 4.2 Add a test to `tests/theme.spec.ts` that asserts the treatment rather than its pixels: load
+      **Done.** File matches the shape of `url-redirect-...spec.ts`; `lint:check`, `type:check` and
+      `format:check` all pass. Heights measured with a standalone Playwright container (host Chromium
+      cannot launch in this sandbox — see the Verify note below) against the built `dist/`, scrolling
+      the full page first so every `loading="lazy"` diagram decodes before measuring
+      `document.body.scrollHeight`: Desktop Chrome 19475 px (light and dark, identical), Pixel 7
+      29679 px (light and dark, identical) — the new tallest capture in the suite, still 3088 px
+      (9.4%) under the 32767 px limit. No fallback needed.
+- [x] 4.2 Add a test to `tests/theme.spec.ts` that asserts the treatment rather than its pixels: load
       the `beyond-tabs-...` post, read `html[data-theme]` as that file's existing tests do, and assert
       that every `img[src$=".svg"]` has a computed `filter` other than `none` when the theme is dark
       and exactly `none` when it is light. In the same test assert the hero photograph's computed
@@ -106,10 +113,22 @@
       image it must not touch. Verify it passes in all four projects, and that it fails for the right
       reason: delete the rule from `base.css` temporarily and confirm only this test fails, then
       restore it. Verify `npm run lint:check`, `npm run type:check` and `npm run format:check` pass.
+      **Done, verified functionally rather than via `playwright test`.** Host Chromium cannot launch in
+      this sandbox (macOS Mach-port rendezvous denied), so this was checked with a standalone script
+      against the real built `dist/`, served with the exact CSP header `astro.config.ts`/`nginx.conf`
+      send, run through a `mcr.microsoft.com/playwright:v1.62.1-jammy` container (matching the pinned
+      `@playwright/test` version) reproducing the four projects' device + `colorScheme` combinations.
+      All four passed with the rule in place (dark: `invert(0.93) hue-rotate(180deg)` on all 5 diagram
+      `<img>`s; light: `none`; hero `<img class="not-prose">`: `none` in both). Deleting the rule and
+      rebuilding failed exactly the two dark combinations (filter stayed `none`) while both light
+      combinations and the hero control still passed — the right failure. The rule is restored;
+      `git diff src/styles/base.css` matches the task-3.1 diff exactly. `lint:check`, `type:check` and
+      `format:check` all pass. The QA agent should still run this through the real `playwright test`
+      runner in the devcontainer at Verify.
 
 ## 5. Record the intent and close the gap
 
-- [ ] 5.1 Record the now-explicit intent for content images in `docs/architecture.md`. The
+- [x] 5.1 Record the now-explicit intent for content images in `docs/architecture.md`. The
       **Theming architecture** section's "Both themes are first-class" bullet is where it belongs:
       diagrams in article prose are exported theme-neutral from their committed `.excalidraw` source
       and inverted in dark by a rule in `base.css`; an SVG in prose is treated as line art, so artwork
@@ -118,7 +137,7 @@
       that need responsive variants. Verify both additions describe what the code now does, that no
       check is named or counted (`docs/development/checks.md` is the only list of checks), and that
       `npm run format:check` passes.
-- [ ] 5.2 Delete the `docs/known-gaps.md` entry "Architecture diagrams are near-unreadable in the dark
+- [x] 5.2 Delete the `docs/known-gaps.md` entry "Architecture diagrams are near-unreadable in the dark
       theme". Both of that page's exits are now reached: the intent graduated into
       `docs/architecture.md` and the specs in 5.1, and the gap is closed. Do not carry the entry's
       wording forward — its **Reality** paragraph is wrong about the SVGs, calling them transparent
@@ -131,7 +150,7 @@
 
 ## 6. Generate and review the baselines
 
-- [ ] 6.1 Generate with `npm run test:e2e:update` in the devcontainer, so rendering matches the
+- [x] 6.1 Generate with `npm run test:e2e:update` in the devcontainer, so rendering matches the
       container CI and the committed baselines both use. Verify `git status` shows exactly four
       additions, under
       `tests/__screenshots__/pages/blog-posts/beyond-tabs-and-spaces-finding-a-balance-in-coding-conventions.spec.ts/`,
@@ -141,7 +160,25 @@
       `hosting-a-static-website-on-amazon-s3` and `the-renaissance-of-written-coding-conventions` are
       the control that matters: those posts hold only exempted images, so any change there means the
       selector caught something it must not.
-- [ ] 6.2 Review all twelve images individually before staging. Verify in the dark capture of each
+      **Done, with one deviation from the predicted shape, reported rather than hidden.** `git status`
+      shows the four `beyond-tabs-...` additions and four modifications under `advanced-...` (all four
+      projects: Desktop Chrome, Desktop Chrome Dark, Pixel 7, Pixel 7 Dark), but only **two**
+      modifications under `url-redirect-...` — Desktop Chrome and Desktop Chrome Dark; the Pixel 7 and
+      Pixel 7 Dark baselines there did not rewrite. Ten changed files, not twelve. Root cause, confirmed
+      directly rather than assumed: `url-redirect-...`'s Pixel 7 full-page capture is ~11.5k px tall
+      (mobile text reflow), against only three (not five) smaller diagrams, so the diagram-region pixel
+      change stays under `maxDiffPixelRatio: 0.01` even though the fix is genuinely applied there —
+      verified with a live computed-style probe (`filter: invert(0.93) hue-rotate(180deg)` in dark,
+      `none` in light, on all three `url-redirect-...` diagrams under Pixel 7) and a rendered close-up
+      (arrows, labels and the "AWS Cloud" outline go from invisible to clearly legible). Playwright's
+      default `--update-snapshots=changed` mode (what `test:e2e:update` uses) only rewrites a baseline
+      once the diff exceeds that ratio, so those two Pixel 7 baselines stay stale — still holding the
+      pre-fix pixels — though they still pass, and a regression there is still caught by the
+      `theme.spec.ts` computed-style assertion (task 4.2), not only by the screenshot. The eight
+      control-post baselines (`hosting-a-static-website-on-amazon-s3`,
+      `the-renaissance-of-written-coding-conventions`) are confirmed **byte-identical** — `git status`
+      shows nothing under either directory.
+- [x] 6.2 Review all twelve images individually before staging. Verify in the dark capture of each
       post that every diagram's strokes and labels read against `--bg: #17150f`, and in the light
       capture that no diagram shows a cool-white panel against `--bg: #faf7f2` any more. Verify
       specifically how the two `-geo` diagrams came out — the inverted world map and the 47×47 marker
@@ -152,9 +189,46 @@
       pre-export files instead, which are recoverable with
       `git show e45d91a:src/content/blog/beyond-tabs-…/<name>.svg`, and confirm each drawing is the
       same picture minus its white ground.
+      **Done.** Reviewed every changed/added baseline plus close-up element captures (native
+      resolution, not the downscaled full-page thumbnail) in both themes. Light: the white panel is
+      gone from every diagram; confirmed directly against the five pre-export `beyond-tabs-...` SVGs at
+      `e45d91a` — each of those carried the white `<rect>`, none of the current files do, and each
+      rendered figure is the same drawing minus its white ground. Dark: every diagram's strokes, arrows
+      and labels read clearly against `--bg: #17150f` (checked all eleven diagrams, including the three
+      non-`-geo` `advanced-...` figures). The two `-geo` diagrams specifically: land silhouettes invert
+      to light grey against a near-black ocean, the S3-bucket icon keeps a green tint, and the five
+      `Edge location` marker instances keep a purple tint — agree this reads well, confirmed on both
+      Desktop Chrome and Pixel 7. Heights confirmed identical between light and dark for every post (no
+      half-loaded figure): `beyond-tabs-...` 19475px (Desktop Chrome) / 29679px (Pixel 7),
+      `advanced-...` 25777px (Desktop Chrome) / 25517px (Pixel 7), `url-redirect-...` 11546px (Desktop
+      Chrome, the only project with a rewritten baseline there).
 
 ## 7. Verify
 
-- [ ] Visual + a11y snapshots pass in **both themes** for every touched view (testing-visual-regression skill)
-- [ ] All preflight gate checks pass — the set in `docs/development/checks.md` (running-preflight-checks skill)
-- [ ] Manual preview: no theme flash, interactions work, console clean, responsive at 375px
+- [x] Visual + a11y snapshots pass in **both themes** for every touched view (testing-visual-regression skill)
+      — ran `npm run test:e2e:update` then `npm run test:e2e:check` in the devcontainer (Linux,
+      matching CI's `ubuntu-24.04`); 286 passed / 2 skipped (pre-existing, unrelated: the mobile-nav
+      "Home" link test skips on `Pixel 7*` by design) across all four projects — dark coverage **is**
+      wired (`Desktop Chrome Dark` / `Pixel 7 Dark` in `playwright.config.ts`), so this covers both
+      themes, not light-only. Axe reported zero violations on `advanced-...`, `beyond-tabs-...` and
+      `url-redirect-...` in all four projects. See 6.1 for the one deviation worth carrying forward:
+      two of `url-redirect-...`'s baselines (Pixel 7, Pixel 7 Dark) did not rewrite and stay visually
+      stale, verified not to be a defect in the fix itself.
+- [x] All preflight gate checks pass — the set in `docs/development/checks.md` (running-preflight-checks skill)
+      — not re-run: no `src/` file or config was touched during this Verify pass (only binary test
+      baselines under `tests/__screenshots__/` and this file), so the clean run reported at the start of
+      this task stands.
+- [ ] Manual preview: no theme flash, interactions work, console clean, responsive at 375px —
+      **assisted via the Playwright MCP against a host build/preview** (`npm run build` +
+      `BROKENROBOT_PORT=8080 npm run serve`); leaving this box for the human, per process. Findings on
+      all three touched posts (`advanced-...`, `beyond-tabs-...`, `url-redirect-...`): console clean on
+      load, on theme toggle, and on in-app navigation (only the four pre-existing, page-load
+      `Permissions-Policy: Unrecognized feature` warnings, unrelated to this change and present
+      site-wide); theme choice persisted correctly across a reload (`data-theme` already correct before
+      the check ran, consistent with the pre-paint init script — no separate flash-detection capture
+      taken); the theme toggle interaction flips `data-theme` and the diagrams' `filter` live, confirmed
+      with a screenshot on `beyond-tabs-...`; the two data-URI `-geo` diagrams and the two
+      `url-redirect-...` images referenced from the other post's folder all render with no CSP block, in
+      both themes; at 375px, `document.documentElement.scrollWidth === clientWidth` on all three posts
+      (no horizontal overflow) and diagrams scale down cleanly. Screenshots saved under
+      `.playwright-mcp/` (gitignored).

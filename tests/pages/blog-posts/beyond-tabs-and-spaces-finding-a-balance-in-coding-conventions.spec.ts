@@ -1,6 +1,8 @@
 import AxeBuilder from '@axe-core/playwright';
 import { test, expect } from '@playwright/test';
 
+import { settleImages } from '../../settleImages';
+
 test.describe('Post: Beyond tabs and spaces: Finding a balance in coding conventions', () => {
     test.beforeEach(async ({ page }) => {
         await page.goto('./blog/beyond-tabs-and-spaces-finding-a-balance-in-coding-conventions');
@@ -16,11 +18,9 @@ test.describe('Post: Beyond tabs and spaces: Finding a balance in coding convent
         expect(accessibilityScanResults.violations).toEqual([]);
     });
 
-    // For not snapshot testing is switched off because on iPhone 12 Pro there is an error upon taking a screenshot
-    // "failed to take screenshot - Cannot take screenshot larger than 32767 pixels on any dimension"
-    /*
     test('should match the screenshot', async ({ page }) => {
+        await settleImages(page);
+
         await expect(page).toHaveScreenshot({ fullPage: true });
     });
-    */
 });

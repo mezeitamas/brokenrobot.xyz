@@ -86,20 +86,3 @@ and it says nothing about a flash that resolves within a frame or two.
 **Resolves by:** undecided. Asserting on first paint needs a capture the current setup does not take,
 and it is not yet established which of a trace, a video, or a paint-timing probe can carry that
 assertion without becoming flaky.
-
-## Architecture diagrams are near-unreadable in the dark theme
-
-**Intent:** unrecorded for content images. Both themes are first-class, and the site's own chrome and
-prose honour that through design tokens; nothing states what is expected of an image the author
-supplies.
-
-**Reality:** the Excalidraw diagrams are transparent PNGs drawn in dark ink — seven of them, across
-the `advanced-static-website-hosting-with-amazon-s3-and-cloudfront`,
-`hosting-a-static-website-on-amazon-s3`, and `url-redirect-with-amazon-cloudfront-and-amazon-route-53`
-posts, plus five SVGs in `beyond-tabs-and-spaces-finding-a-balance-in-coding-conventions`. On the
-light ground they read cleanly. On the dark ground the strokes and labels sit near-black on
-near-black. The dark baselines in `tests/__screenshots__/` capture this, and axe does not report it,
-because the text is inside an image.
-
-**Resolves by:** undecided. The choice is between a dark variant of each diagram and a CSS treatment
-for transparent content images, and it is a design decision rather than a token value.
