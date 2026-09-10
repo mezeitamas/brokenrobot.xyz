@@ -18,8 +18,9 @@ Extends `astro/tsconfigs/strictest`. Notable, ESLint-enforced rules:
 ## Imports
 
 Enforced order (`eslint-plugin-import`): builtin → external → internal → parent → sibling →
-index, with `exports-last`. Prefer the path aliases (`@components`, `@layouts`, `@assets`,
-`@styles`) over deep relative paths.
+index, with `exports-last`. Use the path aliases (`@assets`, `@components`, `@consts`, `@layouts`,
+`@styles`, `@utils`) rather than parent-relative paths — `no-restricted-imports` rejects any `../`
+import, because a relative path silently breaks when the file moves. Sibling (`./`) imports are fine.
 
 ## Formatting (Prettier)
 
@@ -28,6 +29,9 @@ index, with `exports-last`. Prefer the path aliases (`@components`, `@layouts`, 
 - **One attribute per line** (`singleAttributePerLine`) — applies to Astro markup.
 - Tailwind classes auto-sorted (`prettier-plugin-tailwindcss`).
 - Covers `.astro, .js, .jsx, .ts, .tsx, .cjs, .mjs, .css, .json, .md, .mdx, .yml`.
+- **Format only the files you touched** — run `npx prettier --write` over them. Do not run
+  `npm run format:fix`, because that script rewrites the full repo glob and reformats files your
+  change never touched.
 
 ## Naming
 

@@ -11,8 +11,10 @@
         "paths": {
             "@assets/*": ["src/assets/*"],
             "@components/*": ["src/components/*"],
+            "@consts": ["src/consts.ts"],
             "@layouts/*": ["src/layouts/*"],
-            "@styles/*": ["src/styles/*"]
+            "@styles/*": ["src/styles/*"],
+            "@utils/*": ["src/utils/*"]
         },
         "plugins": [
             {

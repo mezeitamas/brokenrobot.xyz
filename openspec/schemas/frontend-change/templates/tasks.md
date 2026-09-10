@@ -10,7 +10,8 @@
 
 <!--
   Keep the Verify group LAST and renumber it to follow your work groups (e.g. ## 5. Verify).
-  Do not drop or water down its items — every UI change carries both-theme visual + a11y coverage.
+  Do not drop or water down its items — mark view-dependent items N/A (with a short note) when the
+  change touches no views. Every UI change carries both-theme visual + a11y coverage.
 -->
 
 ## N. Verify

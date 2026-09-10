@@ -151,9 +151,10 @@ The site's security headers are declared in **three places, and they must stay b
 
 The rule covers the whole set — `Content-Security-Policy`, `Strict-Transport-Security`,
 `Referrer-Policy`, `Permissions-Policy`, `X-Content-Type-Options`, `X-Frame-Options` — not any one
-header. Nothing enforces it; when you change one copy, change all three. `Cache-Control` is the one
-deliberate exception: it is absent from the Cloudflare header ruleset, which drives caching from a
-separate cache ruleset.
+header. Only the `Content-Security-Policy` half is enforced, by
+[`headers:check`](development/checks.md#headerscheck); for every other header, when you change one
+copy, change all three yourself. `Cache-Control` is the one deliberate exception: it is absent from
+the Cloudflare header ruleset, which drives caching from a separate cache ruleset.
 
 The intended `Strict-Transport-Security` value is:
 
@@ -183,7 +184,9 @@ each one.
     For this header, drift is quiet: the site keeps rendering because the inline CSS survives,
     while fonts and every bundled script fail. When the Cloudflare stack was first stood up it
     carried a single-layer policy copied from another site, which intersected with the `<meta>`
-    layer to block `font-src` outright and admit no script at all.
+    layer to block `font-src` outright and admit no script at all. `npm run headers:check` (in the
+    preflight gate and CI's Verify site job) fails on any byte of drift between the three copies of
+    this header.
 
 The header keeps `'unsafe-inline'` on `script-src`/`style-src` **deliberately**: a static header
 cannot carry per-page hashes, so without it this layer would block the very inline scripts the

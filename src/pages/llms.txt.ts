@@ -1,8 +1,8 @@
 import type { APIRoute } from 'astro';
 import { getCollection } from 'astro:content';
 
-import { SITE_METADATA } from '../consts';
-import { ATTRIBUTION, markdownTwinPath } from '../utils/markdownTwin';
+import { SITE_METADATA } from '@consts';
+import { ATTRIBUTION, markdownTwinPath } from '@utils/markdownTwin';
 
 // A Markdown map of the site for language models, following the llms.txt convention
 // (https://llmstxt.org): an H1 name, a blockquote summary, free prose, then sections of links.

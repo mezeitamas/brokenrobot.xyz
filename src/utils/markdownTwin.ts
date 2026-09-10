@@ -1,4 +1,4 @@
-import { SITE_METADATA } from '../consts';
+import { SITE_METADATA } from '@consts';
 
 // The one place the twin URLs are derived. Three surfaces advertise them — the endpoint that emits
 // them, `llms.txt`, and the `alternate` link in `ArticleLayout` — and they agree by construction

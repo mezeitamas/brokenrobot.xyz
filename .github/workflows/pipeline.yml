@@ -44,7 +44,7 @@ jobs:
       #
       # Checkout, setup-node and `npm ci` above keep the implicit `if: success()`:
       # there is nothing to report when the setup failed. A failed `npm ci` does
-      # make all six run and fail together, which is noisy but not misleading.
+      # make all seven run and fail together, which is noisy but not misleading.
       - name: Format check
         if: ${{ !cancelled() }}
         run: npm run format:check
@@ -68,6 +68,10 @@ jobs:
       - name: DESIGN token drift check
         if: ${{ !cancelled() }}
         run: npm run tokens:check
+
+      - name: CSP header sync check
+        if: ${{ !cancelled() }}
+        run: npm run headers:check
 
   verify-infrastructure:
     name: 'Verify infrastructure'
