@@ -89,35 +89,63 @@ assertion without becoming flaky.
 
 ## The main session does the work it is meant to coordinate
 
-**Intent:** one Claude Code session carries a change end to end — Explore, Propose, an adversarial
-review of the proposal by a subagent and then by the human, Apply, Verify by a subagent, a review
-of the implementation by a subagent and then by the human, Archive — with the main thread as the
-coordinator. Its context holds only what matters: the explore conversation, the human's gate
-decisions, one short report per phase, and the questions a subagent returned instead of guessing.
-Every phase that reads files, runs commands, or writes artifacts runs in a subagent's context, and
-each subagent stops and returns the question when the phase would need to ask the human.
+**Intent:** every phase of a change — Explore, Propose, an adversarial review of the proposal by a
+subagent and then by the human, Apply, Verify by a subagent, a review of the implementation by a
+subagent and then by the human, Archive — runs in a context that holds only its own input: the
+delegation message and the artifacts on disk from the phase before. Nothing else from the session
+reaches it. The point is that stale reasoning, rejected directions, and earlier tangents cannot
+steer the next phase; a small context is a side effect, not the goal. Three rules follow. Every
+phase ends with a file, and the next phase starts from files, so each hand-off is traceable and is
+a checkpoint the human can correct before the next phase reads it. The main thread is a router: it
+holds the human's gate decisions and one short report per phase, and it does not read files itself
+during a phase, because whatever it reads leaks into the next delegation message. A subagent that
+would need to ask the human stops and returns the question instead of guessing. Forked agents and
+forked skills are acceptable isolation; a fresh session per phase boundary is how the isolation is
+achieved by hand today.
 
-**Reality:** three phases are delegated and return short reports — Apply (`frontend-engineer`),
-Verify (`frontend-qa-engineer`), and the implementation review (`frontend-code-reviewer`). The
-rest run inline. Propose reads the specs, the docs, and the codebase, and writes four artifacts,
-all in the main thread; it sits there so it can ask questions. No subagent reviews the proposal
-before the human does. The `running-preflight-checks`, `testing-visual-regression`, and
-`scaffolding-components` skills carry a `model:` pin and nothing else, which switches the model for
-one turn and isolates nothing, so their output lands in the main thread whenever it calls them
-directly. The committing skill replays the full diff into the main thread on every commit. Nothing
-loaded in a fresh session names the sequence, the owner of each phase, or the two points where the
-main thread must stop for the human, so a session can drift into doing the work itself.
+**Reality:** the isolation exists at one boundary only, and by hand: Explore and Propose run in one
+session, and the human opens a new session for Apply onward, because the change folder is the only
+thing that crosses. Inside each session the phases share one context. Explore ends with nothing on
+disk, so Propose reads the whole Explore conversation, rejected directions included. Propose reads
+the specs, the docs, and the codebase, and writes four artifacts, all in the main thread; it sits
+there so it can ask questions. No subagent reviews the proposal before the human does. Three phases
+are delegated and return short reports — Apply (`frontend-engineer`), Verify
+(`frontend-qa-engineer`), and the implementation review (`frontend-code-reviewer`). The
+`running-preflight-checks`, `testing-visual-regression`, and `scaffolding-components` skills carry a
+`model:` pin and nothing else, which switches the model for one turn and isolates nothing, so their
+output lands in the main thread whenever it calls them directly. The committing skill replays the
+full diff into the main thread on every commit. Nothing loaded in a fresh session names the
+sequence, the owner of each phase, or the two points where the main thread must stop for the
+human, so a session can drift into doing the work itself.
 
 **Resolves by:** change the tooling, through the OpenSpec flow, even though tooling under
-`.claude/` otherwise commits directly. The shape is known: a planner subagent that wraps the
-vanilla propose and update skills and returns questions instead of guessing, as the engineer does;
-a read-only proposal reviewer that attacks the change folder — untestable scenarios, requirements
-that contradict the living specs, tasks that use a primitive nobody establishes, a missing tier
-decision, unnamed scope, a `skip_specs` claim that hides a behaviour change; `context: fork` with an
-`agent:` on the project-owned skills and on the committing skill in the marketplace plugin, which
-the docs confirm isolates a skill's tool output; and a coordinator skill, with one pointer line in
-`CLAUDE.md`, that names the sequence, the owners, and the stops. The vendored `openspec-*` skills
-stay untouched, because `openspec update` regenerates them. Archive and update stay in the main
-thread until they prove noisy. Open decisions: whether Blocking proposal findings reach the human
-directly or after one automatic planner fix round, and whether this lands on the branch that
-restored the engineer or on a branch after it.
+`.claude/` otherwise commits directly. It lands on a new branch: the commit that restored the
+engineer is already on `main`. The vendored `openspec-*` skills stay untouched, because
+`openspec update` regenerates them. The pieces are being settled one at a time; the state as of
+2026-09-10:
+
+- **Explore** stays in the main thread and ends with a written brief that the human can read and
+  correct. The brief is Propose's only input besides the disk. _Decided._ Where the brief lives is
+  open.
+- **Propose and Update** run in a planner subagent that wraps the vanilla propose and update
+  skills and returns questions instead of guessing, as the engineer does. _Decided._ The
+  workflow doc's line that planning has no agent by design is rewritten when this lands.
+- **The proposal review** is a separate read-only subagent, not a third placement on
+  `frontend-code-reviewer`, because judging prose against specs shares almost nothing with judging
+  a diff. It attacks the change folder — untestable scenarios, requirements that contradict the
+  living specs, tasks that use a primitive nobody establishes, a missing tier decision, unnamed
+  scope, a `skip_specs` claim that hides a behaviour change — and writes its report as a file, so
+  an Update round picks it up from disk. Blocking findings go straight to the human; an automatic
+  planner fix round waits until the reviewer has earned trust. _Decided._ Whether extra files in
+  the change folder pass `openspec validate` is unchecked.
+- **The three inline skills**: the known shape is `context: fork` with an `agent:`, which the
+  Claude Code docs confirm keeps a skill's tool output in the subagent; `checking-dev-env` already
+  runs that way. Two of the three are invoked from inside subagents through the `Skill` tool, and
+  whether a fork nested in a subagent works is unchecked. _Open._
+- **The committing skill** lives in the marketplace plugin, so isolating it is a change in that
+  repository, and a forked skill cannot ask before staging. _Open._
+- **The coordinator**: the known shape is a skill, with one pointer line in `CLAUDE.md`, that names
+  the sequence, the owners, and the stops. It needs two entry points, because the human starts a
+  change in one session and applies it in another: start a change, and apply a named change.
+  _Open._
+- **Archive** stays in the main thread until it proves noisy.
