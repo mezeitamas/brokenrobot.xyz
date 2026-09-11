@@ -154,10 +154,14 @@ engineer is already on `main`. The vendored `openspec-*` skills stay untouched, 
   planner fix round waits until the reviewer has earned trust. _Decided._ The report survives
   archive with the rest of the folder. Checked on 1.12.0: `openspec validate --all --strict`
   ignores files the schema does not declare, and `openspec status` tracks only declared ones, so
-  the report can be a declared `review` artifact — the documented shape, and the one a community
-  schema already uses for a fresh-context reviewer — or a loose file. Open detail: whether `apply`
-  should require the review artifact, which would make OpenSpec itself refuse to apply an
-  unreviewed change.
+  the report is a declared `review` artifact — the documented shape, and the one a community
+  schema already uses for a fresh-context reviewer — and `apply` requires it, so OpenSpec itself
+  refuses to apply a change nobody reviewed. _Decided 2026-09-11._ The gate proves a review ran,
+  not that it passed and not that the human approved: existence is all OpenSpec checks, and the
+  file goes stale after an Update round. So the coordinator reviews again after every Update, and
+  the human reads the report before opening the apply session. If that hole needs closing
+  mechanically, the reviewer writes its verdict on the report's first line and the coordinator
+  refuses to proceed on anything but a clean one.
 - **The three inline skills**: the known shape is `context: fork` with an `agent:`, which the
   Claude Code docs confirm keeps a skill's tool output in the subagent; `checking-dev-env` already
   runs that way. Two of the three are invoked from inside subagents through the `Skill` tool, and
