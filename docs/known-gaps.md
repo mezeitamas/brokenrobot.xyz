@@ -134,7 +134,10 @@ per step, skills as the owner's capabilities, every output a file:
 | Verify                | the code, the tasks Verify group             | ticked Verify items, a report file | `frontend-qa-engineer`      | visual regression, preflight |
 | Implementation review | the diff, the change folder, the conventions | a findings file                    | `frontend-code-reviewer`    | none                         |
 | _Gate_                | the findings, the pull request               | the human's approval               | the human                   |                              |
+| Commit the code       | the approved diff, the touched-files list    | a commit                           | a general-purpose subagent  | committing-conventionally    |
 | Archive               | the change folder                            | merged specs, the archived folder  | main thread                 | vendored archive             |
+| _Look_                | the merged specs                             | the human's go                     | the human                   |                              |
+| Commit the specs      | the archive diff                             | a commit                           | a general-purpose subagent  | committing-conventionally    |
 
 The review artifact gates Apply by existing; its accepted findings reach the engineer through the
 artifacts an Update round rewrote, not through the file. Both review reports and the Verify
@@ -198,8 +201,16 @@ one at a time:
   subagent, and what happens then is the one case the docs do not cover. A fork for running the
   gate by hand outside a change is a follow-up once a probe at implementation shows nested forks
   work.
-- **The committing skill** lives in the marketplace plugin, so isolating it is a change in that
-  repository, and a forked skill cannot ask before staging. _Open._
+- **The committing skill** stays as it is in the marketplace plugin, and during a change it runs
+  inside a general-purpose subagent that invokes it, so the diff replay lands there. The
+  delegation answers up front the three questions the skill would ask — the branch is the
+  change's branch, the scope is the engineer's touched-files list, staging is explicit paths —
+  and a question the skill still hits comes back in the subagent's report. Commits happen only
+  after a human approval: the code commit after the implementation gate, then Archive, then the
+  human looks at the merged specs, then the second commit. Docs-only commits outside a change stay
+  inline, because the human is present and no phase follows. _Decided 2026-09-11._ Forking the
+  skill in the plugin was rejected because every consumer would lose its questions; it can become
+  a plugin feature if a second project wants it.
 - **The coordinator**: the known shape is a skill, with one pointer line in `CLAUDE.md`, that names
   the sequence, the owners, and the stops. It needs two entry points, because the human starts a
   change in one session and applies it in another: start a change, and apply a named change.
