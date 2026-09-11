@@ -130,7 +130,10 @@ engineer is already on `main`. The vendored `openspec-*` skills stay untouched, 
   `proposal` requires it, so every change has one — for a one-line idea with no Explore, the main
   thread writes the few lines itself before delegating. It carries the problem and goal, the
   decisions taken with their reasons, the rejected directions, the open questions and scope limits,
-  and an answers section. The vendored explore skill writes it: since OpenSpec 1.8 that skill may
+  and an answers section. Its template is settled at implementation; the starting point is five
+  headings — Problem and goal, Decisions, Rejected directions, Open questions and scope, Answers —
+  with an instruction that caps it at about one screen and sends anything longer to the proposal.
+  The vendored explore skill writes it: since OpenSpec 1.8 that skill may
   create change artifacts within a scope the human confirms with an explicit yes, after scaffolding
   the change with `openspec new change`, so the change folder now exists at the end of Explore. No
   vendored skill changes: the propose skill reads every completed dependency before drafting, so a
