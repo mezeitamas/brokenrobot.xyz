@@ -121,8 +121,28 @@ human, so a session can drift into doing the work itself.
 **Resolves by:** change the tooling, through the OpenSpec flow, even though tooling under
 `.claude/` otherwise commits directly. It lands on a new branch: the commit that restored the
 engineer is already on `main`. The vendored `openspec-*` skills stay untouched, because
-`openspec update` regenerates them. The pieces are being settled one at a time; the state as of
-2026-09-10:
+`openspec update` regenerates them. The process this resolves to, agreed 2026-09-11 — one owner
+per step, skills as the owner's capabilities, every output a file:
+
+| Step                  | Input                                        | Output on disk                     | Owner                       | Skills                       |
+| --------------------- | -------------------------------------------- | ---------------------------------- | --------------------------- | ---------------------------- |
+| Explore               | the idea, the codebase                       | `brief.md`                         | main thread, with the human | vendored explore             |
+| Propose               | the brief                                    | proposal, specs, design, tasks     | planner agent               | vendored propose, update     |
+| Proposal review       | the four artifacts, the living specs         | `review.md`                        | proposal reviewer agent     | none                         |
+| _Gate_                | the change folder                            | the human's approval               | the human                   |                              |
+| Apply                 | tasks, the rest of the folder                | code, ticked tasks                 | `frontend-engineer`         | vendored apply, scaffolding  |
+| Verify                | the code, the tasks Verify group             | ticked Verify items, a report file | `frontend-qa-engineer`      | visual regression, preflight |
+| Implementation review | the diff, the change folder, the conventions | a findings file                    | `frontend-code-reviewer`    | none                         |
+| _Gate_                | the findings, the pull request               | the human's approval               | the human                   |                              |
+| Archive               | the change folder                            | merged specs, the archived folder  | main thread                 | vendored archive             |
+
+The review artifact gates Apply by existing; its accepted findings reach the engineer through the
+artifacts an Update round rewrote, not through the file. Both review reports and the Verify
+report are files so the folder is an audit log and a debugging record; where the two later files
+live is settled at implementation. Both review loops keep the human in them: findings come to the
+human, the human decides which go back, the coordinator re-delegates, and the reviewer runs again.
+An automatic loop on Blocking findings waits until both reviewers have a track record. The pieces
+one at a time:
 
 - **Explore** stays in the main thread and ends with a written brief that the human can read and
   correct. The brief is Propose's only input besides the disk. _Decided 2026-09-11, in detail:_
@@ -165,10 +185,19 @@ engineer is already on `main`. The vendored `openspec-*` skills stay untouched, 
   the human reads the report before opening the apply session. If that hole needs closing
   mechanically, the reviewer writes its verdict on the report's first line and the coordinator
   refuses to proceed on anything but a clean one.
-- **The three inline skills**: the known shape is `context: fork` with an `agent:`, which the
-  Claude Code docs confirm keeps a skill's tool output in the subagent; `checking-dev-env` already
-  runs that way. Two of the three are invoked from inside subagents through the `Skill` tool, and
-  whether a fork nested in a subagent works is unchecked. _Open._
+- **The three inline skills** stay inline. They are procedures, not phases: invoked from inside a
+  phase's subagent their output lands where it belongs, and the leak exists only when the main
+  thread invokes one directly. Scaffolding is invoked by the engineer and visual regression by the
+  QA agent, so those two already sit inside a phase. Preflight had no owner, so the main thread
+  ran the gate itself; now the QA agent owns all of Verify, runs the gate as well as the snapshot
+  suite, and the apply guidance's hand-off line changes to match. The coordinator carries the
+  rule that during a change the main thread never invokes these three. _Decided 2026-09-11._ The
+  fork shape — `context: fork` with an `agent:`, which the Claude Code docs confirm keeps a skill's
+  tool output in the subagent, and which `checking-dev-env` already uses — is not applied, because
+  the dev-environment check and the QA agent would then invoke a forked skill from inside a
+  subagent, and what happens then is the one case the docs do not cover. A fork for running the
+  gate by hand outside a change is a follow-up once a probe at implementation shows nested forks
+  work.
 - **The committing skill** lives in the marketplace plugin, so isolating it is a change in that
   repository, and a forked skill cannot ask before staging. _Open._
 - **The coordinator**: the known shape is a skill, with one pointer line in `CLAUDE.md`, that names
