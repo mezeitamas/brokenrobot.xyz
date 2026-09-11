@@ -211,8 +211,16 @@ one at a time:
   inline, because the human is present and no phase follows. _Decided 2026-09-11._ Forking the
   skill in the plugin was rejected because every consumer would lose its questions; it can become
   a plugin feature if a second project wants it.
-- **The coordinator**: the known shape is a skill, with one pointer line in `CLAUDE.md`, that names
-  the sequence, the owners, and the stops. It needs two entry points, because the human starts a
-  change in one session and applies it in another: start a change, and apply a named change.
-  _Open._
+- **The coordinator** is one project-owned skill, with one pointer line in `CLAUDE.md`, that names
+  the sequence, the owner of each step, the files each step reads and writes, and the stops for
+  the human. It is a runbook that points at the process table above, not a second copy of it. It
+  has two entry points as two sections of the one skill, because the human starts a change in one
+  session and applies it in another: start a change, and apply a named change. It carries the
+  rules that belong to no single agent: the main thread never invokes the three procedure skills
+  during a change; an answer to a planner question is appended to the brief and the same planner
+  resumed; the proposal is reviewed again after every Update; commits are delegated and happen
+  only after an approval. The pointer line is the backstop for a missed trigger, and the skill can
+  be invoked by name. _Decided 2026-09-11._ Writing the sequence into `CLAUDE.md` itself was
+  rejected because every session would pay for it; two separate entry-point skills were rejected
+  because they would share most of their content.
 - **Archive** stays in the main thread until it proves noisy.
