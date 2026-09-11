@@ -125,19 +125,39 @@ engineer is already on `main`. The vendored `openspec-*` skills stay untouched, 
 2026-09-10:
 
 - **Explore** stays in the main thread and ends with a written brief that the human can read and
-  correct. The brief is Propose's only input besides the disk. _Decided._ Where the brief lives is
-  open.
+  correct. The brief is Propose's only input besides the disk. _Decided 2026-09-11, in detail:_
+  the brief is a declared artifact in the `frontend-change` schema, first in the graph, and
+  `proposal` requires it, so every change has one — for a one-line idea with no Explore, the main
+  thread writes the few lines itself before delegating. It carries the problem and goal, the
+  decisions taken with their reasons, the rejected directions, the open questions and scope limits,
+  and an answers section. The vendored explore skill writes it: since OpenSpec 1.8 that skill may
+  create change artifacts within a scope the human confirms with an explicit yes, after scaffolding
+  the change with `openspec new change`, so the change folder now exists at the end of Explore. No
+  vendored skill changes: the propose skill reads every completed dependency before drafting, so a
+  `proposal` that requires `brief` starts from it unmodified. Archive moves the whole change folder,
+  so the brief survives as the record. Cost: the schema fork no longer matches upstream's artifact
+  list, so the reconcile recipe in the tooling doc gains a step. OpenSpec has no subagent concept
+  and its maintainers closed the requests as platform-specific; community schemas use the same
+  file-only hand-off.
 - **Propose and Update** run in a planner subagent that wraps the vanilla propose and update
-  skills and returns questions instead of guessing, as the engineer does. _Decided._ The
-  workflow doc's line that planning has no agent by design is rewritten when this lands.
+  skills and returns questions instead of guessing, as the engineer does. _Decided._ When the
+  planner returns a question, the human answers in chat, the coordinator appends the answer to
+  the brief's answers section, and resumes the same planner rather than starting a new one — the
+  Claude Code docs confirm a finished subagent resumes with its full history. The workflow doc's
+  line that planning has no agent by design is rewritten when this lands.
 - **The proposal review** is a separate read-only subagent, not a third placement on
   `frontend-code-reviewer`, because judging prose against specs shares almost nothing with judging
   a diff. It attacks the change folder — untestable scenarios, requirements that contradict the
   living specs, tasks that use a primitive nobody establishes, a missing tier decision, unnamed
   scope, a `skip_specs` claim that hides a behaviour change — and writes its report as a file, so
   an Update round picks it up from disk. Blocking findings go straight to the human; an automatic
-  planner fix round waits until the reviewer has earned trust. _Decided._ Whether extra files in
-  the change folder pass `openspec validate` is unchecked.
+  planner fix round waits until the reviewer has earned trust. _Decided._ The report survives
+  archive with the rest of the folder. Checked on 1.12.0: `openspec validate --all --strict`
+  ignores files the schema does not declare, and `openspec status` tracks only declared ones, so
+  the report can be a declared `review` artifact — the documented shape, and the one a community
+  schema already uses for a fresh-context reviewer — or a loose file. Open detail: whether `apply`
+  should require the review artifact, which would make OpenSpec itself refuse to apply an
+  unreviewed change.
 - **The three inline skills**: the known shape is `context: fork` with an `agent:`, which the
   Claude Code docs confirm keeps a skill's tool output in the subagent; `checking-dev-env` already
   runs that way. Two of the three are invoked from inside subagents through the `Skill` tool, and
