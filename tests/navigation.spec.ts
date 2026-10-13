@@ -181,21 +181,6 @@ test.describe('Post: The renaissance of written coding conventions: Because AI r
 });
 
 test.describe('Post: Learned helplessness in software teams: Symptoms, causes, and the path to empowerment', () => {
-    test('should be accessible from the home page', async ({ page }) => {
-        await page.goto('./');
-        await expect(page).toHaveTitle(/Broken Robot/);
-
-        await page
-            .getByRole('heading')
-            .getByRole('link', {
-                name: 'Learned helplessness in software teams: Symptoms, causes, and the path to empowerment'
-            })
-            .click();
-        await expect(page).toHaveTitle(
-            /Learned helplessness in software teams: Symptoms, causes, and the path to empowerment/
-        );
-    });
-
     test('should be accessible from the blog page', async ({ page }) => {
         await page.goto('./blog');
         await expect(page).toHaveTitle(/Blog/);
@@ -265,5 +250,33 @@ test.describe('Post: Navigating cultural clashes in global software teams', () =
             })
             .click();
         await expect(page).toHaveTitle(/Navigating cultural clashes in global software teams/);
+    });
+});
+
+test.describe('Post: More Agents, Same Mythical Month', () => {
+    test('should be accessible from the home page', async ({ page }) => {
+        await page.goto('./');
+        await expect(page).toHaveTitle(/Broken Robot/);
+
+        await page
+            .getByRole('heading')
+            .getByRole('link', {
+                name: 'More Agents, Same Mythical Month'
+            })
+            .click();
+        await expect(page).toHaveTitle(/More Agents, Same Mythical Month/);
+    });
+
+    test('should be accessible from the blog page', async ({ page }) => {
+        await page.goto('./blog');
+        await expect(page).toHaveTitle(/Blog/);
+
+        await page
+            .getByRole('heading')
+            .getByRole('link', {
+                name: 'More Agents, Same Mythical Month'
+            })
+            .click();
+        await expect(page).toHaveTitle(/More Agents, Same Mythical Month/);
     });
 });
