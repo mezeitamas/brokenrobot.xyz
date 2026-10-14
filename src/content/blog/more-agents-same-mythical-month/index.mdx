@@ -1,0 +1,200 @@
+---
+title: 'More Agents, Same Mythical Month'
+excerpt: 'Hundreds of agents can now write millions of lines of code. That proves output scales, not value. What turns code into value is still deciding, verifying and coordinating - and AI amplifies how well an organisation already does them.'
+publishDate: '2026-10-14T18:00:00.000Z'
+heroImage: './heroImage.jpg'
+tags: ['AI agents', 'AI adoption', 'Software delivery', 'Organisation design', 'Brooks law']
+---
+
+import BlogPostPicture from '@components/picture/BlogPostPicture.astro';
+
+import assemblyLineAtTheFordMotorCompany from './Assembly_line_at_the_Ford_Motor_Companys_Highland_Park_plant_LCCN2011661021.jpg';
+import telephoneOperatorsJapan from './Telephone-operators-Japan-1902.jpg';
+import chimpanzeeSeatedAtTypewriter from './Chimpanzee_seated_at_typewriter.jpg';
+
+A delivery date is slipping. The backlog is long, the team is tired, and someone in the planning meeting points out that the work no longer has to wait for people. _Agents are cheap. We can start ten more tonight, or a hundred, and let them work through the queue while we sleep._ The proposal sounds modern and reasonable, and some vendors make it feel natural: Moonshot AI [markets its Kimi K2.5 model](https://www.kimi.ai/blog/kimi-k2-5) on its ability to direct a swarm of up to a hundred sub-agents. The assumption that more agents simply means better results is common enough that [a Google Research study](https://research.google/blog/towards-a-science-of-scaling-agent-systems-when-and-why-agent-systems-work/) set out to test it.
+
+The instinct is older than the agents. Fred Brooks described it in 1975, in _The Mythical Man-Month_:
+
+> Oversimplifying outrageously, we state Brooks's Law: Adding manpower to a late software project makes it later.
+
+The reasons behind it apply to agents with surprisingly few changes. [An earlier post of mine](/blog/your-ai-platform-will-inherit-your-engineering-culture/) argued that an AI platform inherits the engineering culture it is built on. This one looks at what happens when we try to scale that culture with agents.
+
+AI has made producing code cheap, which moves the bottleneck of software delivery to deciding, verifying and coordinating - capabilities that were always largely organisational. **AI amplifies whatever coordination an organisation already has.** Adding more agents will not fix weak coordination, just as adding more developers never did.
+
+## What changed: code got cheap
+
+In early 2026 Cursor [ran hundreds of agents on a single codebase](https://cursor.com/blog/scaling-agents), and in close to a week they produced a web browser of more than a million lines. Anthropic had a team of parallel agents [build a C compiler](https://www.anthropic.com/engineering/building-c-compiler) that builds many real projects - Doom among them, and a Linux kernel that boots - though not all of them. Steve Yegge built [Gas Town](https://github.com/gastownhall/gastown), an orchestrator for fleets of coding agents.
+
+Their authors are also honest about what these projects are. Cursor's engineer described the browser as a research experiment that was [never meant to be production software](https://simonwillison.net/2026/Jan/23/fastrender/). Anthropic's write-up says plainly that the compiler is not yet a drop-in replacement for a real compiler. Yegge [wrote](https://yegge.ai/essays/the-shape-of-things-to-come/) that he only ever ended up using Gas Town to build Gas Town. These are experiments about how far output can scale, and on that question they are convincing: output scales. But it scales only when someone designs a structure for the agents to work in - a hierarchy, a single design authority, written intent, and a test suite strong enough to tell the agents when they are wrong.
+
+<BlogPostPicture
+    src={assemblyLineAtTheFordMotorCompany}
+    alt="Workers on the assembly line at Ford's Highland Park plant"
+/>
+
+_The assembly line at Ford's Highland Park plant, 1913. Public domain, Library of Congress, via [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Assembly_line_at_the_Ford_Motor_Company's_Highland_Park_plant_LCCN2011661021.jpg)._
+
+Agent-written software also creates real value. Claude Code is [reportedly written almost entirely by Claude Code](https://fortune.com/2026/06/11/anthropic-claude-boris-cherny-doesnt-write-code-by-hand-anymore/), and Anthropic reported Claude Code's run-rate revenue at [over $2.5 billion in February 2026](https://www.anthropic.com/news/anthropic-raises-30-billion-series-g-funding-380-billion-post-money-valuation). Lovable, where people build applications by describing them, passed [$600 million in annualised revenue in September 2026](https://techcrunch.com/2026/09/24/lovables-annualized-revenue-crosses-600m-as-vibe-coding-takes-off/). It would be wrong to say that agents produce output but no value.
+
+Code has become cheap and abundant, but cheap code is not the same as correct, working software. Verification and quality are still partly technical problems, and we will come back to them as part of the correction mechanisms that have to keep up. The rest of the argument depends on one point: when one input becomes cheap, the constraint moves to the inputs that do not.
+
+## What did not change: Brooks's mechanism
+
+Others have drawn the Brooks parallel before. Murat Demirbas argued that multi-agent systems [do not escape Brooks's law](http://muratbuffalo.blogspot.com/2026/01/agentic-ai-and-mythical-agent-month.html), and Wes McKinney that coordination [changes shape rather than disappearing](https://www.oreilly.com/radar/the-mythical-agent-month/). What this piece adds is a step past both the Brooks parallel and the finding that AI amplifies what a team already is. Cheap output makes hidden coordination and value failures visible, as review queues and unused features, faster than our correction loops can respond.
+
+Brooks's law is about late projects, while the agent question is about throughput in general, so the comparison needs some care. Twenty years after the book, Brooks still described his law as a rule of thumb rather than a law of nature. What carries over is the mechanism he gave for it.
+
+The first part is partitioning. Months and workers are interchangeable only when a task can be split into pieces that need no communication between them. When a task has sequential constraints, more effort does not shorten it. His example was childbirth: some work takes the time it takes, no matter how many people are assigned. Agents do not escape this. A controlled study of agent configurations, using small teams of three or four agents on benchmark tasks, found that every multi-agent setup it tested made sequential planning 39–70% worse, while a multi-agent setup improved performance by about 80% on a task that could be split cleanly ([published January 2026](https://research.google/blog/towards-a-science-of-scaling-agent-systems-when-and-why-agent-systems-work/)). Agents help where the work divides and hurt where it does not: Brooks's rule, restated.
+
+<BlogPostPicture
+    src={telephoneOperatorsJapan}
+    alt="Telephone exchange operators connecting calls by hand"
+/>
+
+_Telephone exchange operators in Yaesu, Japan, 1902. Public domain, via [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Telephone-operators-Japan-1902.jpg)._
+
+The second part is communication. Brooks counted the pairwise channels between workers, _n(n-1)/2_, and noted that coordination effort quickly overtakes the time saved by dividing the work. Cursor ran into the same problem. Its first design let agents coordinate as equals, with no hierarchy, and Wilson Lin reported the result:
+
+> Twenty agents would slow down to the effective throughput of two or three, with most time spent waiting.
+
+The fair reply is that Cursor then fixed it. A hierarchy of planner agents and worker agents let hundreds of agents work in parallel, and the field is building more of these tools every month: orchestrators, merge queues, review agents, written specifications. This is the strongest objection to the argument here - that coordination is a distributed-systems problem, and engineering is solving it.
+
+The answer is that the fixes are Brooks's own. A single planner that decides the shape of the work is his surgical team, in which one chief programmer makes the key decisions and the others support that person. One design authority that keeps the parts consistent is his conceptual integrity, the idea that a design must come from one mind, or from a very small number of agreeing minds. These fixes work, and they solve coordination among the agents. What they cannot reach is the coordination among the people who decide what the agents are for - the goal, the trade-offs, the definition of done. That kind of coordination does not get easier with more agents, and the rest of this piece is about it.
+
+The third part is training, and this is where agents differ most. Brooks wrote:
+
+> Each worker must be trained in the technology, the goals of the effort, the overall strategy, and the plan of work.
+
+Human ramp-up largely disappears: an agent can take in a codebase far faster than a new hire. But the second half of Brooks's sentence does not disappear. The goals, the strategy and the plan still have to be transmitted, and with agents they become context and specification that someone must write and keep consistent. The recurring cost is keeping that written intent current as goals change. Requirements engineers see the same effect from their side: AI [magnifies the quality of the documentation it is given](https://www.clarityisrare.com/blog/documentation-quality-bottleneck/), good or bad. [Written conventions](/blog/the-renaissance-of-written-coding-conventions/) and agent skills are this training in written form, and they matter for the same reason [conventions matter in large, distributed teams](/blog/the-power-of-coding-conventions-in-large-distributed-teams/).
+
+Agents have no careers or egos, so their failures have partly different causes, even where they take the same shapes as human ones: [a study of failures in multi-agent systems](https://arxiv.org/abs/2503.13657) sorted them into poor specification, misalignment between agents, and missing verification. The coordination problem also does not shrink when the human team does. A small team directing hundreds of agents still meets it: in how the agents are organised, in the customers and other teams it works with, and in the limits of its own attention. One engineer at OpenAI, whose team [grew from three to seven engineers](https://openai.com/index/harness-engineering/) while shipping about a million lines of agent-written code, [described the team's synchronous attention](https://www.latent.space/p/harness-eng) as the only fundamentally scarce resource.
+
+## What is new: speed outruns self-correction
+
+Every working software organisation already corrects its own mistakes, through code review, testing, small releases, retrospectives and talking to users. Self-correction is the "verifying" from the thesis, seen at the scale of the organisation. Tom Johnson made this point well in [a review of Yuval Noah Harari's _Nexus_](https://idratherbewriting.com/blog/review-harari-nexus-scms-and-alien-intelligence): software methodology is already built on self-correction. That is right, and the real question is whether those mechanisms were built for the speed they now face.
+
+One of Harari's observations fits here directly:
+
+> as a network becomes more powerful, its self-correcting mechanisms become more vital.
+
+Our correction loops were calibrated to human pace. A reviewer could read most of what a team produced in a week. A product manager could watch a feature in use before the next one was built. Kief Morris observed in March 2026 that [agents can now generate code faster than humans can inspect it](https://martinfowler.com/articles/exploring-gen-ai/humans-and-agents.html), and others have pointed out that many of our engineering habits were [built around the assumption that code is expensive](https://simonwillison.net/guides/agentic-engineering-patterns/code-is-cheap/). When that assumption breaks, the habits do not adjust themselves.
+
+There is a fair counterpoint. Cheap code also makes experiments, tests and automated reviews cheaper, and teams running many agents already use review agents and verifiers to speed up correction. That helps, but it does not settle the question: someone still has to decide what counts as wrong, and that decision is the part that does not speed up.
+
+The same speed mismatch has another side. Problems that used to stay hidden for months now become visible artefacts within days. Weak coordination used to show up as a vague sense that the team was slow. Now it typically shows up as a queue: pull requests waiting for review, features delivered that nobody asked for, several agents solving the same problem in different ways.
+
+A flawed understanding of value used to be a matter of opinion in a planning meeting. Now it is something you can point at in the repository. AI makes these failures visible faster than our correction mechanisms can respond; it did not create them. The requirements-engineering blog Clarity Is Rare [puts it in one line](https://www.clarityisrare.com/blog/what-organizations-must-change/):
+
+> AI doesn't make uncertainty disappear. It makes its consequences arrive faster.
+
+## Output is not value
+
+The clearest statements come from the people who build the tools. In February 2026, [Dario Amodei](https://www.dwarkesh.com/p/dario-amodei-2), Anthropic's chief executive, was asked about his earlier prediction that AI would write 90% of the code. He called the share of lines a poor measure of what matters:
+
+> But that's actually a very weak criterion.
+
+His point was that the share of code written by AI says little about how much faster a company actually delivers. AI writing most of the code and a company needing far fewer engineers are, in his view, two very different claims, and the first does not imply the second. He estimated the overall speed-up from coding models at the time at perhaps 15–20%.
+
+Amodei himself expects the speed-up to keep growing, and models to do software engineering end to end within a year or two, which makes the narrower point stronger: even by the builders' own account, value depends on more than code. In February 2026 [Boris Cherny](https://simonwillison.net/2026/Feb/14/boris/), who leads Claude Code, described what engineers at Anthropic - a company still hiring engineers - now spend their time on when Claude writes their code:
+
+> Someone has to prompt the Claudes, talk to customers, coordinate with other teams, decide what to build next.
+
+[A study of the company's own engineers](https://www.anthropic.com/research/how-ai-is-transforming-work-at-anthropic), from December 2025, found that most of them could fully hand over only 0–20% of their work. The rest still needs a person in the loop.
+
+At the level of whole organisations the picture is mixed. [Faros AI](https://www.faros.ai/blog/ai-software-engineering) analysed telemetry from more than 10,000 developers in 2025 and [summarised the result](https://www.faros.ai/ai-productivity-paradox) this way:
+
+> Engineers are completing twice as many code changes, but company metrics remain flat.
+
+In its [2026 dataset](https://www.faros.ai/blog/key-takeaways-from-the-dora-report-2025), median time in pull-request review rose by 441%, compared with a 91% rise in the previous year's dataset. DORA's survey-based research is more encouraging: its [2025 report](https://cloud.google.com/blog/products/ai-machine-learning/announcing-the-2025-dora-report) found a positive relationship between AI adoption and both throughput and product performance, while the relationship with delivery stability stayed negative. A year earlier, DORA had [estimated](https://cloud.google.com/blog/products/devops-sre/announcing-the-2024-dora-report) that rising AI adoption came with a 1.5% drop in delivery throughput and a 7.2% drop in stability.
+
+Both sources are correlational, and they do not agree. Controlled [field studies](https://laweconcenter.org/resources/ai-productivity-and-labor-markets-a-review-of-the-empirical-evidence/) have also found real productivity gains at the level of individual tasks; those gains turn into delivery gains only if review, decisions and coordination can absorb them. What the organisation-level data shares is that more output does not reliably or evenly turn into more value. These studies measure AI adoption in general, not fleets of agents, so they cannot settle the agent question directly. But if broad AI adoption already amplifies weak coordination, it would be surprising if more agents did the opposite - and Brooks's mechanism suggests why.
+
+<BlogPostPicture
+    src={chimpanzeeSeatedAtTypewriter}
+    alt="A chimpanzee seated at a typewriter"
+/>
+
+_A chimpanzee at a typewriter, New York Zoological Society, around 1906. Public domain, via [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Chimpanzee_seated_at_typewriter.jpg)._
+
+There is an old image for output without aim: the infinite monkey theorem, in which monkeys at typewriters, given infinite time, will eventually type Shakespeare. The image is a deliberate stretch. Agent output is usually locally competent and often good, far from random. The problem is aim, not quality - or, as requirements engineers describe the same pattern, analysis that is [locally correct but globally wrong](https://www.clarityisrare.com/blog/failure-modes/). Output that is locally competent but not aimed at shared intent is, with respect to that intent, as good as random. That is why the finite version applies. [When researchers calculated the odds in 2024](https://phys.org/news/2024-10-monkey-unable-hamlet-lifetime-universe.html) for a finite universe, they found that random typing would almost certainly never produce the complete works of Shakespeare before the universe ends, even with every chimpanzee on Earth at a keyboard. Real projects have budgets, not infinite time, and my reading is that output not held to shared intent will not add up to a working product before the budget runs out.
+
+## What gets amplified: the organisation
+
+Deciding, verifying and coordinating live in the organisation, and [DORA's AI research](https://cloud.google.com/blog/products/ai-machine-learning/announcing-the-2025-dora-report) describes the effect plainly: AI amplifies what is already in a team rather than fixing it. Its [AI Capabilities Model](https://cloud.google.com/blog/products/ai-machine-learning/introducing-doras-inaugural-ai-capabilities-model) adds a warning that reads like a summary of this whole argument:
+
+> But, when users aren't the focus, AI-assisted development teams may just be moving quickly in the wrong direction.
+
+Melvin Conway made the structural point in 1968: organisations [produce designs that copy their own communication structures](https://www.melconway.com/Home/Committees_Paper.html). My [previous post](/blog/your-ai-platform-will-inherit-your-engineering-culture/) argued this for AI platforms. Agents work inside the organisation's communication structure, and they inherit its gaps. When goals are unclear, agents implement the unclear goals faster. When ownership is fragmented, agents produce fragmented systems faster. Amplification also works in the positive direction: Clarity Is Rare [observes](https://www.clarityisrare.com/blog/amplification/) that the value from AI concentrates in the teams that redesigned their workflows, not in the ones that only adopted the tools.
+
+[A large international survey of requirements engineering](https://arxiv.org/abs/1611.10288) found that hidden requirements and frequently changing goals were among the most common problems teams reported, and that they were linked to project failure. Incentives make the problem worse. Researchers who studied [Résumé-Driven Development](https://arxiv.org/abs/2101.12703) found that job adverts and CVs both overemphasise fashionable technologies, and described how the two can feed each other in a self-sustaining loop. However this is a story about structure rather than bad people: people do what the structure rewards, and when it rewards visible activity over value for customers, AI makes visible activity very cheap. The same structures that leave large teams [feeling powerless](/blog/learned-helplessness-in-software-teams/) or [divided by culture and hierarchy](/blog/navigating-cultural-clashes-in-global-software-teams/) will shape what a fleet of agents produces.
+
+## Change the structure, and the mindset follows
+
+We have seen this pattern before. Agile spread through the industry as a set of values and practices, and in many companies only the ceremonies arrived - stand-ups, sprints and boards - without the change in thinking behind them. Martin Fowler called the result [faux-agile](https://martinfowler.com/articles/agile-aus-2018.html): agile in name, without the practices or the values. AI adoption can follow the same path, with agents, dashboards and adoption targets standing in for the shift it needs: from measuring output to owning intent and value.
+
+[Craig Larman](https://www.craiglarman.com/wiki/index.php?title=Larman%27s_Laws_of_Organizational_Behavior)'s observation explains why the shift is hard to achieve by persuasion alone:
+
+> (in large established orgs) Culture follows structure.
+
+Structure and incentives come first, because the rest follows from them. That points to three concrete changes.
+
+The first is to judge AI work by value rather than output - by changes in what customers do, not by lines, pull requests or agent hours. This matters more than it may seem: Microsoft's experimentation team reported that [only about a third of tested ideas improved the metric they were designed to improve](https://www.exp-platform.com/Documents/2015%20Online%20Controlled%20Experiments_EncyclopediaOfMLDM.pdf). Cheap output with good validation finds more of the winners; without validation, it mostly multiplies the other two thirds.
+
+The second is to invest in shared, written intent before scaling the number of agents: what we are building, for whom, and what good looks like - with [named owners for that documentation and a validation step](https://www.clarityisrare.com/blog/what-organizations-must-change/) before AI output drives decisions.
+
+The third is to match review and validation capacity to the new speed of production, rather than letting the queue grow.
+
+None of this rejects technical work. Tests, verifiers and version control are part of the correction mechanisms, and they matter more now, not less. The claim is not that AI in software development has no technical side; it is that the technical part became cheap, and the expensive part is everything that turns code into value.
+
+## The man-month, revisited
+
+Brooks' central point was never really about headcount. It was that effort and progress - his word for what this piece has called value - are different things, and that the man-month, as a unit, confuses them. Cost scales with people multiplied by months. Progress does not.
+
+The cheap agent-hour makes the same confusion easier: we can now buy effort almost without limit. What we cannot buy is the shared intent that turns effort into progress: knowing what to build, agreeing why, and noticing quickly when we were wrong - deciding, coordinating and verifying. Those were always the scarce part of software development, and AI has made them much harder to hide. So the next time a late project meets the offer of a hundred more agents, the better question is not how many to start, but whether we know what we want them to build.
+
+## Used resources
+
+- [The Mythical Man-Month (essay text) - Frederick P. Brooks, Jr.](https://phoenix.goucher.edu/~kelliher/f2010/cs245/theMythicalManMonth.pdf)
+- [RISE: The Mythical Man-Month (Frederick P. Brooks, Jr., 1975/1995) - Bruce F. Webster](http://bfwa.com/2012/06/04/rise-the-mythical-man-month-frederick-p-brooks-jr-19751995/)
+- [Kimi K2.5 - Moonshot AI](https://www.kimi.ai/blog/kimi-k2-5)
+- [Towards a science of scaling agent systems: When and why agent systems work - Google Research](https://research.google/blog/towards-a-science-of-scaling-agent-systems-when-and-why-agent-systems-work/)
+- [Towards a Science of Scaling Agent Systems - Kim et al.](https://arxiv.org/abs/2512.08296)
+- [Scaling long-running autonomous coding - Cursor](https://cursor.com/blog/scaling-agents)
+- [Wilson Lin on FastRender: a browser built by thousands of parallel agents - Simon Willison](https://simonwillison.net/2026/Jan/23/fastrender/)
+- [Building a C compiler with a team of parallel Claudes - Anthropic](https://www.anthropic.com/engineering/building-c-compiler)
+- [Gas Town - GitHub](https://github.com/gastownhall/gastown)
+- [The Shape of Things to Come, Part 1: The Continuous Thunderdome - Steve Yegge](https://yegge.ai/essays/the-shape-of-things-to-come/)
+- [The head of Claude Code hasn't 'written a line of code by hand' in 8 months - Fortune](https://fortune.com/2026/06/11/anthropic-claude-boris-cherny-doesnt-write-code-by-hand-anymore/)
+- [Anthropic raises $30B Series G - Anthropic](https://www.anthropic.com/news/anthropic-raises-30-billion-series-g-funding-380-billion-post-money-valuation)
+- [Lovable's annualized revenue crosses $600M - TechCrunch](https://techcrunch.com/2026/09/24/lovables-annualized-revenue-crosses-600m-as-vibe-coding-takes-off/)
+- [Agentic AI and The Mythical Agent-Month - Murat Demirbas](http://muratbuffalo.blogspot.com/2026/01/agentic-ai-and-mythical-agent-month.html)
+- [The Mythical Agent-Month - Wes McKinney, O'Reilly Radar](https://www.oreilly.com/radar/the-mythical-agent-month/)
+- [Why Do Multi-Agent LLM Systems Fail? - Cemri et al.](https://arxiv.org/abs/2503.13657)
+- [Harness engineering: leveraging Codex in an agent-first world - Ryan Lopopolo, OpenAI](https://openai.com/index/harness-engineering/)
+- [Extreme Harness Engineering - Latent Space](https://www.latent.space/p/harness-eng)
+- [Review of Yuval Noah Harari's "Nexus" - Tom Johnson](https://idratherbewriting.com/blog/review-harari-nexus-scms-and-alien-intelligence)
+- [Humans and Agents in Software Engineering Loops - Kief Morris](https://martinfowler.com/articles/exploring-gen-ai/humans-and-agents.html)
+- [Writing code is cheap now - Simon Willison](https://simonwillison.net/guides/agentic-engineering-patterns/code-is-cheap/)
+- [Dario Amodei - "We are near the end of the exponential" - Dwarkesh Podcast](https://www.dwarkesh.com/p/dario-amodei-2)
+- [A quote from Boris Cherny - Simon Willison](https://simonwillison.net/2026/Feb/14/boris/)
+- [How AI is transforming work at Anthropic - Anthropic](https://www.anthropic.com/research/how-ai-is-transforming-work-at-anthropic)
+- [AI coding assistants increase developer output, but not company productivity - Faros AI](https://www.faros.ai/blog/ai-software-engineering)
+- [AI Productivity Paradox - Faros AI](https://www.faros.ai/ai-productivity-paradox)
+- [Key Takeaways from the DORA Report 2025 - Faros AI](https://www.faros.ai/blog/key-takeaways-from-the-dora-report-2025)
+- [Highlights from the 10th DORA report - Google Cloud](https://cloud.google.com/blog/products/devops-sre/announcing-the-2024-dora-report)
+- [Announcing the 2025 DORA Report - Google Cloud](https://cloud.google.com/blog/products/ai-machine-learning/announcing-the-2025-dora-report)
+- [Introducing DORA's inaugural AI Capabilities Model - Google Cloud](https://cloud.google.com/blog/products/ai-machine-learning/introducing-doras-inaugural-ai-capabilities-model)
+- [AI, Productivity, and Labor Markets: A Review of the Empirical Evidence - ICLE](https://laweconcenter.org/resources/ai-productivity-and-labor-markets-a-review-of-the-empirical-evidence/)
+- [Infinite monkey theorem - Wikipedia](https://en.wikipedia.org/wiki/Infinite_monkey_theorem)
+- [Typing monkey would be unable to produce 'Hamlet' within the lifetime of the universe - Phys.org](https://phys.org/news/2024-10-monkey-unable-hamlet-lifetime-universe.html)
+- [How Do Committees Invent? - Melvin E. Conway](https://www.melconway.com/Home/Committees_Paper.html)
+- [NaPiRE: Naming the Pain in Requirements Engineering - Méndez Fernández et al.](https://arxiv.org/abs/1611.10288)
+- [Résumé-Driven Development: A Definition and Empirical Characterization - Fritzsch et al.](https://arxiv.org/abs/2101.12703)
+- [The State of Agile Software in 2018 - Martin Fowler](https://martinfowler.com/articles/agile-aus-2018.html)
+- [Larman's Laws of Organizational Behavior - Craig Larman](https://www.craiglarman.com/wiki/index.php?title=Larman%27s_Laws_of_Organizational_Behavior)
+- [Online Controlled Experiments and A/B Testing - Kohavi & Longbotham](https://www.exp-platform.com/Documents/2015%20Online%20Controlled%20Experiments_EncyclopediaOfMLDM.pdf)
+- [Why documentation quality is the real bottleneck in AI-assisted requirements engineering - Clarity Is Rare](https://www.clarityisrare.com/blog/documentation-quality-bottleneck/)
+- [Failure Modes - Clarity Is Rare](https://www.clarityisrare.com/blog/failure-modes/)
+- [Amplification - Clarity Is Rare](https://www.clarityisrare.com/blog/amplification/)
+- [AI Does Not Fix Bad Requirements. It Scales Them. - What Organizations Must Change - Clarity Is Rare](https://www.clarityisrare.com/blog/what-organizations-must-change/)
