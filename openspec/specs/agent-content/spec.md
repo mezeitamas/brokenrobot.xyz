@@ -30,14 +30,11 @@ property of the serving layer rather than of the built artifact, and is out of s
 - **WHEN** a client requests the Markdown URL directly, sending no `Accept` header preference
 - **THEN** the Markdown representation is returned
 
-### Requirement: Markdown representations are faithful to the authored article
+### Requirement: Markdown representations contain only the authored prose
 
 The Markdown representation SHALL be derived from the authored article source rather than from
 rendered HTML, and SHALL contain the article's prose only — no site chrome such as header,
-navigation, footer, or theme controls. Code samples SHALL be reproduced exactly as authored,
-including any markup that appears inside them. Images that appear in the article SHALL be
-represented as standard Markdown images whose targets are absolute URLs resolvable outside the site,
-and SHALL retain their alternative text. No authoring-tool syntax — component markup or module
+navigation, footer, or theme controls. No authoring-tool syntax — component markup or module
 imports — SHALL remain in the output.
 
 #### Scenario: No site chrome
@@ -45,6 +42,18 @@ imports — SHALL remain in the output.
 - **WHEN** an agent reads a post's Markdown representation
 - **THEN** it contains the article's prose and no header, navigation, footer, or theme-control
   content
+
+#### Scenario: No authoring syntax leaks
+
+- **WHEN** an agent reads any post's Markdown representation
+- **THEN** it contains no component markup and no module import statements
+
+### Requirement: Markdown representations keep code samples and images intact
+
+In the Markdown representation, code samples SHALL be reproduced exactly as authored, including
+any markup that appears inside them. Images that appear in the article SHALL be represented as
+standard Markdown images whose targets are absolute URLs resolvable outside the site, and SHALL
+retain their alternative text.
 
 #### Scenario: Code samples are untouched
 
@@ -57,11 +66,6 @@ imports — SHALL remain in the output.
 - **WHEN** an article embeds an image
 - **THEN** the Markdown representation renders it as a Markdown image with its alternative text and
   an absolute URL that resolves to the published image
-
-#### Scenario: No authoring syntax leaks
-
-- **WHEN** an agent reads any post's Markdown representation
-- **THEN** it contains no component markup and no module import statements
 
 ### Requirement: Markdown representations carry metadata and licensing terms
 
@@ -88,16 +92,11 @@ so that the terms travel with the content when it is consumed detached from the 
 - **THEN** the copyright and attribution terms are stated within that file, consistent with the terms
   published in the site's `llms.txt`
 
-### Requirement: Agents can discover the Markdown representation
+### Requirement: Agents can discover the Markdown representation from the post's page
 
-An agent SHALL be able to find a post's Markdown representation from two independent starting
-points: the post's own HTML page, which SHALL advertise the Markdown URL as an alternate
-representation of itself and SHALL point to the site's machine-readable index; and that index
-itself, which SHALL link each post by its Markdown representation rather than by the page a human
-reads. Discovery SHALL NOT require the agent to guess a URL pattern.
-
-Entries in the index for pages that have no Markdown representation SHALL continue to link those
-pages themselves.
+A post's own HTML page SHALL advertise the post's Markdown URL as an alternate representation of
+itself, and SHALL point to the site's machine-readable index. Discovery from the page SHALL NOT
+require the agent to guess a URL pattern.
 
 #### Scenario: Discoverable from the HTML page
 
@@ -110,6 +109,13 @@ pages themselves.
 - **WHEN** an agent fetches a post's HTML page
 - **THEN** the page also points to the site's `llms.txt`, so an agent arriving at any single post
   can reach the index describing the rest
+
+### Requirement: Agents can discover the Markdown representation from the index
+
+The site's machine-readable index SHALL link each post by its Markdown representation rather than
+by the page a human reads. Entries in the index for pages that have no Markdown representation
+SHALL continue to link those pages themselves. Discovery from the index SHALL NOT require the
+agent to guess a URL pattern.
 
 #### Scenario: Discoverable from the index
 

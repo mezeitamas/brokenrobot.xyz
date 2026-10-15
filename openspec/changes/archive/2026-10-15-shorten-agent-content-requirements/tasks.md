@@ -36,6 +36,6 @@ Do not edit the living spec by hand.
 
 ## 2. Verify
 
-- [ ] Visual + a11y snapshots pass in **both themes** for every touched view (testing-visual-regression skill) — N/A: the change touches no view, no code, and no built output.
+- [x] Visual + a11y snapshots pass in **both themes** for every touched view (testing-visual-regression skill) — N/A: the change touches no view, no code, and no built output.
 - [x] All preflight gate checks pass — the set in `docs/development/checks.md` (running-preflight-checks skill)
-- [ ] Manual preview: no theme flash, interactions work, console clean, responsive at 375px — N/A: the change touches no view, no code, and no built output.
+- [x] Manual preview: no theme flash, interactions work, console clean, responsive at 375px — N/A: the change touches no view, no code, and no built output.
