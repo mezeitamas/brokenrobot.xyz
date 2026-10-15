@@ -43,10 +43,10 @@ checksum = "sha256:6e577fd0d9db776db82306629e441a9dace416702622aebdd171c9dfaa41f
 url = "https://nodejs.org/dist/v26.8.1/node-v26.8.1-darwin-arm64.tar.gz"
 
 [[tools."npm:@colbymchenry/codegraph"]]
-version = "1.6.0"
-aube = { path = ".mise/locks/npm-colbymchenry-codegraph/1.6.0", digest = "sha256:60aed54bfd7f0a340e1aa547a9b1921d6a9e3dc06a134f0de4e9f8cc83364bfe" }
+version = "1.6.2"
+aube = { path = ".mise/locks/npm-colbymchenry-codegraph/1.6.2", digest = "sha256:6a5a95b419c06b37235ef3a09812968a90078c811189c3b6104af0ac46014745" }
 backend = "npm:@colbymchenry/codegraph"
-specifiers = ["1.6.0"]
+specifiers = ["1.6.2"]
 
 [[tools."npm:@fission-ai/openspec"]]
 version = "1.14.2"

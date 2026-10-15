@@ -2,6 +2,6 @@
   "name": "mise-npm-install",
   "private": true,
   "dependencies": {
-    "@colbymchenry/codegraph": "1.6.0"
+    "@colbymchenry/codegraph": "1.6.2"
   }
 }
