@@ -5,8 +5,8 @@
             "url": "https://mcp.docs.astro.build/mcp"
         },
         "codegraph": {
-            "command": "npx",
-            "args": ["-y", "@colbymchenry/codegraph@1.6.0", "serve", "--mcp"]
+            "command": "codegraph",
+            "args": ["serve", "--mcp"]
         },
         "terraform": {
             "command": "docker",

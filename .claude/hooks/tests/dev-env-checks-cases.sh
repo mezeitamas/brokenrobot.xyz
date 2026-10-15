@@ -14,8 +14,6 @@ set -uo pipefail
 hook_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 LIB="${hook_dir}/lib/dev-env-checks.sh"
 
-CG_PIN="$(grep -m1 '^CODEGRAPH_VERSION=' "${LIB}" | cut -d'"' -f2)"
-
 root="$(mktemp -d)"
 trap 'rm -rf "${root}"' EXIT
 
@@ -26,7 +24,7 @@ export MARKER="${root}/calls"
 mkdir -p "${shim}" "${base}" "${proj}"
 
 # The PATH is fully controlled — real tools the probes rely on are linked into base, everything
-# else exists only as a stub in shim — so what the host happens to have installed (fnm, docker, a
+# else exists only as a stub in shim — so what the host happens to have installed (mise, docker, a
 # global language server) can never decide a case.
 for tool in bash git jq cat awk cut grep sort node; do
     ln -s "$(command -v "${tool}")" "${base}/${tool}"
@@ -42,12 +40,9 @@ case "$1" in
 esac
 STUB
 
-# Stub npx: stands in for codegraph as in the session-start suite; only `status --json` should
-# ever be reached from executed mode.
-cat >"${shim}/npx" <<'STUB'
+# Stub codegraph: only `status --json` should ever be reached from executed mode.
+cat >"${shim}/codegraph" <<'STUB'
 #!/usr/bin/env bash
-[ "${1:-}" = "-y" ] && shift
-shift # the pinned package spec
 echo "codegraph $*" >>"${MARKER}"
 case "$1" in
   status)
@@ -68,17 +63,27 @@ exit "${DOCKER_INFO_EXIT:-0}"
 STUB
 
 printf '#!/usr/bin/env bash\nexit 0\n' >"${shim}/typescript-language-server"
-printf '#!/usr/bin/env bash\nexit 0\n' >"${shim}/fnm"
 
-# Stub openspec: answers --version with the fixture pin below — an arbitrary value, since the
-# probe compares it against the fixture package.json, not the repo's — and `config get profile`
-# with OPENSPEC_PROFILE, defaulting to the core profile the committed integration expects.
-OS_PIN="9.1.0"
+# Stub mise: `ls` prints MISE_MISSING (the not-installed pins, empty when all are installed) and
+# exits MISE_LS_EXIT, which fakes a config mise cannot read. Anything but `ls` and `--version` is
+# recorded as a mutation tripwire — executed mode must never install.
+cat >"${shim}/mise" <<'STUB'
+#!/usr/bin/env bash
+case "$1" in
+  --version) echo "2026.10.9 linux-x64 (2026-10-09)" ;;
+  ls) [ -z "${MISE_MISSING:-}" ] || printf '%s\n' "${MISE_MISSING}"; exit "${MISE_LS_EXIT:-0}" ;;
+  *) echo "mise $*" >>"${MARKER}" ;;
+esac
+STUB
+
+# Stub openspec: answers --version with an arbitrary version, and `config get profile` with
+# OPENSPEC_PROFILE, defaulting to the core profile the committed integration expects.
+OS_VER="9.1.0"
 openspec_stub() {
     cat >"${shim}/openspec" <<STUB
 #!/usr/bin/env bash
 case "\$1" in
-  --version) echo "${OS_PIN}" ;;
+  --version) echo "${OS_VER}" ;;
   config) [ "\$2 \$3" = "get profile" ] && echo "\${OPENSPEC_PROFILE:-core}" ;;
 esac
 STUB
@@ -88,12 +93,7 @@ openspec_stub
 chmod +x "${shim}"/*
 
 # A checkout every probe calls healthy; the cases below break one thing at a time and restore it.
-node_ver="$(node --version)"
-node_ver="${node_ver#v}"
-printf '%s\n' "${node_ver}" >"${proj}/.node-version"
-printf '{"mcpServers":{"codegraph":{"command":"npx","args":["-y","@colbymchenry/codegraph@%s"]}}}\n' "${CG_PIN}" >"${proj}/.mcp.json"
-printf '{"scripts":{"codegraph:status":"npx -y @colbymchenry/codegraph@%s status"},"devDependencies":{"@fission-ai/openspec":"%s"}}\n' \
-    "${CG_PIN}" "${OS_PIN}" >"${proj}/package.json"
+printf '{"mcpServers":{"codegraph":{"command":"codegraph","args":["serve","--mcp"]}}}\n' >"${proj}/.mcp.json"
 printf '{"v":1}\n' >"${proj}/package-lock.json"
 mkdir -p "${proj}/.codegraph" "${proj}/node_modules/.bin" "${proj}/.claude"
 git hash-object "${proj}/package-lock.json" >"${proj}/node_modules/.session-start-stamp"
@@ -141,10 +141,9 @@ lacks() {
     fi
 }
 
-# NVM_DIR points into the void so a real ~/.nvm on the host cannot satisfy the manager probe.
 run() {
     : >"${MARKER}"
-    PATH="${shim}:${base}" NVM_DIR="${root}/absent" CLAUDE_PROJECT_DIR="${proj}" bash "${LIB}" 2>/dev/null
+    PATH="${shim}:${base}" CLAUDE_PROJECT_DIR="${proj}" bash "${LIB}" 2>/dev/null
 }
 calls() { cat "${MARKER}"; }
 
@@ -154,10 +153,11 @@ out="$(run)"
 rc=$?
 check "a healthy checkout exits 0" "0" "${rc}"
 contains "and reports the toolchain" "✓ tools:" "${out}"
-contains "crediting the openspec profile" "openspec ${OS_PIN} (profile core)" "${out}"
+contains "crediting mise with every pin installed" "mise 2026.10.9 (all pins installed)" "${out}"
+contains "crediting the openspec profile" "openspec ${OS_VER} (profile core)" "${out}"
 contains "and fresh dependencies" "✓ dependencies: fresh" "${out}"
 contains "and a readable index" "✓ codegraph: index present and readable" "${out}"
-contains "and the claude code integration" "✓ claude code: typescript-lsp plugin enabled, codegraph MCP enabled, node manager fnm" "${out}"
+contains "and the claude code integration" "✓ claude code: typescript-lsp plugin enabled, codegraph MCP enabled" "${out}"
 contains "and the containers" "✓ containers: docker daemon running, devcontainer CLI present" "${out}"
 lacks "with no problem lines" "✗" "${out}"
 check "a full audit records nothing mutating — only the status probe" "codegraph status --json" "$(calls)"
@@ -178,18 +178,18 @@ rm "${shim}/openspec"
 out="$(run)"
 rc=$?
 check "a missing openspec cli exits 1" "1" "${rc}"
-contains "and is reported with the pinned install" "✗ openspec missing" "${out}"
-contains "naming the fixture pin" "@fission-ai/openspec@${OS_PIN}" "${out}"
+contains "and is reported" "✗ openspec missing" "${out}"
+contains "naming mise as the fix" "mise install" "${out}"
 openspec_stub
 
 # The profile is read from the machine-global config, so it can be wrong on a machine whose CLI
-# matches the pin exactly.
+# is installed correctly.
 out="$(OPENSPEC_PROFILE=custom run)"
 rc=$?
 check "a non-core openspec profile exits 1" "1" "${rc}"
 contains "and is reported" "✗ openspec profile is custom" "${out}"
 contains "naming the fix" "openspec config profile core" "${out}"
-contains "while the matching CLI is still credited" "openspec ${OS_PIN}" "${out}"
+contains "while the CLI is still credited" "openspec ${OS_VER}" "${out}"
 lacks "but not as core" "(profile core)" "${out}"
 
 printf '{"v":2}\n' >"${proj}/package-lock.json"
@@ -222,11 +222,24 @@ out="$(run)"
 contains "an enabled list without codegraph is the same problem" "✗ codegraph MCP not enabled" "${out}"
 settings
 
-rm "${shim}/fnm"
+# --- mise: the version check is mise's own answer; the presence checks still run without it ---
+
+out="$(MISE_MISSING='node  26.8.1 (missing)  mise.toml  26.8.1' run)"
+rc=$?
+check "a pin mise has not installed exits 1" "1" "${rc}"
+contains "and is reported with mise as the fix" "✗ node 26.8.1 not installed — mise.toml pins it; mise install" "${out}"
+check "and the audit installs nothing" "codegraph status --json" "$(calls)"
+
+out="$(MISE_LS_EXIT=1 run)"
+contains "a config mise cannot read is reported" "✗ mise cannot read mise.toml" "${out}"
+
+mv "${shim}/mise" "${root}/mise.off"
 out="$(run)"
-contains "no manager on PATH and no nvm dir is reported" "✗ no node version manager detected" "${out}"
-printf '#!/usr/bin/env bash\nexit 0\n' >"${shim}/fnm"
-chmod +x "${shim}/fnm"
+rc=$?
+check "a missing mise exits 1" "1" "${rc}"
+contains "and is reported" "✗ mise missing" "${out}"
+contains "while the other tools are still checked" "typescript-language-server" "${out}"
+mv "${root}/mise.off" "${shim}/mise"
 
 # --- containers: consequences scoped to the e2e suite, never to host development ---
 

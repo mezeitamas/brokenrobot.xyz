@@ -1,0 +1,8 @@
+# The only place tool versions are pinned. `mise install` sets up the machine.
+[tools]
+node = "26.8.1"
+jq = "1.8.2"
+terraform = "1.16.0"
+"npm:@fission-ai/openspec" = "1.13.2"
+"npm:@colbymchenry/codegraph" = "1.6.0"
+"npm:typescript-language-server" = "6.0.1"

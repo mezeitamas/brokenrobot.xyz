@@ -115,8 +115,8 @@ build_index() { # $1 = codegraph subcommand, $2 = what it is doing, as a phrase
     fi
 }
 
-if [ "${have_node}" != true ]; then
-    add "✗ codegraph: skipped (node missing) — no index was built or synced."
+if [ "${have_codegraph}" != true ]; then
+    add "✗ codegraph: skipped (codegraph missing) — no index was built or synced."
 elif [ "${have_jq}" != true ]; then
     # Without jq the probe's JSON cannot be read; a blind incremental sync is the safe move — it
     # fails loudly when there is no usable index, instead of rebuilding every session on a hunch.

@@ -13,10 +13,6 @@ set -uo pipefail
 hook_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 HOOK="${hook_dir}/session-start.sh"
 
-# The pin the sanity check compares .mcp.json and package.json against. Read from the source rather
-# than hardcoded, so a version bump does not silently turn every healthy case into a drift report.
-CG_PIN="$(grep -h -m1 '^CODEGRAPH_VERSION=' "${hook_dir}/lib/dev-env-checks.sh" "${HOOK}" 2>/dev/null | head -n1 | cut -d'"' -f2)"
-
 root="$(mktemp -d)"
 trap 'rm -rf "${root}"' EXIT
 
@@ -28,8 +24,8 @@ mkdir -p "${shim}" "${proj}"
 # Stub npm: `--version` is answered first and silently — the sanity check probes it on every run,
 # and a version probe is not behavior under test, so it neither records to MARKER nor touches the
 # tree. `install` records the call, then either fails (NPM_INSTALL_EXIT) or lays down a
-# node_modules tree. The tree is otherwise empty: codegraph no longer lives there, it is fetched by
-# npx. Anything else recorded is a tripwire for npm usage the suite does not expect.
+# node_modules tree. The tree is otherwise empty: codegraph does not live there, mise installs it.
+# Anything else recorded is a tripwire for npm usage the suite does not expect.
 cat >"${shim}/npm" <<'STUB'
 #!/usr/bin/env bash
 case "$1" in
@@ -49,19 +45,15 @@ esac
 STUB
 chmod +x "${shim}/npm"
 
-# Stub npx: the hook reaches codegraph as `npx -y <pkg>@<version> <subcommand>`, so this drops those
-# two leading arguments and then stands in for codegraph itself — recording under the bare name the
-# assertions below expect. It reproduces the real `status --json` contract, which is what the hook
-# probes for index health: exit 1 when the database cannot be read (CG_BROKEN), initialized:false
-# when no .codegraph exists, and reindexRecommended when the index predates the installed codegraph
+# Stub codegraph: it reproduces the real `status --json` contract, which is what the hook probes for
+# index health: exit 1 when the database cannot be read (CG_BROKEN), initialized:false when no
+# .codegraph exists, and reindexRecommended when the index predates the installed codegraph
 # (CG_REINDEX). CG_EXIT fails the build and sync subcommands, not the probe.
 #
 # Being on PATH rather than inside node_modules is the point: it is reachable whether or not this
-# checkout has been installed, exactly as the real npx is.
-cat >"${shim}/npx" <<'STUB'
+# checkout has been installed, exactly as the mise-installed codegraph is.
+cat >"${shim}/codegraph" <<'STUB'
 #!/usr/bin/env bash
-[ "${1:-}" = "-y" ] && shift
-shift # the pinned package spec
 echo "codegraph $*" >>"${MARKER}"
 case "$1" in
   status)
@@ -80,40 +72,40 @@ case "$1" in
 esac
 exit "${CG_EXIT:-0}"
 STUB
-chmod +x "${shim}/npx"
+chmod +x "${shim}/codegraph"
+
+# Stub mise: `ls` prints MISE_MISSING, the not-installed pins (empty when all are installed), so the
+# host's real mise and its installs can never decide a case.
+cat >"${shim}/mise" <<'STUB'
+#!/usr/bin/env bash
+case "$1" in
+  --version) echo "2026.10.9 linux-x64 (2026-10-09)" ;;
+  ls) [ -z "${MISE_MISSING:-}" ] || printf '%s\n' "${MISE_MISSING}" ;;
+  *) echo "mise $*" >>"${MARKER}" ;;
+esac
+STUB
+chmod +x "${shim}/mise"
 
 # Stub typescript-language-server: the sanity check only asks whether it is on PATH; whether the
 # host happens to have a real one must not decide a case.
 printf '#!/usr/bin/env bash\nexit 0\n' >"${shim}/typescript-language-server"
 chmod +x "${shim}/typescript-language-server"
 
-# Stub openspec: the sanity check compares its --version against the fixture package.json pin (an
-# arbitrary value — the probe never reads the repo's) and reads `config get profile`.
-# OPENSPEC_VERSION fakes a drifted global install, OPENSPEC_PROFILE a machine on another profile.
-# The missing case lives in the dev-env-checks suite, whose PATH is fully controlled; here the shim
-# only prefixes the host PATH, so removing the stub would not be host-independent.
-OS_PIN="9.1.0"
-cat >"${shim}/openspec" <<STUB
+# Stub openspec: answers --version and reads `config get profile`; OPENSPEC_PROFILE fakes a machine
+# on another profile. The missing case lives in the dev-env-checks suite, whose PATH is fully
+# controlled; here the shim only prefixes the host PATH, so removing the stub would not be
+# host-independent.
+cat >"${shim}/openspec" <<'STUB'
 #!/usr/bin/env bash
-case "\$1" in
-  --version) echo "\${OPENSPEC_VERSION:-${OS_PIN}}" ;;
-  config) [ "\$2 \$3" = "get profile" ] && echo "\${OPENSPEC_PROFILE:-core}" ;;
+case "$1" in
+  --version) echo "9.1.0" ;;
+  config) [ "$2 $3" = "get profile" ] && echo "${OPENSPEC_PROFILE:-core}" ;;
 esac
 STUB
 chmod +x "${shim}/openspec"
 
 export PATH="${shim}:${PATH}"
 export CLAUDE_PROJECT_DIR="${proj}"
-
-# A checkout the sanity check calls healthy: the host's node version pinned, and both committed
-# codegraph pins matching the hook's own. The problem cases below break these one at a time.
-node_ver="$(node --version)"
-node_ver="${node_ver#v}"
-printf '%s\n' "${node_ver}" >"${proj}/.node-version"
-mcp_json() { printf '{"mcpServers":{"codegraph":{"command":"npx","args":["-y","@colbymchenry/codegraph@%s"]}}}\n' "$1" >"${proj}/.mcp.json"; }
-mcp_json "${CG_PIN}"
-printf '{"scripts":{"codegraph:init":"npx -y @colbymchenry/codegraph@%s init","codegraph:status":"npx -y @colbymchenry/codegraph@%s status"},"devDependencies":{"@fission-ai/openspec":"%s"}}\n' \
-    "${CG_PIN}" "${CG_PIN}" "${OS_PIN}" >"${proj}/package.json"
 
 pass=0
 fail=0
@@ -208,7 +200,7 @@ out="$(NPM_INSTALL_EXIT=1 run)"
 check "a failed install still emits valid JSON" "yes" "$(is_json "${out}")"
 contains "a failed install is reported" "npm install failed" "${out}"
 contains "a failed install reaches Claude" "npm install failed" "$(printf '%s' "${out}" | jq -r '.hookSpecificOutput.additionalContext')"
-check "a failed install does not block the index — codegraph comes from npx, not node_modules" "npm install
+check "a failed install does not block the index — codegraph comes from mise, not node_modules" "npm install
 codegraph status --json
 codegraph sync -q" "$(calls)"
 check "a failed install leaves the previous stamp in place" "$(git hash-object <(printf '{"v":3}\n'))" "$(stamp)"
@@ -255,27 +247,17 @@ contains "and is reported alongside the install that preceded it" "dependencies:
 
 # --- the sanity check: each problem it can see lands in the report ---
 
-printf '0.0.1\n' >"${proj}/.node-version"
-out="$(run)"
-contains "a node/.node-version mismatch is reported" "but .node-version pins 0.0.1" "${out}"
-printf '%s\n' "${node_ver}" >"${proj}/.node-version"
-
-mcp_json "9.9.9"
-out="$(run)"
-contains "a drifted codegraph pin is reported" "codegraph pins drifted" "${out}"
+out="$(MISE_MISSING='node  0.0.1 (missing)  mise.toml  0.0.1' run)"
+contains "a pin mise has not installed is reported" "✗ node 0.0.1 not installed — mise.toml pins it; mise install" "${out}"
 contains "and problems point at the checking-dev-env skill" "(run the checking-dev-env skill for a fix guide)" "${out}"
-mcp_json "${CG_PIN}"
-
-out="$(OPENSPEC_VERSION=0.0.1 run)"
-contains "a drifted global openspec is reported against the package.json pin" \
-    "openspec is 0.0.1 but package.json pins ${OS_PIN}" "${out}"
 
 out="$(OPENSPEC_PROFILE=custom run)"
 contains "a non-core openspec profile is reported" "openspec profile is custom" "${out}"
 
 # --- environment guards ---
 
-# A PATH holding only what the hook needs to report a failure — deliberately no node and no npm.
+# A PATH holding only what the hook needs to report a failure — deliberately no node, no npm, and
+# no codegraph.
 nonode="${root}/nonode"
 mkdir -p "${nonode}"
 for tool in bash git jq cat awk cut grep sort; do ln -s "$(command -v "${tool}")" "${nonode}/${tool}"; done
