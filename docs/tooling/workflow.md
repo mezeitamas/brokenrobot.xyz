@@ -259,23 +259,20 @@ Unlike the other servers, `github` needs a credential. Keep it read-only and out
   this repo, with an **expiry**, and **read-only** permissions: Metadata (required), Contents, Pull
   requests, Issues, Actions, Commit statuses. Nothing more — the server runs read-only and write actions
   are out of scope.
-- **Where it lives.** Put it in `.claude/settings.local.json` (gitignored), whose `env` block Claude Code
-  injects into the session. The variable carries a `BROKEN_ROBOT_XYZ_` prefix so per-project tokens can
-  coexist (e.g. in the machine-global `~/.claude/settings.json`); `.mcp.json` maps it onto the
-  `GITHUB_PERSONAL_ACCESS_TOKEN` name the server's Docker container expects:
+- **Where it lives.** Put it in `.env.github-mcp` at the repository root (gitignored), one line in
+  Docker's env-file format:
 
-    ```json
-    { "env": { "BROKEN_ROBOT_XYZ_GITHUB_PERSONAL_ACCESS_TOKEN": "github_pat_…" } }
+    ```
+    GITHUB_PERSONAL_ACCESS_TOKEN=github_pat_…
     ```
 
-    Use this file — **not** `.zshrc` (a Dock/Finder launch of the desktop app doesn't source it) and **not**
-    the committed `.claude/settings.json` (that would commit the secret). `.claude/settings.local.json` is
-    ignored by the repo `.gitignore`. **Restart Claude Code** after adding or changing the token so the
-    server reconnects.
+    `.mcp.json` passes that file to the server's container with `--env-file`, so the token never enters
+    the Claude Code session environment, and the sandbox denies the agent both reading and editing it
+    (see [sandbox.md](sandbox.md)). Use this file — **not** `.zshrc` and **not** a committed file.
+    **Restart Claude Code** after adding or changing the token so the server reconnects.
 
-- **Rotation.** The token is plaintext at rest and is visible to the session environment (including the
-  agent's shell). Use an expiring PAT, rotate periodically, and revoke immediately (github.com → Settings
-  → Developer settings) if it is ever exposed.
+- **Rotation.** The token is plaintext at rest. Use an expiring PAT, rotate periodically, and revoke
+  immediately (github.com → Settings → Developer settings) if it is ever exposed.
 - **Bumping the image.** Check the latest release at `github.com/github/github-mcp-server/releases`,
   update the `:vX.Y.Z` tag in `.mcp.json`, and restart. You can't verify the tag with
   `docker manifest inspect` from inside the sandbox — its TLS interception breaks the registry handshake
@@ -284,10 +281,10 @@ Unlike the other servers, `github` needs a credential. Keep it read-only and out
 - **Write access.** Out of scope by default. It would need a write-scoped PAT and dropping
   `GITHUB_READ_ONLY` — and any outward action (commenting, merging) is a deliberate, per-action decision,
   not something to enable ambiently.
-- **Troubleshooting — `mcp__github__*` tools don't appear:** token unset in the environment Claude was
-  launched with (most common — especially a GUI launch; confirm it's in `.claude/settings.local.json` and
-  restart); Docker not running or the pinned image can't be pulled; or a config change that needs a
-  restart to take effect.
+- **Troubleshooting — `mcp__github__*` tools don't appear:** `.env.github-mcp` missing, or its line
+  malformed (most common; confirm the file exists at the repository root and holds exactly
+  `GITHUB_PERSONAL_ACCESS_TOKEN=…`, then restart); Docker not running or the pinned image can't be
+  pulled; or a config change that needs a restart to take effect.
 
 ## How the proposer is customized
 

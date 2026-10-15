@@ -95,7 +95,11 @@ the agent does. This is also _why_ opening non-secret reads (above) costs little
   applied to every spawned process.
 - **Secrets inside the project** (`.env*`, `mise.local.toml`) — `permissions.deny` `Read(...)` and
   `Edit(...)` rules, which override the readable project tree. That includes `.env.github-mcp`, the
-  GitHub MCP server's token file.
+  GitHub MCP server's token file. The files that exist to hold a secret — `.env.github-mcp`,
+  `mise.local.toml`, `.claude/settings.local.json` — are also listed under `sandbox.credentials.files`
+  with `mode: "deny"`, which blocks reads at the OS level for every process a sandboxed command
+  starts. The `Read(...)` rule governs the built-in tools; the credentials entry governs scripts that
+  open the file themselves, which the permission rules do not promise to catch.
 - **Writes outside the project** — default-denied; only the `allowWrite` list is writable.
 - **Irreversible / outbound actions** (`git push` / `fetch`, `gh`, `rm -rf`, `python`) — the
   `permissions.deny` list.
