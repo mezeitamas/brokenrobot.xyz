@@ -7,14 +7,16 @@ truth rather than restating them, so versions and commands live in one place.
 
 ## Prerequisites
 
-| Tool | Version       | Source of truth                                   |
-| ---- | ------------- | ------------------------------------------------- |
-| mise | required      | [`mise.toml`](../mise.toml) pins every other tool |
-| npm  | **≥ 11.19.0** | `engines` in [`package.json`](../package.json)    |
+| Tool   | Needed for                                              | How to get it                                      |
+| ------ | ------------------------------------------------------- | -------------------------------------------------- |
+| git    | cloning, and the session hook's lockfile stamp          | macOS Command Line Tools, or `brew install git`    |
+| mise   | every other tool, pinned in [`mise.toml`](../mise.toml) | see [Toolchain (mise)](#toolchain-mise)            |
+| Docker | only the e2e / visual-regression suite                  | see [Host vs. devcontainer](#host-vs-devcontainer) |
 
-[`.npmrc`](../.npmrc) sets `engine-strict=true`, so installs **fail** if your Node/npm fall below
-those floors — this is intentional, keeping everyone on the pinned toolchain. It also sets
-`save-exact=true` (dependencies are pinned to exact versions, no `^`).
+npm comes with the Node that mise installs. `engines` in [`package.json`](../package.json) sets
+floors for both (Node ≥ 26.8.1, npm ≥ 11.19.0), and [`.npmrc`](../.npmrc) sets `engine-strict=true`,
+so an install **fails** below them — that catches a shell that isn't using mise's Node. `.npmrc`
+also sets `save-exact=true` (dependencies are pinned to exact versions, no `^`).
 
 ## Toolchain (mise)
 
