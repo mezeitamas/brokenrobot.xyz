@@ -56,11 +56,17 @@ esac
 exit 0
 STUB
 
-# Stub docker: `info` is the read-only daemon probe; DOCKER_INFO_EXIT fakes a stopped daemon.
-cat >"${shim}/docker" <<'STUB'
+# Stub docker: `--version` answers in the real CLI's form and needs no daemon; `info` is the
+# read-only daemon probe, and DOCKER_INFO_EXIT fakes a stopped daemon.
+docker_stub() {
+    cat >"${shim}/docker" <<'STUB'
 #!/usr/bin/env bash
+[ "$1" = "--version" ] && { echo "Docker version 29.8.2, build test"; exit 0; }
 exit "${DOCKER_INFO_EXIT:-0}"
 STUB
+    chmod +x "${shim}/docker"
+}
+docker_stub
 
 printf '#!/usr/bin/env bash\nexit 0\n' >"${shim}/typescript-language-server"
 
@@ -97,7 +103,7 @@ printf '{"mcpServers":{"codegraph":{"command":"codegraph","args":["serve","--mcp
 printf '{"v":1}\n' >"${proj}/package-lock.json"
 mkdir -p "${proj}/.codegraph" "${proj}/node_modules/.bin" "${proj}/.claude"
 git hash-object "${proj}/package-lock.json" >"${proj}/node_modules/.session-start-stamp"
-printf '#!/usr/bin/env bash\nexit 0\n' >"${proj}/node_modules/.bin/devcontainer"
+printf '#!/usr/bin/env bash\necho 0.89.0\n' >"${proj}/node_modules/.bin/devcontainer"
 chmod +x "${proj}/node_modules/.bin/devcontainer"
 settings() {
     printf '{"enabledPlugins":{"typescript-lsp@claude-plugins-official":true},"enabledMcpjsonServers":["codegraph"]}\n' \
@@ -158,7 +164,7 @@ contains "crediting the openspec profile" "openspec ${OS_VER} (profile core)" "$
 contains "and fresh dependencies" "✓ dependencies: fresh" "${out}"
 contains "and a readable index" "✓ codegraph: index present and readable" "${out}"
 contains "and the claude code integration" "✓ claude code: typescript-lsp plugin enabled, codegraph MCP enabled" "${out}"
-contains "and the containers" "✓ containers: docker daemon running, devcontainer CLI present" "${out}"
+contains "and the containers, with versions" "✓ containers: docker 29.8.2 (daemon running), devcontainer CLI 0.89.0" "${out}"
 lacks "with no problem lines" "✗" "${out}"
 check "a full audit records nothing mutating — only the status probe" "codegraph status --json" "$(calls)"
 
@@ -245,19 +251,18 @@ mv "${root}/mise.off" "${shim}/mise"
 
 out="$(DOCKER_INFO_EXIT=1 run)"
 contains "a stopped daemon is reported" "✗ docker daemon not running" "${out}"
-contains "while the CLI is still credited" "✓ containers: devcontainer CLI present" "${out}"
+contains "while both CLIs are still credited" "✓ containers: docker 29.8.2, devcontainer CLI 0.89.0" "${out}"
 
 rm "${shim}/docker"
 out="$(run)"
 contains "a missing docker is reported" "✗ docker missing" "${out}"
 contains "and scoped away from host development" "host development is unaffected" "${out}"
-printf '#!/usr/bin/env bash\nexit "${DOCKER_INFO_EXIT:-0}"\n' >"${shim}/docker"
-chmod +x "${shim}/docker"
+docker_stub
 
 rm "${proj}/node_modules/.bin/devcontainer"
 out="$(run)"
 contains "a missing devcontainer CLI is reported" "✗ devcontainer CLI missing" "${out}"
-printf '#!/usr/bin/env bash\nexit 0\n' >"${proj}/node_modules/.bin/devcontainer"
+printf '#!/usr/bin/env bash\necho 0.89.0\n' >"${proj}/node_modules/.bin/devcontainer"
 chmod +x "${proj}/node_modules/.bin/devcontainer"
 
 printf '\n%d passed, %d failed\n' "${pass}" "${fail}"

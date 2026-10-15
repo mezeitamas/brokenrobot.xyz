@@ -192,18 +192,31 @@ dev_env_check_claude() { # requires jq; returns 1 on any ✗
 # --- Containers — needed solely for the e2e/visual-regression suite. Read-only, so the hook reports
 #     it too; nothing gates on it. ---------------------------------------------------------------
 dev_env_check_containers() { # returns 1 on any ✗
-    local ok="" bad="" rc=0
+    local ok="" bad="" rc=0 docker_ver devcontainer_cli
+    # `docker --version` needs no daemon, so a stopped daemon still credits the installed CLI and
+    # the ✗ line names only the half that failed. Output form: "Docker version 29.8.2, build …".
     if command -v docker >/dev/null; then
+        docker_ver="$(docker --version 2>/dev/null | awk '{print $3}')"
+        docker_ver="${docker_ver%,}"
         if docker info --format '{{.ServerVersion}}' >/dev/null 2>&1; then
-            ok="docker daemon running"
+            ok="docker ${docker_ver:-present} (daemon running)"
         else
+            ok="docker ${docker_ver:-present}"
             bad="✗ docker daemon not running — start Docker Desktop before using the devcontainer/e2e suite"
         fi
     else
         bad="✗ docker missing — the devcontainer and the e2e/visual-regression suite cannot run; day-to-day host development is unaffected"
     fi
-    if [ -x node_modules/.bin/devcontainer ] || command -v devcontainer >/dev/null; then
-        ok="${ok}${ok:+, }devcontainer CLI present"
+    devcontainer_cli=""
+    if [ -x node_modules/.bin/devcontainer ]; then
+        devcontainer_cli="node_modules/.bin/devcontainer"
+    elif command -v devcontainer >/dev/null; then
+        devcontainer_cli="devcontainer"
+    fi
+    if [ -n "${devcontainer_cli}" ]; then
+        local devcontainer_ver
+        devcontainer_ver="$("${devcontainer_cli}" --version 2>/dev/null)"
+        ok="${ok}${ok:+, }devcontainer CLI ${devcontainer_ver:-present}"
     else
         bad="${bad}${bad:+$'\n'}✗ devcontainer CLI missing — it ships as a devDependency, so install dependencies first; only the e2e suite needs it"
     fi

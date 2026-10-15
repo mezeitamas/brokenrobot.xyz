@@ -86,10 +86,15 @@ esac
 STUB
 chmod +x "${shim}/mise"
 
-# Stub docker and devcontainer: the containers check probes `docker info` and the CLI's presence;
-# DOCKER_INFO_EXIT fakes a stopped daemon. The host's real Docker must never decide a case.
-printf '#!/usr/bin/env bash\nexit "${DOCKER_INFO_EXIT:-0}"\n' >"${shim}/docker"
-printf '#!/usr/bin/env bash\nexit 0\n' >"${shim}/devcontainer"
+# Stub docker and devcontainer: the containers check reads both CLIs' `--version` and probes
+# `docker info`; DOCKER_INFO_EXIT fakes a stopped daemon. The host's real Docker must never decide a
+# case.
+cat >"${shim}/docker" <<'STUB'
+#!/usr/bin/env bash
+[ "$1" = "--version" ] && { echo "Docker version 29.8.2, build test"; exit 0; }
+exit "${DOCKER_INFO_EXIT:-0}"
+STUB
+printf '#!/usr/bin/env bash\necho 0.89.0\n' >"${shim}/devcontainer"
 chmod +x "${shim}/docker" "${shim}/devcontainer"
 
 # Stub typescript-language-server: the sanity check only asks whether it is on PATH; whether the
@@ -263,7 +268,7 @@ contains "a non-core openspec profile is reported" "openspec profile is custom" 
 # --- the containers check: reported every session, gating nothing ---
 
 out="$(run)"
-contains "a running daemon and the CLI are credited" "✓ containers: docker daemon running, devcontainer CLI present" "${out}"
+contains "both CLIs are credited with versions, and the daemon" "✓ containers: docker 29.8.2 (daemon running), devcontainer CLI 0.89.0" "${out}"
 
 out="$(DOCKER_INFO_EXIT=1 run)"
 contains "a stopped daemon is reported with the skill pointer" \
