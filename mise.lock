@@ -49,10 +49,10 @@ backend = "npm:@colbymchenry/codegraph"
 specifiers = ["1.6.0"]
 
 [[tools."npm:@fission-ai/openspec"]]
-version = "1.13.2"
-aube = { path = ".mise/locks/npm-fission-ai-openspec/1.13.2", digest = "sha256:e2ca3b8bd442bbf8b2ef33f5b133dbe7950b617fb08ed9a5d493c0e182f989e3" }
+version = "1.14.2"
+aube = { path = ".mise/locks/npm-fission-ai-openspec/1.14.2", digest = "sha256:7eca22e0444e0c6f876fd4f3dd194439cd31d288cc9e432922f2dfe2e8a1e58a" }
 backend = "npm:@fission-ai/openspec"
-specifiers = ["1.13.2"]
+specifiers = ["1.14.2"]
 
 [[tools."npm:typescript-language-server"]]
 version = "6.0.1"
