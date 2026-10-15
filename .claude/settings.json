@@ -73,11 +73,14 @@
                 "host.docker.internal",
                 "github.com",
                 "raw.githubusercontent.com",
+                "mise-versions.jdx.dev",
                 "*.npmjs.org",
+                "nodejs.org",
                 "mcr.microsoft.com",
                 "ghcr.io",
                 "pkg-containers.githubusercontent.com",
-                "containers.dev"
+                "containers.dev",
+                "releases.hashicorp.com"
             ],
             "allowLocalBinding": true,
             "allowAllUnixSockets": true
@@ -192,6 +195,8 @@
             "Bash(npm outdated *)",
 
             "Bash(openspec *)",
+
+            "Bash(mise *)",
 
             "Bash(bash .claude/hooks/lib/dev-env-checks.sh)",
 
