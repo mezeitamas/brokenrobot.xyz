@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Idempotent session bootstrap — runs when a Claude Code session starts or resumes, in whatever
-# checkout it opens in (main clone or worktree). Three steps, each ending in the report: a host-tool
-# sanity check, dependency install, and the Codegraph index.
+# checkout it opens in (main clone or worktree). Four steps, each ending in the report: a host-tool
+# sanity check, a containers check, dependency install, and the Codegraph index.
 #
 # A fresh git worktree is the case with real work to do: it contains only tracked files, so it has
 # neither node_modules/ nor .codegraph/ (both gitignored). This script brings it up to a working
@@ -73,6 +73,15 @@ cd "${project_dir}" || {
 dev_env_check_tools
 while IFS= read -r line; do add "${line}"; done < <(dev_env_tool_report "(run the checking-dev-env skill for a fix guide)")
 
+# --- 1b. Containers check — report-only too. Only the e2e suite needs Docker, so nothing below
+#     gates on it; it is reported here so a stopped daemon shows before `mise run dc:up` fails.
+while IFS= read -r line; do
+    case "${line}" in
+        ✗*) add "${line} (run the checking-dev-env skill for a fix guide)" ;;
+        *) add "${line}" ;;
+    esac
+done < <(dev_env_check_containers)
+
 # --- 2. Dependencies — install only when missing or stale (npm install is slow; never every
 #     session). The stamp holds the lockfile's git hash, so a pull or branch switch that moves
 #     package-lock.json reinstalls. It is written only on success and lives inside node_modules/,
@@ -94,11 +103,11 @@ if [ "${have_node}" = true ] && [ "${have_npm}" = true ]; then
             git hash-object package-lock.json >node_modules/.session-start-stamp
             add "✓ dependencies: installed (npm install, $((SECONDS - t0))s) — node_modules was missing or package-lock.json had moved."
         else
-            add "✗ npm install failed after $((SECONDS - t0))s — dependencies are NOT installed; builds, tests and npm scripts will fail until \`npm install\` succeeds."
+            add "✗ npm install failed after $((SECONDS - t0))s — dependencies are NOT installed; builds, tests and mise tasks will fail until \`npm install\` succeeds."
         fi
     fi
 else
-    add "✗ dependencies: skipped (node/npm missing) — nothing is installed; builds, tests and npm scripts will fail."
+    add "✗ dependencies: skipped (node/npm missing) — nothing is installed; builds, tests and mise tasks will fail."
 fi
 
 # --- 3. Codegraph index — build once per checkout, then incremental sync.
@@ -115,8 +124,8 @@ build_index() { # $1 = codegraph subcommand, $2 = what it is doing, as a phrase
     fi
 }
 
-if [ "${have_node}" != true ]; then
-    add "✗ codegraph: skipped (node missing) — no index was built or synced."
+if [ "${have_codegraph}" != true ]; then
+    add "✗ codegraph: skipped (codegraph missing) — no index was built or synced."
 elif [ "${have_jq}" != true ]; then
     # Without jq the probe's JSON cannot be read; a blind incremental sync is the safe move — it
     # fails loudly when there is no usable index, instead of rebuilding every session on a hunch.

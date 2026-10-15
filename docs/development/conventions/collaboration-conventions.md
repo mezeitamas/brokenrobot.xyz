@@ -25,6 +25,10 @@ while code is written live in [implementation-conventions.md](implementation-con
   settle it.
 - **Name things in full.** Write "the caching change", never "the third one" or "group 5", because
   a reference the reader must resolve is a reference the reader can resolve wrongly.
+- **Keep private projects private.** Never name a private project of the human's, its repository,
+  or its commits in a file that is committed here — a brief, a planning artifact, a document, or a
+  commit message — because a committed file travels with the repository to every reader of it. Use
+  what was learned from it, and state the reason in this repository's own terms.
 - **Run no opaque commands.** One readable command per step; no inline scripts and no long shell
   chains. Make file edits through the editing tools, so that the human can read every change.
 - **Keep the rules in the repository.** When a process was skipped or misread, put the fix into the

@@ -44,8 +44,8 @@ Two of the skill's steps do not apply to you as written, and this section overri
 
 ## Working rhythm
 
-- After each task, run `npm run type:check` and `npm run lint:check`, and fix what they report before ticking the task, so a failure surfaces next to the edit that caused it rather than batched at Verify.
-- Format the files you touched with `npx prettier --write <files>`. Never run `npm run format:fix`, because that script rewrites the full repo glob and reformats files your change never touched.
+- After each task, run `mise run type:check` and `mise run lint:check`, and fix what they report before ticking the task, so a failure surfaces next to the edit that caused it rather than batched at Verify.
+- Format the files you touched with `npx prettier --write <files>`. Never run `mise run format:fix`, because that task rewrites the full repo glob and reformats files your change never touched.
 - Minimum code that satisfies the task. Do not improve adjacent code, do not refactor what is not broken, and do not add configurability the task did not ask for. When your change orphans an import or a variable, remove it; leave pre-existing dead code alone and mention it instead.
 - Do not commit, and never push. The main thread reviews the working diff through the `frontend-code-reviewer` before anything is committed, and pushing is a human-only gate.
 

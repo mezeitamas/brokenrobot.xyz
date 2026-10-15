@@ -30,7 +30,7 @@ import, because a relative path silently breaks when the file moves. Sibling (`.
 - Tailwind classes auto-sorted (`prettier-plugin-tailwindcss`).
 - Covers `.astro, .js, .jsx, .ts, .tsx, .cjs, .mjs, .css, .json, .md, .mdx, .yml`.
 - **Format only the files you touched** — run `npx prettier --write` over them. Do not run
-  `npm run format:fix`, because that script rewrites the full repo glob and reformats files your
+  `mise run format:fix`, because that script rewrites the full repo glob and reformats files your
   change never touched.
 
 ## Naming
@@ -73,7 +73,7 @@ Pick the lightest tool for the job:
 - **Design tokens via CSS custom properties** in `src/styles/base.css` (see
   [architecture](../../architecture.md)). Theme-aware components read tokens, not hard-coded
   colors — this is what makes light/dark work. Colour token _values_ are authored in `DESIGN.md` /
-  `DESIGN.dark.md`; run `npm run tokens:generate` after changing them and commit the regenerated
+  `DESIGN.dark.md`; run `mise run tokens:generate` after changing them and commit the regenerated
   `src/styles/tokens.generated.css`.
 - Article body uses the `@tailwindcss/typography` `prose` classes; tune `prose` to the
   tokens so long-form content respects the active theme.
@@ -82,7 +82,7 @@ Pick the lightest tool for the job:
 
 - **Playwright** E2E specs live in `tests/` (desktop Chrome + mobile Pixel 7 projects).
 - **Visual regression** via screenshot snapshots (tight pixel tolerance). When intentional
-  visual changes land, update with `npm run test:e2e:update` and review the diffs.
+  visual changes land, update with `mise run test:e2e:update` and review the diffs.
 - **Accessibility** checks via `@axe-core/playwright` — keep them green.
 - **Theme coverage:** because light and dark are both first-class, new UI needs snapshot /
   a11y coverage in **both** themes.

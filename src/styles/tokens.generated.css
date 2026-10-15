@@ -1,6 +1,6 @@
 /* AUTO-GENERATED — do not edit.
    Source of truth: DESIGN.md (light) and DESIGN.dark.md (dark).
-   Regenerate with `npm run tokens:generate`. */
+   Regenerate with `mise run tokens:generate`. */
 
 @layer base {
     :root {

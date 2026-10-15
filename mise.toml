@@ -1,0 +1,178 @@
+# The only place tool versions are pinned. `mise install` sets up the machine.
+[tools]
+node = "26.8.1"
+jq = "1.8.2"
+terraform = "1.16.0"
+"npm:@fission-ai/openspec" = "1.13.2"
+"npm:@colbymchenry/codegraph" = "1.6.0"
+"npm:typescript-language-server" = "6.0.1"
+
+# Every project command is a task: `mise run <name>`, `mise tasks` lists them. Tools from
+# package.json run as node_modules/.bin/<tool>, so a task fails loudly when `npm ci` has not run.
+# Keep this file free of templates and of an [env] table: either one makes mise require
+# `mise trust` in every clone.
+
+# --- The preflight gate -------------------------------------------------------------------------
+#     Shaped like the Pipeline workflow: the three verify groups mirror its Verify jobs, then the
+#     build, then the checks that read dist/. The e2e suite is not part of it — it runs in the
+#     devcontainer (test:e2e:check). It keeps going past a failure, so one run reports every check.
+
+[tasks.preflight]
+description = "Run every check CI runs except the e2e suite, reporting all failures"
+run = "mise run --continue-on-error --output keep-order verify:site ::: verify:infrastructure ::: verify:tooling ::: build ::: thirdparty:check ::: twins:check"
+
+[tasks."verify:site"]
+description = "The checks of CI's Verify site job"
+depends = [
+    "format:check",
+    "lint:check",
+    "type:check",
+    "specs:check",
+    "designmd:check",
+    "tokens:check",
+    "headers:check",
+]
+
+[tasks."verify:infrastructure"]
+description = "The checks of CI's Verify infrastructure job"
+depends = ["terraform:check"]
+
+[tasks."verify:tooling"]
+description = "The checks of CI's Verify tooling job"
+depends = ["hooks:check"]
+
+# --- Source code ---------------------------------------------------------------------------------
+
+[tasks."format:check"]
+description = "Prettier, check only"
+run = "node_modules/.bin/prettier '**/*.{astro,js,jsx,ts,tsx,cjs,mjs,css,json,md,mdx,yml}' --check"
+
+[tasks."format:fix"]
+description = "Prettier, rewriting the offending files"
+run = "node_modules/.bin/prettier '**/*.{astro,js,jsx,ts,tsx,cjs,mjs,css,json,md,mdx,yml}' --write"
+
+[tasks."lint:check"]
+description = "ESLint over src/"
+run = ["node_modules/.bin/astro sync", "node_modules/.bin/eslint 'src/**/*.{astro,ts,tsx}'"]
+
+[tasks."type:check"]
+description = "astro check, then tsc"
+run = ["node_modules/.bin/astro check", "node_modules/.bin/tsc --noEmit"]
+
+[tasks."specs:check"]
+description = "Validate the OpenSpec specs and changes, then the archive"
+run = ["openspec validate --all --strict", "openspec validate --archived"]
+
+# --- Design --------------------------------------------------------------------------------------
+
+[tasks."designmd:check"]
+description = "Lint DESIGN.md and DESIGN.dark.md"
+run = ["node_modules/.bin/design.md lint DESIGN.md", "node_modules/.bin/design.md lint DESIGN.dark.md"]
+
+[tasks."tokens:generate"]
+description = "Regenerate src/styles/tokens.generated.css from DESIGN.md"
+run = "node scripts/generate-tokens.mjs"
+
+[tasks."tokens:check"]
+description = "Fail when the generated design tokens are stale"
+run = "node scripts/generate-tokens.mjs --check"
+
+[tasks."headers:check"]
+description = "Fail when the CSP header copies differ"
+run = "node scripts/check-header-sync.mjs"
+
+# --- Build and the checks that read dist/ ---------------------------------------------------------
+
+[tasks.build]
+description = "Production build into dist/"
+run = "node_modules/.bin/astro build"
+
+[tasks."thirdparty:check"]
+description = "Fail when dist/ loads a third-party resource"
+wait_for = ["build"]
+run = "node scripts/check-third-party-resources.mjs"
+
+[tasks."twins:check"]
+description = "Audit the Markdown twins in dist/"
+wait_for = ["build"]
+run = "node scripts/check-markdown-twins.mjs"
+
+[tasks.clean]
+description = "Remove build, test, and cache output"
+run = "node_modules/.bin/rimraf dist/ reports/ .astro/ .cache/ test-results/ playwright-report/"
+
+# --- Development ---------------------------------------------------------------------------------
+
+[tasks.start]
+description = "Dev server on http://localhost:4321"
+run = "node_modules/.bin/astro dev"
+
+[tasks.serve]
+description = "Preview the built site"
+run = "node_modules/.bin/astro preview"
+
+# --- Infrastructure and tooling ------------------------------------------------------------------
+
+[tasks."terraform:check"]
+description = "terraform fmt and validate in infra/cloudflare"
+dir = "infra/cloudflare"
+run = ["terraform fmt -check -recursive", "terraform validate -no-color"]
+
+[tasks."hooks:check"]
+description = "The Claude Code hook test suites"
+run = 'for t in .claude/hooks/tests/*-cases.sh; do echo "== $t"; bash "$t" || exit 1; done'
+
+[tasks."audit:check"]
+description = "npm audit of the production dependencies"
+run = "npm audit --package-lock-only --omit=dev"
+
+[tasks."codegraph:init"]
+description = "Build the Codegraph index for this checkout"
+run = "codegraph init"
+
+[tasks."codegraph:status"]
+description = "Report the Codegraph index state"
+run = "codegraph status"
+
+# --- Devcontainer and the e2e suite --------------------------------------------------------------
+
+[tasks."install:playwright"]
+description = "Install Playwright's browsers and their system packages"
+run = "node_modules/.bin/playwright install --with-deps"
+
+[tasks."dc:up"]
+description = "Bring the devcontainer up, installing its tools and dependencies on first start"
+run = """node_modules/.bin/devcontainer up --workspace-folder . && node_modules/.bin/devcontainer exec --workspace-folder . bash -c 'test -x node_modules/.bin/astro || (mise install --locked && npm install && mise run install:playwright)'"""
+
+[tasks."test:e2e:check"]
+description = "Build, then run the visual-regression and a11y suite in the devcontainer"
+run = """node_modules/.bin/devcontainer exec --workspace-folder . bash -c 'export BROKENROBOT_PORT="${BROKENROBOT_PORT:-8080}"; mise run build && node_modules/.bin/playwright test'"""
+
+[tasks."test:e2e:update"]
+description = "Build, then regenerate the e2e snapshots in the devcontainer"
+run = """node_modules/.bin/devcontainer exec --workspace-folder . bash -c 'export BROKENROBOT_PORT="${BROKENROBOT_PORT:-8080}"; mise run build && node_modules/.bin/playwright test --update-snapshots'"""
+
+# --- The site as a local container (Dockerfile) --------------------------------------------------
+
+[tasks."container:build"]
+description = "Clean build, then the brokenrobot.xyz image"
+run = ["mise run clean", "mise run build", "docker build -t brokenrobot.xyz ."]
+
+[tasks."container:run"]
+description = "Run the image on http://localhost:8080"
+depends = ["container:build"]
+run = "docker run -p 8080:8080 --read-only --tmpfs /tmp --name brokenrobot.xyz --rm brokenrobot.xyz"
+
+[tasks."container:stop"]
+description = "Stop the running container"
+run = "docker stop brokenrobot.xyz"
+
+[tasks."container:tag"]
+description = "Tag the image for the local registry"
+depends = ["container:build"]
+run = "docker tag brokenrobot.xyz localhost:5000/brokenrobot.xyz"
+
+[tasks."container:push"]
+description = "Push the image to the local registry"
+depends = ["container:tag"]
+run = "docker push localhost:5000/brokenrobot.xyz"

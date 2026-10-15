@@ -105,7 +105,7 @@ The light/dark system, as implemented in the foundation:
   `--muted`, `--border`, `--accent`, `--accent-ink`, code colors, shadows, `--ff-*`).
   The **colour token values** are the source of truth in `DESIGN.md` / `DESIGN.dark.md` and are
   generated into `src/styles/tokens.generated.css` (imported by `base.css`) by
-  `npm run tokens:generate`; shadows, `--ff-*`, and `color-mix` derivations stay hand-authored in
+  `mise run tokens:generate`; shadows, `--ff-*`, and `color-mix` derivations stay hand-authored in
   `base.css`. See [design-md-assessment](design-md-assessment.md).
 - **Tokens exposed to Tailwind** via `@theme inline` (e.g. `--color-bg: var(--bg)`), so
   utilities like `bg-bg`/`text-muted` and the `prose` mapping (`--tw-prose-*`) follow the
@@ -184,7 +184,7 @@ each one.
     For this header, drift is quiet: the site keeps rendering because the inline CSS survives,
     while fonts and every bundled script fail. When the Cloudflare stack was first stood up it
     carried a single-layer policy copied from another site, which intersected with the `<meta>`
-    layer to block `font-src` outright and admit no script at all. `npm run headers:check` (in the
+    layer to block `font-src` outright and admit no script at all. `mise run headers:check` (in the
     preflight gate and CI's Verify site job) fails on any byte of drift between the three copies of
     this header.
 
@@ -207,7 +207,7 @@ Two consequences worth knowing:
   that.
 
 Astro's CSP does not work in `dev` (the Vite dev server injects its own inline assets) — verify
-with `npm run build` and `npm run serve`.
+with `mise run build` and `mise run serve`.
 
 ### The one third-party script
 
@@ -215,7 +215,7 @@ with `npm run build` and `npm run serve`.
 layers: the Cloudflare Web Analytics beacon, injected at the edge by `auto_install` on
 `cloudflare_web_analytics_site`. Three things about it are easy to get wrong:
 
-- **`npm run thirdparty:check` cannot see it.** The guardrail scans `dist/`, and the beacon is
+- **`mise run thirdparty:check` cannot see it.** The guardrail scans `dist/`, and the beacon is
   added by the edge after the build, so `scriptDirective.resources` in `astro.config.ts` is the
   only place this dependency is written down. Nothing fails if it is removed — analytics just
   goes quiet.

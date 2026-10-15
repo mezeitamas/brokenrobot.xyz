@@ -63,7 +63,7 @@ page's title received `"Error"` — Astro's generic error page — with
 `dist/index.html` was absent. Which window is not established. Two candidates: `webServer` treats
 any response as ready, including an error page, so a server that binds before its files are in
 place passes the probe; and `reuseExistingServer` is on outside CI, so a preview server left over
-from an earlier run can be serving `dist/` while `npm run build` rewrites it underneath. The two
+from an earlier run can be serving `dist/` while `mise run build` rewrites it underneath. The two
 are not exclusive, and a single non-reproducing observation cannot separate them.
 
 **Resolves by:** undecided. It needs the mechanism established before a fix, because the two

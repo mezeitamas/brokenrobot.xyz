@@ -13,33 +13,6 @@
         "node": ">=26.8.1",
         "npm": ">=11.19.0"
     },
-    "scripts": {
-        "install:playwright": "playwright install --with-deps",
-        "clean": "rimraf dist/ reports/ .astro/ .cache/ test-results/ playwright-report/",
-        "format:check": "prettier '**/*.{astro,js,jsx,ts,tsx,cjs,mjs,css,json,md,mdx,yml}' --check",
-        "format:fix": "prettier '**/*.{astro,js,jsx,ts,tsx,cjs,mjs,css,json,md,mdx,yml}' --write",
-        "lint:check": "astro sync && eslint 'src/**/*.{astro,ts,tsx}'",
-        "type:check": "astro check && tsc --noEmit",
-        "specs:check": "openspec validate --all --strict && openspec validate --archived",
-        "tokens:generate": "node scripts/generate-tokens.mjs",
-        "tokens:check": "node scripts/generate-tokens.mjs --check",
-        "designmd:check": "design.md lint DESIGN.md && design.md lint DESIGN.dark.md",
-        "headers:check": "node scripts/check-header-sync.mjs",
-        "thirdparty:check": "node scripts/check-third-party-resources.mjs",
-        "twins:check": "node scripts/check-markdown-twins.mjs",
-        "terraform:check": "terraform -chdir=infra/cloudflare fmt -check -recursive && terraform -chdir=infra/cloudflare validate -no-color",
-        "hooks:check": "for t in .claude/hooks/tests/*-cases.sh; do echo \"== $t\"; bash \"$t\" || exit 1; done",
-        "test:e2e:check": "devcontainer exec --workspace-folder . bash -lc 'export BROKENROBOT_PORT=\"${BROKENROBOT_PORT:-8080}\"; npm run build && node_modules/.bin/playwright test'",
-        "test:e2e:update": "devcontainer exec --workspace-folder . bash -lc 'export BROKENROBOT_PORT=\"${BROKENROBOT_PORT:-8080}\"; npm run build && node_modules/.bin/playwright test --update-snapshots'",
-        "dc:up": "devcontainer up --workspace-folder . && devcontainer exec --workspace-folder . bash -lc 'test -x node_modules/.bin/astro || (sudo chown vscode:vscode node_modules && npm install && npm run install:playwright)'",
-        "audit:check": "npm audit --package-lock-only --omit=dev",
-        "codegraph:init": "npx -y @colbymchenry/codegraph@1.6.0 init",
-        "codegraph:status": "npx -y @colbymchenry/codegraph@1.6.0 status",
-        "build": "astro build",
-        "serve": "astro preview",
-        "start": "astro dev",
-        "astro": "astro"
-    },
     "dependencies": {
         "@astrojs/check": "0.9.10",
         "@astrojs/markdown-satteri": "0.4.2",
@@ -65,7 +38,6 @@
     "devDependencies": {
         "@axe-core/playwright": "4.13.0",
         "@devcontainers/cli": "0.89.0",
-        "@fission-ai/openspec": "1.13.2",
         "@google/design.md": "0.4.0",
         "@playwright/test": "1.63.0",
         "@typescript-eslint/eslint-plugin": "8.70.1",
@@ -81,7 +53,6 @@
         "prettier-plugin-sh": "0.20.2",
         "prettier-plugin-tailwindcss": "0.8.1",
         "rimraf": "6.1.3",
-        "typescript": "6.0.3",
-        "typescript-language-server": "6.0.1"
+        "typescript": "6.0.3"
     }
 }

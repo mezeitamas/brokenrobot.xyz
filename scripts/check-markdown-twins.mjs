@@ -5,7 +5,7 @@
 // every build, so they cannot drift apart; the failure worth auditing is a missing or empty twin,
 // which is a real failure mode in the wild — sites serving `.md` that answer 200 with no body, where
 // nothing looks broken to anyone. Content faults belong to the transform, which fails the build and
-// names the offending post. Runs locally as `npm run twins:check` and in CI's Test job against the
+// names the offending post. Runs locally as `mise run twins:check` and in CI's Test job against the
 // `dist/` that Build produced.
 //
 //   node scripts/check-markdown-twins.mjs [dist/]
@@ -100,7 +100,7 @@ try {
         process.exit(2);
     }
 } catch {
-    console.error(`not verified: ${blogDir} does not exist — run \`npm run build\` first`);
+    console.error(`not verified: ${blogDir} does not exist — run \`mise run build\` first`);
     process.exit(2);
 }
 

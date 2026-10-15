@@ -1,19 +1,17 @@
 {
     "name": "brokenrobot.xyz",
-    "image": "mcr.microsoft.com/devcontainers/base:ubuntu-24.04",
-    "features": {
-        "ghcr.io/devcontainers/features/git:1": {},
-        "ghcr.io/devcontainers/features/node:2": {
-            "version": "26.8.1"
-        },
-        "ghcr.io/devcontainers/features/terraform:1": {
-            "version": "1.16.0"
-        }
+    // The same image, by the same digest, as every job in .github/workflows/pipeline.yml — the
+    // visual baselines must render in one environment locally and in CI. Change both together.
+    "image": "ghcr.io/jdx/mise:2026.10.10-debian@sha256:8eb2c479207e09099c9ae401625f0e4782344031fa327cee296cee223193fc07",
+    // A login shell's /etc/profile resets PATH and drops the image's mise shims; this restores them
+    // for everything the devcontainer runs.
+    "remoteEnv": {
+        "PATH": "/mise/shims:${containerEnv:PATH}"
     },
     "mounts": [
         "source=${localWorkspaceFolderBasename}-node-modules,target=${containerWorkspaceFolder}/node_modules,type=volume"
     ],
-    "postCreateCommand": "sudo chown vscode:vscode node_modules && npm install && npm run install:playwright",
+    "postCreateCommand": "mise install --locked && npm install && mise run install:playwright",
     "customizations": {
         "vscode": {
             "settings": {},

@@ -16,21 +16,19 @@
 # Written to be sourced under `set -uo pipefail`: it defines functions and accumulator globals,
 # nothing else, and never exits the caller.
 
-# Single source of truth for which codegraph build the hook runs and the pin the sanity check
-# verifies against .mcp.json and the codegraph:* npm scripts. npx resolves it from its own cache,
-# so this works in a checkout that has never been installed — codegraph is deliberately not a
-# devDependency. Drift between the three committed pins lands in the report instead of surfacing
-# as a reindexRecommended loop.
-CODEGRAPH_VERSION="1.6.0"
-codegraph() { npx -y "@colbymchenry/codegraph@${CODEGRAPH_VERSION}" "$@"; }
-
 # --- Toolchain ----------------------------------------------------------------------------------
 #     Healthy tools share one ✓ line; each problem gets its own ✗ line with the consequence
 #     spelled out. Fills the have_* globals the callers gate their later steps on, so a report
 #     never implies work that never ran.
+#
+#     mise.toml is the only place tool versions are pinned, and mise is a required tool, so the
+#     version check is mise's own answer: which pins are not installed. The presence checks after
+#     it catch a pinned tool that is installed but not on this PATH — mise not active in the shell
+#     that started Claude Code.
 have_node=false
 have_npm=false
 have_jq=false
+have_codegraph=false
 ok_parts=""
 problems=""
 tool_ok() { ok_parts="${ok_parts}${ok_parts:+, }$1"; }
@@ -40,8 +38,10 @@ dev_env_check_tools() {
     have_node=false
     have_npm=false
     have_jq=false
+    have_codegraph=false
     ok_parts=""
     problems=""
+    local fix="mise install, then start Claude Code from a shell with mise activated"
 
     if command -v git >/dev/null; then
         tool_ok "git $(git --version | awk '{print $3}')"
@@ -49,85 +49,75 @@ dev_env_check_tools() {
         tool_bad "git missing — the lockfile stamp cannot be computed, so dependencies reinstall every session"
     fi
 
-    local node_pin node_ver
-    node_pin="$(cat .node-version 2>/dev/null)"
-    if command -v node >/dev/null; then
-        have_node=true
-        node_ver="$(node --version)"
-        node_ver="${node_ver#v}"
-        if [ "${node_ver}" = "${node_pin}" ]; then
-            tool_ok "node ${node_ver} (=.node-version)"
+    # `mise ls --current --missing` prints one line per pin that is not installed, and nothing when
+    # all are; it exits non-zero only when it cannot read the config (an untrusted mise.toml, say).
+    local missing tool version
+    if command -v mise >/dev/null; then
+        if missing="$(mise ls --current --missing --no-header 2>/dev/null)"; then
+            if [ -z "${missing}" ]; then
+                tool_ok "mise $(mise --version | awk '{print $1}') (all pins installed)"
+            else
+                while read -r tool version _; do
+                    tool_bad "${tool} ${version} not installed — mise.toml pins it; mise install"
+                done <<<"${missing}"
+            fi
         else
-            tool_bad "node is ${node_ver} but .node-version pins ${node_pin:-unknown} — installs and builds may misbehave; switch versions with your version manager"
+            tool_bad "mise cannot read mise.toml — no pinned tool can be installed; run mise install to see the error"
         fi
     else
-        tool_bad "node missing — dependencies cannot be installed and codegraph cannot run"
+        tool_bad "mise missing — the project's tools cannot be installed; see docs/development-environment.md § Toolchain (mise)"
+    fi
+
+    if command -v node >/dev/null; then
+        have_node=true
+        tool_ok "node $(node --version)"
+    else
+        tool_bad "node missing — dependencies cannot be installed; ${fix}"
     fi
 
     if command -v npm >/dev/null; then
         have_npm=true
         tool_ok "npm $(npm --version)"
     else
-        tool_bad "npm missing — dependencies cannot be installed"
+        tool_bad "npm missing — dependencies cannot be installed; ${fix}"
     fi
 
     if command -v jq >/dev/null; then
         have_jq=true
         tool_ok "jq"
     else
-        tool_bad "jq missing — the session report degrades to plain text and the codegraph health probe cannot be parsed"
+        tool_bad "jq missing — the session report degrades to plain text and the codegraph health probe cannot be parsed; ${fix}"
+    fi
+
+    if command -v codegraph >/dev/null; then
+        have_codegraph=true
+        tool_ok "codegraph"
+    else
+        tool_bad "codegraph missing — no index is built and the codegraph MCP server cannot start; ${fix}"
     fi
 
     if command -v typescript-language-server >/dev/null; then
         tool_ok "typescript-language-server"
     else
-        tool_bad "typescript-language-server missing — the typescript-lsp plugin has no server and silently degrades; npm i -g typescript-language-server typescript"
+        tool_bad "typescript-language-server missing — the typescript-lsp plugin has no server and silently degrades; ${fix}"
     fi
 
-    # openspec ships as a devDependency only as a version reference — the /opsx commands and
-    # openspec-* skills launch a bare `openspec` from the shell PATH, which cannot reach the repo's
-    # node_modules/.bin, so the host-global install is what matters. Without jq the pin cannot be
-    # read and the check degrades to presence-only. The workflow profile is machine-global too
-    # (~/.config/openspec/config.json): the committed /opsx integration is the six-workflow core
-    # set, and on any other profile `openspec update` regenerates a different subset and leaves
-    # the rest stale. `config get profile` answers `core` when the key was never set.
-    local openspec_pin openspec_ver openspec_profile
-    openspec_pin="$(jq -r '.devDependencies["@fission-ai/openspec"] // empty' package.json 2>/dev/null)"
+    # The workflow profile is machine-global (~/.config/openspec/config.json): the committed /opsx
+    # integration is the six-workflow core set, and on any other profile `openspec update`
+    # regenerates a different subset and leaves the rest stale. `config get profile` answers `core`
+    # when the key was never set.
+    local openspec_ver openspec_profile
     if command -v openspec >/dev/null; then
         openspec_ver="$(openspec --version 2>/dev/null)"
         openspec_profile="$(openspec config get profile 2>/dev/null)"
-        if [ -z "${openspec_pin}" ] || [ "${openspec_ver}" = "${openspec_pin}" ]; then
-            if [ "${openspec_profile}" = "core" ]; then
-                tool_ok "openspec ${openspec_ver} (profile core)"
-            else
-                tool_ok "openspec ${openspec_ver}"
-            fi
+        if [ "${openspec_profile}" = "core" ]; then
+            tool_ok "openspec ${openspec_ver} (profile core)"
         else
-            tool_bad "openspec is ${openspec_ver} but package.json pins ${openspec_pin} — the committed /opsx integration was generated by the pinned version; npm i -g @fission-ai/openspec@${openspec_pin}"
-        fi
-        if [ "${openspec_profile}" != "core" ]; then
+            tool_ok "openspec ${openspec_ver}"
             tool_bad "openspec profile is ${openspec_profile:-unknown} but the committed /opsx integration is the six-workflow core set — openspec update on this machine regenerates a different subset and leaves the rest stale; openspec config profile core"
         fi
     else
-        tool_bad "openspec missing — the /opsx commands and openspec-* skills fail at their first CLI call; npm i -g @fission-ai/openspec${openspec_pin:+@${openspec_pin}}"
-    fi
-
-    # Codegraph itself is npx-launched at a pinned version, so presence needs no probe — the real
-    # calls exercise it. What can drift is the pin, which lives in three committed places.
-    if [ "${have_jq}" = true ]; then
-        local drift mcp_pin pin
-        drift=""
-        mcp_pin="$(jq -r '.mcpServers.codegraph.args[] | select(startswith("@colbymchenry/codegraph@"))' .mcp.json 2>/dev/null | cut -d@ -f3)"
-        [ "${mcp_pin}" = "${CODEGRAPH_VERSION}" ] || drift=".mcp.json pins ${mcp_pin:-nothing}"
-        for pin in $(jq -r '.scripts | to_entries[] | select(.key | startswith("codegraph:")) | .value' package.json 2>/dev/null |
-            grep -o '@colbymchenry/codegraph@[0-9][0-9.]*' | cut -d@ -f3 | sort -u); do
-            [ "${pin}" = "${CODEGRAPH_VERSION}" ] || drift="${drift}${drift:+; }package.json scripts pin ${pin}"
-        done
-        if [ -z "${drift}" ]; then
-            tool_ok "codegraph pin ${CODEGRAPH_VERSION} consistent"
-        else
-            tool_bad "codegraph pins drifted — this lib pins ${CODEGRAPH_VERSION} but ${drift}; align them, or the MCP server and the session hook index with different builds"
-        fi
+        tool_bad "openspec missing — the /opsx commands and openspec-* skills fail at their first CLI call; ${fix}"
     fi
 }
 
@@ -156,7 +146,7 @@ dev_env_deps_fresh() {
 #     ever proved a directory existed. Its three answers are distinct — exit 1 when the database
 #     cannot be read, initialized:false when there is no index, and reindexRecommended when the
 #     index predates the installed codegraph's extraction version. Anything unparseable is treated
-#     as unreadable, which is the safe reading of "no usable answer". Requires node and jq.
+#     as unreadable, which is the safe reading of "no usable answer". Requires codegraph and jq.
 dev_env_codegraph_state() { # echoes: healthy | uninitialized | reindex | unreadable
     local status_json initialized reindex
     status_json="$(codegraph status --json)"
@@ -175,7 +165,7 @@ dev_env_codegraph_state() { # echoes: healthy | uninitialized | reindex | unread
 
 # --- Claude Code integration (executed mode only — the hook cannot fix these, so it never asks) --
 dev_env_check_claude() { # requires jq; returns 1 on any ✗
-    local ok="" bad="" mgr="" m rc=0
+    local ok="" bad="" rc=0
     if jq -e '.enabledPlugins["typescript-lsp@claude-plugins-official"] == true' .claude/settings.json >/dev/null 2>&1; then
         ok="typescript-lsp plugin enabled"
     else
@@ -191,19 +181,6 @@ dev_env_check_claude() { # requires jq; returns 1 on any ✗
     else
         bad="${bad}${bad:+$'\n'}✗ codegraph MCP not enabled — it must be in .mcp.json and in enabledMcpjsonServers of .claude/settings.json"
     fi
-    # nvm is a shell function, not an executable — command -v cannot see it, its install dir can.
-    for m in fnm asdf volta; do
-        command -v "${m}" >/dev/null && {
-            mgr="${m}"
-            break
-        }
-    done
-    [ -n "${mgr}" ] || { [ -s "${NVM_DIR:-$HOME/.nvm}/nvm.sh" ] && mgr="nvm"; }
-    if [ -n "${mgr}" ]; then
-        ok="${ok}${ok:+, }node manager ${mgr}"
-    else
-        bad="${bad}${bad:+$'\n'}✗ no node version manager detected (fnm/nvm/asdf/volta) — keeping node on the .node-version pin is manual"
-    fi
     [ -z "${ok}" ] || printf '✓ claude code: %s\n' "${ok}"
     if [ -n "${bad}" ]; then
         printf '%s\n' "${bad}"
@@ -212,20 +189,34 @@ dev_env_check_claude() { # requires jq; returns 1 on any ✗
     return "${rc}"
 }
 
-# --- Containers (executed mode only) — needed solely for the e2e/visual-regression suite. --------
+# --- Containers — needed solely for the e2e/visual-regression suite. Read-only, so the hook reports
+#     it too; nothing gates on it. ---------------------------------------------------------------
 dev_env_check_containers() { # returns 1 on any ✗
-    local ok="" bad="" rc=0
+    local ok="" bad="" rc=0 docker_ver devcontainer_cli
+    # `docker --version` needs no daemon, so a stopped daemon still credits the installed CLI and
+    # the ✗ line names only the half that failed. Output form: "Docker version 29.8.2, build …".
     if command -v docker >/dev/null; then
+        docker_ver="$(docker --version 2>/dev/null | awk '{print $3}')"
+        docker_ver="${docker_ver%,}"
         if docker info --format '{{.ServerVersion}}' >/dev/null 2>&1; then
-            ok="docker daemon running"
+            ok="docker ${docker_ver:-present} (daemon running)"
         else
+            ok="docker ${docker_ver:-present}"
             bad="✗ docker daemon not running — start Docker Desktop before using the devcontainer/e2e suite"
         fi
     else
         bad="✗ docker missing — the devcontainer and the e2e/visual-regression suite cannot run; day-to-day host development is unaffected"
     fi
-    if [ -x node_modules/.bin/devcontainer ] || command -v devcontainer >/dev/null; then
-        ok="${ok}${ok:+, }devcontainer CLI present"
+    devcontainer_cli=""
+    if [ -x node_modules/.bin/devcontainer ]; then
+        devcontainer_cli="node_modules/.bin/devcontainer"
+    elif command -v devcontainer >/dev/null; then
+        devcontainer_cli="devcontainer"
+    fi
+    if [ -n "${devcontainer_cli}" ]; then
+        local devcontainer_ver
+        devcontainer_ver="$("${devcontainer_cli}" --version 2>/dev/null)"
+        ok="${ok}${ok:+, }devcontainer CLI ${devcontainer_ver:-present}"
     else
         bad="${bad}${bad:+$'\n'}✗ devcontainer CLI missing — it ships as a devDependency, so install dependencies first; only the e2e suite needs it"
     fi
@@ -253,7 +244,7 @@ dev_env_main() {
         if dev_env_deps_fresh; then
             echo "✓ dependencies: fresh (lockfile unchanged since the last install)"
         else
-            echo "✗ dependencies: node_modules missing or stale — builds, tests and npm scripts will misbehave"
+            echo "✗ dependencies: node_modules missing or stale — builds, tests and mise tasks will misbehave"
             rc=1
         fi
     else
@@ -261,7 +252,7 @@ dev_env_main() {
         rc=1
     fi
 
-    if [ "${have_node}" = true ] && [ "${have_jq}" = true ]; then
+    if [ "${have_codegraph}" = true ] && [ "${have_jq}" = true ]; then
         case "$(dev_env_codegraph_state)" in
             healthy) echo "✓ codegraph: index present and readable" ;;
             uninitialized)
@@ -278,7 +269,7 @@ dev_env_main() {
                 ;;
         esac
     else
-        echo "✗ codegraph: not checked (node or jq missing)"
+        echo "✗ codegraph: not checked (codegraph or jq missing)"
         rc=1
     fi
 

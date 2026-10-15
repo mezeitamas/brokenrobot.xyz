@@ -41,11 +41,11 @@ The site treats light and dark as first-class, so UI needs snapshot and a11y cov
 
 ## Where this runs — the devcontainer, not the host
 
-Visual snapshots are OS-specific, and the committed baselines are Linux-rendered (CI runs on `ubuntu-24.04`), so a macOS-host run would mismatch every snapshot at the `0.01` tolerance even when nothing changed — invalid. Run in the **devcontainer** (`.devcontainer/`, same `ubuntu-24.04`), whose `postCreateCommand` installs the browsers; there is no host browser install. Drive the container over the Docker socket:
+Visual snapshots are OS-specific, and the committed baselines are Linux-rendered (CI runs every job in the mise Debian image, `ghcr.io/jdx/mise`), so a macOS-host run would mismatch every snapshot at the `0.01` tolerance even when nothing changed — invalid. Run in the **devcontainer** (`.devcontainer/`, the same image by the same digest), whose `postCreateCommand` installs the browsers; there is no host browser install. Drive the container over the Docker socket:
 
 ```bash
-npm run dc:up
-npm run test:e2e:check
+mise run dc:up
+mise run test:e2e:check
 ```
 
 When the container does not start here, do not run the suite on the host. Report that the visual coverage must run in the devcontainer or rely on CI's `test` job, and stop.
@@ -56,7 +56,7 @@ The snapshots above are pixel baselines and must stay in the devcontainer. The *
 
 Serve the built site on the host, then drive it:
 
-1. Run `npm run build`. Then start the preview with the `Bash` tool's `run_in_background` parameter, and set the port on the command: `BROKENROBOT_PORT=8080 npm run serve`. The `test:e2e:*` scripts default that port for you, but this host preview is not one of those scripts, and `astro preview` binds `BROKENROBOT_PORT`. Do not append `&` — the `Bash` tool backgrounds the command for you, and a foreground call with `&` leaves the server's lifetime undefined.
+1. Run `mise run build`. Then start the preview with the `Bash` tool's `run_in_background` parameter, and set the port on the command: `BROKENROBOT_PORT=8080 mise run serve`. The `test:e2e:*` tasks default that port for you, but this host preview is not one of those tasks, and `astro preview` binds `BROKENROBOT_PORT`. Do not append `&` — the `Bash` tool backgrounds the command for you, and a foreground call with `&` leaves the server's lifetime undefined.
 2. With the Playwright MCP, for each touched view at `http://localhost:8080/…`:
     - **Console clean** — read the console after load; no errors or warnings.
     - **No theme flash** — reload and watch first paint, then toggle the theme; the pre-paint init means there should be no flash either way.

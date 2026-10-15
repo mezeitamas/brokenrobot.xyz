@@ -6,7 +6,7 @@
 // astro.config.ts (what `astro preview`, and therefore the Playwright suite, serves), nginx.conf
 // (Kubernetes), and the domain module in infra/cloudflare (Cloudflare — production). The suite
 // only ever exercises the astro.config.ts copy, so drift in the other two passes every test and
-// surfaces in production alone. Runs locally as `npm run headers:check` and in CI's Verify job.
+// surfaces in production alone. Runs locally as `mise run headers:check` and in CI's Verify job.
 //
 //   node scripts/check-header-sync.mjs
 //

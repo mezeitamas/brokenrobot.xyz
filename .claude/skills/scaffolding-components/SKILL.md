@@ -5,7 +5,7 @@ compatibility: Scaffolding itself needs only a checkout of this repo's Astro + T
 model: claude-sonnet-5
 metadata:
     author: brokenrobot.xyz
-    version: '1.0'
+    version: '1.1'
 ---
 
 Create a new component that matches the existing codebase exactly, so reviews don't bounce on convention drift. Decide the **interactivity tier first**, then scaffold.
@@ -101,4 +101,4 @@ export function Thing({ label }: Props) {
 
 - **Both themes:** sanity-check the component reads well in light and dark (token usage, not hard-coded values). New UI needs both-theme snapshot + a11y coverage — see the `testing-visual-regression` skill.
 - Keep it **surgical** — scaffold only what the task needs; no speculative props or configurability.
-- Run the `running-preflight-checks` skill (or `type:check` / `lint:check`) before handing off, and format the files you touched with `npx prettier --write` — never `npm run format:fix`, which reformats files your change never touched.
+- Run the `running-preflight-checks` skill (or `type:check` / `lint:check`) before handing off, and format the files you touched with `npx prettier --write` — never `mise run format:fix`, which reformats files your change never touched.

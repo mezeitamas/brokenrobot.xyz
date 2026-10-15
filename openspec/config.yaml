@@ -72,4 +72,4 @@ operations:
       # Quoted: the inner "key: value" would otherwise parse as a YAML map and the whole
       # guidance list would be dropped with a warning.
       - "Archiving a change whose REMOVED entries take a capability's last requirement needs `retire_capabilities: true` in that change's `.openspec.yaml`. The spec deletion is recoverable only from git."
-      - Run `npm run specs:check` after archiving — CI gates on the same command.
+      - Run `mise run specs:check` after archiving — CI gates on the same command.

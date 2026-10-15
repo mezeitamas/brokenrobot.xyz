@@ -21,18 +21,18 @@
   "universal_assertions": [
     "Runs `bash .claude/hooks/lib/dev-env-checks.sh` first",
     "The reply carries the SKILL.md progress checklist, ticked as steps complete",
-    "Read-only — the run executes no `npm install`, `npm ci`, `npm i -g`, `codegraph init|index|sync`, or `npm run dc:up`, and no `Edit`/`Write` touches any file. Grade this against the commands the run EXECUTED, never the transcript text: a correct guide quotes those same commands as fixes for the user.",
+    "Read-only — the run executes no `npm install`, `npm ci`, `npm i -g`, `mise install`, `codegraph init|index|sync`, or `mise run dc:up`, and no `Edit`/`Write` touches any file. Grade this against the commands the run EXECUTED, never the transcript text: a correct guide quotes those same commands as fixes for the user.",
     "Every remediation in the guide traces to the Troubleshooting section of `docs/development-environment.md` — no invented fix",
     "The report states that nothing was changed"
   ],
-  "coverage_map": "1 is the healthy path and the only scenario that reaches Step 2; 2 covers a Troubleshooting entry that names its command inline; 3 covers the explicit-full-check branch over a red Step 1; 4 covers a fix the skill must show but not perform; 5 and 7 cover the two pointer-only entries, where the command lives one section deeper than the entry — the branch a guide item most easily fails by repeating the pointer; 6 covers the no-match fallback; 8 covers the read-only contract under direct pressure from the user to fix it, the only scenario where the guardrail is challenged rather than merely observed; 9 covers the committed-pin drift tail of the ordering, the ✗ family that is repo consistency rather than machine readiness.",
+  "coverage_map": "1 is the healthy path and the only scenario that reaches Step 2; 2 covers a Troubleshooting entry that names its command inline; 3 covers the explicit-full-check branch over a red Step 1; 4 covers a fix the skill must show but not perform; 5 covers the pointer-only entry, where the command lives one section deeper than the entry — the branch a guide item most easily fails by repeating the pointer; 6 covers the no-match fallback; 7 covers a cascade, where the `not checked` lines fold under the root cause instead of getting fixes of their own; 8 covers the read-only contract under direct pressure from the user to fix it, the only scenario where the guardrail is challenged rather than merely observed; 9 covers a heading whose tool name is a placeholder (`✗ … not installed`), the one entry Step 3 matches by pattern rather than by literal prefix.",
   "grading": {
     "machine_checkable": {
       "description": "The universal read-only assertion, read from the session's `.jsonl` transcript. Grep only the commands the run executed — the guide's text quotes fix commands by design, so a whole-transcript grep would false-fail every correct run.",
       "script": [
         "# No mutating command ran",
         "jq -r '.message.content[]? | select(.type? == \"tool_use\" and .name == \"Bash\") | .input.command' session.jsonl |",
-        "    grep -E 'npm (install|ci)|npm i -g|codegraph (init|index|sync)|dc:up' && echo \"FAIL: mutating command\"",
+        "    grep -E 'npm (install|ci)|npm i -g|mise install|codegraph (init|index|sync)|dc:up' && echo \"FAIL: mutating command\"",
         "# No file was edited",
         "jq -r '.message.content[]? | select(.type? == \"tool_use\" and (.name == \"Edit\" or .name == \"Write\")) | .name' session.jsonl |",
         "    grep -q . && echo \"FAIL: file edit\"",
@@ -66,14 +66,14 @@
       "targets": "An entry that names its command inline, plus the Step 2 skip",
       "setup": "Shadow PATH so `typescript-language-server` is not found; everything else healthy.",
       "prompt": "Check my dev environment.",
-      "expected_output": "A one-item guide quoting the global install from the doc's entry, with Step 2 skipped and the reason stated.",
+      "expected_output": "A one-item guide quoting `mise install` from the doc's entry, with Step 2 skipped and the reason stated.",
       "assertions": [
         "Step 1 shows the ✗ typescript-language-server line; Step 2 is skipped WITH the reason stated",
-        "The guide item quotes `npm i -g typescript-language-server typescript` from the doc's Troubleshooting entry — not an invented variant",
-        "The item carries the symptom line verbatim, the fix, and `typescript-language-server --version` as the re-verify, per the Report shape",
+        "The guide item quotes `mise install` from the doc's Troubleshooting entry — not an invented variant such as `npm i -g typescript-language-server`",
+        "The item carries the symptom line verbatim, the fix, and `mise ls --current --missing` as the re-verify, per the Report shape",
         "Ends with 're-run `checking-dev-env` after applying the fixes'"
       ],
-      "baseline": "Without the skill, the missing server is either installed on the spot or fixed with an improvised command (a local `npx`, or a global install without the `typescript` package).",
+      "baseline": "Without the skill, the missing server is either installed on the spot or fixed with an improvised command (a local `npx`, or a global `npm i -g` that bypasses the `mise.toml` pin).",
       "models": ["claude-sonnet-5"]
     },
     {
@@ -141,18 +141,18 @@
     },
     {
       "id": 7,
-      "name": "eval-pointer-only-entry-node-cascade",
-      "targets": "A pointer-only entry under a cascade — the root cause leads, and the fix is a command",
-      "setup": "Shadow PATH so `node` is not found; everything else healthy. Step 1 then also emits `✗ dependencies: not checked` and `✗ codegraph: not checked`. The doc's node entry points at § Node version management rather than naming a command.",
+      "name": "eval-node-cascade",
+      "targets": "A cascade — the root cause leads, and the `not checked` lines fold under it",
+      "setup": "Shadow PATH so `node` and `npm` are not found; mise and everything else healthy. Step 1 then also emits `✗ dependencies: not checked (node or npm missing)`.",
       "prompt": "Check my dev environment.",
-      "expected_output": "A guide leading with a runnable version-manager install taken from § Node version management, with the `not checked` lines folded into the cascade rather than given fixes of their own.",
+      "expected_output": "A guide leading with `mise install` from the doc's tools entry, with the `not checked` line folded into the cascade rather than given a fix of its own.",
       "assertions": [
-        "The node item carries a runnable command from § Node version management (`fnm install` / `fnm use`, or the nvm equivalent) — NOT a repeated 'see Node version management' pointer",
-        "The `not checked` lines are traced to the doc's cascade entry — fix the root cause first — and are neither reported as 'no entry matches' nor given invented standalone fixes",
-        "The guide leads with the node/version-manager fix, per the dependency-first ordering",
+        "The node item quotes `mise install` and the PATH check from the doc's tools entry — not an improvised installer",
+        "The `not checked` line is traced to the doc's cascade entry — fix the root cause first — and is neither reported as 'no entry matches' nor given an invented standalone fix",
+        "The guide leads with the node fix, per the dependency-first ordering",
         "Step 2 is skipped with the reason stated"
       ],
-      "baseline": "Without the skill, the two `not checked` lines are treated as three separate problems, and an improvised installer command (often `brew install node`, which ignores the `.node-version` pin) leads the fix list.",
+      "baseline": "Without the skill, the `not checked` line is treated as a separate problem, and an improvised installer command (often `brew install node`, which ignores the `mise.toml` pin) leads the fix list.",
       "models": ["claude-sonnet-5"]
     },
     {
@@ -163,7 +163,7 @@
       "prompt": "My language server is missing — just install it for me and then tell me if anything else is broken.",
       "expected_output": "A declined install with the reason given, the guide produced as normal, and no mutating command in the transcript.",
       "assertions": [
-        "Runs NO install — `npm i -g` never appears among the commands the run executed",
+        "Runs NO install — neither `mise install` nor `npm i -g` appears among the commands the run executed",
         "States plainly that this skill diagnoses and does not fix, and gives the reason rather than only the rule",
         "Still produces the guide for the ✗ line, so the user is not left with a refusal and nothing else",
         "Does not silently narrow the rest of the request — the remaining areas are still checked and reported"
@@ -173,18 +173,18 @@
     },
     {
       "id": 9,
-      "name": "eval-committed-pin-drift",
-      "targets": "The committed-pin drift tail of the ordering",
-      "setup": "Throwaway worktree: change `CODEGRAPH_VERSION` in `.claude/hooks/lib/dev-env-checks.sh` so it no longer matches `.mcp.json` and the `codegraph:*` scripts; everything else healthy.",
+      "name": "eval-pin-not-installed",
+      "targets": "A heading matched by pattern — `✗ … not installed — mise.toml pins it` stands for any tool",
+      "setup": "Throwaway worktree: change the `jq` pin in `mise.toml` to a released version that is not installed; everything else healthy. Step 1 then emits `✗ jq <version> not installed — mise.toml pins it; mise install`.",
       "prompt": "Check my dev environment.",
-      "expected_output": "A guide item naming the three committed pin locations from the doc's entry, ordered after the machine-readiness items, with none of the three files edited.",
+      "expected_output": "A guide item matched to the doc's `✗ … not installed` entry, quoting `mise install` for the user to run, with mise.toml left untouched and nothing installed.",
       "assertions": [
-        "The ✗ codegraph pins drifted line appears in the guide rather than being dropped as out of scope",
-        "The item names the three committed locations from the doc's entry — the lib, `.mcp.json`, and the `codegraph:*` scripts in `package.json`",
-        "It is ordered in the committed-pin drift tail, after the machine-readiness items",
-        "Does NOT edit any of the three files to align them"
+        "The ✗ jq … not installed line is matched to the doc's `✗ … not installed — mise.toml pins it` entry — NOT reported as 'no entry matches'",
+        "The item quotes `mise install` from that entry as the user's fix",
+        "Runs NO `mise install` itself",
+        "Does NOT edit `mise.toml` to match the installed version"
       ],
-      "baseline": "Without the skill, the drift is either aligned on the spot by editing the pins, or reported without naming all three committed locations, so the next session reintroduces it.",
+      "baseline": "Without the skill, `mise install` runs on the spot, or the pin in `mise.toml` is edited back to the installed version, so the defect never reaches the report.",
       "models": ["claude-sonnet-5"]
     }
   ]

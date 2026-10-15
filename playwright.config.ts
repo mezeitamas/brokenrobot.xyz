@@ -53,7 +53,9 @@ export default defineConfig({
         }
     ],
     webServer: {
-        command: 'npm run serve',
+        // Not `mise run serve`: when Playwright stops a `mise run` process, mise leaves the server
+        // it started running, and the suite never exits.
+        command: 'node_modules/.bin/astro preview',
         timeout: 60_000,
         url: `http://localhost:${process.env.BROKENROBOT_PORT}`,
         reuseExistingServer: process.env.CI === undefined

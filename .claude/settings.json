@@ -9,6 +9,7 @@
         "DO_NOT_TRACK": "1",
         "HOMEBREW_NO_ANALYTICS": "1",
         "OPENSPEC_TELEMETRY": "0",
+        "CHECKPOINT_DISABLE": "1",
         "SHARP_IGNORE_GLOBAL_LIBVIPS": "1"
     },
     "autoMemoryEnabled": false,
@@ -55,7 +56,7 @@
                 "~/Library/Keychains"
             ],
             "allowRead": ["."],
-            "denyWrite": ["/tmp", "/etc", "/usr", "/opt"],
+            "denyWrite": ["/etc", "/usr", "/opt"],
             "allowWrite": [
                 ".",
                 "../../../.git",
@@ -73,25 +74,24 @@
                 "host.docker.internal",
                 "github.com",
                 "raw.githubusercontent.com",
+                "mise-versions.jdx.dev",
                 "*.npmjs.org",
+                "nodejs.org",
                 "mcr.microsoft.com",
                 "ghcr.io",
                 "pkg-containers.githubusercontent.com",
-                "containers.dev"
+                "containers.dev",
+                "releases.hashicorp.com"
             ],
             "allowLocalBinding": true,
             "allowAllUnixSockets": true
         },
         "credentials": {
             "files": [
+                { "path": ".env.github-mcp", "mode": "deny" },
+                { "path": "mise.local.toml", "mode": "deny" },
                 { "path": ".claude/settings.local.json", "mode": "deny" },
                 { "path": "~/.claude/settings.json", "mode": "deny" }
-            ],
-            "envVars": [
-                {
-                    "name": "BROKEN_ROBOT_XYZ_GITHUB_PERSONAL_ACCESS_TOKEN",
-                    "mode": "deny"
-                }
             ]
         }
     },
@@ -182,8 +182,6 @@
             "Bash(ln *)",
             "Bash(rm *)",
 
-            "Bash(npm run *)",
-            "Bash(npm run)",
             "Bash(npm ci)",
             "Bash(npm ci *)",
             "Bash(npm install)",
@@ -192,6 +190,8 @@
             "Bash(npm outdated *)",
 
             "Bash(openspec *)",
+
+            "Bash(mise *)",
 
             "Bash(bash .claude/hooks/lib/dev-env-checks.sh)",
 
@@ -226,6 +226,15 @@
             "Read(/.env.*)",
             "Read(/**/.env)",
             "Read(/**/.env.*)",
+            "Read(/mise.local.toml)",
+            "Read(/**/mise.local.toml)",
+
+            "Edit(/.env)",
+            "Edit(/.env.*)",
+            "Edit(/**/.env)",
+            "Edit(/**/.env.*)",
+            "Edit(/mise.local.toml)",
+            "Edit(/**/mise.local.toml)",
 
             "Read(/.claude/settings.local.json)",
             "Read(/**/.claude/settings.local.json)",

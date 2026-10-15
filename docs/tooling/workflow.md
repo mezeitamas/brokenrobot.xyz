@@ -101,7 +101,7 @@ does with them:
 - **`infra/` is checked, but only shallowly.** **Verify infrastructure** is one job with a
   `working-directory` of `infra/cloudflare`, running `fmt -check -recursive`, `init -backend=false`,
   and `validate`; `running-preflight-checks` runs the same `fmt` and `validate` locally as its
-  `terraform:check` step, against the devcontainer's Terraform 1.16.0 pin. What neither covers is
+  `terraform:check` step, against the Terraform version pinned in `mise.toml`. What neither covers is
   what an apply would do — no plan runs, and the apply itself belongs to Terraform Cloud — so a
   change that is well-formed, valid, and wrong still reaches production on a human read alone.
 - **Merge to `main` deploys, but only on a wholly green Pipeline.** No release branches.
@@ -259,23 +259,20 @@ Unlike the other servers, `github` needs a credential. Keep it read-only and out
   this repo, with an **expiry**, and **read-only** permissions: Metadata (required), Contents, Pull
   requests, Issues, Actions, Commit statuses. Nothing more — the server runs read-only and write actions
   are out of scope.
-- **Where it lives.** Put it in `.claude/settings.local.json` (gitignored), whose `env` block Claude Code
-  injects into the session. The variable carries a `BROKEN_ROBOT_XYZ_` prefix so per-project tokens can
-  coexist (e.g. in the machine-global `~/.claude/settings.json`); `.mcp.json` maps it onto the
-  `GITHUB_PERSONAL_ACCESS_TOKEN` name the server's Docker container expects:
+- **Where it lives.** Put it in `.env.github-mcp` at the repository root (gitignored), one line in
+  Docker's env-file format:
 
-    ```json
-    { "env": { "BROKEN_ROBOT_XYZ_GITHUB_PERSONAL_ACCESS_TOKEN": "github_pat_…" } }
+    ```
+    GITHUB_PERSONAL_ACCESS_TOKEN=github_pat_…
     ```
 
-    Use this file — **not** `.zshrc` (a Dock/Finder launch of the desktop app doesn't source it) and **not**
-    the committed `.claude/settings.json` (that would commit the secret). `.claude/settings.local.json` is
-    ignored by the repo `.gitignore`. **Restart Claude Code** after adding or changing the token so the
-    server reconnects.
+    `.mcp.json` passes that file to the server's container with `--env-file`, so the token never enters
+    the Claude Code session environment, and the sandbox denies the agent both reading and editing it
+    (see [sandbox.md](sandbox.md)). Use this file — **not** `.zshrc` and **not** a committed file.
+    **Restart Claude Code** after adding or changing the token so the server reconnects.
 
-- **Rotation.** The token is plaintext at rest and is visible to the session environment (including the
-  agent's shell). Use an expiring PAT, rotate periodically, and revoke immediately (github.com → Settings
-  → Developer settings) if it is ever exposed.
+- **Rotation.** The token is plaintext at rest. Use an expiring PAT, rotate periodically, and revoke
+  immediately (github.com → Settings → Developer settings) if it is ever exposed.
 - **Bumping the image.** Check the latest release at `github.com/github/github-mcp-server/releases`,
   update the `:vX.Y.Z` tag in `.mcp.json`, and restart. You can't verify the tag with
   `docker manifest inspect` from inside the sandbox — its TLS interception breaks the registry handshake
@@ -284,10 +281,10 @@ Unlike the other servers, `github` needs a credential. Keep it read-only and out
 - **Write access.** Out of scope by default. It would need a write-scoped PAT and dropping
   `GITHUB_READ_ONLY` — and any outward action (commenting, merging) is a deliberate, per-action decision,
   not something to enable ambiently.
-- **Troubleshooting — `mcp__github__*` tools don't appear:** token unset in the environment Claude was
-  launched with (most common — especially a GUI launch; confirm it's in `.claude/settings.local.json` and
-  restart); Docker not running or the pinned image can't be pulled; or a config change that needs a
-  restart to take effect.
+- **Troubleshooting — `mcp__github__*` tools don't appear:** `.env.github-mcp` missing, or its line
+  malformed (most common; confirm the file exists at the repository root and holds exactly
+  `GITHUB_PERSONAL_ACCESS_TOKEN=…`, then restart); Docker not running or the pinned image can't be
+  pulled; or a config change that needs a restart to take effect.
 
 ## How the proposer is customized
 
@@ -353,7 +350,7 @@ in tasks); scaffolding conventions ride the `scaffolding-components` skill at im
 the `frontend-code-reviewer` and the human review gates backstop the rest.
 
 This shapes _generation_. Structural validity is also **enforced** in CI: the `verify` job runs
-`npm run specs:check` (`openspec validate --all --strict`, then `openspec validate --archived`), so
+`mise run specs:check` (`openspec validate --all --strict`, then `openspec validate --archived`), so
 malformed proposals or spec deltas fail a PR, as does an archived change with unticked tasks. The _content_ rules above (the Verify section, primitives-first) are generation-shaped
 only — not hard-checked — so the `frontend-code-reviewer` and your review are the backstop.
 
@@ -361,13 +358,13 @@ The schema fork is OpenSpec-experimental and needs reconciling when OpenSpec upd
 schema. Because the fork is upstream-verbatim apart from the two declared artifacts, that's
 mechanical (last done against **1.13.2**):
 
-1. `cp node_modules/@fission-ai/openspec/schemas/spec-driven/schema.yaml openspec/schemas/frontend-change/schema.yaml`,
+1. `cp "$(mise where npm:@fission-ai/openspec)/node_modules/@fission-ai/openspec/schemas/spec-driven/schema.yaml" openspec/schemas/frontend-change/schema.yaml`,
    then restore the `name: frontend-change` and `description:` lines.
 2. Restore the two declared artifacts from git: the `brief` entry (first in `artifacts`,
    `requires: []`, and `proposal` requiring `brief`) and the `review` entry (after `tasks`,
    requiring `tasks`, and `review` added to `apply.requires`). Their templates, `brief.md` and
    `review.md`, have no upstream counterpart and are left as they are.
-3. Diff the four upstream templates against `node_modules/@fission-ai/openspec/schemas/spec-driven/templates/`;
+3. Diff the four upstream templates against `"$(mise where npm:@fission-ai/openspec)/node_modules/@fission-ai/openspec/schemas/spec-driven/templates/"`;
    `design.md` and `spec.md` should stay identical, `proposal.md` keeps only the added **Non-Goals**
    section, `tasks.md` keeps only the appended **Verify** group and its keep-last comment.
 4. `config.yaml` (`context`/`rules`/`operations`) is untouched by upgrades — but skim the release
@@ -376,17 +373,14 @@ mechanical (last done against **1.13.2**):
    `openspec status --change probe` must list `brief` first and `review` last,
    `openspec instructions proposal|tasks --change probe` must show the `<rules>` block and the
    seeded Verify group, and `openspec instructions apply --change probe` must report `review`
-   missing; delete the change and run `npm run specs:check`.
+   missing; delete the change and run `mise run specs:check`.
 
 ## Setup
 
-OpenSpec is pinned as a **devDependency** (`@fission-ai/openspec`), so `npm ci` installs it for both
-CI and local use, and `npm run specs:check` runs that pinned version — it's what CI gates on. It is
-dev-only (not part of the build or runtime), and `audit:check` omits devDependencies.
-
-For **interactive** authoring the `opsx` slash commands call `openspec` directly on your `PATH`, so
-also install the CLI on the host (`npm install -g @fission-ai/openspec`, Node ≥ 20.19). Its Claude
-Code integration lives in `.claude/skills/` and `.claude/commands/opsx/`; run
+OpenSpec is pinned in [`mise.toml`](../../mise.toml) (`npm:@fission-ai/openspec`), so
+`mise install` puts that one version on your `PATH` for the `opsx` slash commands and for
+`mise run specs:check` alike; CI gets it through mise too. It is not part of the build or runtime.
+Its Claude Code integration lives in `.claude/skills/` and `.claude/commands/opsx/`; run
 `openspec init --tools claude` (or `openspec update` after a CLI upgrade) to install or refresh it.
 The customized schema (`openspec/schemas/frontend-change/`) and the rest of the `openspec/` tree are
 committed to the repository.

@@ -73,7 +73,7 @@ amber accent.
 **This file is the source of truth for the site's colour and typography tokens.** It holds the light
 (default) theme plus the full rationale; the dark theme lives in `DESIGN.dark.md` with the same token
 names and dark values. The token _values_ here are compiled into `src/styles/tokens.generated.css`
-(consumed by `src/styles/base.css`) by `npm run tokens:generate` — do not hand-edit that file. Not
+(consumed by `src/styles/base.css`) by `mise run tokens:generate` — do not hand-edit that file. Not
 every design decision is a token: spacing, shadows/elevation, and `color-mix` derivations stay
 hand-authored in `base.css` (see the Layout and Elevation sections).
 
@@ -124,7 +124,7 @@ Real text pairings the linter contrast-checks: `page` and `surface` (body text o
 (secondary text on bg), `link` (accent-ink on bg), `code-block`, and the six `code-*` syntax pairings
 (`code-comment`, `code-keyword`, `code-string`, `code-symbol`, `code-number`, `code-punctuation`) —
 each syntax colour on `code-bg`, so a palette tweak that hurts legibility shows up in
-`npm run designmd:check`. Note the linter reports a contrast failure as a **warning** and still exits
+`mise run designmd:check`. Note the linter reports a contrast failure as a **warning** and still exits
 0, so it informs rather than gates. `accent` is intentionally not a text-background component — it is
 decorative.
 
@@ -132,6 +132,6 @@ decorative.
 
 - **Do** read every colour from a token; never hard-code a hex for a themed role.
 - **Do** keep both themes first-class — every colour token has a dark counterpart in `DESIGN.dark.md`.
-- **Do** run `npm run tokens:generate` after changing any token, and commit the regenerated CSS.
+- **Do** run `mise run tokens:generate` after changing any token, and commit the regenerated CSS.
 - **Don't** introduce a second accent hue; amber is the only brand colour.
 - **Don't** put body text on an `accent` fill — it won't meet contrast; use `accent-ink` on paper.

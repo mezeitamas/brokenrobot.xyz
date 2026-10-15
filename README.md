@@ -8,7 +8,7 @@ To install and run the project, please follow these steps:
 
 - Clone the repository to your local machine using `git clone git@github.com:brokenrobot-xyz/website.git`
 - Install dependencies by executing `npm install`
-- Start the development server by running `npm start`
+- Start the development server by running `mise run start`
 
 For the full setup — Node/npm versions, host vs. devcontainer, code-intelligence tooling, and worktrees — see [docs/development-environment.md](docs/development-environment.md).
 

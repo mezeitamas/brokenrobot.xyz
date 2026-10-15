@@ -33,28 +33,21 @@ before a commit" rather than one specific check.
 
 ### The preflight gate
 
-The gate is the non-visual set that runs before a commit. The
-[`running-preflight-checks`](../../.claude/skills/running-preflight-checks/SKILL.md) skill runs
-it and reports each check. Run every command even when an earlier one fails, because stopping at
-the first failure hides the rest:
+The gate is the non-visual set that runs before a commit: every check of
+[the CI pipeline](#the-ci-pipeline) except the e2e suite. One command runs it:
 
 ```bash
-npm run type:check
-npm run lint:check
-npm run format:check
-npm run specs:check
-npm run designmd:check
-npm run tokens:check
-npm run headers:check
-npm run build
-npm run thirdparty:check
-npm run twins:check
-npm run terraform:check
+mise run preflight
 ```
 
-The order is not arbitrary. `build` comes before `thirdparty:check` and `twins:check` because those
-checks read `dist/`. The cheap source checks come first, so an obvious failure appears before the
-slow build.
+The `preflight` task in [`mise.toml`](../../mise.toml) is shaped like the pipeline. `verify:site`,
+`verify:infrastructure`, and `verify:tooling` run the checks of the CI job with the same name, then
+`build` runs, then `thirdparty:check` and `twins:check`, which read `dist/` and so wait for the
+build. Checks run in parallel where they can, and output is grouped per check. The run continues
+past a failure, because stopping at the first failure hides the rest, and it exits non-zero when
+any check failed. One job's worth also runs alone, for example `mise run verify:site`. The
+[`running-preflight-checks`](../../.claude/skills/running-preflight-checks/SKILL.md) skill runs
+the gate and reports each check.
 
 The gate covers no visual regression and no accessibility. A change is not verified until
 [visual verification](#visual-verification) has also run.
@@ -77,8 +70,9 @@ inspect source and run first, Build produces `dist/` and only `dist/`, and Test 
 run before the build — nothing is built from source already known to be broken. Within Verify site,
 one failing check does not hide the checks after it; every check reports and the job still fails.
 
-CI runs more than the preflight gate. It adds `hooks:check` and the e2e suite, which the gate
-leaves out. A green gate therefore predicts a green pipeline, but it does not guarantee one.
+CI runs more than the preflight gate. It adds the e2e suite, which the gate leaves out, and a
+Terraform `init` step. A green gate therefore predicts a green pipeline, but it does not guarantee
+one.
 
 The pipeline runs on every pull request and on every push to `main`, unfiltered. `deploy.yml`
 ships only when the whole pipeline succeeds.
@@ -97,8 +91,8 @@ These checks read the files as written. They need no build.
 ### `format:check`
 
 ```bash
-npm run format:check # prettier --check, across every supported extension
-npm run format:fix   # rewrites the offending files
+mise run format:check # prettier --check, across every supported extension
+mise run format:fix   # rewrites the offending files
 ```
 
 Prettier checks formatting across source, configuration, and documentation. A tool settles
@@ -108,7 +102,7 @@ whitespace.
 ### `lint:check`
 
 ```bash
-npm run lint:check # astro sync && eslint 'src/**/*.{astro,ts,tsx}'
+mise run lint:check # astro sync && eslint 'src/**/*.{astro,ts,tsx}'
 ```
 
 ESLint inspects the application source. It catches correctness problems that types alone do not,
@@ -119,7 +113,7 @@ it generates the Astro types that ESLint then reads.
 ### `type:check`
 
 ```bash
-npm run type:check # astro check && tsc --noEmit
+mise run type:check # astro check && tsc --noEmit
 ```
 
 Two passes, because one tool cannot see everything. `astro check` types the `.astro` components,
@@ -132,7 +126,7 @@ These checks inspect files that a person writes, but that carry structure a tool
 ### `specs:check`
 
 ```bash
-npm run specs:check # openspec validate --all --strict && openspec validate --archived
+mise run specs:check # openspec validate --all --strict && openspec validate --archived
 ```
 
 OpenSpec validates the change artifacts and the specs. This is what makes the planning workflow
@@ -144,7 +138,7 @@ The check validates **structure**, not content. It cannot tell whether a proposa
 ### `designmd:check`
 
 ```bash
-npm run designmd:check # design.md lint DESIGN.md && design.md lint DESIGN.dark.md
+mise run designmd:check # design.md lint DESIGN.md && design.md lint DESIGN.dark.md
 ```
 
 The check lints both theme files, because both themes are first-class. Only **errors** fail this
@@ -155,8 +149,8 @@ check. Warnings and infos are advisory, and they do not fail it.
 ### `tokens:check`
 
 ```bash
-npm run tokens:check    # node scripts/generate-tokens.mjs --check
-npm run tokens:generate # regenerates the file
+mise run tokens:check    # node scripts/generate-tokens.mjs --check
+mise run tokens:generate # regenerates the file
 ```
 
 `scripts/generate-tokens.mjs` generates `src/styles/tokens.generated.css` from `DESIGN.md`, and
@@ -177,7 +171,7 @@ every other check passes, and the site renders the old value.
 ### `headers:check`
 
 ```bash
-npm run headers:check # node scripts/check-header-sync.mjs
+mise run headers:check # node scripts/check-header-sync.mjs
 ```
 
 The site's security headers are declared in three places that must stay byte-identical:
@@ -206,7 +200,7 @@ These checks need `dist/`. Run the build first, or they inspect nothing.
 ### `build`
 
 ```bash
-npm run build # astro build
+mise run build # astro build
 ```
 
 The build is a check in its own right: it fails on errors that no static pass catches. It is also
@@ -215,7 +209,7 @@ the precondition for everything else in this category.
 ### `thirdparty:check`
 
 ```bash
-npm run thirdparty:check # node scripts/check-third-party-resources.mjs
+mise run thirdparty:check # node scripts/check-third-party-resources.mjs
 ```
 
 The site self-hosts its assets. This check scans the built output for requests to third-party
@@ -243,7 +237,7 @@ and the Markdown twin carries raw — fails the Build job.
 ### `twins:check`
 
 ```bash
-npm run twins:check # node scripts/check-markdown-twins.mjs
+mise run twins:check # node scripts/check-markdown-twins.mjs
 ```
 
 Every blog post is published twice: as the HTML page a person reads, and as the Markdown twin at
@@ -268,7 +262,7 @@ Its exit codes carry the same meaning as `thirdparty:check`'s:
 
 ```bash
 # locally — runs in the devcontainer
-npm run test:e2e:check
+mise run test:e2e:check
 
 # in CI — dist/ is downloaded from the Build site job
 node_modules/.bin/playwright test
@@ -294,7 +288,7 @@ container, so it runs as its own part of Verify.
 
 ```bash
 # locally
-npm run terraform:check # fmt -check -recursive, then validate -no-color, in infra/cloudflare
+mise run terraform:check # fmt -check -recursive, then validate -no-color, in infra/cloudflare
 
 # in CI — the Verify infrastructure job adds an init step
 terraform fmt -check -recursive
@@ -310,7 +304,7 @@ catches such a change.
 
 Two failures are not the author's code, and both are `not run` rather than a real failure:
 
-- Terraform is missing from `PATH` (exit 127). The devcontainer pins 1.16.0 to match CI.
+- Terraform is missing from `PATH` (exit 127). `mise.toml` pins it; run `mise install`.
 - `infra/cloudflare` was never initialized. `validate` reports `Module not installed`. Fix it with
   `terraform -chdir=infra/cloudflare init -backend=false`, which needs network access to the
   Terraform registry.
@@ -322,7 +316,7 @@ A `fmt` failure is a real failure. `fmt` needs no initialization.
 ### `hooks:check`
 
 ```bash
-npm run hooks:check # runs every .claude/hooks/tests/*-cases.sh suite
+mise run hooks:check # runs every .claude/hooks/tests/*-cases.sh suite
 ```
 
 The Claude Code hooks are shell scripts with real logic, so they have their own test suites. CI
@@ -336,7 +330,7 @@ than the site. A change to `src/` cannot break it.
 ### `audit:check`
 
 ```bash
-npm run audit:check # npm audit --package-lock-only --omit=dev
+mise run audit:check # npm audit --package-lock-only --omit=dev
 ```
 
 Audits the production dependency tree for known advisories.

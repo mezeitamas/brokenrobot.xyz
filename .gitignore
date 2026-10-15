@@ -24,6 +24,11 @@ coverage
 # Dotenv
 .env
 .env.production
+.env.local
+.env.github-mcp
+
+# Mise
+mise.local.toml
 
 # Claude Code local settings (may hold secrets, e.g. the GitHub MCP token)
 .claude/worktrees/
