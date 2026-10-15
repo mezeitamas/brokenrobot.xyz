@@ -1,0 +1,5 @@
+schema: frontend-change
+created: 2026-10-14
+# No spec-level behavior changes: this moves every tool pin into mise and runs CI and the
+# devcontainer in one image. The built site is identical. See proposal.md — Capabilities.
+skip_specs: true
