@@ -1,12 +1,12 @@
 ---
 name: running-preflight-checks
 description: Runs the brokenrobot.xyz quality gate — type-check, lint, format-check, spec validation, DESIGN lint, design-token drift, the CSP header sync, build, the third-party-resource guardrail, the Markdown-twin audit, and the Terraform check — and summarizes failures. Use before committing a change or handing it to review; the same set CI's Pipeline jobs enforce. This is the non-visual half of Verify; pair it with testing-visual-regression.
-compatibility: Requires Node and npm at the package.json engine versions, with dependencies installed. `terraform:check` additionally needs Terraform on PATH (the devcontainer pins 1.16.0 to match CI) and `infra/cloudflare` already initialized.
+compatibility: Requires Node and npm at the package.json engine versions, with dependencies installed. `terraform:check` additionally needs Terraform on PATH (pinned in mise.toml, so mise install provides it) and `infra/cloudflare` already initialized.
 model: claude-sonnet-5
 allowed-tools: Bash
 metadata:
     author: brokenrobot.xyz
-    version: '4.1'
+    version: '4.2'
 ---
 
 Run the gate from the repo root. The commands are listed under **The preflight gate** in [docs/development/checks.md](../../../docs/development/checks.md), which is the only place they are listed. Read that section first, then run every command in the order it gives. Run them all even when one fails — stopping at the first failure hides the rest.

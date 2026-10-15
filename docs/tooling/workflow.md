@@ -101,7 +101,7 @@ does with them:
 - **`infra/` is checked, but only shallowly.** **Verify infrastructure** is one job with a
   `working-directory` of `infra/cloudflare`, running `fmt -check -recursive`, `init -backend=false`,
   and `validate`; `running-preflight-checks` runs the same `fmt` and `validate` locally as its
-  `terraform:check` step, against the devcontainer's Terraform 1.16.0 pin. What neither covers is
+  `terraform:check` step, against the Terraform version pinned in `mise.toml`. What neither covers is
   what an apply would do — no plan runs, and the apply itself belongs to Terraform Cloud — so a
   change that is well-formed, valid, and wrong still reaches production on a human read alone.
 - **Merge to `main` deploys, but only on a wholly green Pipeline.** No release branches.
