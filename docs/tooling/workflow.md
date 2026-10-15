@@ -361,13 +361,13 @@ The schema fork is OpenSpec-experimental and needs reconciling when OpenSpec upd
 schema. Because the fork is upstream-verbatim apart from the two declared artifacts, that's
 mechanical (last done against **1.13.2**):
 
-1. `cp node_modules/@fission-ai/openspec/schemas/spec-driven/schema.yaml openspec/schemas/frontend-change/schema.yaml`,
+1. `cp "$(mise where npm:@fission-ai/openspec)/node_modules/@fission-ai/openspec/schemas/spec-driven/schema.yaml" openspec/schemas/frontend-change/schema.yaml`,
    then restore the `name: frontend-change` and `description:` lines.
 2. Restore the two declared artifacts from git: the `brief` entry (first in `artifacts`,
    `requires: []`, and `proposal` requiring `brief`) and the `review` entry (after `tasks`,
    requiring `tasks`, and `review` added to `apply.requires`). Their templates, `brief.md` and
    `review.md`, have no upstream counterpart and are left as they are.
-3. Diff the four upstream templates against `node_modules/@fission-ai/openspec/schemas/spec-driven/templates/`;
+3. Diff the four upstream templates against `"$(mise where npm:@fission-ai/openspec)/node_modules/@fission-ai/openspec/schemas/spec-driven/templates/"`;
    `design.md` and `spec.md` should stay identical, `proposal.md` keeps only the added **Non-Goals**
    section, `tasks.md` keeps only the appended **Verify** group and its keep-last comment.
 4. `config.yaml` (`context`/`rules`/`operations`) is untouched by upgrades — but skim the release
@@ -380,13 +380,10 @@ mechanical (last done against **1.13.2**):
 
 ## Setup
 
-OpenSpec is pinned as a **devDependency** (`@fission-ai/openspec`), so `npm ci` installs it for both
-CI and local use, and `npm run specs:check` runs that pinned version — it's what CI gates on. It is
-dev-only (not part of the build or runtime), and `audit:check` omits devDependencies.
-
-For **interactive** authoring the `opsx` slash commands call `openspec` directly on your `PATH`, so
-also install the CLI on the host (`npm install -g @fission-ai/openspec`, Node ≥ 20.19). Its Claude
-Code integration lives in `.claude/skills/` and `.claude/commands/opsx/`; run
+OpenSpec is pinned in [`mise.toml`](../../mise.toml) (`npm:@fission-ai/openspec`), so
+`mise install` puts that one version on your `PATH` for the `opsx` slash commands and for
+`npm run specs:check` alike; CI gets it through mise too. It is not part of the build or runtime.
+Its Claude Code integration lives in `.claude/skills/` and `.claude/commands/opsx/`; run
 `openspec init --tools claude` (or `openspec update` after a CLI upgrade) to install or refresh it.
 The customized schema (`openspec/schemas/frontend-change/`) and the rest of the `openspec/` tree are
 committed to the repository.

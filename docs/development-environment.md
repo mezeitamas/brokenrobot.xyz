@@ -7,28 +7,37 @@ truth rather than restating them, so versions and commands live in one place.
 
 ## Prerequisites
 
-| Tool | Version       | Source of truth                                |
-| ---- | ------------- | ---------------------------------------------- |
-| Node | **26.8.1**    | [`.node-version`](../.node-version)            |
-| npm  | **≥ 11.19.0** | `engines` in [`package.json`](../package.json) |
+| Tool | Version       | Source of truth                                   |
+| ---- | ------------- | ------------------------------------------------- |
+| mise | required      | [`mise.toml`](../mise.toml) pins every other tool |
+| npm  | **≥ 11.19.0** | `engines` in [`package.json`](../package.json)    |
 
 [`.npmrc`](../.npmrc) sets `engine-strict=true`, so installs **fail** if your Node/npm fall below
 those floors — this is intentional, keeping everyone on the pinned toolchain. It also sets
 `save-exact=true` (dependencies are pinned to exact versions, no `^`).
 
-## Node version management
+## Toolchain (mise)
 
-The repo commits a [`.node-version`](../.node-version) file and does **not** mandate a manager — any
-tool that reads it works (fnm, nvm, asdf, volta). Using [fnm](https://github.com/Schniz/fnm) as the
-worked example:
+[mise](https://mise.jdx.dev) is required. [`mise.toml`](../mise.toml) is the only place tool
+versions are pinned: Node, jq, Terraform, openspec, codegraph, and typescript-language-server.
+Nothing is installed globally with npm.
 
-```sh
-fnm install # installs the version named in .node-version (26.8.1)
-fnm use     # switches the current shell to it
-```
+1. Install mise — see [mise's install guide](https://mise.jdx.dev/installing-mise.html).
+2. Put mise's tools on `PATH` in your shell profile, then start Claude Code from that shell:
 
-Enable `fnm`'s `--use-on-cd` shell hook and it will switch automatically when you `cd` into the repo.
-With nvm the equivalent is `nvm install && nvm use`; asdf/volta read `.node-version` similarly.
+    ```sh
+    eval "$(mise activate zsh)"                                         # interactive shells
+    export PATH="${MISE_DATA_DIR:-$HOME/.local/share/mise}/shims:$PATH" # everything else
+    ```
+
+    `mise activate` updates `PATH` at each prompt. Claude Code's commands, the codegraph MCP server,
+    and the language server never see a prompt, so the shims line is what keeps them on the pinned
+    tools.
+
+3. In the checkout: `mise install`.
+
+`mise.toml` holds only plain tool versions, so mise reads it without a `mise trust` step, in the
+main clone and in every worktree.
 
 ## Install
 
@@ -90,23 +99,14 @@ Why git and Docker behave the way they do under the agent sandbox is documented 
 ## Code-intelligence tools (Claude Code)
 
 Two tools give Claude Code code intelligence in this repo; the full rationale is in
-[tooling/code-intelligence.md](tooling/code-intelligence.md). One requires a manual host step:
+[tooling/code-intelligence.md](tooling/code-intelligence.md). mise installs both (see
+[Toolchain (mise)](#toolchain-mise)):
 
-- **typescript-lsp plugin** — install the language server **globally on the host**, once:
-
-    ```sh
-    npm i -g typescript-language-server typescript
-    ```
-
-    This is **required**, not optional: the plugin launches a bare `typescript-language-server` from
-    your shell `PATH`, which can't reach the repo's `node_modules/.bin`. A single host install covers
-    **every** worktree. When you're inside this repo the server still uses the project's own pinned
-    `typescript`; the global `typescript` is only a fallback for projects without a local one. (The
-    repo also pins `typescript-language-server` as a devDependency, but purely as a version reference —
-    the plugin doesn't consume it.)
-
-- **Codegraph MCP server** — needs no manual step; the `SessionStart` hook described below builds its
-  index.
+- **typescript-lsp plugin** — the plugin launches a bare `typescript-language-server` from your
+  shell `PATH`, which is why mise's tools must be on the `PATH` Claude Code starts with. Inside this
+  repo the server uses the project's own pinned `typescript`.
+- **Codegraph MCP server** — [`.mcp.json`](../.mcp.json) starts a bare `codegraph` from the same
+  `PATH`; the `SessionStart` hook described below builds its index.
 
 ## Worktrees
 
@@ -138,15 +138,13 @@ declares the recommended extensions, worth installing in your host editor too:
 After setup, confirm the environment:
 
 ```sh
-node -v && npm -v                    # 26.8.1 / ≥ 11.19.0
-npm run type:check                   # Astro + tsc, no errors
-npm run lint:check                   # ESLint clean
-npm run format:check                 # Prettier clean
-npm run build                        # production build succeeds
-typescript-language-server --version # global LSP present
-openspec --version                   # matches the @fission-ai/openspec pin in package.json
-openspec config get profile          # core — the six-workflow set the repo commits
-npm run codegraph:status             # "Index is up to date"
+mise ls --current --missing # prints nothing when every pin is installed
+npm run type:check          # Astro + tsc, no errors
+npm run lint:check          # ESLint clean
+npm run format:check        # Prettier clean
+npm run build               # production build succeeds
+openspec config get profile # core — the six-workflow set the repo commits
+npm run codegraph:status    # "Index is up to date"
 ```
 
 In Claude Code, `/plugin` should list **typescript-lsp** as enabled, and `/mcp` should show
@@ -160,36 +158,29 @@ The symptoms below are the ✗ lines emitted by the Claude Code `SessionStart` r
 charter each entry links the fix rather than restating it; the skill turns matching entries into
 an ordered setup guide. (Detection wording lives in the lib; keep these headings in step with it.)
 
-### ✗ git missing · ✗ jq missing
+### ✗ git missing
 
-Install with Homebrew: `brew install git jq`.
+Install with Homebrew: `brew install git`.
 
-### ✗ node missing · ✗ node is … but .node-version pins … · ✗ no node version manager detected
+### ✗ mise missing · ✗ mise cannot read mise.toml
 
-Install a version manager and the pinned Node — see
-[Node version management](#node-version-management).
+For `mise missing`, install mise — see [Toolchain (mise)](#toolchain-mise). For
+`cannot read mise.toml`, run `mise install` in the checkout: it prints mise's own error.
 
-### ✗ npm missing
+### ✗ … not installed — mise.toml pins it
 
-npm ships with Node; fixing the Node install above fixes this too. If npm is present but too old,
-`npm install -g npm` brings it to the `engines` floor.
+Run `mise install` in the checkout.
+
+### ✗ node missing · ✗ npm missing · ✗ jq missing · ✗ codegraph missing · ✗ typescript-language-server missing · ✗ openspec missing
+
+Run `mise install` in the checkout. When `mise ls --current --missing` already prints nothing, the
+tools are installed but not on the `PATH` Claude Code started with — fix step 2 of
+[Toolchain (mise)](#toolchain-mise), then restart Claude Code from a new terminal.
 
 ### ✗ dependencies: node_modules missing or stale · ✗ npm install failed
 
 Run `npm ci` from the checkout — see [Install](#install). Inside a Claude Code session the
 `SessionStart` hook installs on the next session start by itself.
-
-### ✗ typescript-language-server missing
-
-One global install per machine: `npm i -g typescript-language-server typescript` — the why is in
-[Code-intelligence tools](#code-intelligence-tools-claude-code).
-
-### ✗ openspec missing · ✗ openspec is … but package.json pins …
-
-One global install per machine, matching the `@fission-ai/openspec` version pinned in
-[`package.json`](../package.json): `npm i -g @fission-ai/openspec@<pinned version>`. The why — the
-`/opsx` commands launch a bare `openspec` from your shell `PATH` — and the one-time machine-global
-settings that go with it are in [tooling/workflow.md § Setup](tooling/workflow.md#setup).
 
 ### ✗ openspec profile is …
 
@@ -211,13 +202,6 @@ Both halves are committed: [`.mcp.json`](../.mcp.json) registers the server and
 means this checkout's config diverged — restore `"codegraph"` to that list. Background in
 [tooling/code-intelligence.md](tooling/code-intelligence.md).
 
-### ✗ codegraph pins drifted
-
-The version is pinned in three committed places — `CODEGRAPH_VERSION` in
-[`.claude/hooks/lib/dev-env-checks.sh`](../.claude/hooks/lib/dev-env-checks.sh), the `codegraph`
-server in [`.mcp.json`](../.mcp.json), and the `codegraph:*` scripts in
-[`package.json`](../package.json) — align them to one version.
-
 ### ✗ codegraph: no index · index unreadable · built by an older codegraph
 
 Run `npm run codegraph:init` in the checkout, or start a Claude Code session and let the
@@ -232,7 +216,7 @@ devcontainer CLI ships as a devDependency, so a plain `npm ci` provides it.
 
 ### ✗ dependencies: not checked · ✗ codegraph: not checked · ✗ claude code integration: not checked · ✗ cannot enter …
 
-Cascades, not separate problems: a missing prerequisite (node, npm, or jq — named in the line's
+Cascades, not separate problems: a missing prerequisite (node, npm, codegraph, or jq — named in the line's
 parentheses) kept that probe from running at all. Fix the root-cause ✗ in the entries above and
 these clear on the next run. The `cannot enter` line means the checkout path itself was
 inaccessible — re-run from the repo root.

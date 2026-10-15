@@ -17,19 +17,19 @@ plugin adds go-to-definition, find-references, and error-checking for `.ts/.tsx/
   marketplace the skill plugins come from (see [workflow.md](workflow.md)).
 - The plugin launches a fixed `typescript-language-server --stdio` from `PATH` — the command is set
   in the marketplace manifest and is **not** project-configurable. Claude Code's launch `PATH` does
-  **not** include the repo's `node_modules/.bin`, so the server must be installed **globally on the
-  host** (`npm i -g typescript-language-server typescript`) — a single install covers every worktree.
-  See [../development-environment.md](../development-environment.md) for the setup step.
-- We still pin `typescript-language-server` as a devDependency, but purely as a **version
-  reference** — the plugin doesn't consume it. Inside this repo the server uses the project's own
-  pinned `typescript`; the global `typescript` is only a fallback for projects without a local one.
+  **not** include the repo's `node_modules/.bin`, so the server comes from mise, pinned in
+  [`mise.toml`](../../mise.toml) — a single install covers every worktree, and mise's tools must be
+  on the `PATH` Claude Code starts with. See
+  [../development-environment.md § Toolchain (mise)](../development-environment.md#toolchain-mise)
+  for the setup step.
+- Inside this repo the server uses the project's own pinned `typescript`.
 
 ## Codegraph (an MCP server)
 
 [Codegraph](https://github.com/colbymchenry/codegraph) (`@colbymchenry/codegraph`) serves a
 pre-indexed SQLite code graph so the agent gets symbols, call paths, and impact analysis in a single
 call instead of grep/read loops. Indexing and queries are 100% local and need no credentials, and the
-only network call left is `npx` fetching the pinned package the first time a machine runs it. Both of
+only network call left is `mise install` fetching the pinned package once per machine. Both of
 codegraph's own outbound calls are off, through `CODEGRAPH_TELEMETRY=0` and the cross-tool
 `DO_NOT_TRACK=1` in [`.claude/settings.json`](../../.claude/settings.json), alongside the other
 tools' opt-outs. Two things follow: telemetry is on by default and its CLI opt-out is saved
@@ -38,16 +38,14 @@ reproducible; and `DO_NOT_TRACK` also silences the background update check, so a
 release is something to go looking for — it is not a devDependency either, so `npm outdated` will
 not surface it.
 
-- **Registered** in [`.mcp.json`](../../.mcp.json) as
-  `npx -y @colbymchenry/codegraph@<pin> serve --mcp`, with the version pinned **in the command** —
-  read the pin there, never from this page.
+- **Registered** in [`.mcp.json`](../../.mcp.json) as a bare `codegraph serve --mcp`; the version
+  is pinned in [`mise.toml`](../../mise.toml) — read the pin there, never from this page.
   Claude Code launches MCP servers before anything can install dependencies, so a
   `node_modules/.bin/…` path is simply absent in a fresh worktree and the server never starts for
-  that session; `npx` has no such dependency. The explicit `@version` is what keeps that from
-  costing the pin — a bare `npx <pkg>` starts fine but silently fetches the latest release. Codegraph
-  is deliberately **not** a devDependency: nothing loads it from `node_modules`, and keeping it out
-  cuts a 293 MB platform binary from every worktree's install in favour of one `npx` cache per
-  machine. **Enabled** through `enabledMcpjsonServers` in the committed
+  that session; mise's install exists before the session starts, so the bare command has no such
+  dependency. Codegraph is deliberately **not** a devDependency: nothing loads it from
+  `node_modules`, and keeping it out cuts a 293 MB platform binary from every worktree's install in
+  favour of one mise install per machine. **Enabled** through `enabledMcpjsonServers` in the committed
   [`.claude/settings.json`](../../.claude/settings.json) — a clone gets it without a setup step.
 - `CODEGRAPH_EXPLORE_DEDUP=0`, alongside those env vars, keeps `codegraph_explore` returning
   verbatim line-numbered source on **every** call. Codegraph 1.6.0 made deduplication the default:
@@ -56,7 +54,7 @@ not surface it.
   the tool stops being the Read-equivalent its own instructions promise. Turning it on is a
   deliberate change to make on its own, not a side effect of a version bump.
 - We deliberately do **not** run `codegraph install` — that writes a global `~/.claude.json` entry
-  pointing at a global binary, defeating the repo-scoped version pin.
+  pointing at a global binary, defeating the repo-scoped version pin in `mise.toml`.
 - The index lives in `.codegraph/` (SQLite + a daemon lock). It is **checkout-specific** — the lock
   and DB are tied to the path that wrote them — so it is **gitignored** and never shared between
   worktrees.
@@ -72,10 +70,9 @@ nor `.codegraph/`. It runs three steps and ends every session with a short step 
 and failures alike — delivered to both the user and the model (Claude Code reads hook output only
 once the script exits, so the report arrives at the end rather than streaming):
 
-1. **Tool sanity check** (report-only): presence of `git`, `node`, `npm`, `jq` and the global
-   `typescript-language-server`; `node` is validated against `.node-version`, and the codegraph
-   version pin is cross-checked between the lib, `.mcp.json` and the `codegraph:*` npm scripts.
-   Problems point at the `checking-dev-env` skill, whose fix guide is built from
+1. **Tool sanity check** (report-only): mise is present, every pin in `mise.toml` is installed
+   (mise's own answer, `mise ls --current --missing`), and `git`, `node`, `npm`, `jq`, `codegraph`,
+   `openspec` and `typescript-language-server` are on `PATH`. Problems point at the `checking-dev-env` skill, whose fix guide is built from
    [development-environment.md](../development-environment.md#troubleshooting)'s Troubleshooting
    entries — the hook diagnoses, it does not install tools.
 2. **Dependencies**: `npm install`, but only when `node_modules/` is missing or
