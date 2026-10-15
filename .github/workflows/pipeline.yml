@@ -22,7 +22,7 @@ jobs:
     name: 'Verify site'
     runs-on: ubuntu-24.04
     container:
-      image: ghcr.io/jdx/mise:2026.10.9-debian@sha256:2e59c25cb3b4c54ff2769d7a00b48ec41e8e07211c2823247b714a2c231ac615
+      image: ghcr.io/jdx/mise:2026.10.10-debian@sha256:8eb2c479207e09099c9ae401625f0e4782344031fa327cee296cee223193fc07
     timeout-minutes: 10
     permissions:
       contents: read
@@ -96,7 +96,7 @@ jobs:
     name: 'Verify infrastructure'
     runs-on: ubuntu-24.04
     container:
-      image: ghcr.io/jdx/mise:2026.10.9-debian@sha256:2e59c25cb3b4c54ff2769d7a00b48ec41e8e07211c2823247b714a2c231ac615
+      image: ghcr.io/jdx/mise:2026.10.10-debian@sha256:8eb2c479207e09099c9ae401625f0e4782344031fa327cee296cee223193fc07
     timeout-minutes: 10
     permissions:
       contents: read
@@ -132,7 +132,7 @@ jobs:
     name: 'Verify tooling'
     runs-on: ubuntu-24.04
     container:
-      image: ghcr.io/jdx/mise:2026.10.9-debian@sha256:2e59c25cb3b4c54ff2769d7a00b48ec41e8e07211c2823247b714a2c231ac615
+      image: ghcr.io/jdx/mise:2026.10.10-debian@sha256:8eb2c479207e09099c9ae401625f0e4782344031fa327cee296cee223193fc07
     timeout-minutes: 10
     permissions:
       contents: read
@@ -158,7 +158,7 @@ jobs:
     name: 'Build site'
     runs-on: ubuntu-24.04
     container:
-      image: ghcr.io/jdx/mise:2026.10.9-debian@sha256:2e59c25cb3b4c54ff2769d7a00b48ec41e8e07211c2823247b714a2c231ac615
+      image: ghcr.io/jdx/mise:2026.10.10-debian@sha256:8eb2c479207e09099c9ae401625f0e4782344031fa327cee296cee223193fc07
     # The phase rule: if Verify does not pass, Build does not run. This costs
     # wall-clock time — the critical path becomes Verify + Build + Test — and buys
     # never building source already known to be broken.
@@ -204,7 +204,7 @@ jobs:
     name: 'Test site'
     runs-on: ubuntu-24.04
     container:
-      image: ghcr.io/jdx/mise:2026.10.9-debian@sha256:2e59c25cb3b4c54ff2769d7a00b48ec41e8e07211c2823247b714a2c231ac615
+      image: ghcr.io/jdx/mise:2026.10.10-debian@sha256:8eb2c479207e09099c9ae401625f0e4782344031fa327cee296cee223193fc07
     needs: build-site
     timeout-minutes: 10
     env:
