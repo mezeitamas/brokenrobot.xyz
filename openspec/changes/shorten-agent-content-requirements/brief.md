@@ -16,15 +16,15 @@ validation under OpenSpec 1.14.2, and the site behaves exactly as before.
 
 - **Split each requirement into two, one behaviour each.** It keeps every existing SHALL normative,
   in its present wording where possible, and it is the remedy the OpenSpec warning names.
-  - "Faithful to the authored article" becomes: the content is the authored prose only (derived
-    from the source rather than rendered HTML, no site chrome, no authoring-tool syntax); and code
-    samples and images survive intact (code exactly as authored, images as absolute URLs with
-    their alternative text).
-  - "Agents can discover the Markdown representation" becomes: discoverable from the post's HTML
-    page (the alternate link, and the pointer to the index); and discoverable from the index (each
-    post linked by its Markdown representation, pages without one still linked as pages). The rule
-    that discovery needs no guessed URL pattern stays.
-  - The existing scenarios move, unchanged, under the requirement they belong to.
+    - "Faithful to the authored article" becomes: the content is the authored prose only (derived
+      from the source rather than rendered HTML, no site chrome, no authoring-tool syntax); and code
+      samples and images survive intact (code exactly as authored, images as absolute URLs with
+      their alternative text).
+    - "Agents can discover the Markdown representation" becomes: discoverable from the post's HTML
+      page (the alternate link, and the pointer to the index); and discoverable from the index (each
+      post linked by its Markdown representation, pages without one still linked as pages). The rule
+      that discovery needs no guessed URL pattern stays.
+    - The existing scenarios move, unchanged, under the requirement they belong to.
 - **No behaviour change.** The change rewords the spec only; no code, test, or built output changes.
 - **The change lives on `chore/update-dependencies`.** The human waived the `<type>/<change-name>`
   branch rule for this change, so that it lands with the OpenSpec bump it unblocks.

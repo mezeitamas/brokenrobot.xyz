@@ -11,16 +11,16 @@ paragraph, so the fix is to split them, not to shorten them.
 ## What Changes
 
 - Split "Markdown representations are faithful to the authored article" into two requirements:
-  - "Markdown representations contain only the authored prose": derived from the source rather
-    than from rendered HTML, no site chrome, no authoring-tool syntax.
-  - "Markdown representations keep code samples and images intact": code exactly as authored,
-    images as absolute URLs with their alternative text.
+    - "Markdown representations contain only the authored prose": derived from the source rather
+      than from rendered HTML, no site chrome, no authoring-tool syntax.
+    - "Markdown representations keep code samples and images intact": code exactly as authored,
+      images as absolute URLs with their alternative text.
 - Split "Agents can discover the Markdown representation" into two requirements:
-  - "Agents can discover the Markdown representation from the post's page": the alternate link
-    and the pointer to the index.
-  - "Agents can discover the Markdown representation from the index": each post linked by its
-    Markdown representation, and pages without one still linked as pages.
-  - Both requirements keep the rule that discovery needs no guessed URL pattern.
+    - "Agents can discover the Markdown representation from the post's page": the alternate link
+      and the pointer to the index.
+    - "Agents can discover the Markdown representation from the index": each post linked by its
+      Markdown representation, and pages without one still linked as pages.
+    - Both requirements keep the rule that discovery needs no guessed URL pattern.
 - Every existing SHALL stays normative, in its present wording where the split allows. Each
   existing scenario moves, unchanged, under the new requirement it belongs to. No requirement
   text or scenario is added beyond that.
