@@ -41,7 +41,7 @@ The site treats light and dark as first-class, so UI needs snapshot and a11y cov
 
 ## Where this runs — the devcontainer, not the host
 
-Visual snapshots are OS-specific, and the committed baselines are Linux-rendered (CI runs on `ubuntu-24.04`), so a macOS-host run would mismatch every snapshot at the `0.01` tolerance even when nothing changed — invalid. Run in the **devcontainer** (`.devcontainer/`, same `ubuntu-24.04`), whose `postCreateCommand` installs the browsers; there is no host browser install. Drive the container over the Docker socket:
+Visual snapshots are OS-specific, and the committed baselines are Linux-rendered (CI runs every job in the mise Debian image, `ghcr.io/jdx/mise`), so a macOS-host run would mismatch every snapshot at the `0.01` tolerance even when nothing changed — invalid. Run in the **devcontainer** (`.devcontainer/`, the same image by the same digest), whose `postCreateCommand` installs the browsers; there is no host browser install. Drive the container over the Docker socket:
 
 ```bash
 npm run dc:up

@@ -6,7 +6,7 @@ model: claude-sonnet-5
 allowed-tools: Bash(npm run:*), Bash(git status:*), Bash(ls:*), Read
 metadata:
     author: brokenrobot.xyz
-    version: '3.0'
+    version: '3.1'
 ---
 
 Run the site's visual-regression and accessibility coverage in **both themes**, and refresh baselines when a visual change is intentional. This is the visual half of every change's **Verify** step; `running-preflight-checks` is the non-visual half.
@@ -32,7 +32,7 @@ Visual-check progress:
 
 ## Step 1 — Run inside the devcontainer, never on the host
 
-Playwright screenshots are **OS-specific** (fonts and anti-aliasing differ), and the committed baselines are **Linux**-rendered (CI runs on `ubuntu-24.04`). A run on the macOS host would mismatch every baseline at the `0.01` tolerance even when nothing changed — invalid results. So run in the devcontainer (`.devcontainer/`, also `ubuntu-24.04`), whose `postCreateCommand` installs the browsers. There is no host browser install and no `PLAYWRIGHT_BROWSERS_PATH` to manage.
+Playwright screenshots are **OS-specific** (fonts and anti-aliasing differ), and the committed baselines are **Linux**-rendered (CI runs every job in the mise Debian image, `ghcr.io/jdx/mise`). A run on the macOS host would mismatch every baseline at the `0.01` tolerance even when nothing changed — invalid results. So run in the devcontainer (`.devcontainer/`, the same image by the same digest), whose `postCreateCommand` installs the browsers. There is no host browser install and no `PLAYWRIGHT_BROWSERS_PATH` to manage.
 
 The `dc:up` and `test:e2e:*` scripts wrap the pinned `@devcontainers/cli` devDependency over the Docker socket:
 

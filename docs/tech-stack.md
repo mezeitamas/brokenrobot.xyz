@@ -71,8 +71,8 @@ design overhaul.
 - **Infrastructure as code:** Terraform under `infra/` (Cloudflare) plus Kubernetes
   manifests. CI also runs `terraform fmt`/`validate`.
 - **Container:** a `Dockerfile` serves `dist/` via unprivileged Nginx.
-- **Dev container:** the mise image (`ghcr.io/jdx/mise`, Debian), which installs the tools pinned
-  in `mise.toml`.
+- **Dev container:** the mise image (`ghcr.io/jdx/mise`, Debian) that every CI job also runs in, by
+  the same digest; it installs the tools pinned in `mise.toml`.
 
 ## Implications for the overhaul
 
