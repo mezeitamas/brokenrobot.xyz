@@ -353,7 +353,7 @@ in tasks); scaffolding conventions ride the `scaffolding-components` skill at im
 the `frontend-code-reviewer` and the human review gates backstop the rest.
 
 This shapes _generation_. Structural validity is also **enforced** in CI: the `verify` job runs
-`npm run specs:check` (`openspec validate --all --strict`, then `openspec validate --archived`), so
+`mise run specs:check` (`openspec validate --all --strict`, then `openspec validate --archived`), so
 malformed proposals or spec deltas fail a PR, as does an archived change with unticked tasks. The _content_ rules above (the Verify section, primitives-first) are generation-shaped
 only — not hard-checked — so the `frontend-code-reviewer` and your review are the backstop.
 
@@ -376,13 +376,13 @@ mechanical (last done against **1.13.2**):
    `openspec status --change probe` must list `brief` first and `review` last,
    `openspec instructions proposal|tasks --change probe` must show the `<rules>` block and the
    seeded Verify group, and `openspec instructions apply --change probe` must report `review`
-   missing; delete the change and run `npm run specs:check`.
+   missing; delete the change and run `mise run specs:check`.
 
 ## Setup
 
 OpenSpec is pinned in [`mise.toml`](../../mise.toml) (`npm:@fission-ai/openspec`), so
 `mise install` puts that one version on your `PATH` for the `opsx` slash commands and for
-`npm run specs:check` alike; CI gets it through mise too. It is not part of the build or runtime.
+`mise run specs:check` alike; CI gets it through mise too. It is not part of the build or runtime.
 Its Claude Code integration lives in `.claude/skills/` and `.claude/commands/opsx/`; run
 `openspec init --tools claude` (or `openspec update` after a CLI upgrade) to install or refresh it.
 The customized schema (`openspec/schemas/frontend-change/`) and the rest of the `openspec/` tree are

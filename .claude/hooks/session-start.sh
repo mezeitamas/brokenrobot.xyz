@@ -74,7 +74,7 @@ dev_env_check_tools
 while IFS= read -r line; do add "${line}"; done < <(dev_env_tool_report "(run the checking-dev-env skill for a fix guide)")
 
 # --- 1b. Containers check — report-only too. Only the e2e suite needs Docker, so nothing below
-#     gates on it; it is reported here so a stopped daemon shows before `npm run dc:up` fails.
+#     gates on it; it is reported here so a stopped daemon shows before `mise run dc:up` fails.
 while IFS= read -r line; do
     case "${line}" in
         ✗*) add "${line} (run the checking-dev-env skill for a fix guide)" ;;
@@ -103,11 +103,11 @@ if [ "${have_node}" = true ] && [ "${have_npm}" = true ]; then
             git hash-object package-lock.json >node_modules/.session-start-stamp
             add "✓ dependencies: installed (npm install, $((SECONDS - t0))s) — node_modules was missing or package-lock.json had moved."
         else
-            add "✗ npm install failed after $((SECONDS - t0))s — dependencies are NOT installed; builds, tests and npm scripts will fail until \`npm install\` succeeds."
+            add "✗ npm install failed after $((SECONDS - t0))s — dependencies are NOT installed; builds, tests and mise tasks will fail until \`npm install\` succeeds."
         fi
     fi
 else
-    add "✗ dependencies: skipped (node/npm missing) — nothing is installed; builds, tests and npm scripts will fail."
+    add "✗ dependencies: skipped (node/npm missing) — nothing is installed; builds, tests and mise tasks will fail."
 fi
 
 # --- 3. Codegraph index — build once per checkout, then incremental sync.

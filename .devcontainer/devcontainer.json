@@ -11,7 +11,7 @@
     "mounts": [
         "source=${localWorkspaceFolderBasename}-node-modules,target=${containerWorkspaceFolder}/node_modules,type=volume"
     ],
-    "postCreateCommand": "mise install --locked && npm install && npm run install:playwright",
+    "postCreateCommand": "mise install --locked && npm install && mise run install:playwright",
     "customizations": {
         "vscode": {
             "settings": {},

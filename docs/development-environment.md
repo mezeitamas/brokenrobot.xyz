@@ -1,7 +1,7 @@
 # Development environment
 
 How to set up a machine to work on brokenrobot.xyz. This is the human counterpart to the root
-[README](../README.md) quickstart (`npm install` / `npm start`): it covers the prerequisites, the
+[README](../README.md) quickstart (`npm install` / `mise run start`): it covers the prerequisites, the
 tooling that `npm ci` doesn't install, and how the pieces fit together. It **links** the sources of
 truth rather than restating them, so versions and commands live in one place.
 
@@ -46,13 +46,13 @@ main clone and in every worktree.
 ```sh
 git clone git@github.com:brokenrobot-xyz/website.git
 cd website
-npm ci    # reproducible install from the committed package-lock.json
-npm start # dev server on http://localhost:4321
+npm ci         # reproducible install from the committed package-lock.json
+mise run start # dev server on http://localhost:4321
 ```
 
-Use `npm ci` (not `npm install`) for a clean, lockfile-exact install. The common scripts:
-`npm run type:check`, `npm run lint:check`, `npm run format:check`, `npm run build` — see
-[`package.json`](../package.json) for the full list.
+Use `npm ci` (not `npm install`) for a clean, lockfile-exact install. Every project command is a
+task in [`mise.toml`](../mise.toml): `mise tasks` lists them, and `mise run preflight` runs every
+check CI runs except the e2e suite. One check also runs alone, e.g. `mise run type:check`.
 
 ### The dev server in the background
 
@@ -87,12 +87,12 @@ independent), but they all default to port 4321 — give each one `--port`.
 Do day-to-day development — and run your Claude Code session — **on the host**. The
 [devcontainer](../.devcontainer/devcontainer.json) exists for **one** job: the Playwright
 visual-regression e2e suite, which must render in a Linux environment matching CI (host macOS
-rendering is not authoritative). Drive it through the npm scripts:
+rendering is not authoritative). Drive it through the mise tasks:
 
 ```sh
-npm run dc:up           # bring the devcontainer up (installs deps + Playwright browsers)
-npm run test:e2e:check  # build + run the visual-regression / a11y suite inside it
-npm run test:e2e:update # regenerate snapshots for an intentional visual change
+mise run dc:up           # bring the devcontainer up (installs deps + Playwright browsers)
+mise run test:e2e:check  # build + run the visual-regression / a11y suite inside it
+mise run test:e2e:update # regenerate snapshots for an intentional visual change
 ```
 
 Why git and Docker behave the way they do under the agent sandbox is documented in
@@ -127,7 +127,7 @@ Details, including the between-session sync behavior, are in
 ## Editor
 
 Formatting is governed by [`.editorconfig`](../.editorconfig) (LF, UTF-8, final newline, 4-space
-indent — 2 for `.tf`/`.yml`, tabs for `Makefile`). The [devcontainer](../.devcontainer/devcontainer.json)
+indent — 2 for `.tf`/`.yml`). The [devcontainer](../.devcontainer/devcontainer.json)
 declares the recommended extensions, worth installing in your host editor too:
 
 - **EditorConfig**, **Prettier**, **ESLint** — formatting and linting parity with CI.
@@ -141,12 +141,12 @@ After setup, confirm the environment:
 
 ```sh
 mise ls --current --missing # prints nothing when every pin is installed
-npm run type:check          # Astro + tsc, no errors
-npm run lint:check          # ESLint clean
-npm run format:check        # Prettier clean
-npm run build               # production build succeeds
+mise run type:check         # Astro + tsc, no errors
+mise run lint:check         # ESLint clean
+mise run format:check       # Prettier clean
+mise run build              # production build succeeds
 openspec config get profile # core — the six-workflow set the repo commits
-npm run codegraph:status    # "Index is up to date"
+mise run codegraph:status   # "Index is up to date"
 ```
 
 In Claude Code, `/plugin` should list **typescript-lsp** as enabled, and `/mcp` should show
@@ -206,7 +206,7 @@ means this checkout's config diverged — restore `"codegraph"` to that list. Ba
 
 ### ✗ codegraph: no index · index unreadable · built by an older codegraph
 
-Run `npm run codegraph:init` in the checkout, or start a Claude Code session and let the
+Run `mise run codegraph:init` in the checkout, or start a Claude Code session and let the
 `SessionStart` hook rebuild it. Caveats (nested worktrees, the fresh-worktree race) are in
 [tooling/code-intelligence.md](tooling/code-intelligence.md).
 
@@ -226,4 +226,4 @@ inaccessible — re-run from the repo root.
 ### Verify-suite failures (`type:check`, `lint:check`, `format:check`, `build`)
 
 Those are code problems, not environment ones — this section ends where the `running-preflight-checks`
-skill (or [`package.json`](../package.json)'s scripts run by hand) takes over.
+skill (or the [`mise.toml`](../mise.toml) tasks run by hand) takes over.

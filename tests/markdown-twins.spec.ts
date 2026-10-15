@@ -5,7 +5,7 @@ import { test, expect } from '@playwright/test';
 
 // The served-site layer of the twins' coverage: what an agent actually receives over HTTP, and
 // whether it can find it from either entry point. Content faults are the transform's to catch at
-// generation time, and coverage of `dist/` is `npm run twins:check`'s — this file asserts neither.
+// generation time, and coverage of `dist/` is `mise run twins:check`'s — this file asserts neither.
 //
 // The content type is deliberately not asserted. A prerendered endpoint writes only its body, so
 // the type comes from whichever platform serves the build; a Playwright assertion would have proved

@@ -66,31 +66,31 @@ jobs:
       # seven run and fail together, which is noisy but not misleading.
       - name: Format check
         if: ${{ !cancelled() }}
-        run: npm run format:check
+        run: mise run format:check
 
       - name: Lint check
         if: ${{ !cancelled() }}
-        run: npm run lint:check
+        run: mise run lint:check
 
       - name: Type check
         if: ${{ !cancelled() }}
-        run: npm run type:check
+        run: mise run type:check
 
       - name: OpenSpec validate
         if: ${{ !cancelled() }}
-        run: npm run specs:check
+        run: mise run specs:check
 
       - name: DESIGN lint
         if: ${{ !cancelled() }}
-        run: npm run designmd:check
+        run: mise run designmd:check
 
       - name: DESIGN token drift check
         if: ${{ !cancelled() }}
-        run: npm run tokens:check
+        run: mise run tokens:check
 
       - name: CSP header sync check
         if: ${{ !cancelled() }}
-        run: npm run headers:check
+        run: mise run headers:check
 
   verify-infrastructure:
     name: 'Verify infrastructure'
@@ -140,7 +140,7 @@ jobs:
       MISE_ENABLE_TOOLS: node,jq
 
     # No `npm ci`: the hook suites stub the tools they exercise and need only bash, git, and
-    # coreutils from the image and node and jq from mise — `npm run` reads package.json without
+    # coreutils from the image and node and jq from mise — `mise run hooks:check` needs no
     # node_modules.
     steps:
       - name: Checkout the repository
@@ -152,7 +152,7 @@ jobs:
           mise bin-paths >> "$GITHUB_PATH"
 
       - name: Hook suites
-        run: npm run hooks:check
+        run: mise run hooks:check
 
   build-site:
     name: 'Build site'
@@ -191,7 +191,7 @@ jobs:
         run: npm ci
 
       - name: Build
-        run: npm run build
+        run: mise run build
 
       - name: Upload dist
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
@@ -242,13 +242,13 @@ jobs:
       # Both checks read the downloaded `dist/`. `twins:check` imports `yaml`, so
       # both wait for `npm ci` above.
       - name: Third-party resource check
-        run: npm run thirdparty:check
+        run: mise run thirdparty:check
 
       - name: Markdown twin check
-        run: npm run twins:check
+        run: mise run twins:check
 
       - name: Install Playwright Browsers
-        run: npm run install:playwright
+        run: mise run install:playwright
 
       - name: E2E test check
         run: node_modules/.bin/playwright test

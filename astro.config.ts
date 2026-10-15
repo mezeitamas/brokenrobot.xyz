@@ -38,7 +38,7 @@ export default defineConfig({
             ],
             // The site's one third-party script: the Cloudflare Web Analytics beacon, injected at
             // the edge by `auto_install` on cloudflare_web_analytics_site. It never appears in
-            // `dist/`, so `npm run thirdparty:check` cannot see it -- this list is the only place
+            // `dist/`, so `mise run thirdparty:check` cannot see it -- this list is the only place
             // the dependency is visible.
             //
             // `resources` REPLACES Astro's defaults rather than extending them, so 'self' must be

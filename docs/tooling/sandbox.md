@@ -120,13 +120,14 @@ the agent does. This is also _why_ opening non-secret reads (above) costs little
   (jq), and `*.npmjs.org` (the npm-backed tools). `Bash(mise *)` lets the agent run it without a
   prompt. The committed config does **not** make mise's data directory writable, so the agent can
   read the toolchain state (`mise ls`, which is all the `SessionStart` hook needs) but cannot
-  install: `mise install` and `mise lock` are the human's steps, run from a terminal. A machine whose
-  personal settings allow writes to its mise directory still hits one wall: the npm-backed tools
-  take a lock file under the OS temp area, which `denyWrite` blocks.
+  install: `mise install` and `mise lock` are the human's steps, run from a terminal. `mise run`
+  writes a temp file for every task under the sandbox's `TMPDIR`, which Claude Code sets under
+  `/tmp` (`/tmp/claude-<uid>`) — so `/tmp` must stay out of `denyWrite`, or every task fails with
+  "Operation not permitted".
 - These frictions are **local-only**. A normal checkout (CI, plain `git clone`) is not nested under
-  a denied home, so `npm run format:check` / `type:check` / `lint:check` / `build` all run there
+  a denied home, so `mise run format:check` / `type:check` / `lint:check` / `build` all run there
   without any of this — which is why none of the fixes live in application config.
-- **Running the devcontainer e2e from the agent** works (via the `dc:*` npm scripts):
+- **Running the devcontainer e2e from the agent** works (via the `dc:*` mise tasks):
   `network.allowedDomains` includes `containers.dev` / `ghcr.io` /
   `pkg-containers.githubusercontent.com` / `mcr.microsoft.com` (the devcontainer CLI's direct
   feature/registry fetches — image layers and in-container installs go through the Docker daemon,
@@ -162,7 +163,7 @@ wholesale, since `dev.log` lands there.
 
 Practical consequences for an agent working on the host:
 
-- Prefer **`npm run serve`** (`astro preview`) when you just need the built site — it is what the
+- Prefer **`mise run serve`** (`astro preview`) when you just need the built site — it is what the
   Playwright suite uses, and it runs in the foreground under the agent's control.
 - If you do start `astro dev`, **record the PID from its startup line**; it is the only handle you
   will get. Hand it to the user to `kill` rather than assuming `astro dev stop` will work.

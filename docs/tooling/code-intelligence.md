@@ -78,7 +78,7 @@ once the script exits, so the report arrives at the end rather than streaming):
 2. **Containers check** (report-only): Docker is installed, its daemon is running, and the
    devcontainer CLI is present — the same probe the `checking-dev-env` skill runs. Only the
    e2e/visual-regression suite needs them, so nothing gates on the result; a stopped daemon shows in
-   the report before `npm run dc:up` fails.
+   the report before `mise run dc:up` fails.
 3. **Dependencies**: `npm install`, but only when `node_modules/` is missing or
    `package-lock.json` has changed since the last successful install — a stamp inside
    `node_modules/` holds the lockfile's git hash, so a partial or wiped install self-invalidates.
@@ -95,12 +95,12 @@ once the script exits, so the report arrives at the end rather than streaming):
 While a session is open, `codegraph serve --mcp` runs a file watcher that auto-syncs on save, so the
 hook's job is really the first-run build plus between-session catch-up.
 
-The hook is Claude Code's entry point only — it reads `CLAUDE_PROJECT_DIR` and has no `npm run`
-equivalent. Its probes, though, live in
+The hook is Claude Code's entry point only — it reads `CLAUDE_PROJECT_DIR` and has no `mise run`
+task. Its probes, though, live in
 [`.claude/hooks/lib/dev-env-checks.sh`](../../.claude/hooks/lib/dev-env-checks.sh), shared with the
 `checking-dev-env` skill and runnable by hand (`bash .claude/hooks/lib/dev-env-checks.sh` — read-only,
 exits non-zero on any ✗). The mutating steps stay manual: run `npm install` and
-`npm run codegraph:init` yourself; `npm run codegraph:status` reports the index/sync state.
+`mise run codegraph:init` yourself; `mise run codegraph:status` reports the index/sync state.
 
 > In a fresh worktree the server is up before the index exists, because Claude Code launches it
 > before this hook can build one. Queries in that window answer with "no index — use Read/Grep/Glob"

@@ -244,7 +244,7 @@ dev_env_main() {
         if dev_env_deps_fresh; then
             echo "✓ dependencies: fresh (lockfile unchanged since the last install)"
         else
-            echo "✗ dependencies: node_modules missing or stale — builds, tests and npm scripts will misbehave"
+            echo "✗ dependencies: node_modules missing or stale — builds, tests and mise tasks will misbehave"
             rc=1
         fi
     else

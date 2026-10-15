@@ -102,7 +102,7 @@ function themeColorDrift(themes) {
 const header =
     '/* AUTO-GENERATED — do not edit.\n' +
     '   Source of truth: DESIGN.md (light) and DESIGN.dark.md (dark).\n' +
-    '   Regenerate with `npm run tokens:generate`. */\n';
+    '   Regenerate with `mise run tokens:generate`. */\n';
 
 const themes = THEMES.map(({ file, selector, mode }) => ({ selector, mode, colors: colorsFor(file) }));
 const body = themes.map(({ selector, colors }) => block(selector, colors)).join('\n\n');
@@ -116,7 +116,7 @@ if (process.argv.includes('--check')) {
         // missing file counts as stale
     }
     if (current !== output) {
-        console.error('tokens.generated.css is out of date. Run `npm run tokens:generate` and commit the result.');
+        console.error('tokens.generated.css is out of date. Run `mise run tokens:generate` and commit the result.');
         process.exit(1);
     }
     const drift = themeColorDrift(themes);

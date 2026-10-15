@@ -21,7 +21,7 @@
   "universal_assertions": [
     "Runs `bash .claude/hooks/lib/dev-env-checks.sh` first",
     "The reply carries the SKILL.md progress checklist, ticked as steps complete",
-    "Read-only — the run executes no `npm install`, `npm ci`, `npm i -g`, `mise install`, `codegraph init|index|sync`, or `npm run dc:up`, and no `Edit`/`Write` touches any file. Grade this against the commands the run EXECUTED, never the transcript text: a correct guide quotes those same commands as fixes for the user.",
+    "Read-only — the run executes no `npm install`, `npm ci`, `npm i -g`, `mise install`, `codegraph init|index|sync`, or `mise run dc:up`, and no `Edit`/`Write` touches any file. Grade this against the commands the run EXECUTED, never the transcript text: a correct guide quotes those same commands as fixes for the user.",
     "Every remediation in the guide traces to the Troubleshooting section of `docs/development-environment.md` — no invented fix",
     "The report states that nothing was changed"
   ],

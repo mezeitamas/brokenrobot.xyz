@@ -9,7 +9,7 @@ agent: general-purpose
 background: false
 metadata:
     author: brokenrobot.xyz
-    version: '1.5'
+    version: '1.6'
 ---
 
 Audit this checkout's development environment and, when anything is missing, hand the user an
@@ -21,7 +21,7 @@ so the guide can never drift from the docs.
 ## Guardrails
 
 **Diagnose and guide, never fix.** Do not run `npm install` / `npm ci`, `npm i -g …`,
-`mise install`, `codegraph init|index|sync`, or `npm run dc:up`. Do not edit any file or setting. An install this
+`mise install`, `codegraph init|index|sync`, or `mise run dc:up`. Do not edit any file or setting. An install this
 skill runs itself mutates the machine outside the repo and hides the defect that caused it, so the
 next fresh checkout breaks the same way with no record of why. Print every fix for the user to run
 instead. The only commands this skill executes are the read-only scan in Step 1 and, through
@@ -54,7 +54,7 @@ report; the ✗ lines are the keys into the doc's Troubleshooting entries.
 When Step 1 was all-✓, or when the user explicitly asked for the gate to run anyway, delegate to
 the `running-preflight-checks` skill — it owns the gate's step list and already knows how to read
 its failures. Otherwise skip the gate and say so: a build on a broken toolchain fails for the wrong
-reasons. Do not rerun `npm run codegraph:status` here, because Step 1's codegraph probe already is
+reasons. Do not rerun `mise run codegraph:status` here, because Step 1's codegraph probe already is
 that check.
 
 When the user asked for the gate over a red Step 1, run it and report environment failures and gate
