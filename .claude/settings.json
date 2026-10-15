@@ -231,6 +231,15 @@
             "Read(/.env.*)",
             "Read(/**/.env)",
             "Read(/**/.env.*)",
+            "Read(/mise.local.toml)",
+            "Read(/**/mise.local.toml)",
+
+            "Edit(/.env)",
+            "Edit(/.env.*)",
+            "Edit(/**/.env)",
+            "Edit(/**/.env.*)",
+            "Edit(/mise.local.toml)",
+            "Edit(/**/mise.local.toml)",
 
             "Read(/.claude/settings.local.json)",
             "Read(/**/.claude/settings.local.json)",

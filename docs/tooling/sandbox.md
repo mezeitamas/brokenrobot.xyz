@@ -58,8 +58,8 @@ entry, it stays readable even if a more specific `denyRead` entry also matches i
 secret denials are absolute: nothing in `allowRead` covers them (it only lists `.`). The corollary
 — **don't put a secret deny _inside_ an allowed directory and expect it to take effect.** To deny
 something within an allowed tree (e.g. `.env` inside the project), use a `permissions.deny`
-`Read(<path>)` rule, which _does_ override allows. That is how `.env` stays blocked inside the
-otherwise-readable project.
+`Read(<path>)` rule, which _does_ override allows. That is how `.env` files and `mise.local.toml`
+stay blocked inside the otherwise-readable project.
 
 ## The `../../../.git` carve-out
 
@@ -93,8 +93,9 @@ the agent does. This is also _why_ opening non-secret reads (above) costs little
 
 - **Home secrets** (`~/.ssh`, `~/.aws`, `~/.npmrc`, the keychain, …) — the `denyRead` secret list,
   applied to every spawned process.
-- **Secrets inside the project** (`.env*`) — `permissions.deny: Read(...)`, which overrides the
-  readable project tree.
+- **Secrets inside the project** (`.env*`, `mise.local.toml`) — `permissions.deny` `Read(...)` and
+  `Edit(...)` rules, which override the readable project tree. That includes `.env.github-mcp`, the
+  GitHub MCP server's token file.
 - **Writes outside the project** — default-denied; only the `allowWrite` list is writable.
 - **Irreversible / outbound actions** (`git push` / `fetch`, `gh`, `rm -rf`, `python`) — the
   `permissions.deny` list.
@@ -114,6 +115,14 @@ the agent does. This is also _why_ opening non-secret reads (above) costs little
   `.claude/settings.json` declares, so it cannot be relaxed from this repo. The `SessionStart` hook
   therefore runs `npm ci` only when there is no tree and `npm install` to reconcile one that exists;
   by hand, reach for `npm install` after a lockfile change.
+- **mise** reaches its download hosts through `network.allowedDomains`: `nodejs.org` (Node),
+  `releases.hashicorp.com` (Terraform), `mise-versions.jdx.dev` (mise's version index), `github.com`
+  (jq), and `*.npmjs.org` (the npm-backed tools). `Bash(mise *)` lets the agent run it without a
+  prompt. The committed config does **not** make mise's data directory writable, so the agent can
+  read the toolchain state (`mise ls`, which is all the `SessionStart` hook needs) but cannot
+  install: `mise install` and `mise lock` are the human's steps, run from a terminal. A machine whose
+  personal settings allow writes to its mise directory still hits one wall: the npm-backed tools
+  take a lock file under the OS temp area, which `denyWrite` blocks.
 - These frictions are **local-only**. A normal checkout (CI, plain `git clone`) is not nested under
   a denied home, so `npm run format:check` / `type:check` / `lint:check` / `build` all run there
   without any of this — which is why none of the fixes live in application config.
