@@ -41,6 +41,13 @@ Nothing is installed globally with npm.
 `mise.toml` holds only plain tool versions, so mise reads it without a `mise trust` step, in the
 main clone and in every worktree.
 
+[`mise.lock`](../mise.lock) records the download URL and checksum of every pin per platform, and
+`mise install` verifies the checksum after each download. CI and the devcontainer run
+`mise install --locked`, which also refuses to resolve a tool the lockfile does not cover, so a pin
+bumped in `mise.toml` without a `mise lock` run fails there instead of installing from a registry
+lookup. On the host the plain command stays, because that lookup is what writes the new entry
+when a pin is bumped.
+
 ## Install
 
 ```sh
