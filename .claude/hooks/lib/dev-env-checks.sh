@@ -189,7 +189,8 @@ dev_env_check_claude() { # requires jq; returns 1 on any ✗
     return "${rc}"
 }
 
-# --- Containers (executed mode only) — needed solely for the e2e/visual-regression suite. --------
+# --- Containers — needed solely for the e2e/visual-regression suite. Read-only, so the hook reports
+#     it too; nothing gates on it. ---------------------------------------------------------------
 dev_env_check_containers() { # returns 1 on any ✗
     local ok="" bad="" rc=0
     if command -v docker >/dev/null; then

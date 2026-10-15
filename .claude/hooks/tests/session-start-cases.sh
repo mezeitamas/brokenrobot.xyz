@@ -86,6 +86,12 @@ esac
 STUB
 chmod +x "${shim}/mise"
 
+# Stub docker and devcontainer: the containers check probes `docker info` and the CLI's presence;
+# DOCKER_INFO_EXIT fakes a stopped daemon. The host's real Docker must never decide a case.
+printf '#!/usr/bin/env bash\nexit "${DOCKER_INFO_EXIT:-0}"\n' >"${shim}/docker"
+printf '#!/usr/bin/env bash\nexit 0\n' >"${shim}/devcontainer"
+chmod +x "${shim}/docker" "${shim}/devcontainer"
+
 # Stub typescript-language-server: the sanity check only asks whether it is on PATH; whether the
 # host happens to have a real one must not decide a case.
 printf '#!/usr/bin/env bash\nexit 0\n' >"${shim}/typescript-language-server"
@@ -253,6 +259,26 @@ contains "and problems point at the checking-dev-env skill" "(run the checking-d
 
 out="$(OPENSPEC_PROFILE=custom run)"
 contains "a non-core openspec profile is reported" "openspec profile is custom" "${out}"
+
+# --- the containers check: reported every session, gating nothing ---
+
+out="$(run)"
+contains "a running daemon and the CLI are credited" "✓ containers: docker daemon running, devcontainer CLI present" "${out}"
+
+out="$(DOCKER_INFO_EXIT=1 run)"
+contains "a stopped daemon is reported with the skill pointer" \
+    "✗ docker daemon not running — start Docker Desktop before using the devcontainer/e2e suite (run the checking-dev-env skill for a fix guide)" "${out}"
+
+# A PATH holding the stubs and the real tools the hook needs, but no docker at all — the host's
+# own Docker sits on the inherited PATH, so removing the stub alone would not hide it.
+nodocker="${root}/nodocker"
+mkdir -p "${nodocker}"
+for tool in bash git jq cat awk cut grep sort node; do ln -s "$(command -v "${tool}")" "${nodocker}/${tool}"; done
+for stub in npm codegraph mise openspec typescript-language-server devcontainer; do ln -s "${shim}/${stub}" "${nodocker}/${stub}"; done
+out="$(PATH="${nodocker}" run)"
+contains "a missing docker is reported" "✗ docker missing" "${out}"
+check "and the rest of the session still runs" "codegraph status --json
+codegraph sync -q" "$(calls)"
 
 # --- environment guards ---
 

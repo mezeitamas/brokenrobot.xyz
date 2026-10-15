@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Idempotent session bootstrap — runs when a Claude Code session starts or resumes, in whatever
-# checkout it opens in (main clone or worktree). Three steps, each ending in the report: a host-tool
-# sanity check, dependency install, and the Codegraph index.
+# checkout it opens in (main clone or worktree). Four steps, each ending in the report: a host-tool
+# sanity check, a containers check, dependency install, and the Codegraph index.
 #
 # A fresh git worktree is the case with real work to do: it contains only tracked files, so it has
 # neither node_modules/ nor .codegraph/ (both gitignored). This script brings it up to a working
@@ -72,6 +72,15 @@ cd "${project_dir}" || {
 #     that never ran.
 dev_env_check_tools
 while IFS= read -r line; do add "${line}"; done < <(dev_env_tool_report "(run the checking-dev-env skill for a fix guide)")
+
+# --- 1b. Containers check — report-only too. Only the e2e suite needs Docker, so nothing below
+#     gates on it; it is reported here so a stopped daemon shows before `npm run dc:up` fails.
+while IFS= read -r line; do
+    case "${line}" in
+        ✗*) add "${line} (run the checking-dev-env skill for a fix guide)" ;;
+        *) add "${line}" ;;
+    esac
+done < <(dev_env_check_containers)
 
 # --- 2. Dependencies — install only when missing or stale (npm install is slow; never every
 #     session). The stamp holds the lockfile's git hash, so a pull or branch switch that moves

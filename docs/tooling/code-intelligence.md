@@ -66,7 +66,7 @@ The [`SessionStart` hook](../../.claude/settings.json) runs
 Claude Code session (startup and resume), in whatever checkout it opens in — the main clone or a
 worktree. It's idempotent and cheap on the common path; a fresh worktree is simply the case where it
 has real work to do, since it contains only tracked files and so starts with neither `node_modules/`
-nor `.codegraph/`. It runs three steps and ends every session with a short step report — successes
+nor `.codegraph/`. It runs four steps and ends every session with a short step report — successes
 and failures alike — delivered to both the user and the model (Claude Code reads hook output only
 once the script exits, so the report arrives at the end rather than streaming):
 
@@ -75,7 +75,11 @@ once the script exits, so the report arrives at the end rather than streaming):
    `openspec` and `typescript-language-server` are on `PATH`. Problems point at the `checking-dev-env` skill, whose fix guide is built from
    [development-environment.md](../development-environment.md#troubleshooting)'s Troubleshooting
    entries — the hook diagnoses, it does not install tools.
-2. **Dependencies**: `npm install`, but only when `node_modules/` is missing or
+2. **Containers check** (report-only): Docker is installed, its daemon is running, and the
+   devcontainer CLI is present — the same probe the `checking-dev-env` skill runs. Only the
+   e2e/visual-regression suite needs them, so nothing gates on the result; a stopped daemon shows in
+   the report before `npm run dc:up` fails.
+3. **Dependencies**: `npm install`, but only when `node_modules/` is missing or
    `package-lock.json` has changed since the last successful install — a stamp inside
    `node_modules/` holds the lockfile's git hash, so a partial or wiped install self-invalidates.
    It's `npm install` rather than `npm ci` because the sandbox denies deleting one path inside
@@ -83,7 +87,7 @@ once the script exits, so the report arrives at the end rather than streaming):
    same tree. The same denial surfaces during install as a
    `npm warn tar TAR_ENTRY_ERROR EPERM … .vscode/settings.json` — benign: npm skips that one file
    and the install succeeds.
-3. **Codegraph index**: `codegraph status --json` as the health probe — healthy ⇒ `sync -q`
+4. **Codegraph index**: `codegraph status --json` as the health probe — healthy ⇒ `sync -q`
    (~0.2s) to catch between-session drift (e.g. edits or `git switch`/`pull`/`rebase` made while
    no session's file watcher was running); uninitialized ⇒ `init`; built by an older codegraph or
    unreadable ⇒ `index` rebuild.
