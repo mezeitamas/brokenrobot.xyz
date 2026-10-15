@@ -186,8 +186,6 @@
             "Bash(ln *)",
             "Bash(rm *)",
 
-            "Bash(npm run *)",
-            "Bash(npm run)",
             "Bash(npm ci)",
             "Bash(npm ci *)",
             "Bash(npm install)",
