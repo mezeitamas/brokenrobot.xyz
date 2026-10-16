@@ -3,8 +3,8 @@
 node = "26.8.1"
 jq = "1.8.2"
 terraform = "1.16.0"
-"npm:@fission-ai/openspec" = "1.13.2"
-"npm:@colbymchenry/codegraph" = "1.6.0"
+"npm:@fission-ai/openspec" = "1.14.2"
+"npm:@colbymchenry/codegraph" = "1.6.2"
 "npm:typescript-language-server" = "6.0.1"
 
 # Every project command is a task: `mise run <name>`, `mise tasks` lists them. Tools from

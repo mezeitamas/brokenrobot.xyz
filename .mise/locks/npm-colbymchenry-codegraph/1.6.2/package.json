@@ -2,6 +2,6 @@
   "name": "mise-npm-install",
   "private": true,
   "dependencies": {
-    "@fission-ai/openspec": "1.13.2"
+    "@colbymchenry/codegraph": "1.6.2"
   }
 }

@@ -356,8 +356,13 @@ only — not hard-checked — so the `frontend-code-reviewer` and your review ar
 
 The schema fork is OpenSpec-experimental and needs reconciling when OpenSpec updates its upstream
 schema. Because the fork is upstream-verbatim apart from the two declared artifacts, that's
-mechanical (last done against **1.13.2**):
+mechanical (last done against **1.14.2**):
 
+0. Bump `npm:@fission-ai/openspec` in `mise.toml`, then on the host run `mise install` and
+   `mise lock` — the sandbox lets the agent do neither (see [sandbox.md](sandbox.md)). Commit the
+   new `.mise/locks/npm-fission-ai-openspec/<version>/` folder with `mise.lock`. In a shell opened
+   before the install, `PATH` still resolves the old version, so run OpenSpec as
+   `mise exec -- openspec …`.
 1. `cp "$(mise where npm:@fission-ai/openspec)/node_modules/@fission-ai/openspec/schemas/spec-driven/schema.yaml" openspec/schemas/frontend-change/schema.yaml`,
    then restore the `name: frontend-change` and `description:` lines.
 2. Restore the two declared artifacts from git: the `brief` entry (first in `artifacts`,
@@ -374,6 +379,8 @@ mechanical (last done against **1.13.2**):
    `openspec instructions proposal|tasks --change probe` must show the `<rules>` block and the
    seeded Verify group, and `openspec instructions apply --change probe` must report `review`
    missing; delete the change and run `mise run specs:check`.
+6. On the host, `mise exec -- openspec update` to regenerate the Claude integration (see
+   [Setup](#setup)), then review its diff against the release notes.
 
 ## Setup
 

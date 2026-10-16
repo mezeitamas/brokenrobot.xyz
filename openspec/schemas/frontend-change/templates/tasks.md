@@ -11,7 +11,8 @@
 - [ ] 2.2 <!-- Task description -->
 
 <!--
-  Keep the Verify group LAST and renumber it to follow your work groups (e.g. ## 5. Verify).
+  Keep the Verify group the last numbered group and renumber it to follow your work groups
+  (e.g. ## 5. Verify). An optional ## Workflow follow-up section of plain bullets may follow it.
   Do not drop or water down its items — mark view-dependent items N/A (with a short note) when the
   change touches no views. Every UI change carries both-theme visual + a11y coverage.
   This group is the change-wide gate over the finished change. A work group's own tests and docs
