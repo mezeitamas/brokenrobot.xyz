@@ -104,7 +104,7 @@
       `markdownTwin.ts`. Do not touch `public/robots.txt`. Verify that `mise run build` loads the
       config and passes, and that `dist/sitemap-0.xml` lists every post page and no URL that
       contains `/tldr/`.
-- [ ] 2.5 Add `tests/tldr.spec.ts` for the behaviour in `specs/post-summaries/spec.md`. Discover the
+- [x] 2.5 Add `tests/tldr.spec.ts` for the behaviour in `specs/post-summaries/spec.md`. Discover the
       TL;DR slugs from `src/content/blog/*/tldr/index.mdx` on disk, as `markdown-twins.spec.ts`
       discovers posts, and assert for each:
       the post page's meta row has the "TL;DR in N min" link to the TL;DR page, and its N equals
@@ -122,7 +122,7 @@
       (`node_modules/.bin/playwright test tests/tldr.spec.ts` after `mise run build`, inside
       `devcontainer exec`), and that `mise run lint:check`, `mise run type:check`, and
       `mise run format:check` pass.
-- [ ] 2.6 Add `tests/pages/blog-posts/more-agents-same-mythical-month-tldr.spec.ts` in the shape of
+- [x] 2.6 Add `tests/pages/blog-posts/more-agents-same-mythical-month-tldr.spec.ts` in the shape of
       `more-agents-same-mythical-month.spec.ts`: a title test, an axe test, and a full-page
       screenshot test with `settleImages`. Verify the title and axe tests pass in all four projects
       in the devcontainer against the fixture build. Do **not** generate the screenshot baselines
@@ -181,7 +181,7 @@
 
 ## 4. Hand-off to the human
 
-- [ ] 4.1 Run `mise run preflight` against the fixture build. Verify every check passes.
+- [x] 4.1 Run `mise run preflight` against the fixture build. Verify every check passes.
 - [x] 4.2 Prove the singular form (`specs/post-summaries/spec.md` — scenario "Singular in the
       closing link"; no post takes 1 minute, so no automated test can reach it): in a temporary
       local edit of the TL;DR page, pass 1 as the
@@ -210,11 +210,11 @@
 
 ## 6. Verify
 
-- [ ] Visual + a11y snapshots pass in **both themes** for every touched view (testing-visual-regression skill)
+- [x] Visual + a11y snapshots pass in **both themes** for every touched view (testing-visual-regression skill)
       — the new TL;DR page (four new baselines) and the `more-agents-same-mythical-month` post page
       (four updated baselines, for the meta-row link), against the human's TL;DR. Every other
       baseline stays byte-identical.
-- [ ] All preflight gate checks pass — the set in `docs/development/checks.md` (running-preflight-checks skill)
+- [x] All preflight gate checks pass — the set in `docs/development/checks.md` (running-preflight-checks skill)
 - [ ] Manual preview: no theme flash, interactions work, console clean, responsive at 375px
       — the post page's meta row with the TL;DR link, and the TL;DR page, in both themes.
 
