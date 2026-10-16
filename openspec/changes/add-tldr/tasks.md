@@ -13,7 +13,7 @@
 
 ## 1. Content model, pairing, and minute counts
 
-- [ ] 1.1 Before any edit, run `mise run build` on the base commit and record in this task the number
+- [x] 1.1 Before any edit, run `mise run build` on the base commit and record in this task the number
       of post folders under `dist/blog/` (each folder that holds an `index.html`) and the
       "N min read" text of each post page. Later tasks compare against these recorded values; no
       task hard-codes a post count. From the same base build, copy each `dist/blog/<slug>/index.md`
@@ -25,23 +25,24 @@
       Extend the typing so `remarkPluginFrontmatter.minutesReadCount` is a `number` where it is read.
       Verify `mise run type:check` and `mise run lint:check` pass, and that `mise run build` emits
       the recorded "N min read" text on every post page.
-- [ ] 1.2 In `src/content.config.ts`, change the `blog` glob pattern to
+      Record: 12 post folders under `dist/blog/`. "N min read" text, in `dist/blog/*` order: advanced-static-website-hosting 21, beyond-tabs-and-spaces 37, hello-world 2, hosting-a-static-website 6, learned-helplessness 23, more-agents-same-mythical-month 18, navigating-cultural-clashes 22, the-human-side-of-code-reviews 6, the-power-of-coding-conventions 9, the-renaissance-of-written-coding-conventions 11, url-redirect 9, your-ai-platform 10. Scratch copies: `/tmp/claude-501/add-tldr-base/`.
+- [x] 1.2 In `src/content.config.ts`, change the `blog` glob pattern to
       `['**/[^_]*.{md,mdx}', '!**/tldr/**']` and add the `tldr` collection: glob
       `*/tldr/index.mdx` over `./src/content/blog`, schema `z.object({}).strict()` (design.md —
       Decision 2). Export both collections. Verify `mise run build` passes and builds the number of
       post folders under `dist/blog/` that task 1.1 recorded, and `mise run twins:check` passes.
-- [ ] 1.3 Add `src/utils/tldrPaths.ts` with `tldrPagePath` and the sitemap predicate that matches a
+- [x] 1.3 Add `src/utils/tldrPaths.ts` with `tldrPagePath` and the sitemap predicate that matches a
       `/blog/<slug>/tldr/` URL, built from `tldrPagePath`. The file has no aliased import (no `@`
       path), so `astro.config.ts` can import it with a relative path (design.md — Decisions 3 and
       9). In `src/utils/markdownTwin.ts`, re-export both, and add `tldrTwinRouteParam` and
       `tldrTwinPath`. Build `tldrTwinPath` from `tldrTwinRouteParam`, as `markdownTwinPath` is
       built from `markdownTwinRouteParam`. Verify `mise run type:check` and `mise run lint:check`
       pass, and that `src/utils/tldrPaths.ts` contains no import that starts with `@`.
-- [ ] 1.4 Add `src/utils/tldr.ts` with the pairing helper (design.md — Decision 3). It loads both
+- [x] 1.4 Add `src/utils/tldr.ts` with the pairing helper (design.md — Decision 3). It loads both
       collections, derives each TL;DR's parent slug from its id, throws
       `<id>: TL;DR has no post at src/content/blog/<slug>/index.mdx` for an orphan, and returns a map
       from post id to TL;DR entry. Verify `mise run type:check` and `mise run lint:check` pass.
-- [ ] 1.5 Create the **temporary fixture**
+- [x] 1.5 Create the **temporary fixture**
       `src/content/blog/more-agents-same-mythical-month/tldr/index.mdx`. It has no frontmatter block.
       Its first line is the plain paragraph
       `TEMPORARY FIXTURE — delete in task 4.3, never commit.` Do not use an MDX comment
@@ -49,12 +50,12 @@
       (design.md — Decision 5), and task 3.2 would then fail on the fixture. It holds a few test
       paragraphs, one fenced code block, and one relative image `![Test image](../heroImage.jpg)`.
       It holds no article prose. Then prove the schema rules:
-    - [ ] 1.5.1 The fixture with no frontmatter block passes the strict schema: `mise run build`
+    - [x] 1.5.1 The fixture with no frontmatter block passes the strict schema: `mise run build`
           passes. If it fails, add an empty `---`/`---` block, record the fallback in design.md —
           **Risks / Trade-offs**, and continue.
-    - [ ] 1.5.2 A stray key (`title: x`) in the fixture fails `mise run build`, and the error names
+    - [x] 1.5.2 A stray key (`title: x`) in the fixture fails `mise run build`, and the error names
           the fixture file. Remove the key.
-- [ ] 1.6 Document the content model in `docs/architecture.md`: in **Content model**, the `tldr`
+- [x] 1.6 Document the content model in `docs/architecture.md`: in **Content model**, the `tldr`
       collection, its location `src/content/blog/<slug>/tldr/index.mdx`, its strict empty schema,
       the orphan rule, the ~300-word authoring guideline, the syntax limit (a TL;DR can use
       Markdown, imports, and `<BlogPostPicture>` only — no other component, no expression, and no
@@ -65,7 +66,7 @@
 
 ## 2. The TL;DR page and the post-page link
 
-- [ ] 2.1 Add `src/components/blog-posts/TldrLink.astro` (design.md — Decision 7). **Interactivity
+- [x] 2.1 Add `src/components/blog-posts/TldrLink.astro` (design.md — Decision 7). **Interactivity
       tier: none** — a static Astro component with zero client JavaScript; no island and no
       `<script>`. It renders `ZapIcon` from `astro-feather` and an `InternalLink` with the text
       "TL;DR in {n} min" to the TL;DR page, in a `flex items-center gap-2` row that carries
@@ -76,7 +77,7 @@
       `more-agents-same-mythical-month` page holds the link to `/blog/more-agents-same-mythical-month/tldr/`,
       the built `hello-world` page holds no link to a `/tldr/` path, and no new `<script>` appears
       in either page.
-- [ ] 2.2 Add `src/pages/blog/[slug]/tldr.astro` (design.md — Decision 8). `getStaticPaths` returns
+- [x] 2.2 Add `src/pages/blog/[slug]/tldr.astro` (design.md — Decision 8). `getStaticPaths` returns
       one path for each pair from the helper. The page uses `BaseLayout` with `pageTitle`
       "TL;DR: <post title>" and the post's excerpt as `pageDescription`. The `seo` slot carries
       `<meta name="robots" content="noindex, follow">`, the `text/markdown` alternate to
@@ -94,10 +95,11 @@
       `<img>` with a built asset URL, that the full-post count equals the count on the post
       page, that the new **Routing** sentence matches the code, and that
       `mise run format:check` passes.
-- [ ] 2.3 Prove the orphan rule now that a route calls the helper: add a temporary
+- [x] 2.3 Prove the orphan rule now that a route calls the helper: add a temporary
       `src/content/blog/no-such-post/tldr/index.mdx`, verify `mise run build` fails with an error
       that names `no-such-post`, then delete the folder. Record the error text in this task.
-- [ ] 2.4 Pass `sitemap({ filter })` in `astro.config.ts` with the predicate from task 1.3, imported
+      Error text: `no-such-post/tldr: TL;DR has no post at src/content/blog/no-such-post/index.mdx`.
+- [x] 2.4 Pass `sitemap({ filter })` in `astro.config.ts` with the predicate from task 1.3, imported
       with the relative path `./src/utils/tldrPaths` (design.md — Decision 9), not through
       `markdownTwin.ts`. Do not touch `public/robots.txt`. Verify that `mise run build` loads the
       config and passes, and that `dist/sitemap-0.xml` lists every post page and no URL that
@@ -130,13 +132,13 @@
 
 ## 3. The Markdown versions and `llms.txt`
 
-- [ ] 3.1 Let `mdxToMarkdown` in `src/utils/mdxToMarkdown.ts` return `frontmatter: ''` for a
+- [x] 3.1 Let `mdxToMarkdown` in `src/utils/mdxToMarkdown.ts` return `frontmatter: ''` for a
       source with no frontmatter block, in place of throwing, and start the body at offset 0 of the
       source in that case (design.md — Decision 5). In
       `src/pages/blog/[...slug].md.ts`, keep the guard for posts: throw when a post's frontmatter is
       empty. Verify `mise run build` and `mise run twins:check` pass, and that `diff` finds no
       difference between every post twin `dist/blog/<slug>/index.md` and its copy from task 1.1.
-- [ ] 3.2 Extend `src/pages/blog/[...slug].md.ts` (design.md — Decisions 4 and 5): split the raw
+- [x] 3.2 Extend `src/pages/blog/[...slug].md.ts` (design.md — Decisions 4 and 5): split the raw
       glob into `POST_SOURCES` (`*/index.mdx`) and `TLDR_SOURCES` (`*/tldr/index.mdx`); add one
       path per TL;DR with `tldrTwinRouteParam`, with a `kind` discriminant in the props; for a TL;DR,
       edit the **post's** frontmatter block to set `heroImage`, `canonical` (the TL;DR page), and
@@ -151,19 +153,19 @@
       fixture's, the post twin has the `tldr` key, `diff` finds no difference between `hello-world`'s twin and its
       copy from task 1.1, the new
       **Routing** sentence matches the code, and `mise run format:check` passes.
-- [ ] 3.3 Add the `## Post summaries` section to `src/pages/llms.txt.ts` between `## Pages` and
+- [x] 3.3 Add the `## Post summaries` section to `src/pages/llms.txt.ts` between `## Pages` and
       `## Blog posts`, one entry per TL;DR, newest post first,
       `- [TL;DR: <title>](<absolute TL;DR twin URL>): <excerpt>`, omitted with its heading when no
       TL;DR exists (design.md — Decision 10). Verify the built `llms.txt` has the section before
       `## Blog posts`, and that `diff` finds no difference between its `## Blog posts` section and the
       `## Blog posts` section of the `llms.txt` copy from task 1.1.
-- [ ] 3.4 Extend `scripts/check-markdown-twins.mjs` to audit `dist/blog/<slug>/tldr/` when it exists,
+- [x] 3.4 Extend `scripts/check-markdown-twins.mjs` to audit `dist/blog/<slug>/tldr/` when it exists,
       with the same `problemsWith` rules, and to report the TL;DR count in the pass line (design.md
       — Decision 11). Update the `twins:check` section of `docs/development/checks.md` to say it also
       covers TL;DRs. Verify `mise run twins:check` passes; that deleting the built
       `dist/blog/more-agents-same-mythical-month/tldr/index.md` makes it exit 1 and name the file;
       and that `mise run format:check` passes.
-- [ ] 3.5 Extend `tests/markdown-twins.spec.ts` for `specs/agent-content/spec.md`, discovering TL;DR
+- [x] 3.5 Extend `tests/markdown-twins.spec.ts` for `specs/agent-content/spec.md`, discovering TL;DR
       slugs from disk: each TL;DR twin returns 200, opens with frontmatter, has a body opening with
       `# TL;DR: `, has no import statement or component markup, names the TL;DR page as
       `canonical`, and links the post twin in `fullPost`; the post twin links the TL;DR twin in
@@ -180,12 +182,13 @@
 ## 4. Hand-off to the human
 
 - [ ] 4.1 Run `mise run preflight` against the fixture build. Verify every check passes.
-- [ ] 4.2 Prove the singular form (`specs/post-summaries/spec.md` — scenario "Singular in the
+- [x] 4.2 Prove the singular form (`specs/post-summaries/spec.md` — scenario "Singular in the
       closing link"; no post takes 1 minute, so no automated test can reach it): in a temporary
       local edit of the TL;DR page, pass 1 as the
       post's count, build, confirm the closing link reads "Hooked? The full post takes 1 minute.",
       then revert the edit. Record the result in this task.
-- [ ] 4.3 Delete the temporary fixture
+      Result: with the count set to 1, the built closing link read "Hooked? The full post takes 1 minute."; the edit is reverted.
+- [x] 4.3 Delete the temporary fixture
       `src/content/blog/more-agents-same-mythical-month/tldr/index.mdx`, and any orphan folder left
       from task 2.3. Verify `git status` shows nothing under any `tldr/` folder, that
       `mise run build` and `mise run twins:check` still pass with zero TL;DRs, and that the built
@@ -195,6 +198,7 @@
       screenshot tests) fails, and the per-TL;DR assertions of `tests/tldr.spec.ts` and
       `tests/markdown-twins.spec.ts` find no TL;DR to check; preflight does not run the e2e suite,
       so this breaks no gate. **The implementer stops here.**
+      Recorded: until task 5.1 is done, the whole of `tests/pages/blog-posts/more-agents-same-mythical-month-tldr.spec.ts` (title, axe, screenshot) fails, and the per-TL;DR assertions of `tests/tldr.spec.ts` and `tests/markdown-twins.spec.ts` find no TL;DR to check. Preflight does not run the e2e suite, so no gate breaks.
 
 ## 5. The human writes the TL;DR
 

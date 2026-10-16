@@ -8,12 +8,13 @@ import { config } from 'dotenv';
 
 import { codeBlockFocusPlugin } from './src/utils/codeBlockFocusPlugin';
 import { readingTimePlugin } from './src/utils/readingTimePlugin';
+import { isNotTldrPage } from './src/utils/tldrPaths';
 
 config();
 
 export default defineConfig({
     site: 'https://www.brokenrobot.xyz',
-    integrations: [preact(), mdx(), sitemap()],
+    integrations: [preact(), mdx(), sitemap({ filter: isNotTldrPage })],
     vite: {
         plugins: [tailwindcss()]
     },

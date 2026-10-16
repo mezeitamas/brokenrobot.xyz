@@ -36,21 +36,21 @@ reviews confirmed still hold and are not repeated as findings.
   URL, entry, and metadata field that such a document already holds SHALL stay unchanged"
   (`specs/agent-content/spec.md:119-122`). Three outputs that this guarantee covers are not
   compared:
-  - The `more-agents-same-mythical-month` post twin. It is the only post twin that changes, and
-    task 3.2 edits the code that writes its frontmatter. Task 3.2 checks only that it "has the
-    `tldr` key", so a lost or reordered field would pass.
-  - The other post twins after task 3.2. Task 3.2 replaces the raw-source glob with
-    `POST_SOURCES`, after the task 3.1 diff ran, and then compares only `hello-world`'s twin.
-  - The parts of `llms.txt` outside `## Blog posts`. Task 3.3 compares only that section. The
-    summary, `## Pages`, the attribution line, and `## Optional` are what the living scenario
-    "Existing index content preserved" protects, and `tests/markdown-twins.spec.ts` checks only the
-    post entries (`tests/markdown-twins.spec.ts:82-89`).
+    - The `more-agents-same-mythical-month` post twin. It is the only post twin that changes, and
+      task 3.2 edits the code that writes its frontmatter. Task 3.2 checks only that it "has the
+      `tldr` key", so a lost or reordered field would pass.
+    - The other post twins after task 3.2. Task 3.2 replaces the raw-source glob with
+      `POST_SOURCES`, after the task 3.1 diff ran, and then compares only `hello-world`'s twin.
+    - The parts of `llms.txt` outside `## Blog posts`. Task 3.3 compares only that section. The
+      summary, `## Pages`, the attribution line, and `## Optional` are what the living scenario
+      "Existing index content preserved" protects, and `tests/markdown-twins.spec.ts` checks only the
+      post entries (`tests/markdown-twins.spec.ts:82-89`).
 
-  **Fix:** in task 3.2, `diff` every post twin against its copy from task 1.1. Require no
-  difference for each post with no TL;DR, and exactly one added line, the `tldr` key, for
-  `more-agents-same-mythical-month`. In task 3.3, `diff` the whole built `llms.txt` against its
-  copy, and require that the only difference is the added `## Post summaries` heading, its entries,
-  and the blank lines around them.
+    **Fix:** in task 3.2, `diff` every post twin against its copy from task 1.1. Require no
+    difference for each post with no TL;DR, and exactly one added line, the `tldr` key, for
+    `more-agents-same-mythical-month`. In task 3.3, `diff` the whole built `llms.txt` against its
+    copy, and require that the only difference is the added `## Post summaries` heading, its entries,
+    and the blank lines around them.
 
 **Nits:**
 

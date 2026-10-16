@@ -45,6 +45,10 @@ File-based (Astro standard):
 - `pages/blog/index.astro` — blog listing.
 - `pages/blog/[...slug].astro` — dynamic post route via `getStaticPaths()`. **These
   `/blog/<slug>/` permalinks must remain stable** (see [vision](vision.md)).
+- `pages/blog/[slug]/tldr.astro` — the page of a post's TL;DR at `/blog/<slug>/tldr/`, one per
+  TL;DR. It is `noindex`, so the sitemap leaves it out.
+- `pages/blog/[...slug].md.ts` — the Markdown version of each post at `/blog/<slug>/index.md`, and of
+  each TL;DR at `/blog/<slug>/tldr/index.md`.
 - `pages/about/index.astro`, `pages/404/index.astro`.
 - `pages/rss.xml.ts` — RSS feed. Must keep working.
 
@@ -64,6 +68,15 @@ Posts live at `src/content/blog/<slug>/index.mdx` with images in the same folder
 are referenced as plain Markdown images; `<BlogPostPicture>` (`src/components/picture/`) is for
 raster images that need responsive `avif`/`webp` variants, which an SVG has none to generate.
 
+A post can have one optional **TL;DR**, a second collection named `tldr`. It lives beside the post at
+`src/content/blog/<slug>/tldr/index.mdx` and takes all its metadata (title, date, tags, hero image,
+description) from the post, so its schema is strict and empty: the file has no frontmatter, and a
+frontmatter key of any name fails the build. A TL;DR with no post at `src/content/blog/<slug>/index.mdx`
+also fails the build, and the error names the TL;DR. Write it at about 300 words. It can use the same
+syntax as a post's Markdown version accepts: Markdown, imports, and `<BlogPostPicture>` only. Any other
+component, any expression, and any MDX comment fail the build. The `blog` glob excludes `tldr/`
+folders, so a TL;DR is never a post.
+
 Markdown and MDX are rendered by **Sätteri**, Astro's native pipeline and the default since
 Astro 7 (the remark/rehype pipeline is now opt-in via `@astrojs/markdown-remark`). Two Sätteri
 plugins are wired through `markdown.processor` in `astro.config.ts`:
@@ -71,7 +84,8 @@ plugins are wired through `markdown.processor` in `astro.config.ts`:
 - `readingTimePlugin` (`src/utils/`) — an mdast plugin that injects `minutesRead` into
   frontmatter, consumed by the `ReadingTime` component. Sätteri visits nodes by type and has no
   document-level hook, so it accumulates text in the per-document data bag and rewrites the
-  frontmatter on each visit; the value is read only once the document has finished compiling.
+  frontmatter on each visit; the value is read only once the document has finished compiling. It also
+  writes `minutesReadCount`, the same reading time as a number, which the TL;DR links use.
 - `codeBlockFocusPlugin` (`src/utils/`) — a hast plugin adding `tabindex="0"` to `<pre>`, so
   horizontally scrollable code blocks stay keyboard-reachable (axe:
   `scrollable-region-focusable`). Shiki used to emit this attribute itself; Prism does not.

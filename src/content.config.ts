@@ -3,7 +3,7 @@ import { z } from 'astro/zod';
 import { defineCollection } from 'astro:content';
 
 const blog = defineCollection({
-    loader: glob({ pattern: '**/[^_]*.{md,mdx}', base: './src/content/blog' }),
+    loader: glob({ pattern: ['**/[^_]*.{md,mdx}', '!**/tldr/**'], base: './src/content/blog' }),
     schema: ({ image }) =>
         z.object({
             title: z.string(),
@@ -17,4 +17,11 @@ const blog = defineCollection({
         })
 });
 
-export const collections = { blog };
+// A post's TL;DR lives beside it at `<slug>/tldr/index.mdx` and takes all its metadata from the post,
+// so it declares none.
+const tldr = defineCollection({
+    loader: glob({ pattern: '*/tldr/index.mdx', base: './src/content/blog' }),
+    schema: z.object({}).strict()
+});
+
+export const collections = { blog, tldr };
