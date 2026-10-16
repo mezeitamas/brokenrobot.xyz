@@ -16,7 +16,10 @@
 - [ ] 1.1 Before any edit, run `mise run build` on the base commit and record in this task the number
       of post folders under `dist/blog/` (each folder that holds an `index.html`) and the
       "N min read" text of each post page. Later tasks compare against these recorded values; no
-      task hard-codes a post count. Then extend `src/utils/readingTimePlugin.ts` to write
+      task hard-codes a post count. From the same base build, copy each `dist/blog/<slug>/index.md`
+      (keeping its `<slug>/` folder) and `dist/llms.txt` to a scratch folder outside the repository,
+      for example `$TMPDIR/add-tldr-base/`, and record the absolute path of that folder in this
+      task. Tasks 3.1, 3.2, and 3.3 compare against these copies with `diff`. Then extend `src/utils/readingTimePlugin.ts` to write
       `minutesReadCount: number` beside `minutesRead`, both from the same `getReadingTime()`
       result, with the count `Math.ceil(Number(stats.minutes.toFixed(2)))` (design.md — Decision 6).
       Extend the typing so `remarkPluginFrontmatter.minutesReadCount` is a `number` where it is read.
@@ -78,7 +81,8 @@
       "TL;DR: <post title>" and the post's excerpt as `pageDescription`. The `seo` slot carries
       `<meta name="robots" content="noindex, follow">`, the `text/markdown` alternate to
       `tldrTwinPath`, `describedby` to `/llms.txt`, `MetaOgArticle` and `MetaTwitter` with the
-      "TL;DR: " title, the post's excerpt, and the post's hero image — and no JSON-LD. The body is an
+      "TL;DR: " title, the post's excerpt, and the post's hero image, plus the post's publish date
+      and tags for `MetaOgArticle`, as `ArticleLayout` passes them — and no JSON-LD. The body is an
       `<article>`: a `<header>` with the post title as `<h1>`, the meta row (`PublishDate` with the
       post's date, `ReadingTime` with the TL;DR's `minutesRead`), and the link
       "Full post, {n} min read"; then the rendered TL;DR; then the link
@@ -127,10 +131,11 @@
 ## 3. The Markdown versions and `llms.txt`
 
 - [ ] 3.1 Let `mdxToMarkdown` in `src/utils/mdxToMarkdown.ts` return `frontmatter: ''` for a
-      source with no frontmatter block, in place of throwing (design.md — Decision 5). In
+      source with no frontmatter block, in place of throwing, and start the body at offset 0 of the
+      source in that case (design.md — Decision 5). In
       `src/pages/blog/[...slug].md.ts`, keep the guard for posts: throw when a post's frontmatter is
-      empty. Verify `mise run build` and `mise run twins:check` pass, and that every post twin in
-      `dist/` is byte-identical to the one from before this change.
+      empty. Verify `mise run build` and `mise run twins:check` pass, and that `diff` finds no
+      difference between every post twin `dist/blog/<slug>/index.md` and its copy from task 1.1.
 - [ ] 3.2 Extend `src/pages/blog/[...slug].md.ts` (design.md — Decisions 4 and 5): split the raw
       glob into `POST_SOURCES` (`*/index.mdx`) and `TLDR_SOURCES` (`*/tldr/index.mdx`); add one
       path per TL;DR with `tldrTwinRouteParam`, with a `kind` discriminant in the props; for a TL;DR,
@@ -143,14 +148,15 @@
       `dist/blog/more-agents-same-mythical-month/tldr/index.md` exists, its frontmatter parses and
       holds the five post fields plus `canonical` and `fullPost` as absolute URLs, the fixture's
       image is an absolute URL to a built asset, the fenced code block is byte-identical to the
-      fixture's, the post twin has the `tldr` key while `hello-world`'s twin is unchanged, the new
+      fixture's, the post twin has the `tldr` key, `diff` finds no difference between `hello-world`'s twin and its
+      copy from task 1.1, the new
       **Routing** sentence matches the code, and `mise run format:check` passes.
 - [ ] 3.3 Add the `## Post summaries` section to `src/pages/llms.txt.ts` between `## Pages` and
       `## Blog posts`, one entry per TL;DR, newest post first,
       `- [TL;DR: <title>](<absolute TL;DR twin URL>): <excerpt>`, omitted with its heading when no
       TL;DR exists (design.md — Decision 10). Verify the built `llms.txt` has the section before
-      `## Blog posts`, and that the `## Blog posts` lines are byte-identical to the ones from before
-      this change.
+      `## Blog posts`, and that `diff` finds no difference between its `## Blog posts` section and the
+      `## Blog posts` section of the `llms.txt` copy from task 1.1.
 - [ ] 3.4 Extend `scripts/check-markdown-twins.mjs` to audit `dist/blog/<slug>/tldr/` when it exists,
       with the same `problemsWith` rules, and to report the TL;DR count in the pass line (design.md
       — Decision 11). Update the `twins:check` section of `docs/development/checks.md` to say it also
@@ -183,7 +189,12 @@
       `src/content/blog/more-agents-same-mythical-month/tldr/index.mdx`, and any orphan folder left
       from task 2.3. Verify `git status` shows nothing under any `tldr/` folder, that
       `mise run build` and `mise run twins:check` still pass with zero TL;DRs, and that the built
-      `llms.txt` has no `## Post summaries` section. **The implementer stops here.**
+      `llms.txt` has no `## Post summaries` section. Record in this task that, from here until the
+      human finishes task 5.1, the whole of
+      `tests/pages/blog-posts/more-agents-same-mythical-month-tldr.spec.ts` (title, axe, and
+      screenshot tests) fails, and the per-TL;DR assertions of `tests/tldr.spec.ts` and
+      `tests/markdown-twins.spec.ts` find no TL;DR to check; preflight does not run the e2e suite,
+      so this breaks no gate. **The implementer stops here.**
 
 ## 5. The human writes the TL;DR
 

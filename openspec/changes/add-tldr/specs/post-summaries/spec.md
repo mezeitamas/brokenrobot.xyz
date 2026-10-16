@@ -37,13 +37,15 @@ build SHALL fail when a TL;DR declares metadata of its own, and SHALL fail when 
 
 #### Scenario: A TL;DR has no post
 
-- **WHEN** a TL;DR exists for a slug that has no post, for example after the post is renamed
+- **WHEN** a TL;DR exists for a slug that has no post, for example after the post's source file is
+  removed
 - **THEN** the build fails and names the TL;DR
 
 #### Scenario: A TL;DR is not a post
 
 - **WHEN** the site is built with a TL;DR present
-- **THEN** the TL;DR does not appear as a post anywhere a post appears
+- **THEN** the TL;DR is not a separate entry on `/blog`, on the home page, in `rss.xml`, or under
+  `## Blog posts` in `llms.txt`
 
 ### Requirement: The TL;DR page shows the short version and the way back to the post
 

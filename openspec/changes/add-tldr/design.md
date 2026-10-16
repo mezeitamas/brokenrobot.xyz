@@ -118,8 +118,9 @@ route builds and the URL the sitemap drops cannot drift apart.
 ### 5. The TL;DR Markdown version reuses the post's frontmatter
 
 `mdxToMarkdown` returns `frontmatter: ''` when the source has no frontmatter block, in place of
-throwing. The post branch of the endpoint keeps its guard: it throws when a post's frontmatter is
-empty, so a post still cannot lose its metadata.
+throwing, and the body then starts at offset 0 of the source, because the body start today is the
+end of the frontmatter node. The post branch of the endpoint keeps its guard: it throws when a
+post's frontmatter is empty, so a post still cannot lose its metadata.
 
 The TL;DR branch builds its metadata from the **post's** raw frontmatter block, edited the same way
 the post's Markdown version edits it. This reuses the free-text title and excerpt that Astro already
@@ -195,7 +196,8 @@ hydration and so no flash.
 - `<link rel="alternate" type="text/markdown" href={tldrTwinPath(slug)}>` and
   `<link rel="describedby" href="/llms.txt">`, as `ArticleLayout` does for a post.
 - `MetaOgArticle` and `MetaTwitter` with the title "TL;DR: <post title>", the post's excerpt, and
-  the post's `heroImage.src`. `og:url` comes from `Astro.url`, so it is the TL;DR page.
+  the post's `heroImage.src`. `MetaOgArticle` also gets the post's `publishDate` and `tags`, as
+  `ArticleLayout` passes them. `og:url` comes from `Astro.url`, so it is the TL;DR page.
 
 No JSON-LD `Article`. The page is `noindex`, so rich results bring nothing, and a second `Article`
 with the post's headline and date would describe the same article twice.
@@ -244,12 +246,17 @@ frontmatter, and a Markdown version needs a page. The pass line reports the TL;D
   source folders and requests every post's twin and page, and `twins:check` audits every built post
   folder. An implementation task also records the number of built post folders from a build on the
   base commit, and later tasks compare against that recorded number, so no count is hard-coded.
+- [A post twin or an existing `llms.txt` entry changes without notice] → The same base build keeps
+  a copy of every post twin and of `llms.txt` in a scratch folder outside the repository. The
+  Markdown-version and `llms.txt` tasks compare the new output against those copies with `diff`,
+  so the "Existing reader and crawler contracts are preserved" requirement has a real baseline.
 - [The real TL;DR does not exist while the machinery is built] → The human writes it after
   implementation and before Verify (brief — **Answers**). Implementation exercises the machinery
   with one temporary, uncommitted fixture that holds test text only, and deletes it before the
   hand-off. The fixture uses only syntax the converter accepts (Decision 5), so its "temporary"
-  marker is a plain paragraph, not an MDX comment. The tests discover TL;DRs from disk and assert no TL;DR text, so they hold for the
-  human's text. Screenshot baselines are generated only at Verify, against the real page.
+  marker is a plain paragraph, not an MDX comment. The tests discover TL;DRs from disk and assert
+  no TL;DR text, so they hold for the human's text. Screenshot baselines are generated only at
+  Verify, against the real page.
 - [Astro does not accept an MDX file with no frontmatter block against `z.object({}).strict()`] →
   The implementation verifies it with the fixture before any other task depends on it. The
   fallback is an empty `---\n---` block, which the strict schema still accepts.

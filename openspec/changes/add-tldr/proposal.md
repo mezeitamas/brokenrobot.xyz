@@ -80,11 +80,13 @@ the post says.
 - **Shared code:** `src/utils/markdownTwin.ts` (TL;DR URLs), a new `src/utils/tldrPaths.ts` (the
   TL;DR page path and the sitemap predicate, with no aliased imports), `src/utils/mdxToMarkdown.ts`
   (a source with no frontmatter block), `src/utils/readingTimePlugin.ts` (a numeric minute
-  count), a new meta-row component under `src/components/blog-posts/`.
+  count), a new `src/utils/tldr.ts` (the helper that pairs each TL;DR with its post), and a new
+  meta-row component under `src/components/blog-posts/`.
 - **Config:** `astro.config.ts` (sitemap filter).
 - **Checks and tests:** `scripts/check-markdown-twins.mjs`, `tests/markdown-twins.spec.ts`, a new
-  page spec for the TL;DR page, and new screenshot baselines for the TL;DR page and for the
-  `more-agents-same-mythical-month` post page, whose meta row changes.
+  `tests/tldr.spec.ts` (the `post-summaries` behaviour), a new page spec for the TL;DR page, and
+  new screenshot baselines for the TL;DR page and for the `more-agents-same-mythical-month` post
+  page, whose meta row changes.
 - **Docs:** `docs/architecture.md` (routing, content model), `docs/development/checks.md`
   (`twins:check`).
 - **Dependencies:** none new. `astro-feather` already exports the icon.
