@@ -1,13 +1,28 @@
-# Code review: add-tldr
+# Code review: add-tldr (round 2)
 
-Range: `git diff c5ef6c8` (implementation commit `dfc0c07` plus the working tree), untracked files
-included. Read against `design.md`, `tasks.md`, both spec deltas, `docs/architecture.md`, and
-`docs/development/conventions/coding-conventions.md`.
+Range: `git diff c5ef6c8` to the working tree, untracked files included (`src/utils/minutesReadCountOf.ts`).
+The closest read went to the uncommitted diff on top of `0ffd30e`. Read against `design.md`, `tasks.md`,
+`docs/architecture.md`, and `docs/development/conventions/coding-conventions.md`.
 
-The guardrails hold. The diff adds no script, no inline handler, no external host, and no CSP edit.
-Output stays static, and the TL;DR link uses only the `accent-ink` token (defined for both themes in
-`tokens.generated.css`). `TldrLink` is a static component with zero client JS, it uses
-`InternalLink`, and `/blog/<slug>/` and `rss.xml` are unchanged.
+The guardrails still hold. This round adds no script, no inline handler, no external host, and no CSP
+edit, and output stays static. `TldrLink` still uses only the `accent-ink` token, which resolves in
+both themes. The zap icon now inherits the text colour, like `ClockIcon` and `CalendarIcon` in the
+meta row. The new helper is a build-time check with zero client JS. The 7 nits from round 1 were
+declined by the human and are not raised again.
+
+## Earlier should-fix findings
+
+1. **Unchecked minute counts:** resolved. `src/utils/minutesReadCountOf.ts` takes `Record<string, unknown>`
+   and throws when the value is not a number. Both read sites use it
+   (`src/pages/blog/[...slug].astro:33`, `src/pages/blog/[slug]/tldr.astro:45`), and the annotated `any`
+   reads are gone. No other `minutesReadCount` read exists in `src/`. Decision 6 in `design.md:158-160`
+   records that the helper replaces a typing declaration.
+2. **Desktop baselines:** resolved. All 4 `more-agents-same-mythical-month.spec.ts` post baselines are
+   rewritten, so the `tasks.md` Verify wording ("four updated baselines") now matches the diff. See
+   **Not verified** for the eye check.
+3. **Too narrow a plain-post test:** resolved. `tests/tldr.spec.ts:113` loops over all of `PLAIN_SLUGS`.
+   That list comes from the content folders on disk (lines 13-18), so it includes `hello-world` and
+   every future post without a TL;DR.
 
 ## Blocking
 
@@ -15,37 +30,32 @@ None.
 
 ## Should-fix
 
-- `src/pages/blog/[slug]/tldr.astro:44` and `src/pages/blog/[...slug].astro:32-33`: `remarkPluginFrontmatter` is `Record<string, any>`, so `const postMinutes: number = …minutesReadCount` asserts a type without checking it. That is an `any` behind an annotation, and it does not do task 1.1's "extend the typing". If the field ever goes missing, the post page silently drops the TL;DR link (the `tldrMinutes !== undefined` guard), and the TL;DR page prints "undefined min read". Fix: add one helper in `src/utils/`, for example `minutesReadCountOf(frontmatter: Record<string, unknown>): number`, that throws when the value is not a number. Use it at both read sites, and record in design.md (Decision 6) that this replaces the declaration.
-- `openspec/changes/add-tldr/tasks.md:213-216` and the post baselines: the Verify item is ticked, but it promises "four updated baselines" for the post page, and only Pixel 7 and Pixel 7 Dark changed. The conventions settle this. `coding-conventions.md` (Testing) says to update baselines when an intentional visual change lands, and the 0.01 tolerance is a noise budget, not an exemption. The Desktop Chrome and Desktop Chrome Dark baselines now show a page that does not ship, and they spend part of the next change's budget. Fix: in the devcontainer, re-run `more-agents-same-mythical-month.spec.ts` for the two desktop projects with `--update-snapshots=all`, review the result, and stage it. If the human prefers not to, rewrite the Verify item so it states two updated baselines.
-- `tests/tldr.spec.ts:113`: `PLAIN_SLUGS.slice(0, 1)` checks only the first post alphabetically (`advanced-static-website-hosting`). Task 2.5 names `hello-world`, and the spec scenario covers every post that has no TL;DR. Fix: loop over all of `PLAIN_SLUGS`.
+None.
 
 ## Nits
 
-- `src/pages/blog/[...slug].md.ts:104-112`: when the post source is missing, the TL;DR branch falls back to the TL;DR's empty frontmatter and throws "the post has no frontmatter block", which names the wrong cause. Fix: when `isTldr && postSource === undefined`, throw "no MDX source found for the post". The full second conversion with an identity resolver is correct, but it is heavy. A frontmatter-only export from `mdxToMarkdown.ts` would remove it, so this is optional.
-- `tests/markdown-twins.spec.ts:33-36`: the old `bodyOf` comment ("Everything after the closing `---`…") now sits above `frontmatterOf`. Move it back above `bodyOf`.
-- `src/utils/tldrPaths.ts:3,10`: the comment says `markdownTwin.ts` re-exports only `tldrPagePath`, but it also re-exports `isNotTldrPage`, which nothing imports from there. Fix the comment. The `.replaceAll('/', '\\/')` is unneeded in `new RegExp(...)` and can go. The regex is otherwise correct, and it is built from `tldrPagePath` as Decision 9 asks.
-- `docs/architecture.md:49`: "It is `noindex`, so the sitemap leaves it out" has the cause wrong. The `sitemap({ filter })` in `astro.config.ts` drops the page, not the robots meta. Reword it.
-- `src/utils/markdownTwin.ts:4` ("Three surfaces advertise them") and the header of `scripts/check-markdown-twins.mjs:1-19` were not updated for TL;DRs. The TL;DR page is a fourth advertiser, and the script now audits `tldr/`.
-
-2 more nits: `tests/tldr.spec.ts:59` puts an unescaped title into `new RegExp`, and the orphan check at `src/pages/blog/[slug]/tldr.astro:21-23` duplicates the helper's error even though it cannot be reached.
-
-## Points the engineer flagged
-
-- **`Props` discriminant and the two branches in `[...slug].md.ts`**: sound. `satisfies Props` on each arm, plus narrowing on `kind`, keeps `hasTldr` on post paths only.
-- **Nested `mdxToMarkdown` call**: see the first Nit.
-- **Sitemap regex**: correct. See the third Nit.
-- **`TldrLink` with `text-accent-ink`**: the token resolves in both themes. Inside `prose`, the link already takes `accent-ink` through `--tw-prose-links`, so the class mainly colours the icon. This is as designed.
-- **`tldr.astro`**: `closingMinutes` in the frontmatter, no JSON-LD, and no hero image all match Decision 8 and the spec.
-- **Typed locals for `remarkPluginFrontmatter`**: see the first Should-fix.
-- **Editor implicit `any` at `[...slug].md.ts:64,69,70`**: this is not a code finding. `checks.md` names `type:check` (`astro check && tsc --noEmit`) as the type gate, and both are clean. The editor errors match `getCollection` being unresolved (`any`) in the editor's TypeScript server, which reads the types that `astro sync` generates. Run `mise run lint:check` (which runs `astro sync`), then restart the TS server. If the errors persist, record them in `docs/known-gaps.md`, because they are an editor-setup gap.
-- **Desktop post baselines**: see the second Should-fix.
+- `src/components/blog-posts/TldrLink.astro:16`: the `text-accent-ink` span probably has no effect. The
+  meta row is inside `<main class="prose">` (`BaseLayout.astro:115`). Typography colours `a` directly
+  through `--tw-prose-links: var(--accent-ink)` (`base.css:68`), and that rule wins over a colour
+  inherited from the span. The link was already amber because of prose, not because of the span. You
+  can drop the span. Keep it only if `TldrLink` must work outside prose.
+- `openspec/changes/add-tldr/design.md:158-160`: the edited sentence runs to 134 columns. The rest of
+  the file wraps at about 100. Rewrap the paragraph.
 
 ## Not verified
 
-- The rendered result in both themes. I can judge token usage but cannot render pages, so this belongs to `frontend-qa-engineer`. I did not open the PNG baselines.
-- Whether the Verify steps ran. Only `verify-report.md` claims they did, and the diff cannot prove it. The **Manual preview** Verify item is still unticked, and it is the human's gate.
-- Task 5.1 (the human's TL;DR) is still unticked in `tasks.md`, although the file is staged. Ticking it is the human's call.
-- The root cause of the editor diagnostics (inferred above, not reproduced).
-- Link-preview cards on social platforms. This is a post-merge follow-up that the build cannot prove.
+- The rendered result in both themes. I cannot render pages; `frontend-qa-engineer` owns that check. I
+  viewed a crop of the new Desktop Chrome and Desktop Chrome Dark baselines. My crop showed article
+  body, not the meta row, so I did not see the zap icon in a baseline. `verify-report.md` also says QA
+  did not check the meta row in the new baselines by eye; it checked computed styles and a live
+  screenshot instead. Someone should look at the meta row in the 4 forced baselines once before the
+  commit.
+- Whether the span in the first Nit really has no effect. That conclusion comes from the CSS. I did
+  not inspect computed styles with and without the span.
+- Whether the Verify steps ran. Only `verify-report.md` claims they did, and a diff cannot prove it. The
+  **Manual preview** Verify item is still unticked, and it is the human's gate.
+- Task 5.1 (the human's TL;DR) and its ticking are the human's call, as before.
+- Link-preview cards on social platforms: a post-merge follow-up that the build cannot prove.
 
-**Verdict:** no blocking findings. Resolve the three Should-fix items (the typing helper, the desktop baselines or the Verify wording, and the plain-post loop) before committing.
+**Verdict:** ready to commit. All three earlier should-fix items are resolved, and the two nits are
+optional.

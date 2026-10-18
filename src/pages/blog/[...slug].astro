@@ -8,6 +8,7 @@ import PublishDate from '@components/blog-posts/PublishDate.astro';
 import ReadingTime from '@components/blog-posts/ReadingTime.astro';
 import TldrLink from '@components/blog-posts/TldrLink.astro';
 
+import { minutesReadCountOf } from '@utils/minutesReadCountOf';
 import { getPostsWithTldrs } from '@utils/tldr';
 import { tldrPagePath } from '@utils/markdownTwin';
 
@@ -29,8 +30,7 @@ const {
 } = post;
 
 const tldr = (await getPostsWithTldrs()).get(post.id);
-const tldrMinutes: number | undefined =
-    tldr === undefined ? undefined : (await render(tldr)).remarkPluginFrontmatter.minutesReadCount;
+const tldrMinutes = tldr === undefined ? undefined : minutesReadCountOf((await render(tldr)).remarkPluginFrontmatter);
 ---
 
 <ArticleLayout

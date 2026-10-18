@@ -1,64 +1,54 @@
 # Verify report: add-tldr
 
-**verdict: green** (with notes below; the manual-preview item stays with the human)
+**verdict: green** (the manual-preview item stays with the human; one preview server could not be stopped, see Notes)
+
+## What changed since the last Verify
+
+The zap icon on the post page now takes the default text colour; `minutesReadCountOf.ts` is new; the test "should not appear on a post without a TL;DR" now covers every post without a TL;DR. This run replaces the earlier results.
 
 ## visual + a11y
 
-Devcontainer, `mise run test:e2e:check`, all four projects ran (Desktop Chrome, Desktop Chrome Dark, Pixel 7, Pixel 7 Dark): both themes covered.
+Devcontainer, `mise run test:e2e:check`, all four projects (Desktop Chrome, Desktop Chrome Dark, Pixel 7, Pixel 7 Dark): both themes covered.
 
-- First run: 384 passed, 2 skipped (`navigation.spec.ts` header navigation, Pixel 7 and Pixel 7 Dark, skipped by design), 6 failed. All 6 were screenshot tests: 4 TL;DR page (no baseline existed) and 2 post page (Pixel 7, Pixel 7 Dark; height 17219px -> 17247px, ratio 0.13).
-- After `mise run test:e2e:update`: 390 passed, 2 skipped, 0 failed.
-- axe: 0 violations in every project, including the TL;DR page (the title and axe tests, 8 results, passed in all four projects).
-- `tests/tldr.spec.ts`: 36 of 36 passed (9 tests x 4 projects). `tests/markdown-twins.spec.ts`: 44 of 44 passed.
-- I viewed the new Desktop Chrome Dark TL;DR baseline: header, h1, meta row, "Full post, 18 min read", the text, "Hooked? The full post takes 18 minutes." all render as intended.
+- 390 passed, 2 skipped (`navigation.spec.ts` header navigation on Pixel 7 and Pixel 7 Dark, skipped by design), 0 failed. No screenshot failed, so no TL;DR-page baseline was regenerated.
+- axe: 0 violations in every project, including the TL;DR page and the post page.
+- `tests/tldr.spec.ts`, including the new "should not appear on a post without a TL;DR" (hello-world included): passed in all four projects. That test ran for the first time and passed.
 
 ## baselines
 
-Written by `test:e2e:update` in the devcontainer (`git status` shows only these):
+The plain run passed, so there was nothing to update that way. The 4 post-page baselines were forced with `playwright test tests/pages/blog-posts/more-agents-same-mythical-month.spec.ts --grep screenshot --update-snapshots=all` in the devcontainer (`--update-snapshots` alone skips a diff under 0.01, `=all` rewrites regardless). 4 passed.
 
-- New (4), `tests/__screenshots__/pages/blog-posts/more-agents-same-mythical-month-tldr.spec.ts/`: Desktop Chrome, Desktop Chrome Dark, Pixel 7, Pixel 7 Dark. Reason: the new TL;DR page.
-- Updated (2), `more-agents-same-mythical-month.spec.ts/`: Pixel 7 and Pixel 7 Dark. Reason: the TL;DR link in the meta row wraps on mobile (+28px).
-- **Not updated: the Desktop Chrome and Desktop Chrome Dark post baselines.** The task asked for 4 post baselines, but the desktop diff stays under the `0.01` tolerance, so the update does not rewrite them. I did not force them. The committed desktop baselines therefore do not show the TL;DR link. The human decides whether that matters.
-- No other baseline changed.
+- Rewritten (4), `more-agents-same-mythical-month.spec.ts/`: Desktop Chrome, Desktop Chrome Dark, Pixel 7, Pixel 7 Dark. Reason: the zap icon colour change; the human accepted the finding that an intentional visual change needs new baselines.
+- `git status` shows no other baseline changed. The 4 TL;DR-page baselines are untouched.
+- I did not review the new desktop baselines by eye for the meta row (my crop missed it). I checked the icon with computed styles and a live screenshot instead, see manual preview.
 
 ## manual preview
 
-Playwright MCP, host Chrome, preview of the fresh build (see Notes for the port). Light and dark both checked. Console filtered for errors and warnings.
+Playwright MCP, host Chrome, preview of the fresh build on port 8085.
 
-- Post page: console clean except `Permissions-Policy` header warnings (unrecognized `ambient-light-sensor`, `battery`, `document-domain`; a site header issue, not new). "TL;DR in 2 min" link present. Pre-paint `data-theme` was correct at DOMContentLoaded in both schemes (no flash signal; I did not watch first paint by eye). 375px: no horizontal overflow (scrollWidth 375).
-- TL;DR page: console clean, theme correct, 375px no overflow, no TL;DR link on itself.
-- `hello-world`: no TL;DR link, `/blog/hello-world/tldr/` 404, its twin has no `tldr` key and `/blog/hello-world/tldr/index.md` 404.
-- Interactions: the post link opens the TL;DR page; the theme toggle switches light to dark and the choice persists after reload; "Full post, N min read" and "Hooked? ..." both return to the post. No console errors.
-- Screenshots: `.playwright-mcp/post-375.png`, `.playwright-mcp/post-375-dark.png`, `.playwright-mcp/tldr-375-dark.png`. I did not review them by eye; the overflow numbers above are the evidence.
-- Twins: `/blog/more-agents-same-mythical-month/index.md` 200, `tldr:` key present, canonical is the post page. `/blog/more-agents-same-mythical-month/tldr/index.md` 200, body opens `# TL;DR: More Agents, Same Mythical Month`, `fullPost` is the post twin. **`/blog/more-agents-same-mythical-month.md` is 404**: the site serves twins at `<page>/index.md` only, so the URL in the request does not exist (not a bug).
-- `llms.txt`: `## Pages`, `## Post summaries` (one TL;DR entry), `## Blog posts`, `## Optional`, in that order. Sitemap: 0 `/tldr/` URLs. Feed: 12 items, 0 `/tldr/` links.
+- Zap icon colour (both themes): the icon is outside the link and takes the default text colour: light `rgb(33, 29, 24)`, dark `rgb(244, 239, 228)`. The link text keeps the accent: light `rgb(180, 83, 9)`, dark `rgb(251, 191, 36)`. A dark 1280px screenshot of the meta row shows the icon in the same colour as the calendar and clock icons, with the link in amber: `.playwright-mcp/post-meta-dark.png`.
+- 375px: no horizontal overflow (scrollWidth 375) on the post page, the TL;DR page and hello-world.
+- `/blog/hello-world/`: no TL;DR link. TL;DR page: no link to itself.
+- Interactions: post link opens `/tldr/`; "Full post" returns to the post. No console errors. Only the known `Permissions-Policy` header warnings (`ambient-light-sensor`, `battery`, `document-domain`) appeared; they are not new.
+- Theme flash: `data-theme` was set at load; I did not watch first paint by eye. I did not re-test the toggle (unchanged since the last run).
 
 ## perf & seo
 
-Advisory, loopback, not production figures. No prior scores, so no regression claim. TL;DR page, mobile Lighthouse: SEO 66, best practices 100. The one failed audit is `is-crawlable` ("Page is blocked from indexing"), which is the intended `noindex, follow`. Trace: LCP 50 ms, CLS 0.01, INP not in the trace. The post page was not audited separately.
+Advisory, loopback, not production figures. TL;DR page, mobile Lighthouse: SEO 66 (one failed audit, `is-crawlable`, the intended `noindex`), best practices 100. Trace: LCP 46 ms, CLS 0.01, INP not in the trace. Against the prior scores (SEO 66, BP 100, LCP 50 ms, CLS 0.01): no regression.
 
 ## gate
 
-`mise run preflight`:
-
-- Run 1: `build` FAILED, a race in the parallel run, all other checks passed:
-  `[build] ENOTEMPTY: directory not empty, rename '.../node_modules/.vite/deps_temp_05a7cd27' -> '.../node_modules/.vite/deps'` (`astro build` and `astro sync`/`astro check` both re-optimized Vite deps at once).
-- Run 2 (rerun of the whole gate): exit 0, every check passed. `twins:check` 12 posts and 1 TL;DR; `thirdparty:check` 48 files; `type:check` 0 errors; `format:check` clean (the `review.md` fix holds); `designmd:check` 0 errors; `tokens:check`, `headers:check`, `specs:check`, `terraform:check` (fmt + validate only, no plan) and `hooks:check` pass.
-- `lint:check`: 0 errors, 5 warnings (`import/no-unresolved` for `astro:content` in `content.config.ts`, `[...slug].md.ts`, `llms.txt.ts`, `rss.xml.ts`, `tldr.ts`). Advisory. The build race is flaky and worth a note for the project.
-
-## TypeScript diagnostic (`[...slug].md.ts` lines 64, 69, 70)
-
-The editor's implicit-any reports are on `posts.map((post) => ...)` and `.filter((post) => ...)`. They come from `getCollection('blog')` being untyped in the editor, which is the same `astro:content` resolution failure that ESLint warns about. The type-check does NOT catch it: `astro check` reports 0 errors, 0 warnings, and `tsc --noEmit` also exits clean (the CLI resolves the generated `.astro/types.d.ts`). The cause in the editor is most likely stale or missing generated Astro types; I did not confirm it in the editor. Nothing was changed.
+`mise run preflight`: exit 0 on the first run, every check passed. The `ENOTEMPTY` build race did not occur this time. `type:check` 0 errors, 0 warnings; `lint:check` 0 errors, 5 warnings (`import/no-unresolved` for `astro:content`, advisory, as before); `designmd:check` 0 errors; `tokens:check`, `headers:check` pass. `terraform:check` runs no plan.
 
 ## verify items
 
-- visual + a11y: supported (390 passed, 0 failed, 0 axe violations, both themes; caveat: 2 of the 4 expected post baselines were not rewritten, see baselines)
-- gate: supported (run 2 passed; run 1 failed on the build race, quoted above)
+- visual + a11y: supported (390 passed, 0 failed, 0 axe violations, both themes; 4 post baselines forced)
+- gate: supported (first run passed)
 - manual preview: not yours to judge, human gate
-- tasks 2.5 and 2.6: supported (tldr.spec 36/36; title and axe 8/8; lint, type and format pass)
-- task 4.1: supported (preflight passed on rerun)
+
+Both supported items were already ticked in `tasks.md` and stay ticked. The manual-preview item stays unticked.
 
 ## Notes
 
-- The preview I started with `BROKENROBOT_PORT=8080 mise run serve` actually ran on port 8082 (astro preview daemonizes; the `.env` is unreadable here). Port 8080 and 8081 were already served by other node processes (8080 is probably the devcontainer's). I used 8082. I could not stop my preview: `kill 39269` returned "operation not permitted" and `astro preview stop` said no server was running. The human can run `kill 39269`.
-- The `.playwright-mcp/` screenshots are gitignored.
+- Preview server PID 50517 (`astro preview` on port 8085) is still running. `astro preview stop` said "No preview server is running" and `kill 50517` returned "operation not permitted". The human can run `kill 50517`. PIDs 39301 and 39515 also listen on 8080 to 8085 and are not mine (39301 is probably the earlier run's preview).
+- The `.playwright-mcp/` files are gitignored.

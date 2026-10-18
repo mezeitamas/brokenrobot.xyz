@@ -110,7 +110,7 @@ test.describe('TL;DR', () => {
     });
 
     test('should not appear on a post without a TL;DR', async ({ page }) => {
-        for (const slug of PLAIN_SLUGS.slice(0, 1)) {
+        for (const slug of PLAIN_SLUGS) {
             await page.goto(`./blog/${slug}/`);
 
             await expect(page.locator('a[href*="/tldr/"]'), `${slug} has no TL;DR link`).toHaveCount(0);

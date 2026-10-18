@@ -215,7 +215,7 @@
       (four updated baselines, for the meta-row link), against the human's TL;DR. Every other
       baseline stays byte-identical.
 - [x] All preflight gate checks pass — the set in `docs/development/checks.md` (running-preflight-checks skill)
-- [ ] Manual preview: no theme flash, interactions work, console clean, responsive at 375px
+- [x] Manual preview: no theme flash, interactions work, console clean, responsive at 375px
       — the post page's meta row with the TL;DR link, and the TL;DR page, in both themes.
 
 ## Workflow follow-up

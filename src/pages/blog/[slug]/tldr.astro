@@ -9,6 +9,7 @@ import ReadingTime from '@components/blog-posts/ReadingTime.astro';
 import MetaOgArticle from '@components/seo/meta-og/MetaOgArticle.astro';
 import MetaTwitter from '@components/seo/meta-twitter/MetaTwitter.astro';
 
+import { minutesReadCountOf } from '@utils/minutesReadCountOf';
 import { getPostsWithTldrs } from '@utils/tldr';
 import { postPagePath, tldrTwinPath } from '@utils/markdownTwin';
 
@@ -41,7 +42,7 @@ const {
 const { Content, remarkPluginFrontmatter: tldrFrontmatter } = await render(tldr);
 const { remarkPluginFrontmatter: postFrontmatter } = await render(post);
 
-const postMinutes: number = postFrontmatter.minutesReadCount;
+const postMinutes = minutesReadCountOf(postFrontmatter);
 const closingMinutes = `${postMinutes} ${postMinutes === 1 ? 'minute' : 'minutes'}`;
 const pageTitle = `TL;DR: ${title}`;
 ---
