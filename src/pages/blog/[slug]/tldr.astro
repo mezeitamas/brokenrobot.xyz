@@ -1,0 +1,115 @@
+---
+import { type CollectionEntry, getEntry, render } from 'astro:content';
+
+import BaseLayout from '@layouts/BaseLayout.astro';
+
+import InternalLink from '@components/links/InternalLink.astro';
+import PublishDate from '@components/blog-posts/PublishDate.astro';
+import ReadingTime from '@components/blog-posts/ReadingTime.astro';
+import MetaOgArticle from '@components/seo/meta-og/MetaOgArticle.astro';
+import MetaTwitter from '@components/seo/meta-twitter/MetaTwitter.astro';
+
+import { minutesReadCountOf } from '@utils/minutesReadCountOf';
+import { getPostsWithTldrs } from '@utils/tldr';
+import { postPagePath, tldrTwinPath } from '@utils/markdownTwin';
+
+export async function getStaticPaths() {
+    const pairs = await getPostsWithTldrs();
+
+    return Promise.all(
+        [...pairs].map(async ([postId, tldr]) => {
+            const post = await getEntry('blog', postId);
+
+            if (post === undefined) {
+                throw new Error(`${tldr.id}: TL;DR has no post at src/content/blog/${postId}/index.mdx`);
+            }
+
+            return { params: { slug: postId }, props: { post, tldr } };
+        })
+    );
+}
+
+type Props = {
+    post: CollectionEntry<'blog'>;
+    tldr: CollectionEntry<'tldr'>;
+};
+
+const { post, tldr } = Astro.props;
+const {
+    data: { title, excerpt, publishDate, heroImage, tags }
+} = post;
+
+const { Content, remarkPluginFrontmatter: tldrFrontmatter } = await render(tldr);
+const { remarkPluginFrontmatter: postFrontmatter } = await render(post);
+
+const postMinutes = minutesReadCountOf(postFrontmatter);
+const closingMinutes = `${postMinutes} ${postMinutes === 1 ? 'minute' : 'minutes'}`;
+const pageTitle = `TL;DR: ${title}`;
+---
+
+<BaseLayout
+    pageTitle={pageTitle}
+    pageDescription={excerpt}
+>
+    <Fragment slot="seo">
+        <meta
+            name="robots"
+            content="noindex, follow"
+        />
+
+        <link
+            rel="alternate"
+            type="text/markdown"
+            href={tldrTwinPath(post.id)}
+        />
+
+        <link
+            rel="describedby"
+            href="/llms.txt"
+        />
+
+        <MetaOgArticle
+            title={pageTitle}
+            description={excerpt}
+            image={heroImage.src}
+            publishDate={publishDate}
+            tags={tags}
+        />
+
+        <MetaTwitter
+            title={pageTitle}
+            description={excerpt}
+            image={heroImage.src}
+        />
+    </Fragment>
+
+    <Fragment slot="content">
+        <article>
+            <header>
+                <h1>{title}</h1>
+
+                <div class="flex flex-col sm:flex-row sm:gap-8">
+                    <PublishDate date={publishDate} />
+
+                    <ReadingTime minutesRead={tldrFrontmatter.minutesRead} />
+                </div>
+
+                <p>
+                    <InternalLink href={postPagePath(post.id)}>Full post, {postMinutes} min read</InternalLink>
+                </p>
+            </header>
+
+            <section>
+                <Content />
+            </section>
+
+            <footer>
+                <p>
+                    <InternalLink href={postPagePath(post.id)}>
+                        Hooked? The full post takes {closingMinutes}.
+                    </InternalLink>
+                </p>
+            </footer>
+        </article>
+    </Fragment>
+</BaseLayout>

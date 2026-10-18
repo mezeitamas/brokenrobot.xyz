@@ -23,7 +23,11 @@ const appendText = (context: MdastVisitorContext, value: string): void => {
     const astro: SatteriAstroData | undefined = context.data.astro;
 
     if (astro !== undefined) {
-        astro.frontmatter.minutesRead = getReadingTime(state.text).text;
+        const stats = getReadingTime(state.text);
+
+        astro.frontmatter.minutesRead = stats.text;
+        // The same rounding `reading-time` applies to `text`, so "25 min read" and 25 always agree.
+        astro.frontmatter.minutesReadCount = Math.ceil(Number(stats.minutes.toFixed(2)));
     }
 };
 

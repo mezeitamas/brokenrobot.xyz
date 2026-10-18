@@ -2,7 +2,8 @@ import type { APIRoute } from 'astro';
 import { getCollection } from 'astro:content';
 
 import { SITE_METADATA } from '@consts';
-import { ATTRIBUTION, markdownTwinPath } from '@utils/markdownTwin';
+import { ATTRIBUTION, markdownTwinPath, tldrTwinPath } from '@utils/markdownTwin';
+import { getPostsWithTldrs } from '@utils/tldr';
 
 // A Markdown map of the site for language models, following the llms.txt convention
 // (https://llmstxt.org): an H1 name, a blockquote summary, free prose, then sections of links.
@@ -15,6 +16,9 @@ export const GET: APIRoute = async ({ site }) => {
     const posts = (await getCollection('blog')).sort(
         (a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf()
     );
+
+    const tldrs = await getPostsWithTldrs();
+    const summarised = posts.filter((post) => tldrs.has(post.id));
 
     const body = [
         `# ${SITE_METADATA.TITLE}`,
@@ -31,6 +35,17 @@ export const GET: APIRoute = async ({ site }) => {
         `- [About](${toUrl('/about')}): Who Tamas is and what he works on.`,
         `- [Blog](${toUrl('/blog')}): Every post, newest first.`,
         '',
+        // Omitted with its heading when no post has a TL;DR: an empty heading tells an agent nothing.
+        ...(summarised.length === 0
+            ? []
+            : [
+                  '## Post summaries',
+                  '',
+                  ...summarised.map(
+                      (post) => `- [TL;DR: ${post.data.title}](${toUrl(tldrTwinPath(post.id))}): ${post.data.excerpt}`
+                  ),
+                  ''
+              ]),
         '## Blog posts',
         '',
         // The spec is explicit that the links in an llms.txt file should lead to LLM-friendly

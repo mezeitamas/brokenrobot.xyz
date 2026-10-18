@@ -1,0 +1,17 @@
+---
+import { ZapIcon } from 'astro-feather';
+
+import InternalLink from '@components/links/InternalLink.astro';
+
+type Props = {
+    href: string;
+    minutes: number;
+};
+
+const { href, minutes } = Astro.props;
+---
+
+<div class="flex items-center gap-2">
+    <ZapIcon />
+    <InternalLink href={href}>TL;DR in {minutes} min</InternalLink>
+</div>

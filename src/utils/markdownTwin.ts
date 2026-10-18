@@ -1,4 +1,5 @@
 import { SITE_METADATA } from '@consts';
+import { isNotTldrPage, tldrPagePath } from '@utils/tldrPaths';
 
 // The one place the twin URLs are derived. Three surfaces advertise them — the endpoint that emits
 // them, `llms.txt`, and the `alternate` link in `ArticleLayout` — and they agree by construction
@@ -18,8 +19,23 @@ const markdownTwinPath = (postId: string): string => `/blog/${markdownTwinRouteP
 // sits in.
 const postPagePath = (postId: string): string => `/blog/${postId}/`;
 
+// A TL;DR's twin sits in the `tldr/` directory beside its page, built from the route parameter the
+// same way `markdownTwinPath` is.
+const tldrTwinRouteParam = (postId: string): string => `${postId}/tldr/index`;
+
+const tldrTwinPath = (postId: string): string => `/blog/${tldrTwinRouteParam(postId)}.md`;
+
 // Stated in `llms.txt` and repeated in every twin's frontmatter, so the terms travel with the file
 // when it is read detached from the site.
 const ATTRIBUTION = `Content is © ${SITE_METADATA.AUTHOR.NAME}, all rights reserved. Quote briefly with attribution and a link to the canonical URL.`;
 
-export { ATTRIBUTION, markdownTwinPath, markdownTwinRouteParam, postPagePath };
+export {
+    ATTRIBUTION,
+    isNotTldrPage,
+    markdownTwinPath,
+    markdownTwinRouteParam,
+    postPagePath,
+    tldrPagePath,
+    tldrTwinPath,
+    tldrTwinRouteParam
+};

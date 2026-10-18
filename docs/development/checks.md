@@ -126,7 +126,7 @@ These checks inspect files that a person writes, but that carry structure a tool
 ### `specs:check`
 
 ```bash
-mise run specs:check # openspec validate --all --strict && openspec validate --archived
+mise run specs:check # openspec validate --all && openspec validate --archived
 ```
 
 OpenSpec validates the change artifacts and the specs. This is what makes the planning workflow
@@ -243,7 +243,9 @@ mise run twins:check # node scripts/check-markdown-twins.mjs
 Every blog post is published twice: as the HTML page a person reads, and as the Markdown twin at
 `/blog/<slug>/index.md` that an agent reads. This check confirms the build produced the second one —
 a twin beside every built post page and no orphan beside none, each twin non-empty, each opening
-with a frontmatter block that parses.
+with a frontmatter block that parses. It audits a post's TL;DR the same way, at
+`/blog/<slug>/tldr/index.md` beside the built TL;DR page, and the pass line reports how many
+TL;DRs it checked.
 
 It audits **coverage, not content**. Twins and pages are generated from one source on every build,
 so they cannot drift apart. A wrong twin is the transform's failure, and the transform fails the

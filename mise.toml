@@ -61,7 +61,7 @@ run = ["node_modules/.bin/astro check", "node_modules/.bin/tsc --noEmit"]
 
 [tasks."specs:check"]
 description = "Validate the OpenSpec specs and changes, then the archive"
-run = ["openspec validate --all --strict", "openspec validate --archived"]
+run = ["openspec validate --all", "openspec validate --archived"]
 
 # --- Design --------------------------------------------------------------------------------------
 

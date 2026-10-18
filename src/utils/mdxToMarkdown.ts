@@ -22,7 +22,8 @@ const PICTURE_COMPONENT = 'BlogPostPicture';
 type ImageUrlResolver = (specifier: string) => string | undefined;
 
 type MarkdownTwin = {
-    // The post's own frontmatter block, without its `---` delimiters, exactly as authored.
+    // The post's own frontmatter block, without its `---` delimiters, exactly as authored. Empty for a
+    // source with no block.
     frontmatter: string;
     // The article prose, with imports removed and component pictures rewritten.
     body: string;
@@ -152,10 +153,6 @@ const mdxToMarkdown = (
 
     const frontmatterNode = nodes.find((node) => node.type === 'yaml');
 
-    if (frontmatterNode === undefined) {
-        throw new Error(`${slug}: the post has no frontmatter block.`);
-    }
-
     const images = importedImages(nodes);
     const splices: Splice[] = [];
 
@@ -192,7 +189,9 @@ const mdxToMarkdown = (
         throw new Error(`${slug}: unhandled MDX syntax — ${name}. The transform only knows <${PICTURE_COMPONENT}>.`);
     }
 
-    const bodyStart = rangeOf(frontmatterNode, slug).end;
+    // A TL;DR has no frontmatter block, so its body starts at the top of the source. The post branch
+    // of the endpoint rejects an empty `frontmatter`, so a post cannot lose its metadata.
+    const bodyStart = frontmatterNode === undefined ? 0 : rangeOf(frontmatterNode, slug).end;
     let cursor = bodyStart;
     let body = '';
 
@@ -203,7 +202,7 @@ const mdxToMarkdown = (
 
     body += source.slice(cursor);
 
-    return { frontmatter: frontmatterNode.value, body: body.trim() };
+    return { frontmatter: frontmatterNode?.value ?? '', body: body.trim() };
 };
 
 export { mdxToMarkdown };

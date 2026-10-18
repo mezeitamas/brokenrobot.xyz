@@ -6,6 +6,11 @@ import ArticleLayout from '@layouts/ArticleLayout.astro';
 
 import PublishDate from '@components/blog-posts/PublishDate.astro';
 import ReadingTime from '@components/blog-posts/ReadingTime.astro';
+import TldrLink from '@components/blog-posts/TldrLink.astro';
+
+import { minutesReadCountOf } from '@utils/minutesReadCountOf';
+import { getPostsWithTldrs } from '@utils/tldr';
+import { tldrPagePath } from '@utils/markdownTwin';
 
 export async function getStaticPaths() {
     const posts = await getCollection('blog');
@@ -23,6 +28,9 @@ const { Content, remarkPluginFrontmatter } = await render(post);
 const {
     data: { title, excerpt, publishDate, heroImage, tags }
 } = post;
+
+const tldr = (await getPostsWithTldrs()).get(post.id);
+const tldrMinutes = tldr === undefined ? undefined : minutesReadCountOf((await render(tldr)).remarkPluginFrontmatter);
 ---
 
 <ArticleLayout
@@ -42,6 +50,15 @@ const {
                     <PublishDate date={publishDate} />
 
                     <ReadingTime minutesRead={remarkPluginFrontmatter.minutesRead} />
+
+                    {
+                        tldrMinutes !== undefined && (
+                            <TldrLink
+                                href={tldrPagePath(post.id)}
+                                minutes={tldrMinutes}
+                            />
+                        )
+                    }
                 </div>
             </header>
 

@@ -111,11 +111,29 @@ if (posts.length === 0) {
     process.exit(2);
 }
 
+// A post's TL;DR is built to `<dist>/blog/<slug>/tldr/` and audited by the same rules.
+function isDirectory(path) {
+    try {
+        return statSync(path).isDirectory();
+    } catch {
+        return false;
+    }
+}
+
 let violations = 0;
+let tldrs = 0;
 for (const post of posts) {
-    for (const [path, problem] of problemsWith(join(blogDir, post))) {
-        console.log(`${path}\n    ${problem}`);
-        violations += 1;
+    const postDir = join(blogDir, post);
+    const tldrDir = join(postDir, 'tldr');
+    const dirs = isDirectory(tldrDir) ? [postDir, tldrDir] : [postDir];
+
+    tldrs += dirs.length - 1;
+
+    for (const dir of dirs) {
+        for (const [path, problem] of problemsWith(dir)) {
+            console.log(`${path}\n    ${problem}`);
+            violations += 1;
+        }
     }
 }
 
@@ -124,4 +142,6 @@ if (violations > 0) {
     process.exit(1);
 }
 
-console.log(`pass: every post page in ${dir} has a Markdown twin (${posts.length} post(s) checked)`);
+console.log(
+    `pass: every post page in ${dir} has a Markdown twin (${posts.length} post(s) and ${tldrs} TL;DR(s) checked)`
+);
