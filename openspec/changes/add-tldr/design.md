@@ -155,9 +155,9 @@ TL;DR needs a new component, the converter learns it the same way it would for a
 `readingTimePlugin` writes a second field, `minutesReadCount: number`, beside `minutesRead`. Both
 come from the same `getReadingTime()` result: the count is
 `Math.ceil(Number(stats.minutes.toFixed(2)))`, the rounding `reading-time` 1.5 uses for its `text`.
-So "25 min read" and 25 always agree. `remarkPluginFrontmatter` is `Record<string, any>` and cannot be declared narrower, so a helper,
-`minutesReadCountOf` in `src/utils/`, reads the value at every read site and fails the build when it is
-not a number. It replaces a typing declaration.
+So "25 min read" and 25 always agree. `remarkPluginFrontmatter` is `Record<string, any>` and cannot be
+declared narrower, so a helper, `minutesReadCountOf` in `src/utils/`, reads the value at every read
+site and fails the build when it is not a number. It replaces a typing declaration.
 
 The post page needs the TL;DR's count, and the TL;DR page needs the post's count, so each page calls
 `render()` on the other entry and reads `remarkPluginFrontmatter.minutesReadCount`. This is a

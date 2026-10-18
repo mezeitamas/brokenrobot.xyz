@@ -13,7 +13,5 @@ const { href, minutes } = Astro.props;
 
 <div class="flex items-center gap-2">
     <ZapIcon />
-    <span class="text-accent-ink">
-        <InternalLink href={href}>TL;DR in {minutes} min</InternalLink>
-    </span>
+    <InternalLink href={href}>TL;DR in {minutes} min</InternalLink>
 </div>
