@@ -23,10 +23,10 @@ None regenerated, as instructed. `git status` shows only `design.md` and `TldrLi
 
 Playwright MCP, host Chrome, preview of a fresh build on port 8086. Computed colours on `/blog/more-agents-same-mythical-month/`:
 
-| | link | zap icon |
-|---|---|---|
-| light | `rgb(180, 83, 9)` | `rgb(33, 29, 24)` |
-| dark | `rgb(251, 191, 36)` | `rgb(244, 239, 228)` |
+|       | link                | zap icon             |
+| ----- | ------------------- | -------------------- |
+| light | `rgb(180, 83, 9)`   | `rgb(33, 29, 24)`    |
+| dark  | `rgb(251, 191, 36)` | `rgb(244, 239, 228)` |
 
 - The icon values match the last run (light `rgb(33,29,24)`, dark `rgb(244,239,228)`). The link stays amber through the prose link colour, with the same values as before.
 - 375px: no horizontal overflow on the post page (scrollWidth 375).
