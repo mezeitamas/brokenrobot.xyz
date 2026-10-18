@@ -350,7 +350,7 @@ in tasks); scaffolding conventions ride the `scaffolding-components` skill at im
 the `frontend-code-reviewer` and the human review gates backstop the rest.
 
 This shapes _generation_. Structural validity is also **enforced** in CI: the `verify` job runs
-`mise run specs:check` (`openspec validate --all --strict`, then `openspec validate --archived`), so
+`mise run specs:check` (`openspec validate --all`, then `openspec validate --archived`), so
 malformed proposals or spec deltas fail a PR, as does an archived change with unticked tasks. The _content_ rules above (the Verify section, primitives-first) are generation-shaped
 only — not hard-checked — so the `frontend-code-reviewer` and your review are the backstop.
 

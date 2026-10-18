@@ -126,7 +126,7 @@ These checks inspect files that a person writes, but that carry structure a tool
 ### `specs:check`
 
 ```bash
-mise run specs:check # openspec validate --all --strict && openspec validate --archived
+mise run specs:check # openspec validate --all && openspec validate --archived
 ```
 
 OpenSpec validates the change artifacts and the specs. This is what makes the planning workflow

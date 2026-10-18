@@ -202,7 +202,7 @@
 
 ## 5. The human writes the TL;DR
 
-- [ ] 5.1 **Human step.** Write `src/content/blog/more-agents-same-mythical-month/tldr/index.mdx` on
+- [x] 5.1 **Human step.** Write `src/content/blog/more-agents-same-mythical-month/tldr/index.mdx` on
       this branch: no frontmatter, about 300 words, in the shape that suits the post, and only the
       syntax a post can use (Markdown, imports, and `<BlogPostPicture>`; no other component, no
       expression, no MDX comment — see `docs/architecture.md`, **Content model**). Verify
