@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 470" font-family="'Space Grotesk', Helvetica, Arial, sans-serif" role="img" aria-labelledby="t d">
+  <title id="t">Where the evidence on spec-driven development sits</title>
+  <desc id="d">A two-by-two grid. Columns: small, solo, short-lived work versus team, long-lived, brownfield work. Rows: costs measured versus benefits measured. Costs are measured mostly for small solo work; benefits are measured only as components or uncontrolled pilots; for team and long-lived work, little cost has been measured and benefits are claimed but not measured.</desc>
+  <rect width="880" height="470" fill="#faf7f2"/>
+  <text x="345" y="58" font-size="15" font-weight="700" fill="#211d18" text-anchor="middle">Small, solo, short-lived work</text>
+  <text x="690" y="58" font-size="15" font-weight="700" fill="#211d18" text-anchor="middle">Team, long-lived, brownfield work</text>
+  <text x="90" y="150" font-size="15" font-weight="700" fill="#211d18" text-anchor="middle">Costs</text>
+  <text x="90" y="170" font-size="15" font-weight="700" fill="#211d18" text-anchor="middle">measured</text>
+  <text x="90" y="335" font-size="15" font-weight="700" fill="#211d18" text-anchor="middle">Benefits</text>
+  <text x="90" y="355" font-size="15" font-weight="700" fill="#211d18" text-anchor="middle">measured</text>
+  <rect x="180" y="70" width="330" height="170" rx="8" fill="#fdebc4" stroke="#b45309" stroke-width="2"/>
+  <rect x="525" y="70" width="330" height="170" rx="8" fill="#f4f0e8" stroke="#736a5b" stroke-width="2" stroke-dasharray="6 5"/>
+  <rect x="180" y="255" width="330" height="170" rx="8" fill="#ffffff" stroke="#211d18" stroke-width="2"/>
+  <rect x="525" y="255" width="330" height="170" rx="8" fill="#f4f0e8" stroke="#736a5b" stroke-width="2" stroke-dasharray="6 5"/>
+  <g font-size="14" fill="#211d18" text-anchor="middle">
+    <text x="345" y="110" font-weight="700" fill="#b45309">Mostly here</text>
+    <text x="345" y="140">Single trials of heavy</text>
+    <text x="345" y="160">spec-first frameworks:</text>
+    <text x="345" y="180">review time, Markdown volume,</text>
+    <text x="345" y="200">tokens</text>
+    <text x="690" y="110" font-weight="700" fill="#736a5b">Little measured</text>
+    <text x="690" y="140">A few exceptions, such as</text>
+    <text x="690" y="160">the SpecMine study and</text>
+    <text x="690" y="180">Garg's review pilot</text>
+    <text x="345" y="295" font-weight="700" fill="#211d18">Components and pilots</text>
+    <text x="345" y="325">Test generation from contracts,</text>
+    <text x="345" y="345">traceability, spec quality</text>
+    <text x="345" y="365">(correlation), one uncontrolled</text>
+    <text x="345" y="385">pilot</text>
+    <text x="690" y="295" font-weight="700" fill="#736a5b">Claimed, not measured</text>
+    <text x="690" y="325">Where supporters locate</text>
+    <text x="690" y="345">the payoff; no independent</text>
+    <text x="690" y="365">controlled study of the</text>
+    <text x="690" y="385">full workflow yet</text>
+  </g>
+  <text x="440" y="455" font-size="12" fill="#736a5b" text-anchor="middle">Summary of the sources reviewed for this article, as of October 2026. Dashed boxes: little or no measurement.</text>
+</svg>

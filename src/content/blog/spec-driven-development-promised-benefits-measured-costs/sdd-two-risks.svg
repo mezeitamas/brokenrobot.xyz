@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 300" font-family="'Space Grotesk', Helvetica, Arial, sans-serif" role="img" aria-labelledby="t d">
+  <title id="t">Two kinds of risk pull in opposite directions</title>
+  <desc id="d">Low appetite for the risk of the agent getting it wrong pushes a team towards more specification. Low appetite for the risk of the investment not paying off pushes towards less. Each side has a counterweight.</desc>
+  <rect width="880" height="300" fill="#faf7f2"/>
+  <defs>
+    <marker id="l" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#211d18"/></marker>
+    <marker id="r" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#b45309"/></marker>
+  </defs>
+  <text x="70" y="45" font-size="16" font-weight="700" fill="#211d18">Less specification</text>
+  <text x="810" y="45" font-size="16" font-weight="700" fill="#b45309" text-anchor="end">More specification</text>
+  <line x1="70" y1="65" x2="810" y2="65" stroke="#e8e1d5" stroke-width="6" stroke-linecap="round"/>
+  <line x1="430" y1="110" x2="110" y2="110" stroke="#211d18" stroke-width="3" marker-end="url(#l)"/>
+  <line x1="450" y1="110" x2="770" y2="110" stroke="#b45309" stroke-width="3" marker-end="url(#r)"/>
+  <g font-size="14" fill="#211d18">
+    <text x="70" y="145" font-weight="700" fill="#211d18">Investment risk</text>
+    <text x="70" y="167">Low appetite for the risk that the</text>
+    <text x="70" y="187">investment does not pay off: review</text>
+    <text x="70" y="207">time, tokens, unproven returns</text>
+    <text x="70" y="240" font-style="italic" fill="#736a5b">Counterweight: detailed specs can</text>
+    <text x="70" y="260" font-style="italic" fill="#736a5b">lower token spend at execution</text>
+    <text x="810" y="145" font-weight="700" fill="#b45309" text-anchor="end">Agent risk</text>
+    <text x="810" y="167" text-anchor="end">Low appetite for the risk that the</text>
+    <text x="810" y="187" text-anchor="end">agent gets it wrong: off-track output,</text>
+    <text x="810" y="207" text-anchor="end">hallucinated code, a failed audit</text>
+    <text x="810" y="240" font-style="italic" fill="#736a5b" text-anchor="end">Counterweight: most misalignment episodes</text>
+    <text x="810" y="260" font-style="italic" fill="#736a5b" text-anchor="end">cost effort and trust, not irreversible damage</text>
+  </g>
+  <text x="440" y="292" font-size="12" fill="#736a5b" text-anchor="middle">Risk appetite is one deciding factor among several.</text>
+</svg>

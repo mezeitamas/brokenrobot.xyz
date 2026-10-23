@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 300" font-family="'Space Grotesk', Helvetica, Arial, sans-serif" role="img" aria-labelledby="t d">
+  <title id="t">The three levels of spec-driven development</title>
+  <desc id="d">A spectrum from spec-first, where the spec serves one change, through spec-anchored, where spec and code are maintained together, to spec-as-source, where humans edit only the spec. Most use appears to sit at spec-first; spec-as-source has largely stalled.</desc>
+  <rect width="880" height="300" fill="#faf7f2"/>
+  <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#736a5b"/></marker></defs>
+  <line x1="60" y1="70" x2="830" y2="70" stroke="#736a5b" stroke-width="2" marker-end="url(#a)"/>
+  <text x="60" y="50" font-size="14" fill="#736a5b">The spec serves one change</text>
+  <text x="830" y="50" font-size="14" fill="#736a5b" text-anchor="end">The spec is the only thing humans edit</text>
+  <g>
+    <rect x="40" y="100" width="250" height="150" rx="10" fill="#fdebc4" stroke="#b45309" stroke-width="2"/>
+    <text x="165" y="132" font-size="20" font-weight="700" fill="#b45309" text-anchor="middle">Spec-first</text>
+    <text x="165" y="162" font-size="14" fill="#211d18" text-anchor="middle">Written before a change,</text>
+    <text x="165" y="182" font-size="14" fill="#211d18" text-anchor="middle">used for it, not</text>
+    <text x="165" y="202" font-size="14" fill="#211d18" text-anchor="middle">maintained afterwards</text>
+    <text x="165" y="234" font-size="13" font-style="italic" fill="#b45309" text-anchor="middle">Where most use appears to sit</text>
+  </g>
+  <g>
+    <rect x="315" y="100" width="250" height="150" rx="10" fill="#f4f0e8" stroke="#736a5b" stroke-width="2"/>
+    <text x="440" y="132" font-size="20" font-weight="700" fill="#736a5b" text-anchor="middle">Spec-anchored</text>
+    <text x="440" y="162" font-size="14" fill="#211d18" text-anchor="middle">Kept after the change and</text>
+    <text x="440" y="182" font-size="14" fill="#211d18" text-anchor="middle">maintained alongside the</text>
+    <text x="440" y="202" font-size="14" fill="#211d18" text-anchor="middle">code as the feature evolves</text>
+    <text x="440" y="234" font-size="13" font-style="italic" fill="#736a5b" text-anchor="middle">Little evidence of it at scale</text>
+  </g>
+  <g>
+    <rect x="590" y="100" width="250" height="150" rx="10" fill="#f4f0e8" stroke="#736a5b" stroke-width="2" stroke-dasharray="6 5"/>
+    <text x="715" y="132" font-size="20" font-weight="700" fill="#736a5b" text-anchor="middle">Spec-as-source</text>
+    <text x="715" y="162" font-size="14" fill="#211d18" text-anchor="middle">Humans edit only the</text>
+    <text x="715" y="182" font-size="14" fill="#211d18" text-anchor="middle">spec; code is regenerated</text>
+    <text x="715" y="202" font-size="14" fill="#211d18" text-anchor="middle">from it</text>
+    <text x="715" y="234" font-size="13" font-style="italic" fill="#736a5b" text-anchor="middle">Largely stalled</text>
+  </g>
+  <text x="440" y="285" font-size="12" fill="#736a5b" text-anchor="middle">Levels after Birgitta Böckeler (martinfowler.com, October 2025). Status notes as of October 2026.</text>
+</svg>
